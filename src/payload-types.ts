@@ -88,10 +88,14 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
-  locale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'zh' | 'mi') | ('en' | 'zh' | 'mi')[];
+  globals: {
+    'home-page': HomePage;
+  };
+  globalsSelect: {
+    'home-page': HomePageSelect<false> | HomePageSelect<true>;
+  };
+  locale: 'en' | 'zh' | 'mi';
   widgets: {
     collections: CollectionsWidget;
   };
@@ -357,6 +361,76 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page".
+ */
+export interface HomePage {
+  id: number;
+  hero: {
+    title: string;
+    description: string;
+    illustration: number | Media;
+    buttons?:
+      | {
+          label: string;
+          url: string;
+          variant: 'primary' | 'secondary';
+          id?: string | null;
+        }[]
+      | null;
+  };
+  aboutSection: {
+    eyebrow?: string | null;
+    heading: string;
+    body: string;
+    image: number | Media;
+  };
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "home-page_select".
+ */
+export interface HomePageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        illustration?: T;
+        buttons?:
+          | T
+          | {
+              label?: T;
+              url?: T;
+              variant?: T;
+              id?: T;
+            };
+      };
+  aboutSection?:
+    | T
+    | {
+        eyebrow?: T;
+        heading?: T;
+        body?: T;
+        image?: T;
+      };
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
