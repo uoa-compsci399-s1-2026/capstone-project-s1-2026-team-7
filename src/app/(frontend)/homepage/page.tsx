@@ -1,5 +1,5 @@
 import React from 'react'
-import { getHomePage } from '../../../service/getHomepage'
+import { getHomePage } from '@/queries/homepage'
 import type { HomePage as HomePageData, Media } from '@/payload-types'
 
 export default async function HomePage() {
