@@ -1,58 +1,62 @@
-import { headers as getHeaders } from 'next/headers.js'
-import Image from 'next/image'
-import { getPayload } from 'payload'
 import React from 'react'
-import { fileURLToPath } from 'url'
+import { getHomePage } from '@/queries/homepage'
+import type { HomePage as HomePageData, Media } from '@/payload-types'
+import HeroSection from './HeroSection'
 
-import config from '@/payload.config'
+export type HeroData = {
+  title: string
+  description: string
+  illustration: number | Media
+  buttons?:
+    | {
+        label: string
+        url: string
+        variant: 'primary' | 'secondary'
+        id?: string | null
+      }[]
+    | null
+}
 
 export default async function HomePage() {
-  const headers = await getHeaders()
-  const payloadConfig = await config
-  const payload = await getPayload({ config: payloadConfig })
-  const { user } = await payload.auth({ headers })
+  const data: HomePageData = await getHomePage('en')
+  const heroData: HeroData = data.hero
+  console.log('HomePage data:', data)
+  const heroImage =
+    data?.hero?.illustration && typeof data.hero.illustration === 'object'
+      ? (data.hero.illustration as Media)
+      : null
 
-  const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
+  const aboutImage =
+    data?.aboutSection?.image && typeof data.aboutSection.image === 'object'
+      ? (data.aboutSection.image as Media)
+      : null
 
   return (
-    <div className="home">
-      <div className="content">
-        <picture>
-          <source srcSet="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg" />
-          <Image
-            alt="Payload Logo"
-            height={65}
-            src="https://raw.githubusercontent.com/payloadcms/payload/main/packages/ui/src/assets/payload-favicon.svg"
-            width={65}
-          />
-        </picture>
-        {!user && <h1>Welcome to your new project.</h1>}
-        {user && <h1>Welcome back, {user.email}</h1>}
-        <div className="links">
-          <a
-            className="admin"
-            href={payloadConfig.routes.admin}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Go to admin panel
-          </a>
-          <a
-            className="docs"
-            href="https://payloadcms.com/docs"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            Documentation
-          </a>
-        </div>
-      </div>
-      <div className="footer">
-        <p>Update this page by editing</p>
-        <a className="codeLink" href={fileURL}>
-          <code>app/(frontend)/page.tsx</code>
-        </a>
-      </div>
-    </div>
+    <main>
+      <HeroSection prop={heroData} />
+
+      <section>
+        <h1>{data?.hero?.title}</h1>
+        <p>{data?.hero?.description}</p>
+
+        {heroImage?.url && <img src={heroImage.url} alt={heroImage.alt || 'Hero image'} />}
+
+        {data?.hero?.buttons?.[0] && (
+          <a href={data.hero.buttons[0].url}>{data.hero.buttons[0].label}</a>
+        )}
+
+        {data?.hero?.buttons?.[1] && (
+          <a href={data.hero.buttons[1].url}>{data.hero.buttons[1].label}</a>
+        )}
+      </section>
+
+      <section>
+        <p>{data?.aboutSection?.eyebrow}</p>
+        <h2>{data?.aboutSection?.heading}</h2>
+        <p>{data?.aboutSection?.body}</p>
+
+        {aboutImage?.url && <img src={aboutImage.url} alt={aboutImage.alt || 'About image'} />}
+      </section>
+    </main>
   )
 }
