@@ -70,6 +70,7 @@ export interface Config {
     users: User;
     media: Media;
     pages: Page;
+    staff: Staff;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -80,6 +81,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
+    staff: StaffSelect<false> | StaffSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -91,9 +93,11 @@ export interface Config {
   fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'zh' | 'mi') | ('en' | 'zh' | 'mi')[];
   globals: {
     'home-page': HomePage;
+    'our-team-page': OurTeamPage;
   };
   globalsSelect: {
     'home-page': HomePageSelect<false> | HomePageSelect<true>;
+    'our-team-page': OurTeamPageSelect<false> | OurTeamPageSelect<true>;
   };
   locale: 'en' | 'zh' | 'mi';
   widgets: {
@@ -195,6 +199,24 @@ export interface Page {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "staff".
+ */
+export interface Staff {
+  id: number;
+  firstname: string;
+  lastname: string;
+  jobTitle: string;
+  intro?: string | null;
+  manager: boolean;
+  uoaProfileLink?: string | null;
+  email?: string | null;
+  photo?: (number | null) | Media;
+  sortOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -228,6 +250,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'pages';
         value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'staff';
+        value: number | Staff;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -324,6 +350,23 @@ export interface PagesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "staff_select".
+ */
+export interface StaffSelect<T extends boolean = true> {
+  firstname?: T;
+  lastname?: T;
+  jobTitle?: T;
+  intro?: T;
+  manager?: T;
+  uoaProfileLink?: T;
+  email?: T;
+  photo?: T;
+  sortOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -396,6 +439,19 @@ export interface HomePage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "our-team-page".
+ */
+export interface OurTeamPage {
+  id: number;
+  title: string;
+  boardTabLabel: string;
+  staffTabLabel: string;
+  staffMembers?: (number | Staff)[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "home-page_select".
  */
 export interface HomePageSelect<T extends boolean = true> {
@@ -428,6 +484,19 @@ export interface HomePageSelect<T extends boolean = true> {
         metaTitle?: T;
         metaDescription?: T;
       };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "our-team-page_select".
+ */
+export interface OurTeamPageSelect<T extends boolean = true> {
+  title?: T;
+  boardTabLabel?: T;
+  staffTabLabel?: T;
+  staffMembers?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
