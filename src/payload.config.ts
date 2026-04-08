@@ -10,6 +10,8 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { s3Storage } from '@payloadcms/storage-s3'
 import { HomePage } from './globals/Homepage'
+import { Staff } from './collections/Staff'
+import { OurTeamPage } from './globals/OurTeamPage'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -26,8 +28,8 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
-  collections: [Users, Media, Pages],
-  globals: [HomePage],
+  collections: [Users, Media, Pages, Staff],
+  globals: [HomePage, OurTeamPage],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
