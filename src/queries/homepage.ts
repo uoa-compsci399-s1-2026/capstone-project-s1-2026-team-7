@@ -21,7 +21,7 @@ export async function getHomePage(locale: SiteLocale = 'en') {
   return mapper(homePage)
 }
 
-function mapper(data: HomePage) {
+function mapper(data: HomePage): homepageDTO {
   let heroImage: ImageDTO = mediaToImage(data.hero.illustration)
 
   let button1: ButtonDTO
@@ -70,9 +70,30 @@ function mapper(data: HomePage) {
     body: data.aboutSection.body,
     aboutImage: mediaToImage(data.aboutSection.image),
   }
+  if (typeof data.seo?.metaTitle !== 'string') {
+    throw new Error('seo.metaTitle is not a string')
+  }
+
+  if (typeof data.seo?.metaDescription !== 'string') {
+    throw Error('seo.metaDescription is not a string')
+  }
+
+  const seo: seoDTO = {
+    metaTitle: data.seo.metaTitle,
+    metaDescription: data.seo.metaDescription,
+  }
+
+  const homepage: homepageDTO = {
+    id: data.id,
+    hero: hero,
+    about: about,
+    seo: seo,
+  }
+
+  return homepage
 }
 
-function mediaToImage(media: Media | number) {
+function mediaToImage(media: Media | number): ImageDTO {
   let heroImage: ImageDTO
   if (typeof media !== 'number') {
     if (typeof media === 'object') {
