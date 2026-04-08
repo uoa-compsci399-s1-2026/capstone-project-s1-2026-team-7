@@ -1,7 +1,7 @@
-import { loader } from '../src/lib/loader/loader'
+import { seedResearch } from '../src/lib/loader/seedResearch'
 
 async function main() {
-  await loader()
+  await seedResearch()
 }
 
 main().catch((err) => {
