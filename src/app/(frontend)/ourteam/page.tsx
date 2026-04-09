@@ -1,9 +1,9 @@
 import React from 'react'
 import { getOurTeamPage } from '@/queries/ourteampage'
-import { ourteampageDTO, StaffDTO } from '@/queries/ourteampageDTO'
+import { OurTeamPageDTO, StaffDTO } from '@/validation/our-team'
 
 async function Page() {
-  const things: ourteampageDTO = await getOurTeamPage('en')
+  const things: OurTeamPageDTO = await getOurTeamPage('en')
 
   return (
     <div>
