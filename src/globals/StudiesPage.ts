@@ -5,6 +5,12 @@ export const StudiesPage: GlobalConfig = {
   label: 'Studies Page',
   fields: [
     {
+      name: 'title',
+      type: 'text',
+      localized: true,
+      required: true,
+    },
+    {
       name: 'studiesDisplay',
       type: 'relationship',
       relationTo: 'studies',
