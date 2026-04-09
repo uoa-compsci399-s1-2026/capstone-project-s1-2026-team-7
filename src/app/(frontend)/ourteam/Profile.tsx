@@ -15,11 +15,12 @@ export type ProfileProps = {
 export default function ProfileCard({ profile }: ProfileProps) {
   const { photo, fullName, job, email, desc } = profile
   return (
-    <div className="w-[30%] mask-x-from-1 px-16 py-16">
-      <img className="w-[95%] h-auto rounded-2xl" src={photo} />
-      <h2 className="text-2xl font-semibold text-center mb-2">{fullName}</h2>
-      <p className="text-gray-600 text-center mb-4">{job}</p>
-      <p className="text-blue-500 text-center underline">{email}</p>
+    <div className="w-full h-120 bg-white">
+      <img className="scale-80 mx-auto my-6 rounded-full" src={photo} />
+      <p className="text-2xl text-black font-bold text-center mb-2">{fullName}</p>
+      <h2 className="text-xl text-blue-600 text-center mb-4">{job}</h2>
+      <p className="text-xs font-normal text-black">{desc}</p>
+      <p className=" text-lg text-blue-500 text-center underline">{email}</p>
     </div>
   )
 }
