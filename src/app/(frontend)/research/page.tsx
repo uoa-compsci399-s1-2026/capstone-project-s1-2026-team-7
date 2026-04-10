@@ -1,4 +1,3 @@
-import React from 'react'
 import { getResearchPage } from '@/queries/researchpage'
 import { getAllResearch } from '@/queries/research'
 
@@ -8,7 +7,6 @@ async function page() {
 
   return (
     <div>
-      {' '}
       <h1>{researchpage.title}</h1> <p>{researchpage.description}</p>
       <div>
         {researchpage.researchCatagoriesDisplay.map((category) => (
