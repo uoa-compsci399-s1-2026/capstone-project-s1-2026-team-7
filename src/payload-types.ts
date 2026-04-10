@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     pages: Page;
     staff: Staff;
+    studies: Study;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,6 +83,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     staff: StaffSelect<false> | StaffSelect<true>;
+    studies: StudiesSelect<false> | StudiesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -94,10 +96,12 @@ export interface Config {
   globals: {
     'home-page': HomePage;
     'our-team-page': OurTeamPage;
+    'studies-page': StudiesPage;
   };
   globalsSelect: {
     'home-page': HomePageSelect<false> | HomePageSelect<true>;
     'our-team-page': OurTeamPageSelect<false> | OurTeamPageSelect<true>;
+    'studies-page': StudiesPageSelect<false> | StudiesPageSelect<true>;
   };
   locale: 'en' | 'zh' | 'mi';
   widgets: {
@@ -217,6 +221,32 @@ export interface Staff {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "studies".
+ */
+export interface Study {
+  id: number;
+  title: string;
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  sortOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -254,6 +284,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'staff';
         value: number | Staff;
+      } | null)
+    | ({
+        relationTo: 'studies';
+        value: number | Study;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -367,6 +401,17 @@ export interface StaffSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "studies_select".
+ */
+export interface StudiesSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  sortOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -452,6 +497,17 @@ export interface OurTeamPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "studies-page".
+ */
+export interface StudiesPage {
+  id: number;
+  title: string;
+  studiesDisplay?: (number | Study)[] | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "home-page_select".
  */
 export interface HomePageSelect<T extends boolean = true> {
@@ -497,6 +553,17 @@ export interface OurTeamPageSelect<T extends boolean = true> {
   boardTabLabel?: T;
   staffTabLabel?: T;
   staffMembers?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "studies-page_select".
+ */
+export interface StudiesPageSelect<T extends boolean = true> {
+  title?: T;
+  studiesDisplay?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;

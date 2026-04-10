@@ -4,14 +4,17 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
+import { s3Storage } from '@payloadcms/storage-s3'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
-import { s3Storage } from '@payloadcms/storage-s3'
-import { HomePage } from './globals/Homepage'
+import { Studies } from './collections/Studies'
 import { Staff } from './collections/Staff'
+
+import { HomePage } from './globals/Homepage'
 import { OurTeamPage } from './globals/OurTeamPage'
+import { StudiesPage } from './globals/StudiesPage'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -28,8 +31,8 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
-  collections: [Users, Media, Pages, Staff],
-  globals: [HomePage, OurTeamPage],
+  collections: [Users, Media, Pages, Staff, Studies],
+  globals: [HomePage, OurTeamPage, StudiesPage],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
