@@ -20,6 +20,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         S3_REGION: ${{ secrets.S3_REGION }}
         S3_BUCKET: ${{ secrets.S3_BUCKET }}
+        NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL }}
 
 
     steps:
