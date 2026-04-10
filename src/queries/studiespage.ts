@@ -1,13 +1,13 @@
-import { payload } from '@/lib/payload'
-import { studiesDTOSchema } from '@/validation/studies'
+import type { ResearchPageDTO } from '@/validation/research'
 
-export async function getStudiesPage(locale: 'en' | 'zh' | 'mi' = 'en') {
-  const data = await payload.findGlobal({
-    slug: 'studies-page',
-    locale,
-    fallbackLocale: 'en',
-    depth: 1,
-  })
+export const getAllResearch = async (): Promise<ResearchPageDTO[]> => {
+  const res = await fetch('/api/research?depth=1&sort=order')
 
-  return studiesDTOSchema.parse(data)
+  if (!res.ok) {
+    throw new Error('Failed to fetch research')
+  }
+
+  const data = await res.json()
+
+  return data.docs
 }
