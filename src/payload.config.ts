@@ -11,10 +11,13 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Studies } from './collections/Studies'
 import { Staff } from './collections/Staff'
+import { Research } from './collections/Research'
+import { ResearchCategories } from './collections/ResearchCategories'
 
 import { HomePage } from './globals/Homepage'
 import { OurTeamPage } from './globals/OurTeamPage'
 import { StudiesPage } from './globals/StudiesPage'
+import { ResearchPage } from './globals/ResearchPage'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -31,8 +34,8 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
-  collections: [Users, Media, Pages, Staff, Studies],
-  globals: [HomePage, OurTeamPage, StudiesPage],
+  collections: [Users, Media, Pages, Staff, Studies, Research, ResearchCategories],
+  globals: [HomePage, OurTeamPage, StudiesPage, ResearchPage],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

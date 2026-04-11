@@ -72,6 +72,8 @@ export interface Config {
     pages: Page;
     staff: Staff;
     studies: Study;
+    research: Research;
+    'research-categories': ResearchCategory;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -84,6 +86,8 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     staff: StaffSelect<false> | StaffSelect<true>;
     studies: StudiesSelect<false> | StudiesSelect<true>;
+    research: ResearchSelect<false> | ResearchSelect<true>;
+    'research-categories': ResearchCategoriesSelect<false> | ResearchCategoriesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -97,11 +101,13 @@ export interface Config {
     'home-page': HomePage;
     'our-team-page': OurTeamPage;
     'studies-page': StudiesPage;
+    'research-page': ResearchPage;
   };
   globalsSelect: {
     'home-page': HomePageSelect<false> | HomePageSelect<true>;
     'our-team-page': OurTeamPageSelect<false> | OurTeamPageSelect<true>;
     'studies-page': StudiesPageSelect<false> | StudiesPageSelect<true>;
+    'research-page': ResearchPageSelect<false> | ResearchPageSelect<true>;
   };
   locale: 'en' | 'zh' | 'mi';
   widgets: {
@@ -247,6 +253,38 @@ export interface Study {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research".
+ */
+export interface Research {
+  id: number;
+  title: string;
+  description: string;
+  'Your Research File': number | Media;
+  /**
+   * Used for manual sorting (lower comes first)
+   */
+  order?: number | null;
+  /**
+   * Select related staff members
+   */
+  staff?: (number | Staff)[] | null;
+  categories?: (number | ResearchCategory)[] | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research-categories".
+ */
+export interface ResearchCategory {
+  id: number;
+  title: string;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -288,6 +326,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'studies';
         value: number | Study;
+      } | null)
+    | ({
+        relationTo: 'research';
+        value: number | Research;
+      } | null)
+    | ({
+        relationTo: 'research-categories';
+        value: number | ResearchCategory;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -412,6 +458,30 @@ export interface StudiesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research_select".
+ */
+export interface ResearchSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  'Your Research File'?: T;
+  order?: T;
+  staff?: T;
+  categories?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research-categories_select".
+ */
+export interface ResearchCategoriesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -508,6 +578,22 @@ export interface StudiesPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research-page".
+ */
+export interface ResearchPage {
+  id: number;
+  title: string;
+  description: string;
+  researchCatagoriesDisplay?: (number | ResearchCategory)[] | null;
+  seo?: {
+    metaTitle?: string | null;
+    metaDescription?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "home-page_select".
  */
 export interface HomePageSelect<T extends boolean = true> {
@@ -564,6 +650,24 @@ export interface OurTeamPageSelect<T extends boolean = true> {
 export interface StudiesPageSelect<T extends boolean = true> {
   title?: T;
   studiesDisplay?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research-page_select".
+ */
+export interface ResearchPageSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  researchCatagoriesDisplay?: T;
+  seo?:
+    | T
+    | {
+        metaTitle?: T;
+        metaDescription?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
