@@ -1,41 +1,59 @@
-import React from 'react'
-import { Media } from '../../payload-types'
-import { HeroData } from './page'
+import Image from 'next/image'
+import { heroDTO } from '@/dto/homepagedto'
+import mobile_hero from '../../../public/mobile_hero.png'
 
 type HeroSectionProp = {
-  prop: HeroData
+  prop: heroDTO
 }
 
-export default function HeroSection(props: HeroSectionProp) {
-  const data: HeroData = props.prop
-
-  const heroImage =
-    data.illustration && typeof data.illustration === 'object' ? (data.illustration as Media) : null
+export default function HeroSection({ prop }: HeroSectionProp) {
+  const { title, description, illustration, button1, button2 } = prop
 
   return (
-    <section
-      className="relative flex flex-row items-start bg-cover bg-center h-[769px]"
-      style={heroImage?.url ? { backgroundImage: `url(${heroImage.url})` } : undefined}
-    >
-      <div className="absolute bottom-40 left-28 w-[800px]">
-        <p className="text-white text-5xl font-semibold leading-tight">
-          The Human
-          <br />
-          Nutrition Unit Research Centre
-        </p>
+    <section className="relative w-full text-[clamp(8px,1.2vw,16px)]">
+      {/* Mobile image — drives height on mobile */}
+      <div className="block md:hidden">
+        <Image
+          src={mobile_hero}
+          alt="Mobile hero"
+          width={314}
+          height={514}
+          className="w-full h-auto object-cover"
+          priority
+        />
+      </div>
 
-        <p className="text-white text-xl font-normal leading-tight">
-          We specialise in short and long-term studies, focusing on nutritional intervention, the
-          health benefits of food components, metabolic health, and innovative trial designs.
-        </p>
+      {/* Tablet + desktop image — drives height on md+ */}
+      <div className="hidden md:block">
+        {illustration?.url && (
+          <Image
+            src={illustration.url}
+            alt={illustration.alt || 'Hero image'}
+            width={1280}
+            height={700}
+            className="w-full h-auto object-cover object-top"
+            priority
+          />
+        )}
+      </div>
 
-        <div className="flex items-center gap-4">
-          <button className="px-4 py-1 rounded-full border-2 border-transparent text-white bg-blue-950">
-            Our Studies
-          </button>
-          <button className="px-4 py-1 rounded-full border-2 border-white text-white">
-            About the HNU
-          </button>
+      {/* Overlay */}
+      <div className="absolute inset-0 flex items-end justify-center px-4 pb-[3em] text-center">
+        <div className="flex flex-col items-center gap-[0.5em] w-full max-w-[80rem]">
+          <h1 className="font-semibold leading-tight text-white m-0 text-[4em] max-w-[14ch]">
+            {title}
+          </h1>
+
+          <p className="text-white leading-snug text-[1.25em] max-w-[54ch]">{description}</p>
+
+          <div className="flex flex-wrap justify-center gap-[0.5em] mt-[0.5em]">
+            <button className="rounded-full bg-[#23238C] text-white font-medium whitespace-nowrap text-[1em] px-[1.75em] py-[0.65em]">
+              {button1.label}
+            </button>
+            <button className="rounded-full border-[0.15em] border-white text-white font-medium whitespace-nowrap bg-transparent text-[1em] px-[1.75em] py-[0.65em]">
+              {button2.label}
+            </button>
+          </div>
         </div>
       </div>
     </section>

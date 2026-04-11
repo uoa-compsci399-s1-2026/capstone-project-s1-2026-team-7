@@ -70,6 +70,7 @@ function mapper(data: HomePage): homepageDTO {
     body: data.aboutSection.body,
     aboutImage: mediaToImage(data.aboutSection.image),
   }
+  /*
   if (typeof data.seo?.metaTitle !== 'string') {
     throw new Error('seo.metaTitle is not a string')
   }
@@ -77,10 +78,10 @@ function mapper(data: HomePage): homepageDTO {
   if (typeof data.seo?.metaDescription !== 'string') {
     throw Error('seo.metaDescription is not a string')
   }
-
+*/
   const seo: seoDTO = {
-    metaTitle: data.seo.metaTitle,
-    metaDescription: data.seo.metaDescription,
+    metaTitle: '',
+    metaDescription: '',
   }
 
   const homepage: homepageDTO = {
