@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { heroDTO } from '@/dto/homepagedto'
 import mobile_hero from '../../../public/mobile_hero.png'
-
+import MainButton from './MainButton'
 type HeroSectionProp = {
   prop: heroDTO
 }
@@ -10,49 +10,55 @@ export default function HeroSection({ prop }: HeroSectionProp) {
   const { title, description, illustration, button1, button2 } = prop
 
   return (
-    <section className="relative w-full text-[clamp(8px,1.2vw,16px)]">
-      {/* Mobile image — drives height on mobile */}
-      <div className="block md:hidden">
+    <section className="relative w-full overflow-hidden h-[514px] md:h-[507px] xl:h-[700px]">
+      {/* Mobile image — below 450px */}
+      <div className="absolute inset-0 block min-[450px]:hidden">
         <Image
           src={mobile_hero}
           alt="Mobile hero"
-          width={314}
-          height={514}
-          className="w-full h-auto object-cover"
+          fill
           priority
+          sizes="(max-width: 449px) 100vw, 0vw"
+          className="object-cover object-top"
         />
       </div>
 
-      {/* Tablet + desktop image — drives height on md+ */}
-      <div className="hidden md:block">
+      {/* Desktop/tablet image — 450px and above */}
+      <div className="absolute inset-0 hidden min-[450px]:block">
         {illustration?.url && (
           <Image
             src={illustration.url}
             alt={illustration.alt || 'Hero image'}
-            width={1280}
-            height={700}
-            className="w-full h-auto object-cover object-top"
+            fill
             priority
+            quality={100}
+            sizes="(min-width: 449px) 100vw, 0vw"
+            className="object-cover object-top"
           />
         )}
       </div>
 
       {/* Overlay */}
-      <div className="absolute inset-0 flex items-end justify-center px-4 pb-[3em] text-center">
-        <div className="flex flex-col items-center gap-[0.5em] w-full max-w-[80rem]">
-          <h1 className="font-semibold leading-tight text-white m-0 text-[4em] max-w-[14ch]">
+      <div className=" absolute inset-0 flex items-end justify-center px-4 pb-15 min-[450px]:pb-30 text-center sm:pb-20 lg:pb-18 xl:pb-30 text-pretty">
+        <div className="flex flex-col items-center gap-3 md:gap-3 lg:gap-4">
+          <h1 className="text-xl font-medium lg:font-semi-bold xl:font-bold text-white sm:text-3xl lg:text-5xl">
             {title}
           </h1>
 
-          <p className="text-white leading-snug text-[1.25em] max-w-[54ch]">{description}</p>
+          <p className=" max-w-md text-xs text-white sm:max-w-xl md:max-w-xl sm:text-lg md:text-xl xl:text-2xl lg:max-w-2xl ">
+            {description}
+          </p>
 
-          <div className="flex flex-wrap justify-center gap-[0.5em] mt-[0.5em]">
-            <button className="rounded-full bg-[#23238C] text-white font-medium whitespace-nowrap text-[1em] px-[1.75em] py-[0.65em]">
-              {button1.label}
-            </button>
-            <button className="rounded-full border-[0.15em] border-white text-white font-medium whitespace-nowrap bg-transparent text-[1em] px-[1.75em] py-[0.65em]">
-              {button2.label}
-            </button>
+          <div className="flex flex-wrap justify-center gap-3 md:gap-4">
+            <MainButton
+              title={button1.label}
+              className="bg-blue-950 text-white border-3 border-transparent hover:-translate-y-0.5 hover:bg-blue-900 hover:shadow-md"
+            />
+
+            <MainButton
+              title={button2.label}
+              className="border-3 border-white text-white hover:-translate-y-0.5 hover:bg-white hover:text-blue-950 hover:shadow-md"
+            />
           </div>
         </div>
       </div>
