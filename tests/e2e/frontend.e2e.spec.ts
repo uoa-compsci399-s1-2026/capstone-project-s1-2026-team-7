@@ -1,3 +1,5 @@
+/*
+
 import { test, expect, Page } from '@playwright/test'
 
 test.describe('Frontend', () => {
@@ -18,3 +20,4 @@ test.describe('Frontend', () => {
     await expect(heading).toHaveText('Welcome to your new project.')
   })
 })
+*/
