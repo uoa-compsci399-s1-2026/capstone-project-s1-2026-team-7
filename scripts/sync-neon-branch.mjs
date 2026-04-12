@@ -8,12 +8,22 @@ const ENV_FILE = path.join(PROJECT_ROOT, '.env')
 const VALID_OWNERS = new Set(['kelvin', 'ayush', 'carl', 'johnathan', 'james', 'rahul'])
 
 function run(cmd, options = {}) {
-  return execSync(cmd, {
+  const result = execSync(cmd, {
     cwd: PROJECT_ROOT,
     stdio: ['pipe', 'pipe', 'pipe'],
     encoding: 'utf8',
     ...options,
-  }).trim()
+  })
+
+  if (typeof result === 'string') {
+    return result.trim()
+  }
+
+  if (Buffer.isBuffer(result)) {
+    return result.toString('utf8').trim()
+  }
+
+  return ''
 }
 
 function getCurrentGitBranch() {
@@ -33,22 +43,28 @@ function getTargetNeonBranch(gitBranch) {
 }
 
 function getExistingNeonBranches() {
-  const raw = run('neon branches list --output json')
+  const raw = run('npx neonctl branches list --output json')
   const branches = JSON.parse(raw)
   return branches.map((b) => b.name)
 }
 
 function ensureNeonBranchExists(branchName) {
   const existing = getExistingNeonBranches()
-  if (existing.includes(branchName)) return
 
-  run(`neon branches create --name "${branchName}" --parent production`, {
+  if (existing.includes(branchName)) {
+    return
+  }
+
+  console.log(`[neon-sync] Creating Neon branch: ${branchName}`)
+
+  execSync(`npx neonctl branches create --name "${branchName}" --parent production`, {
+    cwd: PROJECT_ROOT,
     stdio: 'inherit',
   })
 }
 
 function getConnectionString(branchName) {
-  return run(`neon connection-string "${branchName}"`)
+  return run(`npx neonctl connection-string "${branchName}"`)
 }
 
 function upsertEnvVar(content, key, value) {
