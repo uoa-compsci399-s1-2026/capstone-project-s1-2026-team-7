@@ -21,6 +21,9 @@ jobs:
         S3_REGION: ${{ secrets.S3_REGION }}
         S3_BUCKET: ${{ secrets.S3_BUCKET }}
         NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL }}
+        NEON_BRANCH: ${{ secrets.NEON_BRANCH }}
+        GIT_BRANCH: ${{ secrets.GIT_BRANCH }}
+
 
 
     steps:
