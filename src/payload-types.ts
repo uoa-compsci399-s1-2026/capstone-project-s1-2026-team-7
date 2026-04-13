@@ -102,12 +102,14 @@ export interface Config {
     'our-team-page': OurTeamPage;
     'studies-page': StudiesPage;
     'research-page': ResearchPage;
+    'navigation-bar': NavigationBar;
   };
   globalsSelect: {
     'home-page': HomePageSelect<false> | HomePageSelect<true>;
     'our-team-page': OurTeamPageSelect<false> | OurTeamPageSelect<true>;
     'studies-page': StudiesPageSelect<false> | StudiesPageSelect<true>;
     'research-page': ResearchPageSelect<false> | ResearchPageSelect<true>;
+    'navigation-bar': NavigationBarSelect<false> | NavigationBarSelect<true>;
   };
   locale: 'en' | 'zh' | 'mi';
   widgets: {
@@ -594,6 +596,19 @@ export interface ResearchPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation-bar".
+ */
+export interface NavigationBar {
+  id: number;
+  Logo: number | Media;
+  navbarLinks?: {
+    title?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "home-page_select".
  */
 export interface HomePageSelect<T extends boolean = true> {
@@ -667,6 +682,21 @@ export interface ResearchPageSelect<T extends boolean = true> {
     | {
         metaTitle?: T;
         metaDescription?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "navigation-bar_select".
+ */
+export interface NavigationBarSelect<T extends boolean = true> {
+  Logo?: T;
+  navbarLinks?:
+    | T
+    | {
+        title?: T;
       };
   updatedAt?: T;
   createdAt?: T;

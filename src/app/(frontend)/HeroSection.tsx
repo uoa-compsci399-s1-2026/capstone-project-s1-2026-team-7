@@ -10,7 +10,7 @@ export default function HeroSection({ prop }: HeroSectionProp) {
   const { title, description, illustration, button1, button2 } = prop
 
   return (
-    <section className="relative w-full overflow-hidden h-[514px] md:h-[507px] xl:h-[700px]">
+    <section className="relative w-full overflow-hidden h-128.5 md:h-126.75 xl:h-175">
       {/* Mobile image — below 450px */}
       <div className="absolute inset-0 block min-[450px]:hidden">
         <Image
@@ -50,15 +50,9 @@ export default function HeroSection({ prop }: HeroSectionProp) {
           </p>
 
           <div className="flex flex-wrap justify-center gap-3 md:gap-4">
-            <MainButton
-              title={button1.label}
-              className="bg-blue-950 text-white border-3 border-transparent hover:-translate-y-0.5 hover:bg-blue-900 hover:shadow-md"
-            />
+            <MainButton title={button1.label} variant={button1.variant} />
 
-            <MainButton
-              title={button2.label}
-              className="border-3 border-white text-white hover:-translate-y-0.5 hover:bg-white hover:text-blue-950 hover:shadow-md"
-            />
+            <MainButton title={button2.label} variant={button2.variant} />
           </div>
         </div>
       </div>
