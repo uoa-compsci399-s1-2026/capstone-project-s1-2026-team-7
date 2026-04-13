@@ -5,21 +5,38 @@ export const NavigationBar: GlobalConfig = {
   label: 'Navigation Bar',
   fields: [
     {
-      name: 'Logo',
+      name: 'uoaLogo',
       type: 'upload',
       relationTo: 'media',
-      label: 'Logo',
+      required: true,
+    },
+    {
+      name: 'hnuLogo',
+      type: 'upload',
+      relationTo: 'media',
       required: true,
     },
     {
       name: 'navbarLinks',
-      type: 'group',
+      type: 'array',
       label: 'Navigation Links',
+      labels: {
+        singular: 'Navigation Link',
+        plural: 'Navigation Links',
+      },
       fields: [
         {
-          name: 'title',
+          name: 'navTitle',
           type: 'text',
           label: 'Navigation Title',
+          required: true,
+          localized: true,
+        },
+        {
+          name: 'navURL',
+          type: 'text',
+          label: 'Navigation URL',
+          required: true,
         },
       ],
     },

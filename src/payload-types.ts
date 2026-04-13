@@ -600,10 +600,15 @@ export interface ResearchPage {
  */
 export interface NavigationBar {
   id: number;
-  Logo: number | Media;
-  navbarLinks?: {
-    title?: string | null;
-  };
+  uoaLogo: number | Media;
+  hnuLogo: number | Media;
+  navbarLinks?:
+    | {
+        navTitle: string;
+        navURL: string;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -692,11 +697,14 @@ export interface ResearchPageSelect<T extends boolean = true> {
  * via the `definition` "navigation-bar_select".
  */
 export interface NavigationBarSelect<T extends boolean = true> {
-  Logo?: T;
+  uoaLogo?: T;
+  hnuLogo?: T;
   navbarLinks?:
     | T
     | {
-        title?: T;
+        navTitle?: T;
+        navURL?: T;
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;
