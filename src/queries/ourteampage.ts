@@ -1,5 +1,5 @@
 import { payload } from '@/lib/payload'
-import { ourTeamPageDTOSchema, OurTeamPageDTO } from '@/validation/our-team'
+import { ourTeamPageDTOSchema, OurTeamPageDTO } from '@/validation'
 
 export async function getOurTeamPage(locale: 'en' | 'zh' | 'mi' = 'en'): Promise<OurTeamPageDTO> {
   const data = await payload.findGlobal({

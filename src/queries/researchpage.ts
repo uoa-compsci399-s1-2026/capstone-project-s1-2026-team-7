@@ -1,5 +1,5 @@
 import { payload } from '@/lib/payload'
-import { researchPageDTOSchema, ResearchPageDTO } from '@/validation/research'
+import { researchPageDTOSchema, ResearchPageDTO } from '@/validation'
 
 export async function getResearchPage(locale: 'en' | 'zh' | 'mi' = 'en'): Promise<ResearchPageDTO> {
   const data = await payload.findGlobal({

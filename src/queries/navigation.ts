@@ -1,5 +1,5 @@
 import { payload } from '@/lib/payload'
-import { navigationBarSchema, NavigationBarDTO } from '@/validation/navigationBar'
+import { navigationBarSchema, NavigationBarDTO } from '@/validation'
 
 export async function getNavigationBar(
   locale: 'en' | 'zh' | 'mi' = 'en',

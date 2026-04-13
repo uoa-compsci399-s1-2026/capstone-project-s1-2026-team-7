@@ -5,4 +5,4 @@ export const mediaSchema = z.object({
   alt: z.string(),
 })
 
-export type Media = z.infer<typeof mediaSchema>
+export type MediaDTO = z.infer<typeof mediaSchema>
