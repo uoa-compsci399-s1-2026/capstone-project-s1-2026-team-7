@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { mediaSchema } from './media.schema'
+import { mediaSchema } from '../common/media.schema'
 
 const DEFAULT_PROFILE_PIC = {
   url: 'https://cdn.prod.website-files.com/674c49348dfb73429320f17d/674e546a138ff27bf1f94bd3_default-avatar.png',

@@ -1,7 +1,7 @@
 import { payload } from '@/lib/payload'
-import { ourTeamPageDTOSchema } from '@/validation/our-team'
+import { ourTeamPageDTOSchema, OurTeamPageDTO } from '@/validation/our-team'
 
-export async function getOurTeamPage(locale: 'en' | 'zh' | 'mi' = 'en') {
+export async function getOurTeamPage(locale: 'en' | 'zh' | 'mi' = 'en'): Promise<OurTeamPageDTO> {
   const data = await payload.findGlobal({
     slug: 'our-team-page',
     locale,
