@@ -1,6 +1,6 @@
 import React from 'react'
-import { StaffDTO } from '@/queries/ourteampageDTO'
-import { ImageDTO } from '@/queries/ourteampageDTO'
+import { StaffDTO } from '@/validation/our-team'
+import { ImageDTO } from '@/validation/common'
 import { Mail, UserRound } from 'lucide-react'
 
 export type ProfileProps = {
@@ -12,7 +12,7 @@ export default function ProfileCard({ profile }: ProfileProps) {
     profile
   return (
     <div className="w-full h-full bg-white rounded-[40px] hover:shadow-[0px_0px_20px_0px_rgba(0,0,0,0.25)] transition duration-300">
-      <img className="scale-80 my-2 rounded-full" src={photo.url} />
+      <img className="scale-60 my-2 rounded-full" src={photo.url} />
       <p className="text-2xl my-auto text-black font-bold text-center">
         {firstname} {lastname}
       </p>

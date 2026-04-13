@@ -2,12 +2,12 @@
 import React from 'react'
 import ProfileCard from './Profile'
 import { useState } from 'react'
-import { ourteampageDTO } from '@/queries/ourteampageDTO'
+import { OurTeamPageDTO } from '@/validation/our-team'
 import OurTeam from './page'
-import { StaffDTO } from '@/queries/ourteampageDTO'
+import { StaffDTO } from '@/validation/our-team'
 
 export type teamSectionProps = {
-  teamSection: ourteampageDTO
+  teamSection: OurTeamPageDTO
 }
 
 export default function TeamSection({ teamSection }: teamSectionProps) {
