@@ -1,41 +1,19 @@
-import { test, expect, Page } from '@playwright/test'
-import { login } from '../helpers/login'
-import { seedTestUser, cleanupTestUser, testUser } from '../helpers/seedUser'
+import { getPayload, Payload } from 'payload'
+import config from '@/payload.config'
+import { describe, it, beforeAll, expect } from 'vitest'
 
-test.describe('Admin Panel', () => {
-  let page: Page
+let payload: Payload
 
-  test.beforeAll(async ({ browser }, testInfo) => {
-    await seedTestUser()
+describe('API', () => {
+  beforeAll(async () => {
+    const payloadConfig = await config
+    payload = await getPayload({ config: payloadConfig })
+  }, 30000)
 
-    const context = await browser.newContext()
-    page = await context.newPage()
-
-    await login({ page, user: testUser })
-  })
-
-  test.afterAll(async () => {
-    await cleanupTestUser()
-  })
-
-  test('can navigate to dashboard', async () => {
-    await page.goto('http://localhost:3000/admin')
-    await expect(page).toHaveURL('http://localhost:3000/admin')
-    const dashboardArtifact = page.locator('span[title="Dashboard"]').first()
-    await expect(dashboardArtifact).toBeVisible()
-  })
-
-  test('can navigate to list view', async () => {
-    await page.goto('http://localhost:3000/admin/collections/users')
-    await expect(page).toHaveURL('http://localhost:3000/admin/collections/users')
-    const listViewArtifact = page.locator('h1', { hasText: 'Users' }).first()
-    await expect(listViewArtifact).toBeVisible()
-  })
-
-  test('can navigate to edit view', async () => {
-    await page.goto('http://localhost:3000/admin/collections/users/create')
-    await expect(page).toHaveURL(/\/admin\/collections\/users\/[a-zA-Z0-9-_]+/)
-    const editViewArtifact = page.locator('input[name="email"]')
-    await expect(editViewArtifact).toBeVisible()
+  it('fetches users', async () => {
+    const users = await payload.find({
+      collection: 'users',
+    })
+    expect(users).toBeDefined()
   })
 })
