@@ -152,23 +152,27 @@ export const NavigationLogos = (props: navbarProps) => {
   return (
     <div className="flex shrink-0 items-center gap-4 max-md:gap-3">
       <div className="flex items-center shrink-0 relative h-8 w-16">
-        <Image
-          src={props.data.uoaLogo.url}
-          alt={props.data.uoaLogo.alt}
-          sizes="80px"
-          fill
-          className="object-contain"
-        />
+        <Link href="/">
+          <Image
+            src={props.data.uoaLogo.url}
+            alt={props.data.uoaLogo.alt}
+            sizes="80px"
+            fill
+            className="object-contain"
+          />
+        </Link>
       </div>
       <div className="h-9 w-px bg-[#BFC4CC]" />
       <div className="flex h-8 items-center shrink-0 w-16 relative">
-        <Image
-          src={props.data.hnuLogo.url}
-          alt={props.data.hnuLogo.alt}
-          fill
-          sizes="80px"
-          className="object-contain"
-        />
+        <Link href="/">
+          <Image
+            src={props.data.hnuLogo.url}
+            alt={props.data.hnuLogo.alt}
+            fill
+            sizes="80px"
+            className="object-contain"
+          />
+        </Link>
       </div>
     </div>
   )
