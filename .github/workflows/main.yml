@@ -85,10 +85,8 @@ jobs:
       - name: Verify Neon auth
         shell: bash
         run: |
-          echo "NEON_API_KEY length: ${#NEON_API_KEY}"
-          echo "NEON_PROJECT_ID length: ${#NEON_PROJECT_ID}"
-          npx neonctl projects get --project-id "$NEON_PROJECT_ID" --api-key "$NEON_API_KEY"
-
+          npx neonctl branches list --output json --project-id "$NEON_PROJECT_ID" --api-key "$NEON_API_KEY"      
+      
       - name: Sync Neon branch and write .env
         run: node scripts/sync-neon-branch.mjs
     
