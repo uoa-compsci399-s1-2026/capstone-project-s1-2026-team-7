@@ -13,6 +13,16 @@ const nextConfig: NextConfig = {
       {
         pathname: '/api/media/file/**',
       },
+      {
+        pathname: '/**',
+      },
+    ],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'i0.wp.com',
+        pathname: '/vhin.co.nz/**',
+      },
     ],
   },
   webpack: (webpackConfig) => {
