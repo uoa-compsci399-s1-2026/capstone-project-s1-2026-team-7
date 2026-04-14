@@ -8,10 +8,50 @@ on:
       - opened
       - synchronize
       - reopened
+  push:
+    branches:
+      - main
+      - james
+      - james-*
+      - kelvin
+      - kelvin-*
+      - ayush
+      - ayush-*
+      - carl
+      - carl-*
+      - johnathan
+      - johnathan-*
+      - rahul
+      - rahul-*
+
+permissions:
+  contents: read
 
 jobs:
-  run-and-test:
+  pr-checks:
+    name: PR checks
     runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run lint
+        run: npm run lint
+
+  neon-build-and-test:
+    name: Neon build and test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false)
 
     env:
       PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
@@ -36,10 +76,20 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Check required Neon secrets
+        shell: bash
+        run: |
+          test -n "$NEON_API_KEY" || { echo "NEON_API_KEY is missing"; exit 1; }
+          test -n "$NEON_PROJECT_ID" || { echo "NEON_PROJECT_ID is missing"; exit 1; }
+
       - name: Determine Git branch and Neon branch
         shell: bash
         run: |
-          GIT_BRANCH="${{ github.head_ref }}"
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            GIT_BRANCH="${{ github.head_ref }}"
+          else
+            GIT_BRANCH="${GITHUB_REF_NAME}"
+          fi
 
           case "$GIT_BRANCH" in
             main)
@@ -72,19 +122,19 @@ jobs:
           echo "NEON_BRANCH=$NEON_BRANCH" >> "$GITHUB_ENV"
 
       - name: Set Neon project context
-        run: npx neonctl set-context --project-id "$NEON_PROJECT_ID"
+        run: npx neonctl set-context --project-id "$NEON_PROJECT_ID" --api-key "$NEON_API_KEY"
 
       - name: Fetch DATABASE_URL from Neon
         shell: bash
         run: |
-          DATABASE_URL="$(npx neonctl connection-string "$NEON_BRANCH")"
+          DATABASE_URL="$(npx neonctl connection-string "$NEON_BRANCH" --project-id "$NEON_PROJECT_ID" --api-key "$NEON_API_KEY")"
           echo "DATABASE_URL=$DATABASE_URL" >> "$GITHUB_ENV"
+
+      - name: Run Next.js build
+        run: npm run build
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
-
-      - name: Run Next.js Build
-        run: npm run build
 
       - name: Run tests
         run: npm run test
