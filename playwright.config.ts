@@ -11,6 +11,8 @@ import 'dotenv/config'
  */
 export default defineConfig({
   testDir: './tests/e2e',
+  testMatch: /.*\.e2e\.spec\.ts/,
+  testIgnore: ['**/.next/**', '**/node_modules/**', '**/tests/int/**'],
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
@@ -34,7 +36,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run dev',
+    command: 'npm run start',
     reuseExistingServer: true,
     url: 'http://localhost:3000',
   },
