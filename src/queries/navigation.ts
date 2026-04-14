@@ -1,5 +1,7 @@
-import { payload } from '@/lib/payload'
+import { getPayloadClient } from '@/lib/payload'
 import { navigationBarSchema, NavigationBarDTO } from '@/validation'
+const payload = await getPayloadClient()
+
 
 export async function getNavigationBar(
   locale: 'en' | 'zh' | 'mi' = 'en',
