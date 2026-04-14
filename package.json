@@ -20,18 +20,26 @@
     "db:sync-branch": "node scripts/sync-neon-branch.mjs"
   },
   "dependencies": {
+<<<<<<< Updated upstream
     "@payloadcms/db-postgres": "3.80.0",
     "@payloadcms/next": "3.80.0",
     "@payloadcms/richtext-lexical": "3.80.0",
     "@payloadcms/storage-s3": "3.80.0",
     "@payloadcms/ui": "3.80.0",
+=======
+    "@payloadcms/db-postgres": "^3.82.1",
+    "@payloadcms/next": "^3.82.1",
+    "@payloadcms/richtext-lexical": "^3.82.1",
+    "@payloadcms/storage-s3": "^3.82.1",
+    "@payloadcms/ui": "^3.82.1",
+>>>>>>> Stashed changes
     "@tailwindcss/postcss": "^4.2.2",
     "clsx": "^2.1.1",
     "cross-env": "^7.0.3",
     "dotenv": "16.4.7",
     "graphql": "^16.8.1",
-    "next": "16.2.1",
-    "payload": "3.80.0",
+    "next": "16.2.2",
+    "payload": "^3.82.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "sharp": "0.34.2",
@@ -60,14 +68,7 @@
     "vitest": "4.0.18"
   },
   "engines": {
-    "node": "^18.20.2 || >=20.9.0",
-    "pnpm": "^9 || ^10"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "sharp",
-      "esbuild",
-      "unrs-resolver"
-    ]
+    "node": "24.x",
+    "npm": "11.x"
   }
 }
