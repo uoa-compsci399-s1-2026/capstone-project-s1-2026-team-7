@@ -64,7 +64,7 @@ function ensureNeonBranchExists(branchName) {
 }
 
 function getConnectionString(branchName) {
-  return run(`npx neonctl connection-string "${branchName}"`)
+  return run(`npx neonctl connection-string "${branchName}" --role-name neondb_owner`)
 }
 
 function upsertEnvVar(content, key, value) {
