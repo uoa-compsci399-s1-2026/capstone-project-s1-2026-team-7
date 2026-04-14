@@ -3,15 +3,14 @@
 import React, { useState, useRef, useEffect, PropsWithChildren, HTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
 import { Icon } from '../_components/icons'
-const navLinks = [
-  { label: 'Research', href: '/research' },
-  { label: 'Our Team', href: '/our-team' },
-  { label: 'Studies', href: '/studies' },
-  { label: 'Collaborations', href: '/collaborations' },
-  { label: 'Media', href: '/media' },
-]
+
+type navbarProps = {
+  data: NavigationBarDTO
+}
+
 import Link from 'next/link'
 import Image from 'next/image'
+import { NavigationBarDTO } from '@/validation/navigationBar'
 
 const languages = [
   { code: 'en', label: 'English' },
@@ -21,7 +20,7 @@ const languages = [
   { code: 'ko', label: '한국어' },
 ]
 
-export default function Navbar() {
+export default function Navbar(props: navbarProps) {
   const [searchOpen, setSearchOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -31,12 +30,12 @@ export default function Navbar() {
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 flex flex-col bg-[#F7F7F7] md:hidden">
           {/* Top row — mirrors the header */}
-          <div className="flex h-[68px] shrink-0 items-center justify-between px-4">
-            <NavigationLogos />
+          <div className="flex h-17 shrink-0 items-center justify-between px-4">
+            <NavigationLogos data={props.data} />
             <button
               onClick={() => setMobileMenuOpen(false)}
               aria-label="Close menu"
-              className="flex h-[32px] w-[32px] items-center justify-center rounded-full border border-[#6B6F76] text-[#000000] transition hover:bg-[#ECECEC]"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-[#6B6F76] text-[#000000] transition hover:bg-[#ECECEC]"
             >
               <Icon.X />
             </button>
@@ -44,13 +43,13 @@ export default function Navbar() {
 
           {/* Nav links */}
           <nav className="flex flex-1 flex-col px-4 pt-2">
-            {navLinks.map((item) => (
+            {props.data.navbarLinks.map((item) => (
               <a
-                key={item.label}
-                href={item.href}
+                key={item.navTitle}
+                href={item.navURL}
                 className="border-b border-[#E8E8E8] py-4 text-[22px] font-medium text-[#0C0C48] transition hover:opacity-70"
               >
-                {item.label}
+                {item.navTitle}
               </a>
             ))}
           </nav>
@@ -58,7 +57,7 @@ export default function Navbar() {
           {/* Bottom section — search + contact */}
           <div className="flex shrink-0 flex-col gap-3 px-4 pb-8 pt-4">
             <div className="flex items-center gap-2">
-              <div className="flex h-[44px] flex-1 items-center gap-2 rounded-full border border-[#C9CDD4] bg-white px-4">
+              <div className="flex h-11 flex-1 items-center gap-2 rounded-full border border-[#C9CDD4] bg-white px-4">
                 <input
                   type="text"
                   placeholder="Search..."
@@ -67,30 +66,30 @@ export default function Navbar() {
               </div>
               <button
                 aria-label="Search"
-                className="flex h-[44px] w-[44px] shrink-0 items-center justify-center rounded-full bg-[#2F3FE6] transition hover:opacity-90"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#2F3FE6] transition hover:opacity-90"
               >
                 <Icon.WhiteMagnifyingGlass />
               </button>
             </div>
-            <button className="h-[44px] w-full rounded-full bg-[#2F3FE6] text-[13px] font-medium text-white transition hover:opacity-90">
+            <button className="h-11 w-full rounded-full bg-[#2F3FE6] text-[13px] font-medium text-white transition hover:opacity-90">
               Contact
             </button>
           </div>
         </div>
       )}
 
-      <header className="w-full border-b border-[#D9D9D9] bg-[#F7F7F7]">
-        <div className="mx-auto flex h-[68px] max-w-[1440px] items-center justify-between px-8 max-md:px-4">
-          <NavigationLogos />
+      <header className="w-full border-b border-border bg-[#F7F7F7]">
+        <div className="mx-auto flex h-17 max-w-360 items-center justify-between px-8 max-md:px-4">
+          <NavigationLogos data={props.data} />
           {!searchOpen && (
             <nav className="hidden md:flex items-center gap-8 text-[#0C0C48]">
-              {navLinks.map((item) => (
+              {props.data.navbarLinks.map((item) => (
                 <Link
-                  key={item.label}
-                  href={item.href}
+                  key={item.navTitle}
+                  href={item.navURL}
                   className="text-[#0C0C48] text-[13px] font-medium transition hover:opacity-70"
                 >
-                  {item.label}
+                  {item.navTitle}
                 </Link>
               ))}
             </nav>
@@ -116,7 +115,7 @@ export default function Navbar() {
               </>
             ) : (
               <div className="flex items-center gap-2">
-                <div className="flex h-[38px] w-[280px] max-md:w-[180px] items-center rounded-full border border-[#C9CDD4] bg-white px-4">
+                <div className="flex h-9.5 w-70 max-md:w-45 items-center rounded-full border border-[#C9CDD4] bg-white px-4">
                   <Icon.MagnifyingGlass />
                   <input
                     autoFocus
@@ -128,7 +127,7 @@ export default function Navbar() {
                 <button
                   onClick={() => setSearchOpen(false)}
                   aria-label="Close search"
-                  className="flex h-[32px] w-[32px] items-center justify-center rounded-full border border-[#6B6F76] text-[#000000] transition hover:bg-[#ECECEC]"
+                  className="flex h-8 w-8 items-center justify-center rounded-full border border-[#6B6F76] text-[#000000] transition hover:bg-[#ECECEC]"
                 >
                   <Icon.X />
                 </button>
@@ -149,23 +148,23 @@ export const NavigationButton = ({ children }: PropsWithChildren) => {
   )
 }
 
-export const NavigationLogos = () => {
+export const NavigationLogos = (props: navbarProps) => {
   return (
     <div className="flex shrink-0 items-center gap-4 max-md:gap-3">
       <div className="flex items-center shrink-0 relative h-8 w-16">
         <Image
-          src="https://i0.wp.com/vhin.co.nz/wp-content/uploads/2025/08/UoA-Logo-Primary-RGB-Small.png?ssl=1"
-          alt="University of Auckland logo"
+          src={props.data.uoaLogo.url}
+          alt={props.data.uoaLogo.alt}
           sizes="80px"
           fill
           className="object-contain"
         />
       </div>
-      <div className="h-[36px] w-px bg-[#BFC4CC]" />
+      <div className="h-9 w-px bg-[#BFC4CC]" />
       <div className="flex h-8 items-center shrink-0 w-16 relative">
         <Image
-          src="/HNU logo HD.png"
-          alt="Human Nutrition Unit logo"
+          src={props.data.hnuLogo.url}
+          alt={props.data.hnuLogo.alt}
           fill
           sizes="80px"
           className="object-contain"
@@ -195,7 +194,7 @@ const LanguageDropdown = (props: HTMLAttributes<HTMLDivElement>) => {
       <button
         onClick={() => setOpen((prev) => !prev)}
         aria-label="Change language"
-        className="inline-flex h-[32px] items-center justify-center gap-2 rounded-full border border-[#C9CDD4] bg-white px-3 text-[12px] font-medium text-[#0C0C48] transition hover:bg-[#F2F4F7]"
+        className="inline-flex h-8 items-center justify-center gap-2 rounded-full border border-[#C9CDD4] bg-white px-3 text-[12px] font-medium text-[#0C0C48] transition hover:bg-[#F2F4F7]"
       >
         <span>
           {selected.code === 'en' ? '🇬🇧 ' : ''}
@@ -207,7 +206,7 @@ const LanguageDropdown = (props: HTMLAttributes<HTMLDivElement>) => {
       </button>
 
       {open && (
-        <div className="absolute left-0 top-[calc(100%+6px)] z-50 min-w-[130px] overflow-hidden rounded-xl border border-[#C9CDD4] bg-white shadow-md">
+        <div className="absolute left-0 top-[calc(100%+6px)] z-50 min-w-32.5 overflow-hidden rounded-xl border border-[#C9CDD4] bg-white shadow-md">
           {languages.map((lang) => (
             <button
               key={lang.code}
@@ -231,7 +230,7 @@ const LanguageDropdown = (props: HTMLAttributes<HTMLDivElement>) => {
 
 const ContactButton = (props: HTMLAttributes<HTMLButtonElement>) => {
   return (
-    <button className="hidden md:inline-flex h-[32px] w-[72px] items-center justify-center rounded-full bg-[#2F3FE6] text-[12px] font-medium text-white transition hover:opacity-90">
+    <button className="hidden md:inline-flex h-8 w-18 items-center justify-center rounded-full bg-[#2F3FE6] text-[12px] font-medium text-white transition hover:opacity-90">
       Contact
     </button>
   )
@@ -242,7 +241,7 @@ const SearchButton = (props: HTMLAttributes<HTMLButtonElement>) => {
     <button
       {...props}
       aria-label="Open search"
-      className="flex h-[32px] w-[45px] shrink-0 items-center justify-center rounded-full border border-[#6B6F76] transition hover:bg-[#ECECEC]"
+      className="flex h-8 w-11.25 shrink-0 items-center justify-center rounded-full border border-[#6B6F76] transition hover:bg-[#ECECEC]"
     >
       <Icon.MagnifyingGlass />
     </button>
@@ -255,7 +254,7 @@ const MenuButton = (props: HTMLAttributes<HTMLButtonElement>) => {
       {...props}
       aria-label="Toggle menu"
       className={cn(
-        'flex md:hidden h-[32px] w-[45px] shrink-0 items-center justify-center rounded-full border border-[#6B6F76] transition hover:bg-[#ECECEC]',
+        'flex md:hidden h-8 w-11.25 shrink-0 items-center justify-center rounded-full border border-[#6B6F76] transition hover:bg-[#ECECEC]',
         props.className,
       )}
     >
