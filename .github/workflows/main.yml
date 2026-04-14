@@ -82,53 +82,14 @@ jobs:
           test -n "$NEON_API_KEY" || { echo "NEON_API_KEY is missing"; exit 1; }
           test -n "$NEON_PROJECT_ID" || { echo "NEON_PROJECT_ID is missing"; exit 1; }
 
-      - name: Determine Git branch and Neon branch
+      - name: Sync Neon branch and write .env
+        run: node scripts/sync-neon-branch.mjs
+
+      - name: Export .env values to GitHub Actions env
         shell: bash
         run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            GIT_BRANCH="${{ github.head_ref }}"
-          else
-            GIT_BRANCH="${GITHUB_REF_NAME}"
-          fi
-
-          case "$GIT_BRANCH" in
-            main)
-              NEON_BRANCH="production"
-              ;;
-            james|james-*)
-              NEON_BRANCH="james"
-              ;;
-            kelvin|kelvin-*)
-              NEON_BRANCH="kelvin"
-              ;;
-            ayush|ayush-*)
-              NEON_BRANCH="ayush"
-              ;;
-            carl|carl-*)
-              NEON_BRANCH="carl"
-              ;;
-            johnathan|johnathan-*)
-              NEON_BRANCH="johnathan"
-              ;;
-            rahul|rahul-*)
-              NEON_BRANCH="rahul"
-              ;;
-            *)
-              NEON_BRANCH="production"
-              ;;
-          esac
-
-          echo "GIT_BRANCH=$GIT_BRANCH" >> "$GITHUB_ENV"
-          echo "NEON_BRANCH=$NEON_BRANCH" >> "$GITHUB_ENV"
-
-      - name: Set Neon project context
-        run: npx neonctl set-context --project-id "$NEON_PROJECT_ID" --api-key "$NEON_API_KEY"
-
-      - name: Fetch DATABASE_URL from Neon
-        shell: bash
-        run: |
-          DATABASE_URL="$(npx neonctl connection-string "$NEON_BRANCH" --project-id "$NEON_PROJECT_ID" --api-key "$NEON_API_KEY")"
-          echo "DATABASE_URL=$DATABASE_URL" >> "$GITHUB_ENV"
+          test -f .env || { echo ".env was not created"; exit 1; }
+          grep -E '^(DATABASE_URL|NEON_BRANCH|GIT_BRANCH)=' .env >> "$GITHUB_ENV"
 
       - name: Run Next.js build
         run: npm run build

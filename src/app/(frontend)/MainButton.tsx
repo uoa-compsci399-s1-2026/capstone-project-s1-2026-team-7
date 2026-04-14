@@ -1,5 +1,3 @@
-import { cn } from '@/lib/cn'
-
 type MainButtonProps = {
   title: string
 
