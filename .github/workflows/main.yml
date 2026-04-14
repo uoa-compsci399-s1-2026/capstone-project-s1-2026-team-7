@@ -82,15 +82,16 @@ jobs:
           test -n "$NEON_API_KEY" || { echo "NEON_API_KEY is missing"; exit 1; }
           test -n "$NEON_PROJECT_ID" || { echo "NEON_PROJECT_ID is missing"; exit 1; }
 
-      - name: Sync Neon branch and write .env
-        run: node scripts/sync-neon-branch.mjs
-
-      - name: Export .env values to GitHub Actions env
+      - name: Verify Neon auth
         shell: bash
         run: |
-          test -f .env || { echo ".env was not created"; exit 1; }
-          grep -E '^(DATABASE_URL|NEON_BRANCH|GIT_BRANCH)=' .env >> "$GITHUB_ENV"
+          echo "NEON_API_KEY length: ${#NEON_API_KEY}"
+          echo "NEON_PROJECT_ID length: ${#NEON_PROJECT_ID}"
+          npx neonctl projects get --project-id "$NEON_PROJECT_ID" --api-key "$NEON_API_KEY"
 
+      - name: Sync Neon branch and write .env
+        run: node scripts/sync-neon-branch.mjs
+    
       - name: Run Next.js build
         run: npm run build
 
