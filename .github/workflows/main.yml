@@ -11,18 +11,6 @@ on:
   push:
     branches:
       - main
-      - james
-      - james-*
-      - kelvin
-      - kelvin-*
-      - ayush
-      - ayush-*
-      - carl
-      - carl-*
-      - johnathan
-      - johnathan-*
-      - rahul
-      - rahul-*
 
 permissions:
   contents: read
