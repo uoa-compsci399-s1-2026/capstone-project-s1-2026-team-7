@@ -542,7 +542,7 @@ export interface HomePage {
       | null;
   };
   aboutSection: {
-    eyebrow?: string | null;
+    eyebrow: string;
     heading: string;
     body: string;
     image: number | Media;

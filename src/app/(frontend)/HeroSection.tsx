@@ -1,13 +1,15 @@
 import Image from 'next/image'
-import { heroDTO } from '@/dto/homepagedto'
 import mobile_hero from '../../../public/mobile_hero.png'
 import MainButton from './MainButton'
+import { HeroDTO } from '@/validation'
 type HeroSectionProp = {
-  prop: heroDTO
+  prop: HeroDTO
 }
 
 export default function HeroSection({ prop }: HeroSectionProp) {
-  const { title, description, illustration, button1, button2 } = prop
+  const { title, description, illustration, buttons } = prop
+  const button1 = buttons[0]
+  const button2 = buttons[1]
 
   return (
     <section className="relative w-full overflow-hidden h-128.5 md:h-126.75 xl:h-175">
@@ -25,7 +27,7 @@ export default function HeroSection({ prop }: HeroSectionProp) {
 
       {/* Desktop/tablet image — 450px and above */}
       <div className="absolute inset-0 hidden min-[450px]:block">
-        {illustration?.url && (
+        {illustration.url && (
           <Image
             src={illustration.url}
             alt={illustration.alt || 'Hero image'}

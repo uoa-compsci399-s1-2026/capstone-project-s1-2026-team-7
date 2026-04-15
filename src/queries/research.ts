@@ -1,5 +1,5 @@
 import type { PaginatedDocs } from 'payload'
-import type { ResearchDTO } from '../validation/research'
+import type { ResearchDTO } from '@/validation'
 
 export const getAllResearch = async (): Promise<PaginatedDocs<ResearchDTO>> => {
   const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'

@@ -72,6 +72,7 @@ export const HomePage: GlobalConfig = {
           type: 'text',
           label: 'Small Heading',
           localized: true,
+          required: true,
         },
         {
           name: 'heading',

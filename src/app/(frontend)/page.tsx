@@ -1,10 +1,10 @@
 import React from 'react'
 import { getHomePage } from '@/queries/homepage'
 import HeroSection from './HeroSection'
-import { homepageDTO } from '@/dto/homepagedto'
+import { HomepageDTO } from '@/validation'
 
 export default async function HomePage() {
-  const data: homepageDTO = await getHomePage('en')
+  const data: HomepageDTO = await getHomePage('en')
   console.log('homepage data:', data)
   return (
     <main>
