@@ -1,14 +1,33 @@
 import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
+import nextEnv from '@next/env'
+
+const { loadEnvConfig } = nextEnv
 
 const PROJECT_ROOT = process.cwd()
+loadEnvConfig(PROJECT_ROOT)
+
 const ENV_FILE = path.join(PROJECT_ROOT, '.env')
 
-const VALID_OWNERS = new Set(['kelvin', 'ayush', 'carl', 'johnathan', 'james', 'rahul'])
+const VALID_OWNERS = new Set([
+  'kelvin',
+  'ayush',
+  'carl',
+  'johnathan',
+  'james',
+  'rahul',
+])
 
 const NEON_API_KEY = process.env.NEON_API_KEY
 const NEON_PROJECT_ID = process.env.NEON_PROJECT_ID
+
+const NEONCTL_BIN = path.join(
+  PROJECT_ROOT,
+  'node_modules',
+  '.bin',
+  process.platform === 'win32' ? 'neonctl.cmd' : 'neonctl',
+)
 
 function run(command, args = [], options = {}) {
   const result = execFileSync(command, args, {
@@ -23,17 +42,50 @@ function run(command, args = [], options = {}) {
   return ''
 }
 
-function getCurrentGitBranch() {
-  // GitHub Actions PRs
-  if (process.env.GITHUB_HEAD_REF) return process.env.GITHUB_HEAD_REF
+function withNeonAuth(args) {
+  const finalArgs = [...args]
 
-  // GitHub Actions push events
+  if (NEON_PROJECT_ID) {
+    finalArgs.push('--project-id', NEON_PROJECT_ID)
+  }
+
+  if (NEON_API_KEY) {
+    finalArgs.push('--api-key', NEON_API_KEY)
+  }
+
+  return finalArgs
+}
+
+function runNeon(args, options = {}) {
+  const finalArgs = withNeonAuth(args)
+
+  if (process.platform === 'win32') {
+    return run('cmd.exe', ['/d', '/s', '/c', 'call', NEONCTL_BIN, ...finalArgs], options)
+  }
+
+  return run(NEONCTL_BIN, finalArgs, options)
+}
+
+function execNeon(args, options = {}) {
+  const finalArgs = withNeonAuth(args)
+
+  if (process.platform === 'win32') {
+    return execFileSync('cmd.exe', ['/d', '/s', '/c', 'call', NEONCTL_BIN, ...finalArgs], {
+      cwd: PROJECT_ROOT,
+      ...options,
+    })
+  }
+
+  return execFileSync(NEONCTL_BIN, finalArgs, {
+    cwd: PROJECT_ROOT,
+    ...options,
+  })
+}
+
+function getCurrentGitBranch() {
+  if (process.env.GITHUB_HEAD_REF) return process.env.GITHUB_HEAD_REF
   if (process.env.GITHUB_REF_NAME) return process.env.GITHUB_REF_NAME
 
-  // Manual override if needed
-  if (process.env.GIT_BRANCH) return process.env.GIT_BRANCH
-
-  // Local fallback
   return run('git', ['rev-parse', '--abbrev-ref', 'HEAD'])
 }
 
@@ -46,50 +98,26 @@ function getTargetNeonBranch(gitBranch) {
   return 'production'
 }
 
-function neonArgs(args) {
-  const fullArgs = [...args]
-
-  if (NEON_PROJECT_ID) {
-    fullArgs.push('--project-id', NEON_PROJECT_ID)
-  }
-
-  if (NEON_API_KEY) {
-    fullArgs.push('--api-key', NEON_API_KEY)
-  }
-
-  return fullArgs
-}
-
 function getExistingNeonBranches() {
-  const raw = run('npx', neonArgs(['neonctl', 'branches', 'list', '--output', 'json']))
+  const raw = runNeon(['branches', 'list', '--output', 'json'])
   const branches = JSON.parse(raw)
-  return branches.map((b) => b.name)
+  return branches.map((branch) => branch.name)
 }
 
 function ensureNeonBranchExists(branchName) {
-  const existing = getExistingNeonBranches()
+  const existingBranches = getExistingNeonBranches()
 
-  if (existing.includes(branchName)) {
-    return
-  }
+  if (existingBranches.includes(branchName)) return
 
   console.log(`[neon-sync] Creating Neon branch: ${branchName}`)
 
-  execFileSync(
-    'npx',
-    neonArgs(['neonctl', 'branches', 'create', '--name', branchName, '--parent', 'production']),
-    {
-      cwd: PROJECT_ROOT,
-      stdio: 'inherit',
-    },
-  )
+  execNeon(['branches', 'create', '--name', branchName, '--parent', 'production'], {
+    stdio: 'inherit',
+  })
 }
 
 function getConnectionString(branchName) {
-  return run(
-    'npx',
-    neonArgs(['neonctl', 'connection-string', branchName, '--role-name', 'neondb_owner']),
-  )
+  return runNeon(['connection-string', branchName, '--role-name', 'neondb_owner'])
 }
 
 function upsertEnvVar(content, key, value) {
@@ -121,18 +149,28 @@ function updateEnvFile(connectionString, neonBranch, gitBranch) {
   fs.writeFileSync(ENV_FILE, content, 'utf8')
 }
 
+function ensureNeonCliExists() {
+  if (!fs.existsSync(NEONCTL_BIN)) {
+    throw new Error(
+      `Neon CLI not found at ${NEONCTL_BIN}. Run "npm install" so the local neonctl binary is available.`,
+    )
+  }
+}
+
 function main() {
+  ensureNeonCliExists()
+
   const gitBranch = getCurrentGitBranch()
   const neonBranch = getTargetNeonBranch(gitBranch)
 
   if (!NEON_API_KEY) {
-    console.warn('[neon-sync] NEON_API_KEY is not set.')
-    console.warn('[neon-sync] Falling back to local Neon CLI auth if available.')
+    console.log('[neon-sync] No NEON_API_KEY found, using local Neon CLI auth if available.')
   }
 
   if (!NEON_PROJECT_ID) {
-    console.warn('[neon-sync] NEON_PROJECT_ID is not set.')
-    console.warn('[neon-sync] Neon CLI must already have a project context, or commands may fail.')
+    console.log(
+      '[neon-sync] No NEON_PROJECT_ID found, using local Neon CLI project context if available.',
+    )
   }
 
   ensureNeonBranchExists(neonBranch)
