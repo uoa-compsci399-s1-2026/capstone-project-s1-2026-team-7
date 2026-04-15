@@ -3,3 +3,16 @@
 :root {
   --font-mono: 'Roboto Mono', monospace;
 }
+<<<<<<< HEAD
+=======
+
+* {
+  box-sizing: border-box;
+}
+
+@theme inline {
+  --breakpoint-md: 946px;
+
+  --color-border: #D9D9D9;
+}
+>>>>>>> main
