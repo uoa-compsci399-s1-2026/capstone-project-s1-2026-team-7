@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { imageSchema } from './image.schema'
+import { mediaSchema, DEFAULT_GENERAL_PIC } from '../common/media.schema'
 
 const navbarLinkSchema = z.object({
   navTitle: z.string(),
@@ -7,8 +7,9 @@ const navbarLinkSchema = z.object({
 })
 
 export const navigationBarSchema = z.object({
-  uoaLogo: imageSchema.required(),
-  hnuLogo: imageSchema.required(),
+  uoaLogo: mediaSchema.default(DEFAULT_GENERAL_PIC),
+  hnuLogo: mediaSchema.default(DEFAULT_GENERAL_PIC),
   navbarLinks: z.array(navbarLinkSchema),
 })
+
 export type NavigationBarDTO = z.infer<typeof navigationBarSchema>

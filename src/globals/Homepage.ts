@@ -24,10 +24,17 @@ export const HomePage: GlobalConfig = {
           required: true,
         },
         {
-          name: 'illustration',
+          name: 'portrait hero image',
           type: 'upload',
           relationTo: 'media',
-          label: 'Hero Illustration',
+          label: 'Portrait Hero Image',
+          required: true,
+        },
+        {
+          name: 'mobile hero image',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Mobile Hero Image',
           required: true,
         },
         {
@@ -62,18 +69,38 @@ export const HomePage: GlobalConfig = {
         },
       ],
     },
+
+    {
+      name: 'studiesSection',
+      type: 'group',
+      label: 'Our Studies Section',
+      fields: [
+        {
+          name: 'title',
+          type: 'text',
+          label: 'Our Studies Section Title',
+          localized: true,
+          required: true,
+        },
+
+        {
+          name: 'studiesDisplay',
+          type: 'relationship',
+          relationTo: 'studies',
+          hasMany: true,
+          admin: {
+            allowCreate: true,
+            allowEdit: true,
+          },
+        },
+      ],
+    },
+
     {
       name: 'aboutSection',
       type: 'group',
       label: 'About Section',
       fields: [
-        {
-          name: 'eyebrow',
-          type: 'text',
-          label: 'Small Heading',
-          localized: true,
-          required: true,
-        },
         {
           name: 'heading',
           type: 'text',
@@ -89,14 +116,23 @@ export const HomePage: GlobalConfig = {
           required: true,
         },
         {
-          name: 'image',
+          name: 'portrait image',
           type: 'upload',
           relationTo: 'media',
           label: 'Portrait Image',
           required: true,
         },
+
+        {
+          name: 'mobile image',
+          type: 'upload',
+          relationTo: 'media',
+          label: 'Mobile Image',
+          required: true,
+        },
       ],
     },
+
     {
       name: 'seo',
       type: 'group',

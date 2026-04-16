@@ -1,24 +1,26 @@
 import { z } from 'zod'
-import { mediaSchema } from '../common/media.schema'
-
-const DEFAULT_PROFILE_PIC = {
-  url: 'https://cdn.prod.website-files.com/674c49348dfb73429320f17d/674e546a138ff27bf1f94bd3_default-avatar.png',
-  alt: 'Default Profile Picture',
-}
+import { mediaSchema, DEFAULT_PROFILE_PIC } from '../common/media.schema'
 
 export const staffSchema = z.object({
-  id: z.union([z.string(), z.number()]),
-  firstname: z.string().min(1),
-  lastname: z.string().min(1),
-  jobTitle: z.string().min(1),
-  intro: z.string().nullable().optional(),
-  manager: z.boolean().optional(),
-  uoaProfileLink: z.string().nullable().optional(),
-  email: z.string().nullable().optional(),
-  photo: z.union([mediaSchema, z.number()]).nullable().optional(),
-  sortOrder: z.number().optional(),
+  id: z.number(),
+  firstname: z.string().default(''),
+  lastname: z.string().default(''),
+  jobTitle: z.string().default(''),
+  intro: z
+    .string()
+    .nullish()
+    .transform(() => ''),
+  manager: z.boolean().default(false),
+  uoaProfileLink: z.string().nullable().default(''),
+  email: z.string().nullable().default(''),
+  photo: mediaSchema.default(DEFAULT_PROFILE_PIC),
+  sortOrder: z
+    .number()
+    .nullish()
+    .transform(() => 0),
 })
 
+/*
 export const staffDTOSchema = staffSchema.transform((staff) => {
   const parsedPhoto = mediaSchema.safeParse(staff.photo)
 
@@ -42,5 +44,5 @@ export const staffDTOSchema = staffSchema.transform((staff) => {
     sortOrder: staff.sortOrder ?? 1000000,
   }
 })
-
-export type StaffDTO = z.infer<typeof staffDTOSchema>
+*/
+export type StaffDTO = z.infer<typeof staffSchema>

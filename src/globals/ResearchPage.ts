@@ -9,10 +9,21 @@ export const ResearchPage: GlobalConfig = {
       name: 'title',
       type: 'text',
       required: true,
+      localized: true,
     },
     {
-      name: 'description',
-      type: 'textarea',
+      name: 'portrait image',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Portrait Image',
+      required: true,
+    },
+
+    {
+      name: 'mobile image',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Mobile Image',
       required: true,
     },
 
@@ -28,6 +39,7 @@ export const ResearchPage: GlobalConfig = {
         allowEdit: true,
       },
     },
+
     {
       name: 'seo',
       type: 'group',
