@@ -1,12 +1,12 @@
 import { z } from 'zod'
-import { staffDTOSchema } from './staff.schema'
+import { staffSchema } from './staff.schema'
 
 export const ourTeamPageDTOSchema = z
   .object({
-    title: z.string().min(1),
-    boardTabLabel: z.string().min(1),
-    staffTabLabel: z.string().min(1),
-    staffMembers: z.array(staffDTOSchema),
+    title: z.string().default(''),
+    boardTabLabel: z.string().default(''),
+    staffTabLabel: z.string().default(''),
+    staffMembers: z.array(staffSchema),
   })
   .transform((data) => ({
     title: data.title,

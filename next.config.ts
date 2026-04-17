@@ -20,8 +20,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'i0.wp.com',
-        pathname: '/vhin.co.nz/**',
+        hostname: 'human-nutrition-unit-s3-bucket.s3.ap-southeast-2.amazonaws.com',
+        port: '',
+        pathname: '/**',
       },
     ],
   },

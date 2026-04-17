@@ -7,7 +7,7 @@ export async function getOurTeamPage(locale: 'en' | 'zh' | 'mi' = 'en'): Promise
     slug: 'our-team-page',
     locale,
     fallbackLocale: 'en',
-    depth: 2,
+    depth: 3,
   })
 
   return ourTeamPageDTOSchema.parse(data)

@@ -25,7 +25,6 @@ export const OurTeamPage: GlobalConfig = {
       defaultValue: 'Research Team',
     },
 
-    // Optional: if editors should choose/order staff manually
     {
       name: 'staffMembers',
       type: 'relationship',

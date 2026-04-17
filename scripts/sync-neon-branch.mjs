@@ -10,14 +10,7 @@ loadEnvConfig(PROJECT_ROOT)
 
 const ENV_FILE = path.join(PROJECT_ROOT, '.env')
 
-const VALID_OWNERS = new Set([
-  'kelvin',
-  'ayush',
-  'carl',
-  'johnathan',
-  'james',
-  'rahul',
-])
+const VALID_OWNERS = new Set(['kelvin', 'ayush', 'carl', 'johnathan', 'james', 'rahul'])
 
 const NEON_API_KEY = process.env.NEON_API_KEY
 const NEON_PROJECT_ID = process.env.NEON_PROJECT_ID
