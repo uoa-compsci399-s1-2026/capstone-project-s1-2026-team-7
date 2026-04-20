@@ -8,8 +8,8 @@ type HeroSectionProp = {
 
 export default function HeroSection({ prop }: HeroSectionProp) {
   const { title, description, illustration, buttons } = prop
-  const button1 = buttons[0]
-  const button2 = buttons[1]
+  /* const button1 = buttons[0]
+  const button2 = buttons[1] */
 
   return (
     <section className="relative w-full overflow-hidden h-128.5 md:h-126.75 xl:h-175">
@@ -52,9 +52,12 @@ export default function HeroSection({ prop }: HeroSectionProp) {
           </p>
 
           <div className="flex flex-wrap justify-center gap-3 md:gap-4">
-            <MainButton title={button1.label} variant={button1.variant} />
+            {/* <MainButton title={button1.label} variant={button1.variant} />
 
-            <MainButton title={button2.label} variant={button2.variant} />
+            <MainButton title={button2.label} variant={button2.variant} /> */}
+            {buttons?.map((btn, index) => (
+              <MainButton key={index} title={btn.label} variant={btn.variant} />
+            ))}
           </div>
         </div>
       </div>

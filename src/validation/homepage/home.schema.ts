@@ -25,7 +25,7 @@ const aboutSectionSchema = z.object({
 })
 
 export const homepageSchema = z.object({
-  id: z.number(),
+  //id: z.number(),
   hero: heroSchema,
   aboutSection: aboutSectionSchema,
   seo: seoSchema,

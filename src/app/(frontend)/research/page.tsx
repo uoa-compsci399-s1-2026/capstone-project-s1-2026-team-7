@@ -2,59 +2,51 @@ import { getResearchPage } from '@/queries/researchpage'
 import { searchResearch } from '@/queries/searchResearch'
 import ResearchHero from './_components/ResearchHero'
 import ResearchFilters from './_components/ResearchFilters'
-import ResearchPageClient from './_components/ResearchPageClient'
+import { ResearchClient } from './_components/ResearchClient'
+import { ResearchPageProps } from './_types/types'
 
-async function page() {
-  const researchpage = await getResearchPage()
-  const research = await searchResearch('', 1) // must contain docs[]
+const researchpage: ResearchPageProps = {
+  title: 'Our Research',
+  researchCategoriesDisplay: [
+    { id: '1', title: 'Miscellaneous' },
+    { id: '2', title: 'Muscle Health' },
+    { id: '3', title: 'Energetics' },
+    { id: '4', title: 'Appetite Regulation' },
+    { id: '5', title: 'Obesity and Weight Loss' },
+    { id: '6', title: 'Diabetites and Pre-diabetes' },
+  ],
+  listOfResearch: [
+    {
+      id: '1',
+      title: 'Participant insights from SYNERGY – a residential nutrition intervention trial',
+      link: 'https://example.com/ai-healthcare.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-05-01',
+    },
+    {
+      id: '2',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+  ],
+}
+
+export default function page() {
+  /* const researchpage = await getResearchPage()
+  const research = await searchResearch('', 1) */
 
   return (
     <div>
       <ResearchHero title={researchpage.title} backgroundImage="/research/hero_desktop.jpg" />
 
-      <p>{researchpage.description}</p>
-
       <ResearchFilters />
 
-      <div className="mt-8">
-        {researchpage.researchCatagoriesDisplay.map((category) => (
-          <p key={category.id}>{category.title}</p>
-        ))}
-      </div>
-
-      <ResearchPageClient pdfCount={research.length}>
-        {(viewMode: string) => (
-          <div className="mt-8">
-            {viewMode === 'grid' ? (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {research.map((entry) => (
-                  <div key={entry.id}>
-                    <h3>{entry.title}</h3>
-                    <a href={entry['Your Research File']?.url} target="_blank">
-                      View PDF
-                    </a>
-                    <p>{entry.description}</p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="flex flex-col gap-4">
-                {research.map((entry) => (
-                  <div key={entry.id} className="border p-4 rounded-md">
-                    <h3>{entry.title}</h3>
-                    <a href={entry['Your Research File']?.url} target="_blank">
-                      View PDF
-                    </a>
-                    <p>{entry.description}</p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-      </ResearchPageClient>
+      <ResearchClient
+        categories={researchpage.researchCategoriesDisplay}
+        research={researchpage.listOfResearch}
+      />
     </div>
   )
 }
-
-export default page
