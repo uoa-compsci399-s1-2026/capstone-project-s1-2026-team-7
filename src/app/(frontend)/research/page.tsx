@@ -30,6 +30,146 @@ const researchpage: ResearchPageProps = {
       image: '/research/placeholder_wire_image.jpg',
       date: '2024-04-15',
     },
+    {
+      id: '3',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+    {
+      id: '4',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+    {
+      id: '5',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+    {
+      id: '6',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+    {
+      id: '7',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+    {
+      id: '8',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+    {
+      id: '9',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+    {
+      id: '10',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+    {
+      id: '2',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+    {
+      id: '2',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+    {
+      id: '2',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+    {
+      id: '2',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+    {
+      id: '2',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+    {
+      id: '2',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+    {
+      id: '2',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+    {
+      id: '2',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+    {
+      id: '2',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+    {
+      id: '2',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+    {
+      id: '2',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
+    {
+      id: '2',
+      title: 'Sustainable Energy Solutions',
+      link: 'https://example.com/sustainable-energy.pdf',
+      image: '/research/placeholder_wire_image.jpg',
+      date: '2024-04-15',
+    },
   ],
 }
 
@@ -38,7 +178,7 @@ export default function page() {
   const research = await searchResearch('', 1) */
 
   return (
-    <div>
+    <div className="w-full mx-auto">
       <ResearchHero title={researchpage.title} backgroundImage="/research/hero_desktop.jpg" />
 
       <ResearchFilters />

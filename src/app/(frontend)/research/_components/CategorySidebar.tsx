@@ -1,22 +1,16 @@
 'use client'
 
-import { ChevronIcon } from '@payloadcms/ui'
-
 type Props = {
-  categories: {
-    id: string
-    title: string
-  }[]
+  categories: { id: string; title: string }[]
   onSelect: (categoryId: string) => void
   selectedCategoryId: string | null
 }
 
 export default function CategorySidebar({ categories, onSelect, selectedCategoryId }: Props) {
   return (
-    <aside className="w-full md:w-72 border-r border-gray-200 ml-10 pr-4">
-      <div className="flex items-center justify-between mb-4">
+    <aside className="w-full md:w-72 pr-4 h-full">
+      <div className="mb-4">
         <h2 className="font-semibold text-lg">Categories</h2>
-        <ChevronIcon className="w-10 h-10 text-gray-500" />
       </div>
 
       <div className="space-y-2">
@@ -27,10 +21,14 @@ export default function CategorySidebar({ categories, onSelect, selectedCategory
             className="flex items-center gap-3 cursor-pointer text-left w-full"
           >
             <div
-              className={`w-4 h-4 border border-gray-300 rounded-sm mr-4 flex ${selectedCategoryId === category.id ? 'bg-blue-500 border-blue-500' : ''}`}
+              className={`w-4 h-4 border border-gray-300 rounded-sm mr-4 flex ${
+                selectedCategoryId === category.id ? 'bg-blue-500 border-blue-500' : ''
+              }`}
             />
             <span
-              className={`text-base ${selectedCategoryId === category.id ? 'font-medium' : 'text-gray-700'}`}
+              className={`text-sm ${
+                selectedCategoryId === category.id ? 'font-medium' : 'text-gray-700'
+              }`}
             >
               {category.title}
             </span>

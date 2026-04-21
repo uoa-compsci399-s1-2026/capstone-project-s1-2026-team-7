@@ -1,26 +1,16 @@
-'use client'
-
 import { ResearchEntry } from '../_types/types'
+import ResearchCard from './ResearchCard'
 
 type Props = {
   research: ResearchEntry[]
+  viewMode: 'grid' | 'list'
 }
 
-export default function ResearchArticles({ research }: Props) {
+export default function ResearchArticles({ research, viewMode }: Props) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 ">
+    <div className="grid grid-cols-3 gap-6 min-w-0">
       {research.map((item) => (
-        <a key={item.id} href={item.link} target="_blank">
-          <div className=" p-4 rounded-md cursor-pointer transition-transform duration-200 hover:scale-102">
-            <img
-              src={item.image}
-              alt={item.title}
-              className="w-full h-50 object-cover rounded-2xl"
-            />
-            <h3 className="mt-3 font-semibold">{item.title}</h3>
-            <p className="text-lg text-gray-400 mt-2">{item.date}</p>
-          </div>
-        </a>
+        <ResearchCard key={item.id} item={item} />
       ))}
     </div>
   )

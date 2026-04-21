@@ -1,20 +1,29 @@
-import React from 'react'
-// import { de } from 'zod/locales'
+'use client'
+
+import { HiOutlineSquares2X2, HiOutlineBars3 } from 'react-icons/hi2'
 
 type Props = {
-  pdfCount: number
+  itemCount: number
   viewMode: 'grid' | 'list'
-  OnToggleView: () => void
+  setViewMode: (mode: 'grid' | 'list') => void
 }
 
-export default function ResearchTopBar({ pdfCount, viewMode, OnToggleView }: Props) {
+export default function ResearchTopBar({ itemCount, viewMode, setViewMode }: Props) {
   return (
-    <div className="w-full py-4 border-b border-gray-200">
-      <span className="text-gray-600 text-sm">Items in this collection ({pdfCount})</span>
+    <div className="flex items-center justify-between w-full py-1 px-4">
+      <h2 className="font text-base text-gray-400">Items in this collection ({itemCount})</h2>
 
       <div className="flex items-center gap-3">
-        <button onClick={OnToggleView} className="p-2 border rounded-md bg-white shadow-sm">
-          {viewMode === 'grid' ? 'List' : 'Grid'}
+        <button onClick={() => setViewMode('grid')}>
+          <HiOutlineSquares2X2
+            className={`w-5 h-5 ${viewMode === 'grid' ? 'text-black' : 'text-gray-500'}`}
+          />
+        </button>
+
+        <button onClick={() => setViewMode('list')}>
+          <HiOutlineBars3
+            className={`w-5 h-5 ${viewMode === 'list' ? 'text-black' : 'text-gray-500'}`}
+          />
         </button>
       </div>
     </div>
