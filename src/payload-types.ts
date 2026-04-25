@@ -268,7 +268,7 @@ export interface Research {
   id: number
   title: string
   description: string
-  'Your Research File': number | Media
+  researchLink: string
   /**
    * Used for manual sorting (lower comes first)
    */
@@ -472,7 +472,7 @@ export interface StudiesSelect<T extends boolean = true> {
 export interface ResearchSelect<T extends boolean = true> {
   title?: T
   description?: T
-  'Your Research File'?: T
+  researchLink?: T
   order?: T
   staff?: T
   categories?: T
