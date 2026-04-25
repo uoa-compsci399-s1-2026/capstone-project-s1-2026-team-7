@@ -2,12 +2,12 @@ import { ResearchDTO, researchDTOSchema } from '@/validation'
 import { getPayloadClient } from '@/lib/payload'
 import { PaginatedDocs } from 'payload'
 import { Research } from '@/payload-types'
-const payload = await getPayloadClient()
 
 export async function searchResearch(
   searchTerm: string,
   catagoryId: number,
 ): Promise<ResearchDTO[]> {
+  const payload = await getPayloadClient()
   const data: PaginatedDocs<Research> = await payload.find({
     collection: 'research',
     where: {

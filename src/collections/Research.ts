@@ -13,7 +13,7 @@ export const Research: CollectionConfig = {
       name: 'researchLink',
       label: 'Research Link',
       type: 'text',
-      required: false,
+      required: true,
     },
 
     {
