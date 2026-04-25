@@ -38,9 +38,9 @@ export default function Navbar(props: navbarProps) {
 
           {/* Nav links */}
           <nav className="flex flex-1 flex-col px-4 pt-2">
-            {props.data.navbarLinks.map((item) => (
+            {props.data.navbarLinks.map((item, index) => (
               <a
-                key={item.navTitle}
+                key={index}
                 href={`/${props.currentLang}${item.navURL}`}
                 className="border-b border-[#E8E8E8] py-4 text-[22px] font-medium text-[#0C0C48] transition hover:opacity-70"
               >
@@ -78,9 +78,9 @@ export default function Navbar(props: navbarProps) {
           <NavigationLogos data={props.data} currentLang={props.currentLang} />
           {!searchOpen && (
             <nav className="hidden md:flex items-center gap-8 text-[#0C0C48]">
-              {props.data.navbarLinks.map((item) => (
+              {props.data.navbarLinks.map((item, index) => (
                 <Link
-                  key={item.navTitle}
+                  key={index}
                   href={`/${props.currentLang}${item.navURL}`}
                   className="text-[#0C0C48] text-[13px] font-medium transition hover:opacity-70"
                 >
