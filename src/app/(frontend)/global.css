@@ -4,12 +4,3 @@
   --font-mono: 'Roboto Mono', monospace;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-@theme inline {
-  --breakpoint-md: 946px;
-
-  --color-border: #D9D9D9;
-}

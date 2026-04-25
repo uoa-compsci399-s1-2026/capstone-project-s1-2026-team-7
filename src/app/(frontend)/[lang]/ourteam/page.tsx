@@ -1,30 +1,17 @@
 import React from 'react'
+import ProfileCard from './Profile'
+import TeamSection from './TeamSection'
 import { getOurTeamPage } from '@/queries/ourteampage'
 import { OurTeamPageDTO, StaffDTO } from '@/validation/our-team'
 
-async function Page() {
-  const things: OurTeamPageDTO = await getOurTeamPage('en')
+import { select } from 'payload/shared'
 
-  return (
-    <div>
-      <p>{things.title}</p>
+export default async function OurTeam() {
+  {
+    /* Import from backend*/
+  }
 
-      <button>{things.boardTabLabel}</button>
-      <button>{things.staffTabLabel}</button>
+  const pageData: OurTeamPageDTO = await getOurTeamPage('en')
 
-      {things.staff.map((staffperson: StaffDTO, index: number) => {
-        return (
-          <div key={index}>
-            <p>{staffperson.firstname}</p>
-            <p>{staffperson.lastname}</p>
-            <p>{staffperson.email}</p>
-            <p>{staffperson.jobTitle}</p>
-            <img src={staffperson.photo.url} />
-          </div>
-        )
-      })}
-    </div>
-  )
+  return <TeamSection teamSection={pageData} />
 }
-
-export default Page
