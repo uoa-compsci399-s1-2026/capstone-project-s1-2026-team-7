@@ -18,7 +18,12 @@
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
     "prepare": "husky",
     "db:sync-branch": "node scripts/sync-neon-branch.mjs",
-    "clean": "powershell -Command \"Remove-Item -Recurse -Force .next,node_modules -ErrorAction SilentlyContinue\""
+    "clean": "powershell -Command \"Remove-Item -Recurse -Force .next,node_modules -ErrorAction SilentlyContinue\"",
+    "seed:team": "tsx scripts/seedHomepage.ts",
+    "seed:homepage": "tsx scripts/seedOurteampage.ts"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
     "@payloadcms/db-postgres": "^3.82.1",

@@ -59,558 +59,571 @@ export type SupportedTimezones =
   | 'Pacific/Guam'
   | 'Pacific/Noumea'
   | 'Pacific/Auckland'
-  | 'Pacific/Fiji';
+  | 'Pacific/Fiji'
 
 export interface Config {
   auth: {
-    users: UserAuthOperations;
-  };
-  blocks: {};
+    users: UserAuthOperations
+  }
+  blocks: {}
   collections: {
-    users: User;
-    media: Media;
-    pages: Page;
-    staff: Staff;
-    studies: Study;
-    research: Research;
-    'research-categories': ResearchCategory;
-    'payload-kv': PayloadKv;
-    'payload-locked-documents': PayloadLockedDocument;
-    'payload-preferences': PayloadPreference;
-    'payload-migrations': PayloadMigration;
-  };
-  collectionsJoins: {};
+    users: User
+    media: Media
+    pages: Page
+    staff: Staff
+    studies: Study
+    research: Research
+    'research-categories': ResearchCategory
+    'payload-kv': PayloadKv
+    'payload-locked-documents': PayloadLockedDocument
+    'payload-preferences': PayloadPreference
+    'payload-migrations': PayloadMigration
+  }
+  collectionsJoins: {}
   collectionsSelect: {
-    users: UsersSelect<false> | UsersSelect<true>;
-    media: MediaSelect<false> | MediaSelect<true>;
-    pages: PagesSelect<false> | PagesSelect<true>;
-    staff: StaffSelect<false> | StaffSelect<true>;
-    studies: StudiesSelect<false> | StudiesSelect<true>;
-    research: ResearchSelect<false> | ResearchSelect<true>;
-    'research-categories': ResearchCategoriesSelect<false> | ResearchCategoriesSelect<true>;
-    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
-    'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
-    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
-    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
-  };
+    users: UsersSelect<false> | UsersSelect<true>
+    media: MediaSelect<false> | MediaSelect<true>
+    pages: PagesSelect<false> | PagesSelect<true>
+    staff: StaffSelect<false> | StaffSelect<true>
+    studies: StudiesSelect<false> | StudiesSelect<true>
+    research: ResearchSelect<false> | ResearchSelect<true>
+    'research-categories': ResearchCategoriesSelect<false> | ResearchCategoriesSelect<true>
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>
+    'payload-locked-documents':
+      | PayloadLockedDocumentsSelect<false>
+      | PayloadLockedDocumentsSelect<true>
+    'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>
+    'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>
+  }
   db: {
-    defaultIDType: number;
-  };
-  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'zh' | 'mi') | ('en' | 'zh' | 'mi')[];
+    defaultIDType: number
+  }
+  fallbackLocale:
+    | ('false' | 'none' | 'null')
+    | false
+    | null
+    | ('en' | 'zh' | 'mi')
+    | ('en' | 'zh' | 'mi')[]
   globals: {
-    'home-page': HomePage;
-    'our-team-page': OurTeamPage;
-    'studies-page': StudiesPage;
-    'research-page': ResearchPage;
-    'navigation-bar': NavigationBar;
-  };
+    'home-page': HomePage
+    'our-team-page': OurTeamPage
+    'studies-page': StudiesPage
+    'research-page': ResearchPage
+    'navigation-bar': NavigationBar
+  }
   globalsSelect: {
-    'home-page': HomePageSelect<false> | HomePageSelect<true>;
-    'our-team-page': OurTeamPageSelect<false> | OurTeamPageSelect<true>;
-    'studies-page': StudiesPageSelect<false> | StudiesPageSelect<true>;
-    'research-page': ResearchPageSelect<false> | ResearchPageSelect<true>;
-    'navigation-bar': NavigationBarSelect<false> | NavigationBarSelect<true>;
-  };
-  locale: 'en' | 'zh' | 'mi';
+    'home-page': HomePageSelect<false> | HomePageSelect<true>
+    'our-team-page': OurTeamPageSelect<false> | OurTeamPageSelect<true>
+    'studies-page': StudiesPageSelect<false> | StudiesPageSelect<true>
+    'research-page': ResearchPageSelect<false> | ResearchPageSelect<true>
+    'navigation-bar': NavigationBarSelect<false> | NavigationBarSelect<true>
+  }
+  locale: 'en' | 'zh' | 'mi'
   widgets: {
-    collections: CollectionsWidget;
-  };
-  user: User;
+    collections: CollectionsWidget
+  }
+  user: User
   jobs: {
-    tasks: unknown;
-    workflows: unknown;
-  };
+    tasks: unknown
+    workflows: unknown
+  }
 }
 export interface UserAuthOperations {
   forgotPassword: {
-    email: string;
-    password: string;
-  };
+    email: string
+    password: string
+  }
   login: {
-    email: string;
-    password: string;
-  };
+    email: string
+    password: string
+  }
   registerFirstUser: {
-    email: string;
-    password: string;
-  };
+    email: string
+    password: string
+  }
   unlock: {
-    email: string;
-    password: string;
-  };
+    email: string
+    password: string
+  }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
 export interface User {
-  id: number;
-  updatedAt: string;
-  createdAt: string;
-  email: string;
-  resetPasswordToken?: string | null;
-  resetPasswordExpiration?: string | null;
-  salt?: string | null;
-  hash?: string | null;
-  loginAttempts?: number | null;
-  lockUntil?: string | null;
+  id: number
+  updatedAt: string
+  createdAt: string
+  email: string
+  resetPasswordToken?: string | null
+  resetPasswordExpiration?: string | null
+  salt?: string | null
+  hash?: string | null
+  loginAttempts?: number | null
+  lockUntil?: string | null
   sessions?:
     | {
-        id: string;
-        createdAt?: string | null;
-        expiresAt: string;
+        id: string
+        createdAt?: string | null
+        expiresAt: string
       }[]
-    | null;
-  password?: string | null;
-  collection: 'users';
+    | null
+  password?: string | null
+  collection: 'users'
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
-  id: number;
-  alt: string;
-  updatedAt: string;
-  createdAt: string;
-  url?: string | null;
-  thumbnailURL?: string | null;
-  filename?: string | null;
-  mimeType?: string | null;
-  filesize?: number | null;
-  width?: number | null;
-  height?: number | null;
-  focalX?: number | null;
-  focalY?: number | null;
+  id: number
+  alt: string
+  updatedAt: string
+  createdAt: string
+  url?: string | null
+  thumbnailURL?: string | null
+  filename?: string | null
+  mimeType?: string | null
+  filesize?: number | null
+  width?: number | null
+  height?: number | null
+  focalX?: number | null
+  focalY?: number | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
  */
 export interface Page {
-  id: number;
-  title: string;
+  id: number
+  title: string
   content?: {
     root: {
-      type: string;
+      type: string
       children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
+        type: any
+        version: number
+        [k: string]: unknown
+      }[]
+      direction: ('ltr' | 'rtl') | null
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+      indent: number
+      version: number
+    }
+    [k: string]: unknown
+  } | null
+  updatedAt: string
+  createdAt: string
+  _status?: ('draft' | 'published') | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "staff".
  */
 export interface Staff {
-  id: number;
-  firstname: string;
-  lastname: string;
-  jobTitle: string;
-  intro?: string | null;
-  manager: boolean;
-  uoaProfileLink?: string | null;
-  email?: string | null;
-  photo?: (number | null) | Media;
-  sortOrder?: number | null;
-  updatedAt: string;
-  createdAt: string;
+  id: number
+  firstname: string
+  lastname: string
+  jobTitle: string
+  intro?: string | null
+  manager: boolean
+  uoaProfileLink?: string | null
+  email?: string | null
+  photo?: (number | null) | Media
+  sortOrder?: number | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "studies".
  */
 export interface Study {
-  id: number;
-  title: string;
+  id: number
+  title: string
   description: {
     root: {
-      type: string;
+      type: string
       children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  };
-  sortOrder?: number | null;
-  updatedAt: string;
-  createdAt: string;
+        type: any
+        version: number
+        [k: string]: unknown
+      }[]
+      direction: ('ltr' | 'rtl') | null
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+      indent: number
+      version: number
+    }
+    [k: string]: unknown
+  }
+  sortOrder?: number | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "research".
  */
 export interface Research {
-  id: number;
-  title: string;
-  description: string;
-  'Your Research File': number | Media;
+  id: number
+  title: string
+  description: string
+  researchLink: string
   /**
    * Used for manual sorting (lower comes first)
    */
-  order?: number | null;
+  order?: number | null
   /**
    * Select related staff members
    */
-  staff?: (number | Staff)[] | null;
-  categories?: (number | ResearchCategory)[] | null;
-  updatedAt: string;
-  createdAt: string;
+  staff?: (number | Staff)[] | null
+  categories?: (number | ResearchCategory)[] | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "research-categories".
  */
 export interface ResearchCategory {
-  id: number;
-  title: string;
-  slug: string;
-  updatedAt: string;
-  createdAt: string;
+  id: number
+  title: string
+  slug: string
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
-  id: number;
-  key: string;
+  id: number
+  key: string
   data:
     | {
-        [k: string]: unknown;
+        [k: string]: unknown
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null;
+    | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
-  id: number;
+  id: number
   document?:
     | ({
-        relationTo: 'users';
-        value: number | User;
+        relationTo: 'users'
+        value: number | User
       } | null)
     | ({
-        relationTo: 'media';
-        value: number | Media;
+        relationTo: 'media'
+        value: number | Media
       } | null)
     | ({
-        relationTo: 'pages';
-        value: number | Page;
+        relationTo: 'pages'
+        value: number | Page
       } | null)
     | ({
-        relationTo: 'staff';
-        value: number | Staff;
+        relationTo: 'staff'
+        value: number | Staff
       } | null)
     | ({
-        relationTo: 'studies';
-        value: number | Study;
+        relationTo: 'studies'
+        value: number | Study
       } | null)
     | ({
-        relationTo: 'research';
-        value: number | Research;
+        relationTo: 'research'
+        value: number | Research
       } | null)
     | ({
-        relationTo: 'research-categories';
-        value: number | ResearchCategory;
-      } | null);
-  globalSlug?: string | null;
+        relationTo: 'research-categories'
+        value: number | ResearchCategory
+      } | null)
+  globalSlug?: string | null
   user: {
-    relationTo: 'users';
-    value: number | User;
-  };
-  updatedAt: string;
-  createdAt: string;
+    relationTo: 'users'
+    value: number | User
+  }
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences".
  */
 export interface PayloadPreference {
-  id: number;
+  id: number
   user: {
-    relationTo: 'users';
-    value: number | User;
-  };
-  key?: string | null;
+    relationTo: 'users'
+    value: number | User
+  }
+  key?: string | null
   value?:
     | {
-        [k: string]: unknown;
+        [k: string]: unknown
       }
     | unknown[]
     | string
     | number
     | boolean
-    | null;
-  updatedAt: string;
-  createdAt: string;
+    | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations".
  */
 export interface PayloadMigration {
-  id: number;
-  name?: string | null;
-  batch?: number | null;
-  updatedAt: string;
-  createdAt: string;
+  id: number
+  name?: string | null
+  batch?: number | null
+  updatedAt: string
+  createdAt: string
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
-  updatedAt?: T;
-  createdAt?: T;
-  email?: T;
-  resetPasswordToken?: T;
-  resetPasswordExpiration?: T;
-  salt?: T;
-  hash?: T;
-  loginAttempts?: T;
-  lockUntil?: T;
+  updatedAt?: T
+  createdAt?: T
+  email?: T
+  resetPasswordToken?: T
+  resetPasswordExpiration?: T
+  salt?: T
+  hash?: T
+  loginAttempts?: T
+  lockUntil?: T
   sessions?:
     | T
     | {
-        id?: T;
-        createdAt?: T;
-        expiresAt?: T;
-      };
+        id?: T
+        createdAt?: T
+        expiresAt?: T
+      }
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
-  alt?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  url?: T;
-  thumbnailURL?: T;
-  filename?: T;
-  mimeType?: T;
-  filesize?: T;
-  width?: T;
-  height?: T;
-  focalX?: T;
-  focalY?: T;
+  alt?: T
+  updatedAt?: T
+  createdAt?: T
+  url?: T
+  thumbnailURL?: T
+  filename?: T
+  mimeType?: T
+  filesize?: T
+  width?: T
+  height?: T
+  focalX?: T
+  focalY?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages_select".
  */
 export interface PagesSelect<T extends boolean = true> {
-  title?: T;
-  content?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  _status?: T;
+  title?: T
+  content?: T
+  updatedAt?: T
+  createdAt?: T
+  _status?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "staff_select".
  */
 export interface StaffSelect<T extends boolean = true> {
-  firstname?: T;
-  lastname?: T;
-  jobTitle?: T;
-  intro?: T;
-  manager?: T;
-  uoaProfileLink?: T;
-  email?: T;
-  photo?: T;
-  sortOrder?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  firstname?: T
+  lastname?: T
+  jobTitle?: T
+  intro?: T
+  manager?: T
+  uoaProfileLink?: T
+  email?: T
+  photo?: T
+  sortOrder?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "studies_select".
  */
 export interface StudiesSelect<T extends boolean = true> {
-  title?: T;
-  description?: T;
-  sortOrder?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  title?: T
+  description?: T
+  sortOrder?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "research_select".
  */
 export interface ResearchSelect<T extends boolean = true> {
-  title?: T;
-  description?: T;
-  'Your Research File'?: T;
-  order?: T;
-  staff?: T;
-  categories?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  title?: T
+  description?: T
+  researchLink?: T
+  order?: T
+  staff?: T
+  categories?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "research-categories_select".
  */
 export interface ResearchCategoriesSelect<T extends boolean = true> {
-  title?: T;
-  slug?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  title?: T
+  slug?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
-  key?: T;
-  data?: T;
+  key?: T
+  data?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
-  document?: T;
-  globalSlug?: T;
-  user?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  document?: T
+  globalSlug?: T
+  user?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-preferences_select".
  */
 export interface PayloadPreferencesSelect<T extends boolean = true> {
-  user?: T;
-  key?: T;
-  value?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  user?: T
+  key?: T
+  value?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-migrations_select".
  */
 export interface PayloadMigrationsSelect<T extends boolean = true> {
-  name?: T;
-  batch?: T;
-  updatedAt?: T;
-  createdAt?: T;
+  name?: T
+  batch?: T
+  updatedAt?: T
+  createdAt?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "home-page".
  */
 export interface HomePage {
-  id: number;
+  id: number
   hero: {
-    title: string;
-    description: string;
-    illustration: number | Media;
+    title: string
+    description: string
+    'portrait hero image': number | Media
+    'mobile hero image': number | Media
     buttons?:
       | {
-          label: string;
-          url: string;
-          variant: 'primary' | 'secondary';
-          id?: string | null;
+          label: string
+          url: string
+          variant: 'primary' | 'secondary'
+          id?: string | null
         }[]
-      | null;
-  };
+      | null
+  }
+  studiesSection: {
+    title: string
+    studiesDisplay?: (number | Study)[] | null
+  }
   aboutSection: {
-    eyebrow: string;
-    heading: string;
-    body: string;
-    image: number | Media;
-  };
+    heading: string
+    body: string
+    'portrait image': number | Media
+    'mobile image': number | Media
+  }
   seo?: {
-    metaTitle?: string | null;
-    metaDescription?: string | null;
-  };
-  updatedAt?: string | null;
-  createdAt?: string | null;
+    metaTitle?: string | null
+    metaDescription?: string | null
+  }
+  updatedAt?: string | null
+  createdAt?: string | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "our-team-page".
  */
 export interface OurTeamPage {
-  id: number;
-  title: string;
-  boardTabLabel: string;
-  staffTabLabel: string;
-  staffMembers?: (number | Staff)[] | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+  id: number
+  title: string
+  boardTabLabel: string
+  staffTabLabel: string
+  staffMembers?: (number | Staff)[] | null
+  updatedAt?: string | null
+  createdAt?: string | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "studies-page".
  */
 export interface StudiesPage {
-  id: number;
-  title: string;
-  studiesDisplay?: (number | Study)[] | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+  id: number
+  title: string
+  studiesDisplay?: (number | Study)[] | null
+  updatedAt?: string | null
+  createdAt?: string | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "research-page".
  */
 export interface ResearchPage {
-  id: number;
-  title: string;
-  description: string;
-  researchCatagoriesDisplay?: (number | ResearchCategory)[] | null;
+  id: number
+  title: string
+  'portrait image': number | Media
+  'mobile image': number | Media
+  researchCatagoriesDisplay?: (number | ResearchCategory)[] | null
   seo?: {
-    metaTitle?: string | null;
-    metaDescription?: string | null;
-  };
-  updatedAt?: string | null;
-  createdAt?: string | null;
+    metaTitle?: string | null
+    metaDescription?: string | null
+  }
+  updatedAt?: string | null
+  createdAt?: string | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "navigation-bar".
  */
 export interface NavigationBar {
-  id: number;
-  uoaLogo: number | Media;
-  hnuLogo: number | Media;
+  id: number
+  uoaLogo: number | Media
+  hnuLogo: number | Media
   navbarLinks?:
     | {
-        navTitle: string;
-        navURL: string;
-        id?: string | null;
+        navTitle: string
+        navURL: string
+        id?: string | null
       }[]
-    | null;
-  updatedAt?: string | null;
-  createdAt?: string | null;
+    | null
+  updatedAt?: string | null
+  createdAt?: string | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -620,95 +633,103 @@ export interface HomePageSelect<T extends boolean = true> {
   hero?:
     | T
     | {
-        title?: T;
-        description?: T;
-        illustration?: T;
+        title?: T
+        description?: T
+        'portrait hero image'?: T
+        'mobile hero image'?: T
         buttons?:
           | T
           | {
-              label?: T;
-              url?: T;
-              variant?: T;
-              id?: T;
-            };
-      };
+              label?: T
+              url?: T
+              variant?: T
+              id?: T
+            }
+      }
+  studiesSection?:
+    | T
+    | {
+        title?: T
+        studiesDisplay?: T
+      }
   aboutSection?:
     | T
     | {
-        eyebrow?: T;
-        heading?: T;
-        body?: T;
-        image?: T;
-      };
+        heading?: T
+        body?: T
+        'portrait image'?: T
+        'mobile image'?: T
+      }
   seo?:
     | T
     | {
-        metaTitle?: T;
-        metaDescription?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+        metaTitle?: T
+        metaDescription?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "our-team-page_select".
  */
 export interface OurTeamPageSelect<T extends boolean = true> {
-  title?: T;
-  boardTabLabel?: T;
-  staffTabLabel?: T;
-  staffMembers?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+  title?: T
+  boardTabLabel?: T
+  staffTabLabel?: T
+  staffMembers?: T
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "studies-page_select".
  */
 export interface StudiesPageSelect<T extends boolean = true> {
-  title?: T;
-  studiesDisplay?: T;
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+  title?: T
+  studiesDisplay?: T
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "research-page_select".
  */
 export interface ResearchPageSelect<T extends boolean = true> {
-  title?: T;
-  description?: T;
-  researchCatagoriesDisplay?: T;
+  title?: T
+  'portrait image'?: T
+  'mobile image'?: T
+  researchCatagoriesDisplay?: T
   seo?:
     | T
     | {
-        metaTitle?: T;
-        metaDescription?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+        metaTitle?: T
+        metaDescription?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "navigation-bar_select".
  */
 export interface NavigationBarSelect<T extends boolean = true> {
-  uoaLogo?: T;
-  hnuLogo?: T;
+  uoaLogo?: T
+  hnuLogo?: T
   navbarLinks?:
     | T
     | {
-        navTitle?: T;
-        navURL?: T;
-        id?: T;
-      };
-  updatedAt?: T;
-  createdAt?: T;
-  globalType?: T;
+        navTitle?: T
+        navURL?: T
+        id?: T
+      }
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -716,18 +737,17 @@ export interface NavigationBarSelect<T extends boolean = true> {
  */
 export interface CollectionsWidget {
   data?: {
-    [k: string]: unknown;
-  };
-  width: 'full';
+    [k: string]: unknown
+  }
+  width: 'full'
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "auth".
  */
 export interface Auth {
-  [k: string]: unknown;
+  [k: string]: unknown
 }
-
 
 declare module 'payload' {
   export interface GeneratedTypes extends Config {}
