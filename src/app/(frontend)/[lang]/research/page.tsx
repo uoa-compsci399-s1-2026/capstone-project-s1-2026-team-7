@@ -1,9 +1,9 @@
 import { getResearchPage } from '@/queries/researchpage'
-import { getAllResearch } from '@/queries/research'
+import { searchResearch } from '@/queries/searchResearch'
 
 async function page() {
   const researchpage = await getResearchPage()
-  const research = await getAllResearch()
+  const research = await searchResearch('', 1)
 
   return (
     <div>
@@ -14,11 +14,11 @@ async function page() {
         ))}
       </div>
       <div>
-        {research.docs.map((entry) => (
+        {research.map((entry) => (
           <div key={entry.id}>
             <h3>{entry.title}</h3>
 
-            <a href={entry['Your Research File']?.url} target="_blank" rel="noopener noreferrer">
+            <a href={entry.researchLink} target="_blank" rel="noopener noreferrer">
               View PDF
             </a>
             <p>{entry.description}</p>
