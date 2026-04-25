@@ -10,12 +10,12 @@ export const Research: CollectionConfig = {
     { name: 'description', type: 'text', required: true, localized: true },
 
     {
-      name: 'Your Research File',
-      type: 'upload',
-      relationTo: 'media',
-      required: true,
-      filterOptions: { mimeType: { equals: 'application/pdf' } },
+      name: 'researchLink',
+      label: 'Research Link',
+      type: 'text',
+      required: false,
     },
+
     {
       name: 'order',
       type: 'number',

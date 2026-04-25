@@ -7,7 +7,7 @@ export const researchDTOSchema = z.object({
   id: z.number(),
   title: z.string().default(''),
   description: z.string().default(''),
-  'Your Research File': mediaSchema.default(DEFAULT_GENERAL_PIC),
+  researchLink: z.string().default('https://auckland.ac.nz'), //Default 404 for now
   staff: z.array(staffSchema).default([]),
   categories: z.array(researchCategorySchema).default([]),
   order: z
