@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import mobile_hero from '../../../public/mobile_hero.png'
+import mobile_hero from '../../../../public/mobile_hero.png'
 import MainButton from './MainButton'
 import { HeroDTO } from '@/validation'
 type HeroSectionProp = {
