@@ -10,6 +10,14 @@ export const OurTeamPage: GlobalConfig = {
       localized: true,
       required: true,
     },
+
+    {
+      name: 'banner',
+      type: 'upload',
+      relationTo: 'media',
+      required: true,
+    },
+
     {
       name: 'boardTabLabel',
       type: 'text',

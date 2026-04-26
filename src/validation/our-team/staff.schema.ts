@@ -20,29 +20,4 @@ export const staffSchema = z.object({
     .transform(() => 0),
 })
 
-/*
-export const staffDTOSchema = staffSchema.transform((staff) => {
-  const parsedPhoto = mediaSchema.safeParse(staff.photo)
-
-  const photo =
-    parsedPhoto.success && parsedPhoto.data.url
-      ? {
-          url: parsedPhoto.data.url,
-          alt: parsedPhoto.data.alt?.trim() || 'Profile Picture',
-        }
-      : DEFAULT_PROFILE_PIC
-
-  return {
-    firstname: staff.firstname,
-    lastname: staff.lastname,
-    jobTitle: staff.jobTitle,
-    intro: staff.intro ?? '',
-    manager: staff.manager ?? false,
-    uoaProfileLink: staff.uoaProfileLink ?? '',
-    email: staff.email ?? '',
-    photo,
-    sortOrder: staff.sortOrder ?? 1000000,
-  }
-})
-*/
 export type StaffDTO = z.infer<typeof staffSchema>

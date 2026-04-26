@@ -12,7 +12,6 @@ type PageProps = {
 export default async function HomePage({ params }: PageProps) {
   const { lang } = await params
   const data: HomepageDTO = await getHomePage(lang)
-  console.log('homepage data:', data)
   return (
     <main>
       <HeroSection prop={data.hero} />

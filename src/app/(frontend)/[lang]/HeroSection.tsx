@@ -7,7 +7,7 @@ type HeroSectionProp = {
 }
 
 export default function HeroSection({ prop }: HeroSectionProp) {
-  const { title, description, illustration, buttons } = prop
+  const { title, description, heroHorizontal, buttons } = prop
   const button1 = buttons[0]
   const button2 = buttons[1]
 
@@ -27,10 +27,10 @@ export default function HeroSection({ prop }: HeroSectionProp) {
 
       {/* Desktop/tablet image — 450px and above */}
       <div className="absolute inset-0 hidden min-[450px]:block">
-        {illustration.url && (
+        {heroHorizontal.url && (
           <Image
-            src={illustration.url}
-            alt={illustration.alt || 'Hero image'}
+            src={heroHorizontal.url}
+            alt={heroHorizontal.alt || 'Hero image'}
             fill
             priority
             quality={100}
