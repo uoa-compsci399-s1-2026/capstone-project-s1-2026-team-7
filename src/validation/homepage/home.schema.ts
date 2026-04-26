@@ -1,35 +1,90 @@
 import { z } from 'zod'
-import { mediaSchema } from '../common/media.schema'
-import { DEFAULT_GENERAL_PIC } from '../common/media.schema'
+import { mediaSchema, DEFAULT_GENERAL_PIC } from '../common/media.schema'
 import { seoSchema } from '../common/seo.schema'
+
+const stringWithDefault = z
+  .string()
+  .nullish()
+  .transform((value) => value ?? '')
+
+const mediaWithDefault = mediaSchema.nullish().transform((value) => value ?? DEFAULT_GENERAL_PIC)
 
 const buttonSchema = z.object({
   id: z.string(),
-  label: z.string().default(''),
-  url: z.string().default(''),
-  variant: z.enum(['primary', 'secondary']),
+  label: stringWithDefault,
+  url: stringWithDefault,
+  variant: z.enum(['primary', 'secondary']).default('primary'),
 })
 
-const heroSchema = z.object({
-  title: z.string().default(''),
-  description: z.string().default(''),
-  illustration: mediaSchema.default(DEFAULT_GENERAL_PIC),
-  buttons: z.array(buttonSchema).default([]),
+const heroPayloadSchema = z
+  .object({
+    title: stringWithDefault,
+    description: stringWithDefault,
+
+    'portrait hero image': mediaWithDefault,
+    'mobile hero image': mediaWithDefault,
+
+    buttons: z
+      .array(buttonSchema)
+      .nullish()
+      .transform((value) => value ?? []),
+  })
+  .transform((hero) => ({
+    title: hero.title,
+    description: hero.description,
+    heroHorizontal: hero['portrait hero image'],
+    heroMobile: hero['mobile hero image'],
+    buttons: hero.buttons,
+  }))
+
+const studyDisplaySchema = z.object({
+  id: z.number(),
+  title: stringWithDefault,
+  description: z.unknown().optional(),
+  sortOrder: z.number().nullish().optional(),
+  updatedAt: z.string().optional(),
+  createdAt: z.string().optional(),
 })
 
-const aboutSectionSchema = z.object({
-  eyebrow: z.string().default(''),
-  heading: z.string().default(''),
-  body: z.string().default(''),
-  image: mediaSchema.default(DEFAULT_GENERAL_PIC),
-})
+const studiesSectionPayloadSchema = z
+  .object({
+    title: stringWithDefault,
+    studiesDisplay: z
+      .array(studyDisplaySchema)
+      .nullish()
+      .transform((value) => value ?? []),
+  })
+  .transform((section) => ({
+    title: section.title,
+    researchList: section.studiesDisplay,
+  }))
+
+const aboutSectionPayloadSchema = z
+  .object({
+    eyebrow: stringWithDefault,
+    heading: stringWithDefault,
+    body: stringWithDefault,
+
+    'portrait image': mediaWithDefault,
+    'mobile image': mediaWithDefault,
+  })
+  .transform((section) => ({
+    eyebrow: section.eyebrow,
+    heading: section.heading,
+    body: section.body,
+    image: section['portrait image'],
+    mobileImage: section['mobile image'],
+  }))
 
 export const homepageSchema = z.object({
   id: z.number(),
-  hero: heroSchema,
-  aboutSection: aboutSectionSchema,
+  hero: heroPayloadSchema,
+  studiesSection: studiesSectionPayloadSchema,
+  aboutSection: aboutSectionPayloadSchema,
   seo: seoSchema,
 })
 
 export type HomepageDTO = z.infer<typeof homepageSchema>
-export type HeroDTO = z.infer<typeof heroSchema>
+export type HeroDTO = HomepageDTO['hero']
+export type AboutSectionDTO = HomepageDTO['aboutSection']
+export type StudiesSectionDTO = HomepageDTO['studiesSection']

@@ -573,6 +573,7 @@ export interface HomePage {
 export interface OurTeamPage {
   id: number
   title: string
+  banner: number | Media
   boardTabLabel: string
   staffTabLabel: string
   staffMembers?: (number | Staff)[] | null
@@ -676,6 +677,7 @@ export interface HomePageSelect<T extends boolean = true> {
  */
 export interface OurTeamPageSelect<T extends boolean = true> {
   title?: T
+  banner?: T
   boardTabLabel?: T
   staffTabLabel?: T
   staffMembers?: T
