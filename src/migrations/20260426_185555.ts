@@ -73,6 +73,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"id" serial PRIMARY KEY NOT NULL,
   	"firstname" varchar NOT NULL,
   	"lastname" varchar NOT NULL,
+  	"orcid" varchar,
   	"job_title" varchar NOT NULL,
   	"intro" varchar,
   	"manager" boolean DEFAULT false NOT NULL,
@@ -102,6 +103,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE TABLE "research" (
   	"id" serial PRIMARY KEY NOT NULL,
   	"research_link" varchar NOT NULL,
+  	"date" varchar,
   	"order" numeric,
   	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
   	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
@@ -109,7 +111,6 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   
   CREATE TABLE "research_locales" (
   	"title" varchar NOT NULL,
-  	"description" varchar NOT NULL,
   	"id" serial PRIMARY KEY NOT NULL,
   	"_locale" "_locales" NOT NULL,
   	"_parent_id" integer NOT NULL
@@ -231,6 +232,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   
   CREATE TABLE "our_team_page" (
   	"id" serial PRIMARY KEY NOT NULL,
+  	"banner_id" integer,
   	"updated_at" timestamp(3) with time zone,
   	"created_at" timestamp(3) with time zone
   );
@@ -347,6 +349,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "home_page_locales" ADD CONSTRAINT "home_page_locales_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."home_page"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "home_page_rels" ADD CONSTRAINT "home_page_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."home_page"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "home_page_rels" ADD CONSTRAINT "home_page_rels_studies_fk" FOREIGN KEY ("studies_id") REFERENCES "public"."studies"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "our_team_page" ADD CONSTRAINT "our_team_page_banner_id_media_id_fk" FOREIGN KEY ("banner_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
   ALTER TABLE "our_team_page_locales" ADD CONSTRAINT "our_team_page_locales_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."our_team_page"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "our_team_page_rels" ADD CONSTRAINT "our_team_page_rels_parent_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."our_team_page"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "our_team_page_rels" ADD CONSTRAINT "our_team_page_rels_staff_fk" FOREIGN KEY ("staff_id") REFERENCES "public"."staff"("id") ON DELETE cascade ON UPDATE no action;
@@ -435,6 +438,7 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "home_page_rels_parent_idx" ON "home_page_rels" USING btree ("parent_id");
   CREATE INDEX "home_page_rels_path_idx" ON "home_page_rels" USING btree ("path");
   CREATE INDEX "home_page_rels_studies_id_idx" ON "home_page_rels" USING btree ("studies_id");
+  CREATE INDEX "our_team_page_banner_idx" ON "our_team_page" USING btree ("banner_id");
   CREATE UNIQUE INDEX "our_team_page_locales_locale_parent_id_unique" ON "our_team_page_locales" USING btree ("_locale","_parent_id");
   CREATE INDEX "our_team_page_rels_order_idx" ON "our_team_page_rels" USING btree ("order");
   CREATE INDEX "our_team_page_rels_parent_idx" ON "our_team_page_rels" USING btree ("parent_id");

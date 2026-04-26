@@ -725,6 +725,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "orcid": {
+          "name": "orcid",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "job_title": {
           "name": "job_title",
           "type": "varchar",
@@ -1009,6 +1015,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "date": {
+          "name": "date",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false
+        },
         "order": {
           "name": "order",
           "type": "numeric",
@@ -1075,12 +1087,6 @@
       "columns": {
         "title": {
           "name": "title",
-          "type": "varchar",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "description": {
-          "name": "description",
           "type": "varchar",
           "primaryKey": false,
           "notNull": true
@@ -2662,6 +2668,12 @@
           "primaryKey": true,
           "notNull": true
         },
+        "banner_id": {
+          "name": "banner_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
         "updated_at": {
           "name": "updated_at",
           "type": "timestamp(3) with time zone",
@@ -2675,8 +2687,34 @@
           "notNull": false
         }
       },
-      "indexes": {},
-      "foreignKeys": {},
+      "indexes": {
+        "our_team_page_banner_idx": {
+          "name": "our_team_page_banner_idx",
+          "columns": [
+            {
+              "expression": "banner_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "our_team_page_banner_id_media_id_fk": {
+          "name": "our_team_page_banner_id_media_id_fk",
+          "tableFrom": "our_team_page",
+          "tableTo": "media",
+          "columnsFrom": ["banner_id"],
+          "columnsTo": ["id"],
+          "onDelete": "set null",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},
@@ -3691,6 +3729,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "9f098b01-6940-4342-9e3c-d61588a93fbc",
+  "id": "a6998dc6-42a9-4637-a29b-714f7574ffbb",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }

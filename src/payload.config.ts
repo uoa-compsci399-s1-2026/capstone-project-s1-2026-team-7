@@ -46,7 +46,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
-    push: false,
+    push: process.env.NEON_BRANCH !== 'prod',
   }),
   sharp,
   plugins: [

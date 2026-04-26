@@ -1,4 +1,11 @@
+import { config as loadEnv } from 'dotenv'
+
+loadEnv()
+
 import { OrcidWorkGroup, OrcidWorksResponse } from './loadertypes'
+
+import { uploadResearch, UploadResearchDTO } from '@/queries/uploadResearch'
+
 type nameWithORcid = {
   name: string
   orcid: string
@@ -49,7 +56,47 @@ function getArticleOutput(data: OrcidWorksResponse): ArticleOutput[] {
 
 async function updateDatabase() {}
 
-async function compareEntries() {}
+type SharedArticle = {
+  article: ArticleOutput
+  people: string[]
+}
+
+function articleKey(article: ArticleOutput) {
+  return `${article.title.toLowerCase().trim()}|${article.url ?? ''}|${article.publicationDate ?? ''}`
+}
+
+async function compareEntries(data: PerPersonOutputType[]): Promise<SharedArticle[]> {
+  const articleMap = new Map<string, SharedArticle>()
+
+  for (const person of data) {
+    for (const article of person.articles) {
+      const key = articleKey(article)
+
+      const existing = articleMap.get(key)
+
+      if (existing) {
+        if (!existing.people.includes(person.name)) {
+          existing.people.push(person.name)
+        }
+      } else {
+        articleMap.set(key, {
+          article,
+          people: [person.name],
+        })
+      }
+    }
+  }
+
+  return Array.from(articleMap.values())
+}
+
+function uploadToDatabase(data: ArticleOutput) {
+  uploadResearch({
+    title: data.title,
+    url: data.url || '',
+    publicationDate: data.publicationDate || '',
+  })
+}
 
 async function main() {
   const data: PerPersonOutputType[] = await Promise.all(
@@ -62,8 +109,11 @@ async function main() {
     }),
   )
 
-  console.log(data)
-  return data
+  const cleaned: SharedArticle[] = await compareEntries(data)
+  cleaned.map((data) => uploadToDatabase(data.article))
+
+  console.log(cleaned)
+  return cleaned
 }
 
 main()

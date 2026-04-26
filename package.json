@@ -21,7 +21,7 @@
     "clean": "powershell -Command \"Remove-Item -Recurse -Force .next,node_modules -ErrorAction SilentlyContinue\"",
     "seed:team": "tsx scripts/seedHomepage.ts",
     "seed:homepage": "tsx scripts/seedOurteampage.ts",
-    "load": "tsx scripts/loadResearch.ts"
+    "load": "tsx -r dotenv/config scripts/loadResearch.ts"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
