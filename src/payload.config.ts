@@ -4,12 +4,21 @@ import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
+import { s3Storage } from '@payloadcms/storage-s3'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
-import { s3Storage } from '@payloadcms/storage-s3'
+import { Studies } from './collections/Studies'
+import { Staff } from './collections/Staff'
+import { Research } from './collections/Research'
+import { ResearchCategories } from './collections/ResearchCategories'
+
 import { HomePage } from './globals/Homepage'
+import { OurTeamPage } from './globals/OurTeamPage'
+import { StudiesPage } from './globals/StudiesPage'
+import { ResearchPage } from './globals/ResearchPage'
+import { NavigationBar } from './globals/NavigationBar'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -26,8 +35,8 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
-  collections: [Users, Media, Pages],
-  globals: [HomePage],
+  collections: [Users, Media, Pages, Staff, Studies, Research, ResearchCategories],
+  globals: [HomePage, OurTeamPage, StudiesPage, ResearchPage, NavigationBar],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {

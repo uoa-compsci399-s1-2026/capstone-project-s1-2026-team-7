@@ -1,112 +1,268 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect, PropsWithChildren, HTMLAttributes } from 'react'
+import { cn } from '@/lib/utils'
+import { Icon } from '../_components/icons'
 
-const navLinks = ['Research', 'Our Team', 'Studies', 'Collaborations', 'Media']
+type navbarProps = {
+  data: NavigationBarDTO
+}
 
-export default function Navbar() {
+import Link from 'next/link'
+import Image from 'next/image'
+import { NavigationBarDTO } from '@/validation/navigationBar'
+
+const languages = [
+  { code: 'en', label: 'English' },
+  { code: 'zh', label: '中文' },
+  { code: 'fr', label: 'Français' },
+  { code: 'ja', label: '日本語' },
+  { code: 'ko', label: '한국어' },
+]
+
+export default function Navbar(props: navbarProps) {
   const [searchOpen, setSearchOpen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
-    <header className="w-full border-b border-[#D9D9D9] bg-[#F7F7F7]">
-      <div className="mx-auto flex h-[68px] max-w-[1440px] items-center justify-between px-8">
-        <div className="flex shrink-0 items-center gap-4">
-          <div className="flex items-center shrink-0">
-            <img
-              src="https://i0.wp.com/vhin.co.nz/wp-content/uploads/2025/08/UoA-Logo-Primary-RGB-Small.png?ssl=1"
-              alt="University of Auckland logo"
-              style={{ height: '32px', width: 'auto' }}
-              className="object-contain"
-            />
+    <>
+      {/* Mobile full-screen overlay */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 z-50 flex flex-col bg-[#F7F7F7] md:hidden">
+          {/* Top row — mirrors the header */}
+          <div className="flex h-17 shrink-0 items-center justify-between px-4">
+            <NavigationLogos data={props.data} />
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              aria-label="Close menu"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-[#6B6F76] text-[#000000] transition hover:bg-[#ECECEC]"
+            >
+              <Icon.X />
+            </button>
           </div>
 
-          <div className="h-[36px] w-px bg-[#BFC4CC]" />
-
-          <div className="flex h-[34px] w-[62px] items-center justify-center border-[3px] border-[#00558C] text-[16px] font-bold text-[#00558C]">
-            HNU
-          </div>
-        </div>
-
-        {!searchOpen && (
-          <nav className="hidden md:flex items-center gap-8 text-[#0C0C48]">
-            {navLinks.map((item) => (
+          {/* Nav links */}
+          <nav className="flex flex-1 flex-col px-4 pt-2">
+            {props.data.navbarLinks.map((item) => (
               <a
-                key={item}
-                href="#"
-                className="text-[13px] font-medium hover:opacity-70 transition"
+                key={item.navTitle}
+                href={item.navURL}
+                className="border-b border-[#E8E8E8] py-4 text-[22px] font-medium text-[#0C0C48] transition hover:opacity-70"
               >
-                {item}
+                {item.navTitle}
               </a>
             ))}
           </nav>
-        )}
 
-        <div className="flex items-center gap-3">
-          {!searchOpen ? (
-            <>
-              <button className="h-[32px] w-[72px] rounded-full bg-[#2F3FE6] text-[12px] font-medium text-white hover:opacity-90 transition">
-                Contact
-              </button>
-
-              <button
-                onClick={() => setSearchOpen(true)}
-                aria-label="Open search"
-                className="flex h-[32px] w-[45px] shrink-0 items-center justify-center rounded-full border border-[#6B6F76] hover:bg-[#ECECEC] transition"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="15"
-                  height="15"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#0C0C48"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="7" />
-                  <path d="m20 20-3.5-3.5" />
-                </svg>
-              </button>
-            </>
-          ) : (
+          {/* Bottom section — search + contact */}
+          <div className="flex shrink-0 flex-col gap-3 px-4 pb-8 pt-4">
             <div className="flex items-center gap-2">
-              <div className="flex h-[38px] w-[280px] items-center rounded-full border border-[#C9CDD4] bg-white px-4">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#0C0C48"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="mr-2"
-                >
-                  <circle cx="11" cy="11" r="7" />
-                  <path d="m20 20-3.5-3.5" />
-                </svg>
-
+              <div className="flex h-11 flex-1 items-center gap-2 rounded-full border border-[#C9CDD4] bg-white px-4">
                 <input
-                  autoFocus
                   type="text"
                   placeholder="Search..."
                   className="w-full bg-transparent text-[13px] text-[#18214D] outline-none placeholder:text-[#9AA1AC]"
                 />
               </div>
-
               <button
-                onClick={() => setSearchOpen(false)}
-                aria-label="Close search"
-                className="flex h-[32px] w-[32px] items-center justify-center rounded-full border border-[#6B6F76] text-[#000000] hover:bg-[#ECECEC] transition"
+                aria-label="Search"
+                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#2F3FE6] transition hover:opacity-90"
               >
-                ✕
+                <Icon.WhiteMagnifyingGlass />
               </button>
             </div>
-          )}
+            <button className="h-11 w-full rounded-full bg-[#2F3FE6] text-[13px] font-medium text-white transition hover:opacity-90">
+              Contact
+            </button>
+          </div>
         </div>
+      )}
+
+      <header className="w-full border-b border-border bg-[#F7F7F7]">
+        <div className="mx-auto flex h-17 max-w-360 items-center justify-between px-8 max-md:px-4">
+          <NavigationLogos data={props.data} />
+          {!searchOpen && (
+            <nav className="hidden md:flex items-center gap-8 text-[#0C0C48]">
+              {props.data.navbarLinks.map((item) => (
+                <Link
+                  key={item.navTitle}
+                  href={item.navURL}
+                  className="text-[#0C0C48] text-[13px] font-medium transition hover:opacity-70"
+                >
+                  {item.navTitle}
+                </Link>
+              ))}
+            </nav>
+          )}
+
+          <div className="flex items-center gap-3">
+            {!searchOpen ? (
+              <>
+                {/* should hide on mobile */}
+                <LanguageDropdown className="hidden md:inline-flex" />
+                {/* should hide on mobile */}
+                <ContactButton className="" />
+                {/* always on */}
+                <SearchButton
+                  className=""
+                  onClick={() => {
+                    setSearchOpen(true)
+                    setMobileMenuOpen(false)
+                  }}
+                />
+                {/* should hidden on desktop */}
+                <MenuButton className="" onClick={() => setMobileMenuOpen((prev) => !prev)} />
+              </>
+            ) : (
+              <div className="flex items-center gap-2">
+                <div className="flex h-9.5 w-70 max-md:w-45 items-center rounded-full border border-[#C9CDD4] bg-white px-4">
+                  <Icon.MagnifyingGlass />
+                  <input
+                    autoFocus
+                    type="text"
+                    placeholder="Search"
+                    className="w-full bg-transparent text-[13px] text-[#18214D] outline-none placeholder:text-[#9AA1AC]"
+                  />
+                </div>
+                <button
+                  onClick={() => setSearchOpen(false)}
+                  aria-label="Close search"
+                  className="flex h-8 w-8 items-center justify-center rounded-full border border-[#6B6F76] text-[#000000] transition hover:bg-[#ECECEC]"
+                >
+                  <Icon.X />
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </header>
+    </>
+  )
+}
+
+export const NavigationButton = ({ children }: PropsWithChildren) => {
+  return (
+    <a href="#" className="text-[#0C0C48] text-[13px] font-medium transition hover:opacity-70">
+      {children}
+    </a>
+  )
+}
+
+export const NavigationLogos = (props: navbarProps) => {
+  return (
+    <div className="flex shrink-0 items-center gap-4 max-md:gap-3">
+      <div className="flex items-center shrink-0 relative h-8 w-16">
+        <Link href="/">
+          <Image
+            src={props.data.uoaLogo.url}
+            alt={props.data.uoaLogo.alt}
+            sizes="80px"
+            fill
+            className="object-contain"
+          />
+        </Link>
       </div>
-    </header>
+      <div className="h-9 w-px bg-[#BFC4CC]" />
+      <div className="flex h-8 items-center shrink-0 w-16 relative">
+        <Link href="/">
+          <Image
+            src={props.data.hnuLogo.url}
+            alt={props.data.hnuLogo.alt}
+            fill
+            sizes="80px"
+            className="object-contain"
+          />
+        </Link>
+      </div>
+    </div>
+  )
+}
+
+const LanguageDropdown = (props: HTMLAttributes<HTMLDivElement>) => {
+  const [open, setOpen] = useState(false)
+  const [selected, setSelected] = useState(languages[0])
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
+  return (
+    <div ref={ref} className={cn('relative inline-flex', props.className)}>
+      <button
+        onClick={() => setOpen((prev) => !prev)}
+        aria-label="Change language"
+        className="inline-flex h-8 items-center justify-center gap-2 rounded-full border border-[#C9CDD4] bg-white px-3 text-[12px] font-medium text-[#0C0C48] transition hover:bg-[#F2F4F7]"
+      >
+        <span>
+          {selected.code === 'en' ? '🇬🇧 ' : ''}
+          {selected.label}
+        </span>
+        <span className={cn('transition-transform duration-200', open && 'rotate-180')}>
+          <Icon.V />
+        </span>
+      </button>
+
+      {open && (
+        <div className="absolute left-0 top-[calc(100%+6px)] z-50 min-w-32.5 overflow-hidden rounded-xl border border-[#C9CDD4] bg-white shadow-md">
+          {languages.map((lang) => (
+            <button
+              key={lang.code}
+              onClick={() => {
+                setSelected(lang)
+                setOpen(false)
+              }}
+              className={cn(
+                'flex w-full items-center gap-2 px-3 py-2 text-left text-[12px] font-medium text-[#0C0C48] transition hover:bg-[#F2F4F7]',
+                selected.code === lang.code && 'bg-[#F2F4F7]',
+              )}
+            >
+              <span>{lang.label}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+const ContactButton = (props: HTMLAttributes<HTMLButtonElement>) => {
+  return (
+    <button className="hidden md:inline-flex h-8 w-18 items-center justify-center rounded-full bg-[#2F3FE6] text-[12px] font-medium text-white transition hover:opacity-90">
+      Contact
+    </button>
+  )
+}
+
+const SearchButton = (props: HTMLAttributes<HTMLButtonElement>) => {
+  return (
+    <button
+      {...props}
+      aria-label="Open search"
+      className="flex h-8 w-11.25 shrink-0 items-center justify-center rounded-full border border-[#6B6F76] transition hover:bg-[#ECECEC]"
+    >
+      <Icon.MagnifyingGlass />
+    </button>
+  )
+}
+
+const MenuButton = (props: HTMLAttributes<HTMLButtonElement>) => {
+  return (
+    <button
+      {...props}
+      aria-label="Toggle menu"
+      className={cn(
+        'flex md:hidden h-8 w-11.25 shrink-0 items-center justify-center rounded-full border border-[#6B6F76] transition hover:bg-[#ECECEC]',
+        props.className,
+      )}
+    >
+      <Icon.Burger />
+    </button>
   )
 }

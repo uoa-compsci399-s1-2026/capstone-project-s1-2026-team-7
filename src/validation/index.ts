@@ -1,0 +1,5 @@
+export * from './navigationBar'
+export * from './homepage'
+export * from './our-team'
+export * from './research'
+export * from './studies'

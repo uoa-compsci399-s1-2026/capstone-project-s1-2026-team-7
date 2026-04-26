@@ -4,19 +4,21 @@ on:
   pull_request:
     branches:
       - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
 
 jobs:
-  run-and-test:
+  pr-checks:
+    name: PR checks
     runs-on: ubuntu-latest
-
-    env:
-        DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
-        AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        S3_REGION: ${{ secrets.S3_REGION }}
-        S3_BUCKET: ${{ secrets.S3_BUCKET }}
-
 
     steps:
       - name: Checkout repository
@@ -25,18 +27,62 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
-          cache: 'npm'
+          node-version: 24
+          cache: npm
 
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+      - name: Run lint
+        run: npm run lint
 
+  neon-build-and-test:
+    name: Neon build and test
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false)
 
-      - name: Run Next.js Build
+    env:
+      PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+      AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      S3_REGION: ${{ secrets.S3_REGION }}
+      S3_BUCKET: ${{ secrets.S3_BUCKET }}
+      NEXT_PUBLIC_SERVER_URL: ${{ secrets.NEXT_PUBLIC_SERVER_URL }}
+      NEON_API_KEY: ${{ secrets.NEON_API_KEY }}
+      NEON_PROJECT_ID: ${{ secrets.NEON_PROJECT_ID }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check required Neon secrets
+        shell: bash
+        run: |
+          test -n "$NEON_API_KEY" || { echo "NEON_API_KEY is missing"; exit 1; }
+          test -n "$NEON_PROJECT_ID" || { echo "NEON_PROJECT_ID is missing"; exit 1; }
+
+      - name: Verify Neon auth
+        shell: bash
+        run: |
+          npx neonctl branches list --output json --project-id "$NEON_PROJECT_ID" --api-key "$NEON_API_KEY"      
+      
+      - name: Sync Neon branch and write .env
+        run: node scripts/sync-neon-branch.mjs
+    
+      - name: Run Next.js build
         run: npm run build
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
 
       - name: Run tests
         run: npm run test

@@ -1,9 +1,17 @@
 import React from 'react'
+import ProfileCard from './Profile'
+import TeamSection from './TeamSection'
+import { getOurTeamPage } from '@/queries/ourteampage'
+import { OurTeamPageDTO, StaffDTO } from '@/validation/our-team'
 
-function page() {
-  return (
-    <div>Meet The Team</div>
-  )
+import { select } from 'payload/shared'
+
+export default async function OurTeam() {
+  {
+    /* Import from backend*/
+  }
+
+  const pageData: OurTeamPageDTO = await getOurTeamPage('en')
+
+  return <TeamSection teamSection={pageData} />
 }
-
-export default page
