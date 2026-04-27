@@ -3,6 +3,7 @@ import React, { useState, PropsWithChildren, HTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
 import { Icon } from './_components/icons'
 import { LanguageDropdown } from './_components/LanguageDropdown'
+import { useRouter } from 'next/navigation'
 
 import type { Lang } from '../type/lang'
 
@@ -18,6 +19,7 @@ import { NavigationBarDTO } from '@/validation/navigationBar'
 export default function Navbar(props: navbarProps) {
   const [searchOpen, setSearchOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const router = useRouter()
 
   return (
     <>
@@ -66,7 +68,10 @@ export default function Navbar(props: navbarProps) {
                 <Icon.WhiteMagnifyingGlass />
               </button>
             </div>
-            <button className="h-11 w-full rounded-full bg-[#2F3FE6] text-[13px] font-medium text-white transition hover:opacity-90">
+            <button
+              onClick={() => router.push(`/${props.currentLang}/contact`)}
+              className="h-11 w-full rounded-full bg-[#2F3FE6] text-[13px] font-medium text-white transition hover:opacity-90"
+            >
               Contact
             </button>
           </div>
@@ -99,7 +104,10 @@ export default function Navbar(props: navbarProps) {
                   currentLang={props.currentLang}
                 />
                 {/* should hide on mobile */}
-                <ContactButton className="" />
+                <ContactButton
+                  currentLang={props.currentLang}
+                  className="hidden md:inline-flex h-8 w-18 items-center justify-center rounded-full bg-[#2F3FE6] text-[12px] font-medium text-white transition hover:opacity-90"
+                />
                 {/* always on */}
                 <SearchButton
                   className=""
@@ -176,9 +184,15 @@ export const NavigationLogos = (props: navbarProps) => {
   )
 }
 
-const ContactButton = (props: HTMLAttributes<HTMLButtonElement>) => {
+type ContactButtonProps = {
+  currentLang: Lang
+  className: string
+}
+
+const ContactButton = ({ currentLang, className }: ContactButtonProps) => {
+  const router = useRouter()
   return (
-    <button className="hidden md:inline-flex h-8 w-18 items-center justify-center rounded-full bg-[#2F3FE6] text-[12px] font-medium text-white transition hover:opacity-90">
+    <button onClick={() => router.push(`/${currentLang}/contact`)} className={className}>
       Contact
     </button>
   )
