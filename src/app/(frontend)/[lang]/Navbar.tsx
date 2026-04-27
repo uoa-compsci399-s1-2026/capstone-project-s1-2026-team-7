@@ -1,24 +1,19 @@
 'use client'
-
-import React, { useState, useRef, useEffect, PropsWithChildren, HTMLAttributes } from 'react'
+import React, { useState, PropsWithChildren, HTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
-import { Icon } from '../_components/icons'
+import { Icon } from './_components/icons'
+import { LanguageDropdown } from './_components/LanguageDropdown'
+
+import type { Lang } from '../type/lang'
 
 type navbarProps = {
   data: NavigationBarDTO
+  currentLang: Lang
 }
 
 import Link from 'next/link'
 import Image from 'next/image'
 import { NavigationBarDTO } from '@/validation/navigationBar'
-
-const languages = [
-  { code: 'en', label: 'English' },
-  { code: 'zh', label: '中文' },
-  { code: 'fr', label: 'Français' },
-  { code: 'ja', label: '日本語' },
-  { code: 'ko', label: '한국어' },
-]
 
 export default function Navbar(props: navbarProps) {
   const [searchOpen, setSearchOpen] = useState(false)
@@ -31,7 +26,7 @@ export default function Navbar(props: navbarProps) {
         <div className="fixed inset-0 z-50 flex flex-col bg-[#F7F7F7] md:hidden">
           {/* Top row — mirrors the header */}
           <div className="flex h-17 shrink-0 items-center justify-between px-4">
-            <NavigationLogos data={props.data} />
+            <NavigationLogos data={props.data} currentLang={props.currentLang} />
             <button
               onClick={() => setMobileMenuOpen(false)}
               aria-label="Close menu"
@@ -43,10 +38,10 @@ export default function Navbar(props: navbarProps) {
 
           {/* Nav links */}
           <nav className="flex flex-1 flex-col px-4 pt-2">
-            {props.data.navbarLinks.map((item) => (
+            {props.data.navbarLinks.map((item, index) => (
               <a
-                key={item.navTitle}
-                href={item.navURL}
+                key={index}
+                href={`/${props.currentLang}${item.navURL}`}
                 className="border-b border-[#E8E8E8] py-4 text-[22px] font-medium text-[#0C0C48] transition hover:opacity-70"
               >
                 {item.navTitle}
@@ -80,13 +75,13 @@ export default function Navbar(props: navbarProps) {
 
       <header className="w-full border-b border-border bg-[#F7F7F7]">
         <div className="mx-auto flex h-17 max-w-360 items-center justify-between px-8 max-md:px-4">
-          <NavigationLogos data={props.data} />
+          <NavigationLogos data={props.data} currentLang={props.currentLang} />
           {!searchOpen && (
             <nav className="hidden md:flex items-center gap-8 text-[#0C0C48]">
-              {props.data.navbarLinks.map((item) => (
+              {props.data.navbarLinks.map((item, index) => (
                 <Link
-                  key={item.navTitle}
-                  href={item.navURL}
+                  key={index}
+                  href={`/${props.currentLang}${item.navURL}`}
                   className="text-[#0C0C48] text-[13px] font-medium transition hover:opacity-70"
                 >
                   {item.navTitle}
@@ -99,7 +94,10 @@ export default function Navbar(props: navbarProps) {
             {!searchOpen ? (
               <>
                 {/* should hide on mobile */}
-                <LanguageDropdown className="hidden md:inline-flex" />
+                <LanguageDropdown
+                  className="hidden md:inline-flex"
+                  currentLang={props.currentLang}
+                />
                 {/* should hide on mobile */}
                 <ContactButton className="" />
                 {/* always on */}
@@ -174,60 +172,6 @@ export const NavigationLogos = (props: navbarProps) => {
           />
         </Link>
       </div>
-    </div>
-  )
-}
-
-const LanguageDropdown = (props: HTMLAttributes<HTMLDivElement>) => {
-  const [open, setOpen] = useState(false)
-  const [selected, setSelected] = useState(languages[0])
-  const ref = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        setOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [])
-
-  return (
-    <div ref={ref} className={cn('relative inline-flex', props.className)}>
-      <button
-        onClick={() => setOpen((prev) => !prev)}
-        aria-label="Change language"
-        className="inline-flex h-8 items-center justify-center gap-2 rounded-full border border-[#C9CDD4] bg-white px-3 text-[12px] font-medium text-[#0C0C48] transition hover:bg-[#F2F4F7]"
-      >
-        <span>
-          {selected.code === 'en' ? '🇬🇧 ' : ''}
-          {selected.label}
-        </span>
-        <span className={cn('transition-transform duration-200', open && 'rotate-180')}>
-          <Icon.V />
-        </span>
-      </button>
-
-      {open && (
-        <div className="absolute left-0 top-[calc(100%+6px)] z-50 min-w-32.5 overflow-hidden rounded-xl border border-[#C9CDD4] bg-white shadow-md">
-          {languages.map((lang) => (
-            <button
-              key={lang.code}
-              onClick={() => {
-                setSelected(lang)
-                setOpen(false)
-              }}
-              className={cn(
-                'flex w-full items-center gap-2 px-3 py-2 text-left text-[12px] font-medium text-[#0C0C48] transition hover:bg-[#F2F4F7]',
-                selected.code === lang.code && 'bg-[#F2F4F7]',
-              )}
-            >
-              <span>{lang.label}</span>
-            </button>
-          ))}
-        </div>
-      )}
     </div>
   )
 }

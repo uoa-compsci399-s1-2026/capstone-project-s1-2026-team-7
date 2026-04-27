@@ -8,11 +8,11 @@ export const mediaSchema = z.object({
 export type MediaDTO = z.infer<typeof mediaSchema>
 
 export const DEFAULT_GENERAL_PIC = {
-  url: 'https://human-nutrition-unit-s3-bucket.s3.ap-southeast-2.amazonaws.com/WIN_20260326_13_19_44_Pro-1.jpg',
+  url: 'https://human-nutrition-unit-s3-bucket.s3.ap-southeast-2.amazonaws.com/Screenshot+2026-04-26+133901.png',
   alt: 'Default Picture',
 }
 
 export const DEFAULT_PROFILE_PIC = {
-  url: 'https://human-nutrition-unit-s3-bucket.s3.ap-southeast-2.amazonaws.com/WIN_20260326_13_19_44_Pro-1.jpg',
+  url: 'https://human-nutrition-unit-s3-bucket.s3.ap-southeast-2.amazonaws.com/Screenshot+2026-04-26+133901.png',
   alt: 'The Profile Picture  ',
 }
