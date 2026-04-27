@@ -573,7 +573,7 @@ export interface HomePage {
 export interface OurTeamPage {
   id: number
   title: string
-  banner: number | Media
+  banner?: (number | null) | Media
   boardTabLabel: string
   staffTabLabel: string
   staffMembers?: (number | Staff)[] | null

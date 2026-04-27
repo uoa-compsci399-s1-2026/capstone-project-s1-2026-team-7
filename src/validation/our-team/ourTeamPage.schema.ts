@@ -4,7 +4,7 @@ import { staffSchema } from './staff.schema'
 export const ourTeamPageDTOSchema = z
   .object({
     title: z.string().default(''),
-    banner: z.string(),
+    banner: z.object(),
     boardTabLabel: z.string().default(''),
     staffTabLabel: z.string().default(''),
     staffMembers: z.array(staffSchema),
