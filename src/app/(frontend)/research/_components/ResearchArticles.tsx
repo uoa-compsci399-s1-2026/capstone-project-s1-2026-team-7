@@ -11,7 +11,7 @@ export default function ResearchArticles({ research, viewMode }: Props) {
     <div
       className={
         viewMode === 'grid'
-          ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4'
+          ? 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4'
           : 'flex flex-col gap-4 mt-4'
       }
     >

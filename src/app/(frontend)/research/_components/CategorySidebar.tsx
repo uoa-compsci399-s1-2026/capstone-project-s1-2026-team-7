@@ -4,14 +4,22 @@ type Props = {
   categories: { id: string; title: string }[]
   onSelect: (categoryId: string) => void
   selectedCategoryId: string | null
+  hideTitle?: boolean
 }
 
-export default function CategorySidebar({ categories, onSelect, selectedCategoryId }: Props) {
+export default function CategorySidebar({
+  categories,
+  onSelect,
+  selectedCategoryId,
+  hideTitle,
+}: Props) {
   return (
     <aside className="w-full md:w-72 pr-4 h-full">
-      <div className="mb-4">
-        <h2 className="font-semibold text-lg">Categories</h2>
-      </div>
+      {!hideTitle && (
+        <div className="mb-4">
+          <h2 className="font-semibold text-lg">Categories</h2>
+        </div>
+      )}
 
       <div className="space-y-2">
         {categories.map((category) => (

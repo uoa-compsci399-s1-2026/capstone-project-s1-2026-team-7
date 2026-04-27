@@ -13,4 +13,5 @@ export type ResearchEntry = {
   link: string
   image: string
   date: string
+  categoryId: string
 }
