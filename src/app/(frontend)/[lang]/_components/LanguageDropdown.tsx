@@ -1,7 +1,7 @@
 import { usePathname, useRouter } from 'next/navigation'
 import { useState, useRef, useEffect, HTMLAttributes } from 'react'
-import type { Lang } from '../../type/lang'
-import { languages } from '../../type/lang'
+import type { Lang } from '@/types/lang'
+import { languages } from '@/types/lang'
 import { cn } from '@/lib/utils'
 import { Icon } from './icons'
 

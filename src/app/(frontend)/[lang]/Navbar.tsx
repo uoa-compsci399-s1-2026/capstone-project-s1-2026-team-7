@@ -5,7 +5,7 @@ import { Icon } from './_components/icons'
 import { LanguageDropdown } from './_components/LanguageDropdown'
 import { useRouter } from 'next/navigation'
 
-import type { Lang } from '../type/lang'
+import type { Lang } from '@/types/lang'
 
 type navbarProps = {
   data: NavigationBarDTO

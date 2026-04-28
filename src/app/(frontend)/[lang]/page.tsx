@@ -1,7 +1,7 @@
 import { getHomePage } from '@/queries/homepage'
 import HeroSection from './HeroSection'
 import { HomepageDTO } from '@/validation'
-import { Lang } from '../type/lang'
+import { Lang } from '@/types/lang'
 
 type PageProps = {
   params: Promise<{
