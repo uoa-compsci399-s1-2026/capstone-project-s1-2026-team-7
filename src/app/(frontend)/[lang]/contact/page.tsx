@@ -1,7 +1,7 @@
 import Banner from '../_components/Banner'
 import ContactForm from './_components/ContactForm'
 import ContactMap from './_components/ContactMap'
-import type { Lang } from '../../type/lang'
+import type { Lang } from '@/types/lang'
 
 type ContactPageProps = {
   params: Promise<{
