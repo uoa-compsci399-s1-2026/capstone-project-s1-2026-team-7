@@ -1,12 +1,12 @@
 import Image from 'next/image'
 
-type ContactHeroProps = {
+type BannerProps = {
   title: string
   imageUrl: string
   imageAlt: string
 }
 
-export default function ContactHero({ title, imageUrl, imageAlt }: ContactHeroProps) {
+export default function Banner({ title, imageUrl, imageAlt }: BannerProps) {
   return (
     <section className="relative h-56 w-full overflow-hidden">
       <Image src={imageUrl} alt={imageAlt} fill priority className="object-cover" />

@@ -1,4 +1,4 @@
-import ContactHero from './_components/ContactHero'
+import Banner from '../_components/Banner'
 import ContactForm from './_components/ContactForm'
 import ContactMap from './_components/ContactMap'
 import type { Lang } from '../../type/lang'
@@ -61,11 +61,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
 
   return (
     <>
-      <ContactHero
-        title={content.heroTitle}
-        imageUrl={content.url}
-        imageAlt={content.heroImageAlt}
-      />
+      <Banner title={content.heroTitle} imageUrl={content.url} imageAlt={content.heroImageAlt} />
 
       <section className="bg-white px-8 py-20 md:px-16">
         <div className="mx-auto grid max-w-300 grid-cols-1 gap-16 md:grid-cols-2 md:items-start">
