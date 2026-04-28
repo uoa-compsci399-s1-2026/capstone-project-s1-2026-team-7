@@ -1,9 +1,11 @@
 import { z } from 'zod'
+import { mediaSchema } from '@/validation'
 
 export const studySchema = z.object({
   id: z.number(),
   title: z.string().default(''),
   slug: z.string().default(''),
+  banner: mediaSchema,
   description: z.any().default(''),
   sortOrder: z.number().default(100000),
 })

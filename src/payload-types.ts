@@ -246,6 +246,7 @@ export interface Study {
    * URL-friendly version of the title, e.g. nutrition-study-2026
    */
   slug: string
+  banner?: (number | null) | Media
   description: {
     root: {
       type: string
@@ -467,6 +468,7 @@ export interface StaffSelect<T extends boolean = true> {
 export interface StudiesSelect<T extends boolean = true> {
   title?: T
   slug?: T
+  banner?: T
   description?: T
   sortOrder?: T
   updatedAt?: T

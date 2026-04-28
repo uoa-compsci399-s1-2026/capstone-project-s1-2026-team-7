@@ -13,6 +13,7 @@ export const Studies: CollectionConfig = {
         description: 'URL-friendly version of the title, e.g. nutrition-study-2026',
       },
     },
+    { name: 'banner', type: 'upload', relationTo: 'media' },
     { name: 'description', type: 'richText', required: true },
     { name: 'sortOrder', type: 'number' },
   ],
