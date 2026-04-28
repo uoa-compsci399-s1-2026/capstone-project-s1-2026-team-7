@@ -4,33 +4,39 @@ import MainButton from './MainButton'
 export const StudiesSection = () => {
   return (
     <section className="bg-[#f8f8f8] px-6 pt-28 pb-20 md:px-12 md:pt-32 xl:px-20">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-5xl">
         {/* Top stats */}
-        <div className="grid grid-cols-1 gap-8 text-center md:grid-cols-3">
-          <div className="border-b border-dotted border-gray-400 pb-8 md:border-b-0 md:border-r md:pb-0">
-            <h2 className="text-5xl font-semibold text-black md:text-6xl">1000+</h2>
-            <p className="mx-auto mt-4 max-w-xs text-xl leading-snug text-black">
+        <div className="mx-auto grid max-w-5xl grid-cols-3 gap-0 text-center ">
+          <div className="flex flex-col items-center border-r border-dotted border-gray-400 px-2 sm:px-6 md:px-10">
+            <h2 className="text-3xl font-semibold text-black sm:text-3xl md:text-4xl lg:text-5xl">
+              1000+
+            </h2>
+            <p className="mx-auto mt-3 max-w-xs text-[10px] leading-snug text-black sm:text-base md:mt-4 md:text-xl">
               Participants involved in HNU studies
             </p>
           </div>
 
-          <div className="border-b border-dotted border-gray-400 pb-8 md:border-b-0 md:border-r md:pb-0">
-            <h2 className="text-5xl font-semibold text-black md:text-6xl">4+</h2>
-            <p className="mx-auto mt-4 max-w-xs text-xl leading-snug text-black">
+          <div className="flex flex-col items-center border-r border-dotted border-gray-400 px-2 sm:px-6 md:px-10">
+            <h2 className="text-3xl font-semibold text-black sm:text-3xl md:text-4xl lg:text-5xl">
+              4+
+            </h2>
+            <p className="mx-auto mt-3 max-w-xs text-[10px] leading-snug text-black sm:text-base md:mt-4 md:text-xl">
               Weeks of purpose-built residential study capability
             </p>
           </div>
 
-          <div>
-            <h2 className="text-5xl font-semibold text-black md:text-6xl">1</h2>
-            <p className="mx-auto mt-4 max-w-xs text-xl leading-snug text-black">
+          <div className="flex flex-col items-center px-2 sm:px-6 md:px-10">
+            <h2 className="text-3xl font-semibold text-black sm:text-3xl md:text-4xl lg:text-5xl">
+              1
+            </h2>
+            <p className="mx-auto mt-3 max-w-xs text-[10px] leading-snug text-black sm:text-base md:mt-4 md:text-xl">
               New Zealand’s only long-stay nutrition research facility
             </p>
           </div>
         </div>
 
         {/* Main content */}
-        <div className="mt-24 text-center">
+        <div className="mt-18 text-center md:mt-24 ">
           <h2 className="text-4xl font-bold text-[#08084f] md:text-6xl">Participate in a Study</h2>
 
           <p className="mx-auto mt-6 max-w-6xl text-lg leading-relaxed text-[#08084f] md:text-2xl">

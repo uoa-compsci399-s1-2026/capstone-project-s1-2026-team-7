@@ -40,7 +40,7 @@ export default function AboutSection({ data }: AboutSectionProps) {
               <h2 className="text-[28.9px] font-bold leading-tight lg:text-[48.23px]">{heading}</h2>
             </div>
 
-            <p className="whitespace-pre-line text-[14px] font-normal leading-snug md:text-[14.38px] lg:text-2xl lg:leading-snug">
+            <p className="whitespace-pre-line text-[14px] font-normal leading-snug md:text-[14.38px] lg:text-xl xl:text-2xl lg:leading-snug">
               {body}
             </p>
           </div>
