@@ -1,7 +1,7 @@
 import { getHomePage } from '@/queries/homepage'
-import HeroSection from './HeroSection'
-import AboutSection from './AboutSection'
-import { StudiesSection } from './StudiesSection'
+import HeroSection from './_components/HeroSection'
+import AboutSection from './_components/AboutSection'
+import { StudiesSection } from './_components/StudiesSection'
 import type { HomepageDTO } from '@/validation'
 import type { Lang } from '../type/lang'
 

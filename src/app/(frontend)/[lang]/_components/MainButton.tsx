@@ -4,7 +4,7 @@ type MainButtonProps = HTMLAttributes<HTMLButtonElement> & {
   onClick?: MouseEventHandler<HTMLButtonElement>
   type?: 'button' | 'submit' | 'reset'
 
-  variant: 'primary' | 'secondary'
+  variant: 'primary' | 'secondary' | 'grey'
 }
 
 export default function MainButton({ title, variant, ...props }: MainButtonProps) {

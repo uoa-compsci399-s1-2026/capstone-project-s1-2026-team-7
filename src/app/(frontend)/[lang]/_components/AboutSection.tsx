@@ -47,24 +47,30 @@ export default function AboutSection({ data }: AboutSectionProps) {
         </div>
 
         {/* Stats */}
-        <div className="mt-24 grid grid-cols-3 text-center">
+        <div className="mt-14 grid grid-cols-3 text-center">
           <div className="flex flex-col items-center border-r border-dotted border-gray-400 px-1">
-            <h2 className="text-3xl font-semibold text-black md:text-4xl">25</h2>
-            <p className="mt-2 max-w-[80px] text-center text-[11px] leading-snug text-black md:max-w-[120px] md:text-sm">
+            <h2 className="text-3xl font-semibold text-black sm:text-3xl md:text-4xl lg:text-5xl">
+              25
+            </h2>
+            <p className="mt-2 max-w-50 text-center text-xs leading-snug text-black sm:text-sm md:mt-4 md:text-lg lg:text-xl">
               Postgraduate Students
             </p>
           </div>
 
           <div className="flex flex-col items-center border-r border-dotted border-gray-400 px-1">
-            <h2 className="text-3xl font-semibold text-black md:text-4xl">70</h2>
-            <p className="mt-2 max-w-[80px] text-center text-[11px] leading-snug text-black md:max-w-[120px] md:text-sm">
+            <h2 className="text-3xl font-semibold text-black sm:text-3xl md:text-4xl lg:text-5xl">
+              70
+            </h2>
+            <p className="mt-2 max-w-50 text-center text-xs leading-snug text-black sm:text-sm md:mt-4 md:text-lg lg:text-xl">
               Publications
             </p>
           </div>
 
           <div className="flex flex-col items-center px-1">
-            <h2 className="text-3xl font-semibold text-black md:text-4xl">14</h2>
-            <p className="mx-auto mt-2 max-w-[75px] text-center text-[11px] leading-snug text-black md:max-w-[120px] md:text-sm">
+            <h2 className="text-3xl font-semibold text-black sm:text-3xl md:text-4xl lg:text-5xl">
+              14
+            </h2>
+            <p className="mx-auto mt-2 max-w-50 text-center text-xs leading-snug text-black sm:text-sm md:mt-4 md:text-lg lg:text-xl">
               F&amp;B Industry Partners
             </p>
           </div>

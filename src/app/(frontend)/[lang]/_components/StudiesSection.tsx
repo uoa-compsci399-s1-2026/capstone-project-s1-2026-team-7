@@ -11,7 +11,7 @@ export const StudiesSection = () => {
             <h2 className="text-3xl font-semibold text-black sm:text-3xl md:text-4xl lg:text-5xl">
               1000+
             </h2>
-            <p className="mx-auto mt-3 max-w-xs text-[10px] leading-snug text-black sm:text-base md:mt-4 md:text-xl">
+            <p className="mx-auto mt-3 max-w-xs text-xs leading-snug text-black sm:text-sm md:mt-4 md:text-lg lg:text-xl">
               Participants involved in HNU studies
             </p>
           </div>
@@ -20,7 +20,7 @@ export const StudiesSection = () => {
             <h2 className="text-3xl font-semibold text-black sm:text-3xl md:text-4xl lg:text-5xl">
               4+
             </h2>
-            <p className="mx-auto mt-3 max-w-xs text-[10px] leading-snug text-black sm:text-base md:mt-4 md:text-xl">
+            <p className="mx-auto mt-3 max-w-xs text-xs leading-snug text-black sm:text-sm md:mt-4 md:text-lg lg:text-xl">
               Weeks of purpose-built residential study capability
             </p>
           </div>
@@ -29,23 +29,25 @@ export const StudiesSection = () => {
             <h2 className="text-3xl font-semibold text-black sm:text-3xl md:text-4xl lg:text-5xl">
               1
             </h2>
-            <p className="mx-auto mt-3 max-w-xs text-[10px] leading-snug text-black sm:text-base md:mt-4 md:text-xl">
+            <p className="mx-auto mt-3 max-w-xs text-xs leading-snug text-black sm:text-sm md:mt-4 md:text-lg lg:text-xl">
               New Zealand’s only long-stay nutrition research facility
             </p>
           </div>
         </div>
 
         {/* Main content */}
-        <div className="mt-18 text-center md:mt-24 ">
-          <h2 className="text-4xl font-bold text-[#08084f] md:text-6xl">Participate in a Study</h2>
+        <div className="mt-14 text-center md:mt-24 ">
+          <h2 className="text-4xl font-bold text-[#08084f] md:text-5xl lg:text-6xl">
+            Participate in a Study
+          </h2>
 
-          <p className="mx-auto mt-6 max-w-6xl text-lg leading-relaxed text-[#08084f] md:text-2xl">
+          <p className="mx-auto mt-6 max-w-6xl text-md leading-relaxed text-[#08084f] md:text-xl lg:text-2xl">
             Join world-leading nutrition research at the Human Nutrition Unit Australasia’s only
             residential nutrition trial facility. Participants help researchers understand how food
             affects metabolism, health, and wellbeing.
           </p>
 
-          <div className="mt-10 flex flex-col items-center justify-center gap-2 sm:flex-row sm:gap-4 [&_button]:h-[34px] [&_button]:w-[180px] [&_button]:py-0 sm:[&_button]:h-[40px] sm:[&_button]:w-[150px] lg:[&_button]:h-[46px] lg:[&_button]:w-[170px]">
+          <div className="mt-10 flex flex-col items-center justify-center gap-2 sm:flex-row sm:gap-4 [&_button]:h-10 [&_button]:w-50 [&_button]:py-0 sm:[&_button]:h-10 sm:[&_button]:w-37.5 md:[&_button]:h-12 md:[&] lg:[&_button]:h-13 lg:[&_button]:w-50">
             <MainButton title="Check Eligibility" variant="primary" />
             <MainButton title="Current Studies" variant="grey" />
             <MainButton title="Register Interest" variant="grey" />
@@ -53,8 +55,8 @@ export const StudiesSection = () => {
         </div>
 
         {/* Feature cards */}
-        <div className="mt-[72px] grid grid-cols-1 gap-6 sm:grid-cols-3 md:gap-5 lg:gap-8 max-[346px]:gap-4">
-          <div className="min-h-[140px] rounded-[20px] bg-[#dbe1f0] px-6 py-5 text-left transition-all duration-200 hover:-translate-y-1 hover:shadow-lg lg:rounded-[24px] lg:px-8 lg:py-7 max-[346px]:min-h-[126px] max-[346px]:rounded-[16px] max-[346px]:px-4 max-[346px]:py-4">
+        <div className="mt-18 grid grid-cols-1 gap-6 sm:grid-cols-3 md:gap-5 lg:gap-8 max-[346px]:gap-4">
+          <div className="min-h-35 rounded-[20px] bg-[#dbe1f0] px-6 py-5 text-left transition-all duration-200 hover:-translate-y-1 hover:shadow-lg lg:rounded-3xl lg:px-8 lg:py-7 max-[346px]:min-h-31.5 max-[346px]:rounded-2xl max-[346px]:px-4 max-[346px]:py-4">
             <h3 className="text-xl font-bold text-black lg:text-2xl max-[346px]:text-lg">
               Residential Studies
             </h3>
@@ -63,7 +65,7 @@ export const StudiesSection = () => {
             </p>
           </div>
 
-          <div className="min-h-[140px] rounded-[20px] bg-[#dbe1f0] px-6 py-5 text-left transition-all duration-200 hover:-translate-y-1 hover:shadow-lg lg:rounded-[24px] lg:px-8 lg:py-7 max-[346px]:min-h-[126px] max-[346px]:rounded-[16px] max-[346px]:px-4 max-[346px]:py-4">
+          <div className="min-h-35 rounded-[20px] bg-[#dbe1f0] px-6 py-5 text-left transition-all duration-200 hover:-translate-y-1 hover:shadow-lg lg:rounded-3xl lg:px-8 lg:py-7 max-[346px]:min-h-31.5 max-[346px]:rounded-2xl max-[346px]:px-4 max-[346px]:py-4">
             <h3 className="text-xl font-bold text-black lg:text-2xl max-[346px]:text-lg">
               Metabolic Facilities
             </h3>
@@ -72,7 +74,7 @@ export const StudiesSection = () => {
             </p>
           </div>
 
-          <div className="min-h-[140px] rounded-[20px] bg-[#dbe1f0] px-6 py-5 text-left transition-all duration-200 hover:-translate-y-1 hover:shadow-lg lg:rounded-[24px] lg:px-8 lg:py-7 max-[346px]:min-h-[126px] max-[346px]:rounded-[16px] max-[346px]:px-4 max-[346px]:py-4">
+          <div className="min-h-35 rounded-[20px] bg-[#dbe1f0] px-6 py-5 text-left transition-all duration-200 hover:-translate-y-1 hover:shadow-lg lg:rounded-3xl lg:px-8 lg:py-7 max-[346px]:min-h-31.5 max-[346px]:rounded-2xl max-[346px]:px-4 max-[346px]:py-4">
             <h3 className="text-xl font-bold text-black lg:text-2xl max-[346px]:text-lg">
               Controlled Diet
             </h3>
