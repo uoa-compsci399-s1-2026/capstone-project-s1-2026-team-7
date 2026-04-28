@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
+    "predev": "npm run payload:init",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --no-server-fast-refresh",
     "devsafe": "powershell -Command \"Remove-Item -Recurse -Force .next -ErrorAction SilentlyContinue\"; cross-env NODE_OPTIONS=--no-deprecation next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
@@ -21,7 +22,8 @@
     "clean": "powershell -Command \"Remove-Item -Recurse -Force .next,node_modules -ErrorAction SilentlyContinue\"",
     "seed:team": "tsx scripts/seedHomepage.ts",
     "seed:homepage": "tsx scripts/seedOurteampage.ts",
-    "load": "tsx -r dotenv/config scripts/loadResearch.ts"
+    "load": "tsx -r dotenv/config scripts/loadResearch.ts",
+    "payload:init": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/initPayload.ts"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
