@@ -52,9 +52,12 @@ export default function HeroSection({ prop }: HeroSectionProp) {
           </p>
 
           <div className="flex flex-wrap justify-center gap-3 md:gap-4">
-            <MainButton title={button1.label} variant={button1.variant} />
+            {/* <MainButton title={button1.label} variant={button1.variant} />
 
-            <MainButton title={button2.label} variant={button2.variant} />
+            <MainButton title={button2.label} variant={button2.variant} /> */}
+            {buttons?.map((btn, index) => (
+              <MainButton key={index} title={btn.label} variant={btn.variant} />
+            ))}
           </div>
         </div>
       </div>
