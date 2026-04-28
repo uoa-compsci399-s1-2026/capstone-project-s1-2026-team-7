@@ -1,6 +1,6 @@
 'use client'
 
-import { HiOutlineSquares2X2, HiOutlineBars3 } from 'react-icons/hi2'
+import { LayoutGrid, List } from 'lucide-react'
 
 type Props = {
   itemCount: number
@@ -17,14 +17,14 @@ export default function ResearchTopBar({ itemCount, viewMode, setViewMode }: Pro
 
       <div className="flex items-center gap-3 ml-auto">
         <button onClick={() => setViewMode('grid')}>
-          <HiOutlineSquares2X2
+          <LayoutGrid
             className={`w-6 h-6 cursor-pointer transition-all 
               ${viewMode === 'grid' ? 'text-gray-900 scale-110 font-bold' : 'text-gray-400'}`}
           />
         </button>
 
         <button onClick={() => setViewMode('list')}>
-          <HiOutlineBars3
+          <List
             className={`w-6 h-6 cursor-pointer transition-all 
               ${viewMode === 'list' ? 'text-gray-900 scale-110 font-bold' : 'text-gray-400'}`}
           />

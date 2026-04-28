@@ -14,7 +14,7 @@ export default function CategorySidebar({
   hideTitle,
 }: Props) {
   return (
-    <aside className="w-full md:w-72 pr-4 h-full">
+    <aside className="w-full md:w-72 md:pr-4 h-full">
       {!hideTitle && (
         <div className="mb-4">
           <h2 className="font-semibold text-lg">Categories</h2>
