@@ -14,7 +14,7 @@ export const Studies: CollectionConfig = {
       },
     },
     { name: 'banner', type: 'upload', relationTo: 'media' },
-    { name: 'description', type: 'richText', required: true },
+    { name: 'description', type: 'richText', required: true, localized: true },
     { name: 'sortOrder', type: 'number' },
   ],
 }
