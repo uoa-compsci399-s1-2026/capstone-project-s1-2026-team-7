@@ -4,7 +4,7 @@ import { StudyDTO } from '@/validation'
 import { RichTextRenderer } from '@/lib/richTextRenderer'
 import Banner from '../../_components/Banner'
 import InformationComponent from './InformationComponent'
-import { BookOpen, Phone, Info } from 'lucide-react'
+import { Phone, Info } from 'lucide-react'
 
 import ContactComponent from './ContactComponent'
 
@@ -27,13 +27,6 @@ export default async function StudiesTemplatePage({ params }: StudiesPageProps) 
       </section>
 
       <section className="mx-10 flex flex-col items-center justify-center gap-10 md:flex-row ">
-        {/*<InformationComponent
-    Icon={BookOpen}
-    title="Studies"
-    description="Read more about our studies."
-    link="/studies"
-  />*/}
-
         <InformationComponent
           Icon={Phone}
           title="Pre-Screening Survey"

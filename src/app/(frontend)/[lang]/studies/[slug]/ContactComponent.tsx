@@ -16,13 +16,13 @@ export default function ContactComponent({
   location = '18 Carrick Place, Mount Eden, Auckland, Zealand, 1024',
 }: ContactComponentProps) {
   return (
-    <section className="mx-auto flex w-full max-w-[1170px] flex-col gap-8 px-5 py-20 md:flex-row md:gap-16 md:px-10">
-      <div className="border-l-4 border-[#05083D] pl-5 md:w-[280px]">
+    <section className="mx-auto flex w-full max-w-292.5 flex-col gap-8 px-5 py-20 md:flex-row md:gap-16 md:px-10">
+      <div className="border-l-4 border-[#05083D] pl-5 md:w-70">
         <p className="mb-2 text-base font-medium text-[#2448FF]">{eyebrow}</p>
         <h2 className="text-4xl font-bold text-[#05083D] md:text-5xl">{title}</h2>
       </div>
 
-      <div className="flex w-full max-w-[760px] flex-col">
+      <div className="flex w-full max-w-190 flex-col">
         <ContactRow Icon={Mail} label="Email" value={email} />
         <ContactRow Icon={Phone} label="Phone" value={phone} />
         <ContactRow Icon={MapPin} label="Location" value={location} isLast />
