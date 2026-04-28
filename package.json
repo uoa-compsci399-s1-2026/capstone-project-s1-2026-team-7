@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
+    "predev": "npm run payload:init",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --no-server-fast-refresh",
     "devsafe": "powershell -Command \"Remove-Item -Recurse -Force .next -ErrorAction SilentlyContinue\"; cross-env NODE_OPTIONS=--no-deprecation next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
@@ -20,7 +21,9 @@
     "db:sync-branch": "node scripts/sync-neon-branch.mjs",
     "clean": "powershell -Command \"Remove-Item -Recurse -Force .next,node_modules -ErrorAction SilentlyContinue\"",
     "seed:team": "tsx scripts/seedHomepage.ts",
-    "seed:homepage": "tsx scripts/seedOurteampage.ts"
+    "seed:homepage": "tsx scripts/seedOurteampage.ts",
+    "load": "tsx -r dotenv/config scripts/loadResearch.ts",
+    "payload:init": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/initPayload.ts"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
@@ -39,7 +42,7 @@
     "lucide-react": "^1.8.0",
     "next": "16.2.2",
     "payload": "^3.82.1",
-    "react": "19.2.4",
+    "react": "^19.2.4",
     "react-dom": "19.2.4",
     "sharp": "0.34.2",
     "tailwind-merge": "^3.5.0",

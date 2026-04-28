@@ -7,13 +7,18 @@ export const Research: CollectionConfig = {
   },
   fields: [
     { name: 'title', type: 'text', required: true, localized: true },
-    { name: 'description', type: 'text', required: true, localized: true },
 
     {
       name: 'researchLink',
       label: 'Research Link',
       type: 'text',
       required: true,
+    },
+
+    {
+      name: 'date',
+      label: 'Date Uploaded',
+      type: 'text',
     },
 
     {

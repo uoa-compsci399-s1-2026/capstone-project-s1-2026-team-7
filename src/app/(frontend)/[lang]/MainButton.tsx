@@ -1,9 +1,13 @@
-type MainButtonProps = {
+import { HTMLAttributes, MouseEventHandler } from 'react'
+type MainButtonProps = HTMLAttributes<HTMLButtonElement> & {
   title: string
-  variant: 'primary' | 'secondary' | 'grey'
+  onClick?: MouseEventHandler<HTMLButtonElement>
+  type?: 'button' | 'submit' | 'reset'
+
+  variant: 'primary' | 'secondary'
 }
 
-export default function MainButton({ title, variant }: MainButtonProps) {
+export default function MainButton({ title, variant, ...props }: MainButtonProps) {
   let className =
     'inline-flex min-w-[121px] items-center justify-center whitespace-nowrap rounded-full px-4 py-2 text-xs transition-all duration-200 md:text-sm lg:text-xl'
 
@@ -19,6 +23,9 @@ export default function MainButton({ title, variant }: MainButtonProps) {
   } else {
     throw new Error(`Invalid variant: ${variant}`)
   }
-
-  return <button className={className}>{title}</button>
+  return (
+    <button {...props} className={className}>
+      {title}
+    </button>
+  )
 }
