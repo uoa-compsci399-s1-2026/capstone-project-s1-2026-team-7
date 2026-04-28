@@ -131,14 +131,20 @@ function ensureEnvFileExists() {
   }
 }
 
+function getPayloadDbPush(neonBranch) {
+  return VALID_OWNERS.has(neonBranch) ? 'true' : 'false'
+}
+
 function updateEnvFile(connectionString, neonBranch, gitBranch) {
   ensureEnvFileExists()
+
+  const payloadDbPush = getPayloadDbPush(neonBranch)
 
   let content = fs.readFileSync(ENV_FILE, 'utf8')
   content = upsertEnvVar(content, 'DATABASE_URL', connectionString)
   content = upsertEnvVar(content, 'NEON_BRANCH', neonBranch)
   content = upsertEnvVar(content, 'GIT_BRANCH', gitBranch)
-
+  content = upsertEnvVar(content, 'PAYLOAD_DB_PUSH', payloadDbPush)
   fs.writeFileSync(ENV_FILE, content, 'utf8')
 }
 

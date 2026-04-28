@@ -22,7 +22,9 @@ import { NavigationBar } from './globals/NavigationBar'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
-
+const shouldPush =
+  process.env.PAYLOAD_DB_PUSH === 'true' ||
+  (process.env.NODE_ENV !== 'production' && process.env.CI !== 'true')
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -46,7 +48,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
-    push: process.env.NEON_BRANCH !== 'prod',
+    push: process.env.PAYLOAD_DB_PUSH === 'true',
   }),
   sharp,
   plugins: [

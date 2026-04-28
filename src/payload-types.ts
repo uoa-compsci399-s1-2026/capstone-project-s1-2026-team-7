@@ -589,6 +589,7 @@ export interface OurTeamPage {
 export interface StudiesPage {
   id: number
   title: string
+  banner: number | Media
   studiesDisplay?: (number | Study)[] | null
   updatedAt?: string | null
   createdAt?: string | null
@@ -693,6 +694,7 @@ export interface OurTeamPageSelect<T extends boolean = true> {
  */
 export interface StudiesPageSelect<T extends boolean = true> {
   title?: T
+  banner?: T
   studiesDisplay?: T
   updatedAt?: T
   createdAt?: T
