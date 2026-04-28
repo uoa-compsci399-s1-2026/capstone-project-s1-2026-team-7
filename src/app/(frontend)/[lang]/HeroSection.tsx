@@ -2,6 +2,7 @@ import Image from 'next/image'
 import mobile_hero from '../../../../public/mobile_hero.png'
 import MainButton from './MainButton'
 import { HeroDTO } from '@/validation'
+import { Search } from 'lucide-react'
 
 type HeroSectionProp = {
   prop: HeroDTO
@@ -73,17 +74,11 @@ export default function HeroSection({ prop }: HeroSectionProp) {
               className="h-9 min-w-0 flex-1 rounded-full border border-gray-300 bg-white px-3 text-xs outline-none transition-all duration-200 placeholder:text-xs hover:border-gray-400 hover:bg-gray-50 focus:border-[#4f5bff] md:h-10 md:px-4 md:text-sm md:placeholder:text-sm"
             />
 
-            <button className="flex h-9 w-10 shrink-0 items-center justify-center rounded-xl bg-[#4f5bff] text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#3f4af0] hover:shadow-md md:h-10 md:w-12">
-              <svg
-                className="h-4 w-4 md:h-5 md:w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <circle cx="11" cy="11" r="7" />
-                <line x1="16" y1="16" x2="21" y2="21" />
-              </svg>
+            <button
+              type="button"
+              className="flex h-9 w-10 shrink-0 items-center justify-center rounded-xl bg-[#4f5bff] text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#3f4af0] hover:shadow-md md:h-10 md:w-12"
+            >
+              <Search className="h-4 w-4 md:h-5 md:w-5" strokeWidth={2} />
             </button>
           </div>
         </div>
