@@ -1,5 +1,5 @@
 import ContactInput from './ContactInput'
-import MainButton from '../../MainButton'
+import MainButton from '../../_components/MainButton'
 
 type ContactFormProps = {
   content: {

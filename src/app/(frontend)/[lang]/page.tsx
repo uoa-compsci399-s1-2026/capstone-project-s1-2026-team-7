@@ -1,7 +1,9 @@
 import { getHomePage } from '@/queries/homepage'
-import HeroSection from './HeroSection'
 import { HomepageDTO } from '@/validation'
 import { Lang } from '@/types/lang'
+import HeroSection from './_components/HeroSection'
+import AboutSection from './_components/AboutSection'
+import { StudiesSection } from './_components/StudiesSection'
 
 type PageProps = {
   params: Promise<{
@@ -12,9 +14,12 @@ type PageProps = {
 export default async function HomePage({ params }: PageProps) {
   const { lang } = await params
   const data: HomepageDTO = await getHomePage(lang)
+
   return (
-    <main>
+    <>
       <HeroSection prop={data.hero} />
-    </main>
+      <StudiesSection />
+      <AboutSection data={data.aboutSection} />
+    </>
   )
 }
