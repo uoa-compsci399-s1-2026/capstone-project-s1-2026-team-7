@@ -10,6 +10,7 @@ export const Staff: CollectionConfig = {
   fields: [
     { name: 'firstname', type: 'text', required: true },
     { name: 'lastname', type: 'text', required: true },
+    { name: 'orcid', type: 'text' },
     { name: 'jobTitle', type: 'text', required: true },
     { name: 'intro', type: 'textarea' },
     { name: 'manager', type: 'checkbox', defaultValue: false, required: true },
