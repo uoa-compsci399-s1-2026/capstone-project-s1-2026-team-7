@@ -1,4 +1,5 @@
 import ContactInput from './ContactInput'
+import MainButton from '../../MainButton'
 
 type ContactFormProps = {
   content: {
@@ -10,7 +11,7 @@ type ContactFormProps = {
     emailPlaceholder: string
     phonePlaceholder: string
     messagePlaceholder: string
-    button: string
+    buttonTitle: string
   }
 }
 
@@ -47,12 +48,7 @@ export default function ContactForm({ content }: ContactFormProps) {
         />
       </div>
 
-      <button
-        type="submit"
-        className="mt-2 w-fit rounded-xl bg-[#0C0C48] px-7 py-4 text-[20px] font-medium text-white transition hover:opacity-90"
-      >
-        {content.button}
-      </button>
+      <MainButton title={content.buttonTitle} variant="primary" />
     </form>
   )
 }
