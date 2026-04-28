@@ -3,6 +3,7 @@ import { z } from 'zod'
 export const studySchema = z.object({
   id: z.number(),
   title: z.string().default(''),
+  slug: z.string().default(''),
   description: z.any().default(''),
   sortOrder: z.number().default(100000),
 })

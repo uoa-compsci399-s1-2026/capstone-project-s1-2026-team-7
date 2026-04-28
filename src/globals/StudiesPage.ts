@@ -11,6 +11,13 @@ export const StudiesPage: GlobalConfig = {
       required: true,
     },
     {
+      name: 'banner',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'banner',
+      required: true,
+    },
+    {
       name: 'studiesDisplay',
       type: 'relationship',
       relationTo: 'studies',
