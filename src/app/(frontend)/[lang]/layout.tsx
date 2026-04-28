@@ -1,6 +1,6 @@
 import React from 'react'
-import Navbar from './Navbar'
-import Footer from './Footer'
+import Navbar from '@/app/(frontend)/[lang]/_components/Navbar'
+import Footer from '@/app/(frontend)/[lang]/_components/Footer'
 import { getNavigationBar } from '@/queries/navigation'
 import { Lang } from '../type/lang'
 
