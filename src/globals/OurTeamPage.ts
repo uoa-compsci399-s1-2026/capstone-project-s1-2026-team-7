@@ -15,7 +15,7 @@ export const OurTeamPage: GlobalConfig = {
       name: 'banner',
       type: 'upload',
       relationTo: 'media',
-      required: true,
+      required: false,
     },
 
     {

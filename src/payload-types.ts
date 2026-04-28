@@ -224,6 +224,7 @@ export interface Staff {
   id: number
   firstname: string
   lastname: string
+  orcid?: string | null
   jobTitle: string
   intro?: string | null
   manager: boolean
@@ -267,8 +268,8 @@ export interface Study {
 export interface Research {
   id: number
   title: string
-  description: string
   researchLink: string
+  date?: string | null
   /**
    * Used for manual sorting (lower comes first)
    */
@@ -444,6 +445,7 @@ export interface PagesSelect<T extends boolean = true> {
 export interface StaffSelect<T extends boolean = true> {
   firstname?: T
   lastname?: T
+  orcid?: T
   jobTitle?: T
   intro?: T
   manager?: T
@@ -471,8 +473,8 @@ export interface StudiesSelect<T extends boolean = true> {
  */
 export interface ResearchSelect<T extends boolean = true> {
   title?: T
-  description?: T
   researchLink?: T
+  date?: T
   order?: T
   staff?: T
   categories?: T
@@ -573,7 +575,7 @@ export interface HomePage {
 export interface OurTeamPage {
   id: number
   title: string
-  banner: number | Media
+  banner?: (number | null) | Media
   boardTabLabel: string
   staffTabLabel: string
   staffMembers?: (number | Staff)[] | null
