@@ -1,6 +1,6 @@
 'use server'
 
-import { sendContactFormEmail } from '@/globals/SendEmail'
+import { sendContactFormEmail } from '@/queries/SendEmail'
 
 export async function sendContactEmail(formData: FormData) {
   const name = String(formData.get('name') || '')
