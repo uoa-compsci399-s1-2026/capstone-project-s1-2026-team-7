@@ -9,7 +9,7 @@ type MainButtonProps = HTMLAttributes<HTMLButtonElement> & {
 
 export default function MainButton({ title, variant, ...props }: MainButtonProps) {
   let className =
-    'inline-flex min-w-[121px] items-center justify-center whitespace-nowrap rounded-full px-4 py-2 text-xs transition-all duration-200 md:text-sm lg:text-xl'
+    'inline-flex min-w-[121px] items-center justify-center whitespace-nowrap rounded-full px-4 py-2 text-xs transition-all duration-200 sm:text-sm md:text-md lg:text-lg xl:text-xl'
 
   if (variant === 'primary') {
     className +=

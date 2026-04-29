@@ -569,6 +569,15 @@ export interface HomePage {
     'portrait image': number | Media
     'mobile image': number | Media
   }
+  partnersSection?: {
+    partners?:
+      | {
+          logo: number | Media
+          alt: string
+          id?: string | null
+        }[]
+      | null
+  }
   seo?: {
     metaTitle?: string | null
     metaDescription?: string | null
@@ -736,6 +745,17 @@ export interface HomePageSelect<T extends boolean = true> {
         body?: T
         'portrait image'?: T
         'mobile image'?: T
+      }
+  partnersSection?:
+    | T
+    | {
+        partners?:
+          | T
+          | {
+              logo?: T
+              alt?: T
+              id?: T
+            }
       }
   seo?:
     | T
