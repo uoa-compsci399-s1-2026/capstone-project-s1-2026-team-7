@@ -76,11 +76,29 @@ const aboutSectionPayloadSchema = z
     mobileImage: section['mobile image'],
   }))
 
+const partnerLogoSchema = z.object({
+  id: z.string().optional(),
+  logo: mediaWithDefault,
+  alt: stringWithDefault,
+})
+
+export const partnersSectionPayloadSchema = z
+  .object({
+    partners: z
+      .array(partnerLogoSchema)
+      .nullish()
+      .transform((value) => value ?? []),
+  })
+  .transform((section) => ({
+    partners: section.partners,
+  }))
+
 export const homepageSchema = z.object({
   id: z.number(),
   hero: heroPayloadSchema,
   studiesSection: studiesSectionPayloadSchema,
   aboutSection: aboutSectionPayloadSchema,
+  partnersSection: partnersSectionPayloadSchema,
   seo: seoSchema,
 })
 
@@ -88,3 +106,4 @@ export type HomepageDTO = z.infer<typeof homepageSchema>
 export type HeroDTO = HomepageDTO['hero']
 export type AboutSectionDTO = HomepageDTO['aboutSection']
 export type StudiesSectionDTO = HomepageDTO['studiesSection']
+export type PartnersSectionDTO = HomepageDTO['partnersSection']

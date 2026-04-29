@@ -1,9 +1,10 @@
 import { getHomePage } from '@/queries/homepage'
-import { HomepageDTO } from '@/validation'
-import { Lang } from '@/types/lang'
+import type { HomepageDTO } from '@/validation'
+import type { Lang } from '@/types/lang'
 import HeroSection from './_components/HeroSection'
 import AboutSection from './_components/AboutSection'
 import { StudiesSection } from './_components/StudiesSection'
+import { PartnersSection } from './_components/PartnersSection'
 
 type PageProps = {
   params: Promise<{
@@ -20,6 +21,7 @@ export default async function HomePage({ params }: PageProps) {
       <HeroSection prop={data.hero} />
       <StudiesSection />
       <AboutSection data={data.aboutSection} />
+      <PartnersSection partnersSection={data.partnersSection} />
     </>
   )
 }
