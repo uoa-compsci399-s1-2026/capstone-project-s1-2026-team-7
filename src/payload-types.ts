@@ -98,12 +98,7 @@ export interface Config {
   db: {
     defaultIDType: number
   }
-  fallbackLocale:
-    | ('false' | 'none' | 'null')
-    | false
-    | null
-    | ('en' | 'zh' | 'mi')
-    | ('en' | 'zh' | 'mi')[]
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'zh') | ('en' | 'zh')[]
   globals: {
     'home-page': HomePage
     'our-team-page': OurTeamPage
@@ -120,7 +115,7 @@ export interface Config {
     'navigation-bar': NavigationBarSelect<false> | NavigationBarSelect<true>
     footer: FooterSelect<false> | FooterSelect<true>
   }
-  locale: 'en' | 'zh' | 'mi'
+  locale: 'en' | 'zh'
   widgets: {
     collections: CollectionsWidget
   }
