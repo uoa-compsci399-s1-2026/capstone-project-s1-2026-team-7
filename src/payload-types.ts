@@ -105,6 +105,7 @@ export interface Config {
     'studies-page': StudiesPage
     'research-page': ResearchPage
     'navigation-bar': NavigationBar
+    'contact-page': ContactPage
     footer: Footer
   }
   globalsSelect: {
@@ -113,6 +114,7 @@ export interface Config {
     'studies-page': StudiesPageSelect<false> | StudiesPageSelect<true>
     'research-page': ResearchPageSelect<false> | ResearchPageSelect<true>
     'navigation-bar': NavigationBarSelect<false> | NavigationBarSelect<true>
+    'contact-page': ContactPageSelect<false> | ContactPageSelect<true>
     footer: FooterSelect<false> | FooterSelect<true>
   }
   locale: 'en' | 'zh'
@@ -637,6 +639,31 @@ export interface NavigationBar {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-page".
+ */
+export interface ContactPage {
+  id: number
+  heroTitle: string
+  heroImage?: (number | null) | Media
+  heroImageAlt?: string | null
+  form: {
+    name: string
+    email: string
+    phone: string
+    message: string
+    namePlaceholder?: string | null
+    emailPlaceholder?: string | null
+    phonePlaceholder?: string | null
+    messagePlaceholder?: string | null
+    buttonTitle: string
+    recipientEmail: string
+  }
+  mapSrc: string
+  updatedAt?: string | null
+  createdAt?: string | null
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "footer".
  */
 export interface Footer {
@@ -779,6 +806,33 @@ export interface NavigationBarSelect<T extends boolean = true> {
         navURL?: T
         id?: T
       }
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-page_select".
+ */
+export interface ContactPageSelect<T extends boolean = true> {
+  heroTitle?: T
+  heroImage?: T
+  heroImageAlt?: T
+  form?:
+    | T
+    | {
+        name?: T
+        email?: T
+        phone?: T
+        message?: T
+        namePlaceholder?: T
+        emailPlaceholder?: T
+        phonePlaceholder?: T
+        messagePlaceholder?: T
+        buttonTitle?: T
+        recipientEmail?: T
+      }
+  mapSrc?: T
   updatedAt?: T
   createdAt?: T
   globalType?: T
