@@ -20,11 +20,13 @@ function hasOrcid(staff: StaffDTO): staff is StaffDTO & { orcid: string } {
 
 async function getOrcidList(): Promise<nameWithORcid[]> {
   const staff: StaffDTO[] = await getStaff()
-
-  return staff.filter(hasOrcid).map((s) => ({
-    name: [s.firstname, s.lastname].filter(Boolean).join(' ').trim(),
-    orcid: s.orcid.trim(),
-  }))
+  return staff
+    .filter((s) => s.orcid)
+    .map((s) => ({
+      name: `${s.firstname} ${s.lastname}`.trim(),
+      orcid: s.orcid,
+      staffId: s.id,
+    }))
 }
 
 async function fetchResearchOrcid(orcid: string): Promise<ArticleOutput[]> {
@@ -48,7 +50,6 @@ async function fetchResearchOrcid(orcid: string): Promise<ArticleOutput[]> {
 
 function normalizeDoi(doi: string | null | undefined): string | null {
   if (!doi) return null
-
   return doi
     .trim()
     .toLowerCase()
@@ -58,12 +59,10 @@ function normalizeDoi(doi: string | null | undefined): string | null {
 
 function getDoiFromWork(work: OrcidWorkSummary): string | null {
   const externalIds = work['external-ids']?.['external-id'] ?? []
-
   const doiEntry = externalIds.find((id) => id['external-id-type']?.toLowerCase() === 'doi')
-
-  const doi = doiEntry?.['external-id-normalized']?.value ?? doiEntry?.['external-id-value'] ?? null
-
-  return normalizeDoi(doi)
+  return normalizeDoi(
+    doiEntry?.['external-id-normalized']?.value ?? doiEntry?.['external-id-value'],
+  )
 }
 
 function getArticleOutput(data: OrcidWorksResponse): ArticleOutput[] {
@@ -74,9 +73,11 @@ function getArticleOutput(data: OrcidWorksResponse): ArticleOutput[] {
     const doi = getDoiFromWork(work)
     const url = work.url?.value ?? null
 
-    const year = work['publication-date']?.year?.value
-    const month = work['publication-date']?.month?.value
-    const day = work['publication-date']?.day?.value
+    const publicationDateData = work['publication-date']
+
+    const year = publicationDateData?.year?.value
+    const month = publicationDateData?.month?.value
+    const day = publicationDateData?.day?.value
 
     const publicationDate = year ? [year, month, day].filter(Boolean).join('-') : null
 
@@ -100,7 +101,7 @@ function articleKey(article: ArticleOutput): string {
 }
 
 function compareEntries(data: PerPersonOutputType[]): SharedArticle[] {
-  const articleMap = new Map<string, SharedArticleInternal>()
+  const articleMap = new Map<string, SharedArticle>()
 
   for (const person of data) {
     for (const article of person.articles) {
@@ -108,20 +109,24 @@ function compareEntries(data: PerPersonOutputType[]): SharedArticle[] {
       const existing = articleMap.get(key)
 
       if (existing) {
-        existing.people.add(person.name)
+        if (!existing.people.includes(person.name)) {
+          existing.people.push(person.name)
+        }
+
+        if (!existing.staffIds.includes(person.staffId)) {
+          existing.staffIds.push(person.staffId)
+        }
       } else {
         articleMap.set(key, {
           article,
-          people: new Set([person.name]),
+          people: [person.name],
+          staffIds: [person.staffId],
         })
       }
     }
   }
 
-  return Array.from(articleMap.values()).map((entry) => ({
-    article: entry.article,
-    people: Array.from(entry.people),
-  }))
+  return Array.from(articleMap.values())
 }
 /*
 async function uploadToDatabase(data: ArticleOutput): Promise<void> {
@@ -134,24 +139,40 @@ async function uploadToDatabase(data: ArticleOutput): Promise<void> {
 }
 */
 
-async function uploadToDatabase(data: ArticleOutput): Promise<void> {
-  if (!data.url) {
-    console.log(`Skipping article with no URL: ${data.title}`)
-    return
+async function main() {
+  const nameidpair: nameWithORcid[] = await getOrcidList()
+
+  const data: PerPersonOutputType[] = await Promise.all(
+    nameidpair.map(async (pair) => {
+      const articles = await fetchResearchOrcid(pair.orcid)
+
+      return {
+        name: pair.name,
+        staffId: pair.staffId,
+        articles,
+      }
+    }),
+  )
+
+  const cleaned: SharedArticle[] = compareEntries(data)
+
+  for (const item of cleaned) {
+    await uploadResearch({
+      title: item.article.title,
+      doi: item.article.doi ?? '',
+      url: item.article.url ?? '',
+      publicationDate: item.article.publicationDate ?? '',
+      staffIds: item.staffIds,
+    })
   }
 
-  if (!data.doi) {
-    console.log(`Skipping article with no DOI: ${data.title}`)
-    return
-  }
-
-  await uploadResearch({
-    title: data.title,
-    doi: data.doi,
-    url: data.url,
-    publicationDate: data.publicationDate ?? '',
-  })
+  console.log(cleaned)
+  return cleaned
 }
+
+main()
+
+/*
 
 async function main() {
   const nameidpair: nameWithORcid[] = await getOrcidList()
@@ -177,3 +198,4 @@ main().catch((error) => {
   console.error(error)
   process.exit(1)
 })
+*/
