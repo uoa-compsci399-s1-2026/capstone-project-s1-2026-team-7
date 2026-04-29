@@ -90,6 +90,13 @@ export const ContactPage: GlobalConfig = {
           defaultValue: 'Send Message',
           required: true,
         },
+        {
+          name: 'recipientEmail',
+          label: 'Recipient Email',
+          type: 'email',
+          required: true,
+          defaultValue: 'example@auckland.ac.nz',
+        },
       ],
     },
     {

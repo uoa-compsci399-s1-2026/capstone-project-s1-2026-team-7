@@ -13,11 +13,13 @@ type ContactFormProps = {
     messagePlaceholder: string
     buttonTitle: string
   }
+
+  action: (FormData: FormData) => Promise<void>
 }
 
-export default function ContactForm({ content }: ContactFormProps) {
+export default function ContactForm({ content, action }: ContactFormProps) {
   return (
-    <form className="flex w-full max-w-140 flex-col gap-7">
+    <form action={action} className="flex w-full max-w-140 flex-col gap-7">
       <ContactInput label={content.name} name="name" placeholder={content.namePlaceholder} />
 
       <ContactInput

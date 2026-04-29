@@ -3,6 +3,7 @@ import ContactForm from './_components/ContactForm'
 import ContactMap from './_components/ContactMap'
 import type { Lang } from '@/types/lang'
 import { getContactPage } from '@/queries/contactPage'
+import { sendContactEmail } from './action'
 
 type ContactPageProps = {
   params: Promise<{
@@ -26,7 +27,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
 
       <section className="bg-white px-8 py-20 md:px-16">
         <div className="mx-auto grid max-w-300 grid-cols-1 gap-16 md:grid-cols-2 md:items-start">
-          <ContactForm content={content.form} />
+          <ContactForm content={content.form} action={sendContactEmail} />
           <ContactMap src={content.mapSrc} />
         </div>
       </section>

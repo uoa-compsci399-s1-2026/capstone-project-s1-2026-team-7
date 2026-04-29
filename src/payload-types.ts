@@ -98,12 +98,7 @@ export interface Config {
   db: {
     defaultIDType: number
   }
-  fallbackLocale:
-    | ('false' | 'none' | 'null')
-    | false
-    | null
-    | ('en' | 'zh' | 'mi')
-    | ('en' | 'zh' | 'mi')[]
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'zh') | ('en' | 'zh')[]
   globals: {
     'home-page': HomePage
     'our-team-page': OurTeamPage
@@ -120,7 +115,7 @@ export interface Config {
     'navigation-bar': NavigationBarSelect<false> | NavigationBarSelect<true>
     'contact-page': ContactPageSelect<false> | ContactPageSelect<true>
   }
-  locale: 'en' | 'zh' | 'mi'
+  locale: 'en' | 'zh'
   widgets: {
     collections: CollectionsWidget
   }
@@ -659,6 +654,7 @@ export interface ContactPage {
     phonePlaceholder?: string | null
     messagePlaceholder?: string | null
     buttonTitle: string
+    recipientEmail: string
   }
   mapSrc: string
   updatedAt?: string | null
@@ -792,6 +788,7 @@ export interface ContactPageSelect<T extends boolean = true> {
         phonePlaceholder?: T
         messagePlaceholder?: T
         buttonTitle?: T
+        recipientEmail?: T
       }
   mapSrc?: T
   updatedAt?: T

@@ -5,6 +5,7 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { s3Storage } from '@payloadcms/storage-s3'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -31,8 +32,21 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
+
+  email: nodemailerAdapter({
+    defaultFromAddress: process.env.EMAIL_FROM_ADDRESS || 'noreply@example.com',
+    defaultFromName: process.env.EMAIL_FROM_NAME || 'Human Nutrition Unit',
+    transportOptions: {
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT || 587),
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    },
+  }),
   localization: {
-    locales: ['en', 'zh', 'mi'],
+    locales: ['en', 'zh'],
     defaultLocale: 'en',
     fallback: true,
   },

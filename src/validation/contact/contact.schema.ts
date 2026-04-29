@@ -11,6 +11,7 @@ export const contactFormSchema = z.object({
   phonePlaceholder: z.string().default('0226461819'),
   messagePlaceholder: z.string().default('Let us know how we can help'),
   buttonTitle: z.string().default('Send Message'),
+  recipientEmail: z.string().email().default('example@auckland.ac.nz'),
 })
 
 export const contactPageDTOSchema = z.object({
