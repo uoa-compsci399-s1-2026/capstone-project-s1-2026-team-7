@@ -4,10 +4,12 @@ import { Lang } from '@/types/lang'
 import { PaginatedDocs } from 'payload'
 import { studySchema, StudyDTO } from '@/validation'
 
-export async function getStudiesBySlug(locale: Lang = 'en', slug: string): Promise<StudyDTO> {
+export async function getStudyBySlug(locale: Lang = 'en', slug: string): Promise<StudyDTO> {
   const payload = await getPayloadClient()
   const data: PaginatedDocs<Study> = await payload.find({
     collection: 'studies',
+    locale,
+    fallbackLocale: 'en',
     where: {
       slug: {
         equals: slug,

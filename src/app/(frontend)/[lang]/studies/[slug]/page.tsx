@@ -1,5 +1,5 @@
 import { Lang } from '@/types/lang'
-import { getStudiesBySlug } from '@/queries/getStudyBySlug'
+import { getStudyBySlug } from '@/queries/getStudyBySlug'
 import { StudyDTO } from '@/validation'
 import { RichTextRenderer } from '@/lib/richTextRenderer'
 import Banner from '../../_components/Banner'
@@ -17,7 +17,7 @@ export type StudiesPageProps = {
 
 export default async function StudiesTemplatePage({ params }: StudiesPageProps) {
   const { lang, slug } = await params
-  const result: StudyDTO = await getStudiesBySlug(lang, slug)
+  const result: StudyDTO = await getStudyBySlug(lang, slug)
   return (
     <main>
       <Banner title={result.title} imageUrl={result.banner.url} imageAlt={result.banner.alt} />
