@@ -4,7 +4,7 @@ export default function CollabIntro() {
       <p className="text-gray-700">
         The Human Nutrition Unit encourages research collaborations with industry and academic
         units, both nationally and internationally. We support the full research pathway from early
-        inception hypotheses through to publication.
+        inception hypotheses through to publication. The research pathway includes:
       </p>
     </section>
   )

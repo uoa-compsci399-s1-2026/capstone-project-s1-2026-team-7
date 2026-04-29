@@ -1,11 +1,11 @@
 const steps = [
-  'early inception hypotheses',
-  'protocol development',
-  'ethical and regulatory approval',
-  'completion of trials',
-  'data analysis',
-  'interpretation',
-  'report writing and publication',
+  'Early inception hypotheses',
+  'Protocol development',
+  'Ethical and regulatory approval',
+  'Completion of trials',
+  'Data analysis',
+  'Interpretation',
+  'Report writing and publication',
 ]
 
 export default function CollabPathway() {
@@ -19,6 +19,12 @@ export default function CollabPathway() {
           </li>
         ))}
       </ul>
+
+      <p className="text-gray-700 pt-10">
+        The Unit ensures compliance with Good Clinical Practice, up to the level of ICH GCP where
+        required, and has experience of and welcomes independent trial monitoring and audit
+        processes.
+      </p>
     </section>
   )
 }

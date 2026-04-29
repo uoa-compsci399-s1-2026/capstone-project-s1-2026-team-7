@@ -1,22 +1,27 @@
 import Image from 'next/image'
+import Link from 'next/link'
 
 type Props = {
   title: string
   imageUrl: string
   imageAlt: string
+  href: string
 }
 
-export default function CollabCategoryCard({ title, imageUrl, imageAlt }: Props) {
+export default function CollabCategoryCard({ title, imageUrl, imageAlt, href }: Props) {
   return (
-    <div className="w-full sm:w-[48%] lg:w-[30%] rounded-2xl overflow-hidden hover:shadow-md transition cursor-pointer">
-      <div className="relative w-full h-40">
-        <h3 className="text-lg font-semibold">{title}</h3>
-        <Image src={imageUrl} alt={imageAlt} fill className="object-cover" />
-      </div>
+    <Link href={href} className="w-full sm:w-[48%] lg:w-[30%] block">
+      <div className="rounded-full overflow-hidden cursor-pointer hover:shadow-md transition">
+        <div className="relative w-full h-24">
+          <Image src={imageUrl} alt={imageAlt} fill className="object-cover" />
 
-      {/*       <div className="p-4 text-center">
-        <h3 className="text-lg font-semibold">{title}</h3>
-      </div> */}
-    </div>
+          <div className="absolute inset-0 bg-[#0C0C48] opacity-[0.7]" />
+
+          <div className="absolute inset-0 flex items-center justify-center">
+            <h3 className="text-white text-lg font-semibold">{title}</h3>
+          </div>
+        </div>
+      </div>
+    </Link>
   )
 }

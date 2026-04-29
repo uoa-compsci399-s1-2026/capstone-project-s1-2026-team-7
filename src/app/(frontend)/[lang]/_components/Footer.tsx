@@ -46,7 +46,7 @@ const socialLinks = [
 
 export default function Footer(props: footerProps) {
   return (
-    <footer className="w-full bg-[#F7F7F7] text-[#0C0C48]">
+    <footer className="w-full bg-[#F7F7F7] text-[#0C0C48] mt-20">
       <div className="mx-auto max-w-360 px-8 pt-10 max-md:px-4 max-md:pt-8">
         <div className="grid grid-cols-[260px_1fr_1fr_220px] gap-x-10 gap-y-10 max-xl:grid-cols-2 max-md:grid-cols-1">
           <FooterLogos data={props.data} />
