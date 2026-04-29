@@ -1,4 +1,4 @@
-/* import type { GlobalConfig } from 'payload'
+import type { GlobalConfig } from 'payload'
 
 export const Footer: GlobalConfig = {
   slug: 'footer',
@@ -17,29 +17,115 @@ export const Footer: GlobalConfig = {
       required: true,
     },
     {
-      name: 'navbarLinks',
+      name: 'exploreLinks',
       type: 'array',
-      label: 'Navigation Links',
+      label: 'Explore Links',
       labels: {
-        singular: 'Navigation Link',
-        plural: 'Navigation Links',
+        singular: 'Explore Link',
+        plural: 'Explore Links',
       },
+      minRows: 0,
+      maxRows: 10,
       fields: [
         {
-          name: 'navTitle',
+          name: 'footerTitle',
           type: 'text',
-          label: 'Navigation Title',
+          label: 'Footer Title',
           required: true,
           localized: true,
         },
         {
-          name: 'navURL',
+          name: 'footerURL',
           type: 'text',
-          label: 'Navigation URL',
+          label: 'Footer URL',
           required: true,
         },
       ],
     },
+    {
+      name: 'supportLinks',
+      type: 'array',
+      label: 'Support Links',
+      labels: {
+        singular: 'Support Link',
+        plural: 'Support Links',
+      },
+      minRows: 0,
+      maxRows: 10,
+      fields: [
+        {
+          name: 'footerTitle',
+          type: 'text',
+          label: 'Footer Title',
+          required: true,
+          localized: true,
+        },
+        {
+          name: 'footerURL',
+          type: 'text',
+          label: 'Footer URL',
+          required: true,
+        },
+      ],
+    },
+    {
+      name: 'socialLinks',
+      type: 'array',
+      label: 'Social Links',
+      labels: {
+        singular: 'Social Link',
+        plural: 'Social Links',
+      },
+      minRows: 0,
+      maxRows: 4,
+      fields: [
+        {
+          name: 'footerLogo',
+          type: 'upload',
+          label: 'Footer Logo',
+          required: true,
+          relationTo: 'media',
+        },
+        {
+          name: 'footerURL',
+          type: 'text',
+          label: 'Footer URL',
+          required: true,
+        },
+      ],
+    },
+    {
+      name: 'legalLinks',
+      type: 'array',
+      label: 'Legal Links',
+      labels: {
+        singular: 'Legal Link',
+        plural: 'Legal Links',
+      },
+      minRows: 0,
+      maxRows: 10,
+      fields: [
+        {
+          name: 'footerTitle',
+          type: 'text',
+          label: 'Footer Title',
+          required: true,
+          localized: true,
+        },
+        {
+          name: 'footerURL',
+          type: 'text',
+          label: 'Footer URL',
+          required: true,
+        },
+      ],
+    },
+    {
+      name: 'footerMotif',
+      type: 'upload',
+      label: 'Footer Motif',
+      relationTo: 'media',
+      required: true,
+    },
   ],
 }
-*/

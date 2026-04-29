@@ -110,6 +110,7 @@ export interface Config {
     'studies-page': StudiesPage
     'research-page': ResearchPage
     'navigation-bar': NavigationBar
+    footer: Footer
   }
   globalsSelect: {
     'home-page': HomePageSelect<false> | HomePageSelect<true>
@@ -117,6 +118,7 @@ export interface Config {
     'studies-page': StudiesPageSelect<false> | StudiesPageSelect<true>
     'research-page': ResearchPageSelect<false> | ResearchPageSelect<true>
     'navigation-bar': NavigationBarSelect<false> | NavigationBarSelect<true>
+    footer: FooterSelect<false> | FooterSelect<true>
   }
   locale: 'en' | 'zh' | 'mi'
   widgets: {
@@ -640,6 +642,46 @@ export interface NavigationBar {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: number
+  uoaLogo: number | Media
+  hnuLogo: number | Media
+  exploreLinks?:
+    | {
+        footerTitle: string
+        footerURL: string
+        id?: string | null
+      }[]
+    | null
+  supportLinks?:
+    | {
+        footerTitle: string
+        footerURL: string
+        id?: string | null
+      }[]
+    | null
+  socialLinks?:
+    | {
+        footerLogo: number | Media
+        footerURL: string
+        id?: string | null
+      }[]
+    | null
+  legalLinks?:
+    | {
+        footerTitle: string
+        footerURL: string
+        id?: string | null
+      }[]
+    | null
+  footerMotif: number | Media
+  updatedAt?: string | null
+  createdAt?: string | null
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "home-page_select".
  */
 export interface HomePageSelect<T extends boolean = true> {
@@ -742,6 +784,46 @@ export interface NavigationBarSelect<T extends boolean = true> {
         navURL?: T
         id?: T
       }
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  uoaLogo?: T
+  hnuLogo?: T
+  exploreLinks?:
+    | T
+    | {
+        footerTitle?: T
+        footerURL?: T
+        id?: T
+      }
+  supportLinks?:
+    | T
+    | {
+        footerTitle?: T
+        footerURL?: T
+        id?: T
+      }
+  socialLinks?:
+    | T
+    | {
+        footerLogo?: T
+        footerURL?: T
+        id?: T
+      }
+  legalLinks?:
+    | T
+    | {
+        footerTitle?: T
+        footerURL?: T
+        id?: T
+      }
+  footerMotif?: T
   updatedAt?: T
   createdAt?: T
   globalType?: T

@@ -3,6 +3,7 @@ import Navbar from '@/app/(frontend)/[lang]/_components/Navbar'
 import Footer from '@/app/(frontend)/[lang]/_components/Footer'
 import { getNavigationBar } from '@/queries/navigation'
 import { Lang } from '@/types/lang'
+import { getFooter } from '@/queries/footer'
 
 export default async function LangLayout({
   children,
@@ -15,13 +16,13 @@ export default async function LangLayout({
 
   const currentLang: Lang = lang === 'zh' ? 'zh' : 'en'
 
-  const data = await getNavigationBar(currentLang)
-
+  const navbarData = await getNavigationBar(currentLang)
+  const footerData = await getFooter(currentLang)
   return (
     <>
-      <Navbar data={data} currentLang={currentLang} />
+      <Navbar data={navbarData} currentLang={currentLang} />
       <main>{children}</main>
-      <Footer data={data} />
+      <Footer data={footerData} />
     </>
   )
 }
