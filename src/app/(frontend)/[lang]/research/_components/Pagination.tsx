@@ -11,7 +11,7 @@ export default function Pagination({ page, totalItems, itemsPerPage, onPageChang
   const totalPages = Math.ceil(totalItems / itemsPerPage)
 
   return (
-    <div>
+    <div className="flex flex-row justify-between px-10 mt-10">
       <button
         disabled={page === 1}
         onClick={() => onPageChange(page - 1)}
