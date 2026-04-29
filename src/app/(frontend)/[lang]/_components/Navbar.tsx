@@ -1,11 +1,10 @@
 'use client'
 import React, { useState, PropsWithChildren, HTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
-import { Icon } from './_components/icons'
-import { LanguageDropdown } from './_components/LanguageDropdown'
+import { Icon } from './icons'
+import { LanguageDropdown } from './LanguageDropdown'
 import { useRouter } from 'next/navigation'
-
-import type { Lang } from '../type/lang'
+import type { Lang } from '@/types/lang'
 
 type navbarProps = {
   data: NavigationBarDTO

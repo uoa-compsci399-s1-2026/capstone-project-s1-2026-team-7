@@ -242,6 +242,11 @@ export interface Staff {
 export interface Study {
   id: number
   title: string
+  /**
+   * URL-friendly version of the title, e.g. nutrition-study-2026
+   */
+  slug: string
+  banner?: (number | null) | Media
   description: {
     root: {
       type: string
@@ -462,6 +467,8 @@ export interface StaffSelect<T extends boolean = true> {
  */
 export interface StudiesSelect<T extends boolean = true> {
   title?: T
+  slug?: T
+  banner?: T
   description?: T
   sortOrder?: T
   updatedAt?: T
@@ -589,6 +596,7 @@ export interface OurTeamPage {
 export interface StudiesPage {
   id: number
   title: string
+  banner: number | Media
   studiesDisplay?: (number | Study)[] | null
   updatedAt?: string | null
   createdAt?: string | null
@@ -693,6 +701,7 @@ export interface OurTeamPageSelect<T extends boolean = true> {
  */
 export interface StudiesPageSelect<T extends boolean = true> {
   title?: T
+  banner?: T
   studiesDisplay?: T
   updatedAt?: T
   createdAt?: T

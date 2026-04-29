@@ -1,7 +1,8 @@
 import React from 'react'
-import Navbar from './Navbar'
+import Navbar from '@/app/(frontend)/[lang]/_components/Navbar'
+import Footer from '@/app/(frontend)/[lang]/_components/Footer'
 import { getNavigationBar } from '@/queries/navigation'
-import { Lang } from '../type/lang'
+import { Lang } from '@/types/lang'
 
 export default async function LangLayout({
   children,
@@ -20,6 +21,7 @@ export default async function LangLayout({
     <>
       <Navbar data={data} currentLang={currentLang} />
       <main>{children}</main>
+      <Footer data={data} />
     </>
   )
 }

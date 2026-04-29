@@ -1,7 +1,7 @@
 import Banner from '../_components/Banner'
 import ContactForm from './_components/ContactForm'
 import ContactMap from './_components/ContactMap'
-import type { Lang } from '../../type/lang'
+import type { Lang } from '@/types/lang'
 
 type ContactPageProps = {
   params: Promise<{
@@ -25,10 +25,12 @@ const contactPageContent = {
     phonePlaceholder: '0226461819',
     messagePlaceholder: 'Let us know how we can help',
 
-    button: 'Send Message',
+    buttonTitle: 'Send Message',
 
     location: 'Location',
     address: '18 Carrick Place, Mt Eden\nAuckland 1024, New Zealand',
+    mapSrc:
+      'https://www.google.com/maps?q=18%20Carrick%20Place%2C%20Mt%20Eden%2C%20Auckland%201024%2C%20New%20Zealand&output=embed',
   },
 
   zh: {
@@ -46,10 +48,12 @@ const contactPageContent = {
     phonePlaceholder: '0226461819',
     messagePlaceholder: '请告诉我们您需要什么帮助',
 
-    button: '发送信息',
+    buttonTitle: '发送信息',
 
     location: '位置',
     address: '18 Carrick Place, Mt Eden\nAuckland 1024, New Zealand',
+    mapSrc:
+      'https://www.google.com/maps?q=18%20Carrick%20Place%2C%20Mt%20Eden%2C%20Auckland%201024%2C%20New%20Zealand&output=embed',
   },
 }
 
@@ -66,7 +70,7 @@ export default async function ContactPage({ params }: ContactPageProps) {
       <section className="bg-white px-8 py-20 md:px-16">
         <div className="mx-auto grid max-w-300 grid-cols-1 gap-16 md:grid-cols-2 md:items-start">
           <ContactForm content={content} />
-          <ContactMap />
+          <ContactMap src={content.mapSrc} />
         </div>
       </section>
     </>
