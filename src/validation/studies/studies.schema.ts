@@ -14,6 +14,7 @@ export type StudyDTO = z.infer<typeof studySchema>
 
 export const studiesDTOSchema = z.object({
   title: z.string().default(''),
+  banner: mediaSchema,
   studiesDisplay: z.array(studySchema).default([]),
 })
 

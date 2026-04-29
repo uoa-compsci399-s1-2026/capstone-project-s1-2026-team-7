@@ -8,11 +8,11 @@ export type StudyListProps = {
 }
 export default function StudyList({ studypage }: StudyListProps) {
   return (
-    <div className="mt-17.5">
+    <div>
       <Banner
         title={studypage.title}
-        imageUrl={'/studiesbanner.png'}
-        imageAlt={'Our Studies banner image'}
+        imageUrl={studypage.banner.url}
+        imageAlt={studypage.banner.alt}
       ></Banner>
       <div
         className="flex justify-center
