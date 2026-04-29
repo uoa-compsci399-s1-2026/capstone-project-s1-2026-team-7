@@ -5,6 +5,7 @@ import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
 import sharp from 'sharp'
 import { s3Storage } from '@payloadcms/storage-s3'
+import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
@@ -19,6 +20,7 @@ import { OurTeamPage } from './globals/OurTeamPage'
 import { StudiesPage } from './globals/StudiesPage'
 import { ResearchPage } from './globals/ResearchPage'
 import { NavigationBar } from './globals/NavigationBar'
+import { ContactPage } from './globals/ContactPage'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -30,13 +32,26 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
+
+  email: nodemailerAdapter({
+    defaultFromAddress: process.env.EMAIL_FROM_ADDRESS || 'noreply@example.com',
+    defaultFromName: process.env.EMAIL_FROM_NAME || 'Human Nutrition Unit',
+    transportOptions: {
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT || 587),
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    },
+  }),
   localization: {
-    locales: ['en', 'zh', 'mi'],
+    locales: ['en', 'zh'],
     defaultLocale: 'en',
     fallback: true,
   },
   collections: [Users, Media, Pages, Staff, Studies, Research, ResearchCategories],
-  globals: [HomePage, OurTeamPage, StudiesPage, ResearchPage, NavigationBar],
+  globals: [HomePage, OurTeamPage, StudiesPage, ResearchPage, NavigationBar, ContactPage],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
