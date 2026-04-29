@@ -7,6 +7,7 @@ export const Research: CollectionConfig = {
   },
   fields: [
     { name: 'title', type: 'text', required: true, localized: true },
+    { name: 'doi', type: 'text', required: true },
 
     {
       name: 'researchLink',

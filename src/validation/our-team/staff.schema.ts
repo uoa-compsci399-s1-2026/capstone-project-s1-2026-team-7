@@ -6,6 +6,7 @@ export const staffSchema = z.object({
   firstname: z.string().default(''),
   lastname: z.string().default(''),
   jobTitle: z.string().default(''),
+  orcid: z.string().default(''),
   intro: z
     .string()
     .nullish()

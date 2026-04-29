@@ -273,6 +273,7 @@ export interface Study {
 export interface Research {
   id: number
   title: string
+  doi: string
   researchLink: string
   date?: string | null
   /**
@@ -480,6 +481,7 @@ export interface StudiesSelect<T extends boolean = true> {
  */
 export interface ResearchSelect<T extends boolean = true> {
   title?: T
+  doi?: T
   researchLink?: T
   date?: T
   order?: T

@@ -1,3 +1,30 @@
+export type SharedArticle = {
+  article: ArticleOutput
+  people: string[]
+}
+
+export type SharedArticleInternal = {
+  article: ArticleOutput
+  people: Set<string>
+}
+
+export type nameWithORcid = {
+  name: string
+  orcid: string
+}
+
+export type ArticleOutput = {
+  title: string
+  doi: string | null
+  url: string | null
+  publicationDate: string | null
+}
+
+export type PerPersonOutputType = {
+  name: string
+  articles: ArticleOutput[]
+}
+
 export type OrcidDateValue = {
   value: number
 }
