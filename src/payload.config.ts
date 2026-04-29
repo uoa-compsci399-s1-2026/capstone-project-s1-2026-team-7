@@ -19,6 +19,7 @@ import { OurTeamPage } from './globals/OurTeamPage'
 import { StudiesPage } from './globals/StudiesPage'
 import { ResearchPage } from './globals/ResearchPage'
 import { NavigationBar } from './globals/NavigationBar'
+import { ContactPage } from './globals/ContactPage'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -36,7 +37,7 @@ export default buildConfig({
     fallback: true,
   },
   collections: [Users, Media, Pages, Staff, Studies, Research, ResearchCategories],
-  globals: [HomePage, OurTeamPage, StudiesPage, ResearchPage, NavigationBar],
+  globals: [HomePage, OurTeamPage, StudiesPage, ResearchPage, NavigationBar, ContactPage],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
