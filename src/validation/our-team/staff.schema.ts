@@ -1,24 +1,35 @@
 import { z } from 'zod'
 import { mediaSchema, DEFAULT_PROFILE_PIC } from '../common/media.schema'
 
+const emptyString = z
+  .string()
+  .nullish()
+  .transform((value) => value ?? '')
+
+const zeroNumber = z
+  .number()
+  .nullish()
+  .transform((value) => value ?? 0)
+
 export const staffSchema = z.object({
   id: z.number(),
-  firstname: z.string().default(''),
-  lastname: z.string().default(''),
-  jobTitle: z.string().default(''),
-  orcid: z.string().default(''),
-  intro: z
-    .string()
-    .nullish()
-    .transform(() => ''),
+
+  firstname: emptyString,
+  lastname: emptyString,
+  jobTitle: emptyString,
+
+  orcid: emptyString,
+
+  intro: emptyString,
+
   manager: z.boolean().default(false),
-  uoaProfileLink: z.string().nullable().default(''),
-  email: z.string().nullable().default(''),
-  photo: mediaSchema.default(DEFAULT_PROFILE_PIC),
-  sortOrder: z
-    .number()
-    .nullish()
-    .transform(() => 0),
+
+  uoaProfileLink: emptyString,
+  email: emptyString,
+
+  photo: mediaSchema.nullish().transform((value) => value ?? DEFAULT_PROFILE_PIC),
+
+  sortOrder: zeroNumber,
 })
 
 export type StaffDTO = z.infer<typeof staffSchema>
