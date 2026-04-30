@@ -22,6 +22,12 @@ export default async function StudiesTemplatePage({ params }: StudiesPageProps) 
     <main>
       <Banner title={result.title} imageUrl={result.banner.url} imageAlt={result.banner.alt} />
 
+      {result.subtitle && (
+        <section className="mx-auto max-w-4xl px-4 pt-10 text-center">
+          <p className="text-xl leading-relaxed text-[#08084F] md:text-2xl">{result.subtitle}</p>
+        </section>
+      )}
+
       <section className="mx-auto w-full max-w-4xl px-4 py-20">
         <RichTextRenderer data={result.description} />
       </section>
