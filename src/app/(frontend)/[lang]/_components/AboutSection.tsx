@@ -13,14 +13,14 @@ export default function AboutSection({ data }: AboutSectionProps) {
       <div className="mx-auto max-w-6xl">
         {/* Mobile title - sits above image */}
         <div className="mb-6 flex items-start gap-4 text-[#08084f] md:hidden">
-          <div className="h-[28px] w-[3px] shrink-0 rounded-full bg-[#08084f]" />
+          <div className="h-7 w-0.75 shrink-0 rounded-full bg-[#08084f]" />
 
           <h2 className="text-2xl font-bold leading-tight">{heading}</h2>
         </div>
         {/* Image + text */}
         <div className="grid gap-8 md:grid-cols-2 md:items-start md:gap-8 lg:gap-14">
           {/* Image */}
-          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[2rem]">
+          <div className="relative aspect-4/3 w-full overflow-hidden rounded-4xl">
             <Image
               src={image.url}
               alt={image.alt || heading}
@@ -34,7 +34,7 @@ export default function AboutSection({ data }: AboutSectionProps) {
           <div className="text-[#08084f]">
             {/* Tablet/Desktop title */}
             <div className="mb-5 hidden items-start gap-4 md:flex">
-              <div className="h-[34px] w-[3px] shrink-0 rounded-full bg-[#08084f] lg:h-[58px]" />
+              <div className="h-8.5 w-0.75 shrink-0 rounded-full bg-[#08084f] lg:h-14.5" />
 
               <h2 className="text-[28.9px] font-bold leading-tight lg:text-[48.23px]">{heading}</h2>
             </div>

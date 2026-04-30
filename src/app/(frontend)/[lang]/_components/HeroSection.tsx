@@ -2,7 +2,6 @@ import Image from 'next/image'
 import mobile_hero from '@/../public/mobile_hero.png'
 import MainButton from './MainButton'
 import { HeroDTO } from '@/validation'
-import { Search } from 'lucide-react'
 
 type HeroSectionProp = {
   prop: HeroDTO
@@ -53,33 +52,9 @@ export default function HeroSection({ prop }: HeroSectionProp) {
             {description}
           </p>
 
-          <div className="flex flex-wrap justify-center gap-3 max-[449px]:mb-4 md:gap-4 xl:mt-4 [&_button]:border-2 lg:[&_button]:w-[180px]">
+          <div className="flex flex-wrap justify-center gap-3 max-[449px]:mb-4 md:gap-4 xl:mt-4 [&_button]:border-2 lg:[&_button]:w-45">
             <MainButton title={button1.label} variant={button1.variant} />
             <MainButton title={button2.label} variant={button2.variant} />
-          </div>
-        </div>
-      </div>
-
-      {/* Search bar between Hero and next section */}
-      <div className="absolute bottom-0 left-1/2 z-30 w-[85%] max-w-4xl -translate-x-1/2 translate-y-1/2">
-        <div className="rounded-md bg-[#e5e5e5] px-3 py-3 shadow-md md:px-5 md:py-4">
-          <label className="mb-2 hidden text-xs font-medium text-black md:block">
-            Search for a study:
-          </label>
-
-          <div className="flex min-w-0 items-center gap-2 md:gap-3">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="h-9 min-w-0 flex-1 rounded-full border border-gray-300 bg-white px-3 text-xs outline-none transition-all duration-200 placeholder:text-xs hover:border-gray-400 hover:bg-gray-50 focus:border-[#4f5bff] md:h-10 md:px-4 md:text-sm md:placeholder:text-sm"
-            />
-
-            <button
-              type="button"
-              className="flex h-9 w-10 shrink-0 items-center justify-center rounded-xl bg-[#4f5bff] text-white transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#3f4af0] hover:shadow-md md:h-10 md:w-12"
-            >
-              <Search className="h-4 w-4 md:h-5 md:w-5" strokeWidth={2} />
-            </button>
           </div>
         </div>
       </div>
