@@ -1,8 +1,6 @@
 import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
-import { createInterface } from 'node:readline/promises'
-import { stdin as input, stdout as output } from 'node:process'
 import nextEnv from '@next/env'
 
 const { loadEnvConfig } = nextEnv
@@ -16,8 +14,6 @@ const VALID_OWNERS = new Set(['kelvin', 'ayush', 'carl', 'johnathan', 'james', '
 
 const NEON_API_KEY = process.env.NEON_API_KEY
 const NEON_PROJECT_ID = process.env.NEON_PROJECT_ID
-
-const AUTOPUSH_ENV_KEY = 'AUTOPUSH'
 
 const NEONCTL_BIN = path.join(
   PROJECT_ROOT,
@@ -113,19 +109,6 @@ function ensureNeonBranchExists(branchName) {
   })
 }
 
-function resetNeonBranchFromParent(branchName) {
-  if (branchName === 'production') {
-    console.log('[neon-sync] Skipping reset because production should never be reset.')
-    return
-  }
-
-  console.log(`[neon-sync] Resetting Neon branch "${branchName}" from its parent.`)
-
-  execNeon(['branches', 'reset', branchName, '--parent'], {
-    stdio: 'inherit',
-  })
-}
-
 function getConnectionString(branchName) {
   return runNeon(['connection-string', branchName, '--role-name', 'neondb_owner'])
 }
@@ -148,15 +131,13 @@ function ensureEnvFileExists() {
   }
 }
 
-function updateEnvFile(connectionString, neonBranch, gitBranch, autopush) {
+function updateEnvFile(connectionString, neonBranch, gitBranch) {
   ensureEnvFileExists()
 
   let content = fs.readFileSync(ENV_FILE, 'utf8')
-
   content = upsertEnvVar(content, 'DATABASE_URL', connectionString)
   content = upsertEnvVar(content, 'NEON_BRANCH', neonBranch)
   content = upsertEnvVar(content, 'GIT_BRANCH', gitBranch)
-  content = upsertEnvVar(content, AUTOPUSH_ENV_KEY, String(autopush))
 
   fs.writeFileSync(ENV_FILE, content, 'utf8')
 }
@@ -169,44 +150,7 @@ function ensureNeonCliExists() {
   }
 }
 
-async function askYesNo(question) {
-  if (!process.stdin.isTTY) {
-    console.log('[neon-sync] Non-interactive shell detected. Defaulting autopush=false.')
-    return false
-  }
-
-  const rl = createInterface({ input, output })
-
-  try {
-    while (true) {
-      const answer = await rl.question(`${question} (y/n): `)
-      const normalised = answer.trim().toLowerCase()
-
-      if (normalised === 'y' || normalised === 'yes') return true
-      if (normalised === 'n' || normalised === 'no') return false
-
-      console.log('[neon-sync] Please enter y or n.')
-    }
-  } finally {
-    rl.close()
-  }
-}
-
-async function getAutopushChoice(gitBranch, neonBranch) {
-  if (gitBranch === 'main') {
-    console.log('[neon-sync] Main branch detected. Setting autopush=false.')
-    return false
-  }
-
-  console.log(`[neon-sync] Current git branch: ${gitBranch}`)
-  console.log(`[neon-sync] Target Neon branch: ${neonBranch}`)
-
-  const autopush = await askYesNo('Enable AUTO_PUSH for this branch?:')
-
-  return autopush
-}
-
-async function main() {
+function main() {
   ensureNeonCliExists()
 
   const gitBranch = getCurrentGitBranch()
@@ -223,24 +167,12 @@ async function main() {
   }
 
   ensureNeonBranchExists(neonBranch)
-
-  const autopush = await getAutopushChoice(gitBranch, neonBranch)
-
-  if (gitBranch !== 'main' && autopush === false) {
-    resetNeonBranchFromParent(neonBranch)
-  }
-
   const connectionString = getConnectionString(neonBranch)
-
-  updateEnvFile(connectionString, neonBranch, gitBranch, autopush)
+  updateEnvFile(connectionString, neonBranch, gitBranch)
 
   console.log(`[neon-sync] ${gitBranch} -> ${neonBranch}`)
-  console.log(`[neon-sync] ${AUTOPUSH_ENV_KEY}=${autopush}`)
   console.log('[neon-sync] Updated .env')
   console.log('[neon-sync] Restart dev server if it is already running')
 }
 
-main().catch((error) => {
-  console.error('[neon-sync] Failed:', error.message)
-  process.exit(1)
-})
+main()
