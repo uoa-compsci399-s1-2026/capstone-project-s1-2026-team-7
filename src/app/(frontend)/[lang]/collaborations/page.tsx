@@ -1,7 +1,7 @@
 import Banner from '../_components/Banner'
 import CollabIntro from './_components/CollabIntro'
 import CollabPathway from './_components/CollabPathway'
-import CollabCategoryGrid from './_components/CollabCategoryGrid'
+import ExploreOur from './_components/ExploreOur'
 
 export default function Collaborations() {
   return (
@@ -14,7 +14,7 @@ export default function Collaborations() {
 
       <CollabIntro />
       <CollabPathway />
-      <CollabCategoryGrid />
+      <ExploreOur />
     </div>
   )
 }
