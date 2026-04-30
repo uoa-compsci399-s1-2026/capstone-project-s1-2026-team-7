@@ -26,6 +26,8 @@ import { ContactPage } from './globals/ContactPage'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const autopushEnabled = process.env.AUTOPUSH === 'true'
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -64,7 +66,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URL || '',
     },
-    push: true,
+    push: autopushEnabled,
   }),
   sharp,
   plugins: [
