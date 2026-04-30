@@ -98,7 +98,6 @@ function getTargetNeonBranch(gitBranch) {
 function getExistingNeonBranches() {
   const raw = runNeon(['branches', 'list', '--output', 'json'])
   const branches = JSON.parse(raw)
-
   return branches.map((branch) => branch.name)
 }
 
@@ -131,26 +130,6 @@ function getConnectionString(branchName) {
   return runNeon(['connection-string', branchName, '--role-name', 'neondb_owner'])
 }
 
-function ensureEnvFileExists() {
-  if (!fs.existsSync(ENV_FILE)) {
-    fs.writeFileSync(ENV_FILE, '', 'utf8')
-  }
-}
-
-function readEnvVar(key) {
-  if (!fs.existsSync(ENV_FILE)) return undefined
-
-  const content = fs.readFileSync(ENV_FILE, 'utf8')
-  const regex = new RegExp(`^${key}=(.*)$`, 'm')
-  const match = content.match(regex)
-
-  return match?.[1]?.trim()
-}
-
-function readAutopushFromEnvFile() {
-  return readEnvVar(AUTOPUSH_ENV_KEY)?.toLowerCase() === 'true'
-}
-
 function upsertEnvVar(content, key, value) {
   const line = `${key}=${value}`
   const regex = new RegExp(`^${key}=.*$`, 'm')
@@ -161,6 +140,12 @@ function upsertEnvVar(content, key, value) {
 
   const trimmed = content.trimEnd()
   return trimmed ? `${trimmed}\n${line}\n` : `${line}\n`
+}
+
+function ensureEnvFileExists() {
+  if (!fs.existsSync(ENV_FILE)) {
+    fs.writeFileSync(ENV_FILE, '', 'utf8')
+  }
 }
 
 function updateEnvFile(connectionString, neonBranch, gitBranch, autopush) {
@@ -184,24 +169,21 @@ function ensureNeonCliExists() {
   }
 }
 
-function normaliseYesNoAnswer(answer) {
-  const normalised = answer.trim().toLowerCase()
+async function askYesNo(question) {
+  if (!process.stdin.isTTY) {
+    console.log('[neon-sync] Non-interactive shell detected. Defaulting autopush=false.')
+    return false
+  }
 
-  if (normalised === 'y' || normalised === 'yes') return true
-  if (normalised === 'n' || normalised === 'no') return false
-
-  return undefined
-}
-
-async function askYesNoWithReadline(question) {
   const rl = createInterface({ input, output })
 
   try {
     while (true) {
       const answer = await rl.question(`${question} (y/n): `)
-      const parsedAnswer = normaliseYesNoAnswer(answer)
+      const normalised = answer.trim().toLowerCase()
 
-      if (parsedAnswer !== undefined) return parsedAnswer
+      if (normalised === 'y' || normalised === 'yes') return true
+      if (normalised === 'n' || normalised === 'no') return false
 
       console.log('[neon-sync] Please enter y or n.')
     }
@@ -210,125 +192,18 @@ async function askYesNoWithReadline(question) {
   }
 }
 
-function askYesNoWithPowerShell(question) {
-  const escapedQuestion = question.replaceAll("'", "''")
-
-  while (true) {
-    const answer = execFileSync(
-      'powershell.exe',
-      [
-        '-NoProfile',
-        '-Command',
-        `$answer = Read-Host -Prompt '${escapedQuestion} (y/n)'; Write-Output $answer`,
-      ],
-      {
-        cwd: PROJECT_ROOT,
-        stdio: ['inherit', 'pipe', 'inherit'],
-        encoding: 'utf8',
-      },
-    ).trim()
-
-    const parsedAnswer = normaliseYesNoAnswer(answer)
-
-    if (parsedAnswer !== undefined) return parsedAnswer
-
-    console.log('[neon-sync] Please enter y or n.')
-  }
-}
-
-function askYesNoWithDevTty(question) {
-  const escapedQuestion = question.replaceAll("'", "'\\''")
-
-  while (true) {
-    const answer = execFileSync(
-      'sh',
-      [
-        '-c',
-        `printf '${escapedQuestion} (y/n): ' > /dev/tty; read answer < /dev/tty; printf '%s' "$answer"`,
-      ],
-      {
-        cwd: PROJECT_ROOT,
-        stdio: ['ignore', 'pipe', 'inherit'],
-        encoding: 'utf8',
-      },
-    ).trim()
-
-    const parsedAnswer = normaliseYesNoAnswer(answer)
-
-    if (parsedAnswer !== undefined) return parsedAnswer
-
-    console.log('[neon-sync] Please enter y or n.')
-  }
-}
-
-async function askYesNo(question) {
-  if (process.stdin.isTTY) {
-    return askYesNoWithReadline(question)
-  }
-
-  console.log(
-    '[neon-sync] Git hook is non-interactive. Trying to prompt through the terminal directly.',
-  )
-
-  try {
-    if (process.platform === 'win32') {
-      return askYesNoWithPowerShell(question)
-    }
-
-    if (fs.existsSync('/dev/tty')) {
-      return askYesNoWithDevTty(question)
-    }
-  } catch {
-    console.log('[neon-sync] Could not open an interactive prompt.')
-  }
-
-  return undefined
-}
-
-async function getAutopushDecision(gitBranch, neonBranch) {
+async function getAutopushChoice(gitBranch, neonBranch) {
   if (gitBranch === 'main') {
-    console.log('[neon-sync] Main branch detected. Setting AUTOPUSH=false.')
-
-    return {
-      autopush: false,
-      shouldReset: false,
-    }
+    console.log('[neon-sync] Main branch detected. Setting autopush=false.')
+    return false
   }
-
-  const previousAutopush = readAutopushFromEnvFile()
 
   console.log(`[neon-sync] Current git branch: ${gitBranch}`)
   console.log(`[neon-sync] Target Neon branch: ${neonBranch}`)
-  console.log(`[neon-sync] Existing ${AUTOPUSH_ENV_KEY}=${previousAutopush}`)
 
-  const autopushAnswer = await askYesNo('Enable AUTOPUSH for this branch?')
+  const autopush = await askYesNo('Enable AUTO_PUSH for this branch?:')
 
-  if (autopushAnswer === undefined) {
-    console.log('[neon-sync] Could not ask for AUTOPUSH choice.')
-    console.log(`[neon-sync] Keeping existing ${AUTOPUSH_ENV_KEY}=${previousAutopush}.`)
-    console.log('[neon-sync] No database reset will be performed.')
-
-    return {
-      autopush: previousAutopush,
-      shouldReset: false,
-    }
-  }
-
-  if (autopushAnswer === true) {
-    return {
-      autopush: true,
-      shouldReset: false,
-    }
-  }
-
-  const resetAnswer = await askYesNo(
-    'AUTOPUSH will be false. Do you also want to reset this Neon branch from production?',
-  )
-
-  return {
-    autopush: false,
-    shouldReset: resetAnswer === true,
-  }
+  return autopush
 }
 
 async function main() {
@@ -349,9 +224,9 @@ async function main() {
 
   ensureNeonBranchExists(neonBranch)
 
-  const { autopush, shouldReset } = await getAutopushDecision(gitBranch, neonBranch)
+  const autopush = await getAutopushChoice(gitBranch, neonBranch)
 
-  if (shouldReset) {
+  if (gitBranch !== 'main' && autopush === false) {
     resetNeonBranchFromParent(neonBranch)
   }
 
