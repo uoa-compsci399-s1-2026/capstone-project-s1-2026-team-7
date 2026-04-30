@@ -25,8 +25,6 @@ export default function Footer(props: footerProps) {
 
           <FooterColumn title="Help and support" links={supportLinks} />
 
-          <FooterColumn title="Legal" links={legalLinks} />
-
           <div>
             <h3 className="mb-4 text-[18px] font-semibold leading-none">Connect with us</h3>
             <div className="flex items-center gap-4">
@@ -51,22 +49,9 @@ export default function Footer(props: footerProps) {
             </div>
           </div>
         </div>
-
-        <div className="mt-10 flex justify-end pb-6 max-md:mt-8 max-md:justify-start max-md:pb-5">
-          <div className="flex flex-wrap items-center text-[15px] font-medium max-md:text-[14px]">
-            {legalLinks.map((item, index) => (
-              <React.Fragment key={item.footerTitle}>
-                <Link href={item.footerURL} className="transition hover:opacity-70">
-                  {item.footerTitle}
-                </Link>
-                {index < legalLinks.length - 1 && <span className="px-2 text-[#0C0C48]">|</span>}
-              </React.Fragment>
-            ))}
-          </div>
-        </div>
       </div>
 
-      <div className="w-full border-t border-[#D5D5D5]">
+      <div className="w-full border-t mt-4 border-[#D5D5D5]">
         <img
           src={footerMotif.url}
           alt={footerMotif.alt}
