@@ -1,5 +1,6 @@
 import React from 'react'
 import { StudyDTO } from '@/validation/studies'
+import Link from 'next/link'
 import Image from 'next/image'
 
 export type StudyCardProps = {
@@ -16,7 +17,7 @@ function extractText(node: any): string {
 
 export default function StudyCard({ study }: StudyCardProps) {
   return (
-    <a href={`studies/${study.slug}`}>
+    <Link href={`studies/${study.slug}`}>
       <div
         className="relative overflow-hidden
     xl:w-219 xl:h-73.5
@@ -25,6 +26,7 @@ export default function StudyCard({ study }: StudyCardProps) {
     rounded-[27px] xl:rounded-[45px]"
       >
         <Image src={study.banner.url} alt={study.banner.alt} fill className="object-cover" />
+        <div className="absolute inset-0 bg-[#08084f]/50" />
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center px-4">
           <h1
             className="text-white font-bold leading-tight
@@ -46,6 +48,6 @@ export default function StudyCard({ study }: StudyCardProps) {
           </h2>
         </div>
       </div>
-    </a>
+    </Link>
   )
 }

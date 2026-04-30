@@ -5,6 +5,7 @@ import HeroSection from './_components/HeroSection'
 import AboutSection from './_components/AboutSection'
 import { StudiesSection } from './_components/StudiesSection'
 import { PartnersSection } from './_components/PartnersSection'
+import ParticipantsStats from './_components/ParticipantsStats'
 
 type PageProps = {
   params: Promise<{
@@ -21,6 +22,7 @@ export default async function HomePage({ params }: PageProps) {
       <HeroSection prop={data.hero} />
       <StudiesSection />
       <AboutSection data={data.aboutSection} />
+      <ParticipantsStats />
       <PartnersSection partnersSection={data.partnersSection} />
     </>
   )
