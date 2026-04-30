@@ -2,7 +2,7 @@ import { execFileSync } from 'node:child_process'
 import fs from 'node:fs'
 import path from 'node:path'
 import { createInterface } from 'node:readline/promises'
-import { stdin as input, stdout as output } from 'node:process'
+import { stdin, stdout } from 'node:process'
 import nextEnv from '@next/env'
 
 const { loadEnvConfig } = nextEnv
@@ -120,7 +120,7 @@ function resetNeonBranchFromParent(branchName) {
     return
   }
 
-  console.log(`[neon-sync] Resetting Neon branch "${branchName}" from its parent.`)
+  console.log(`[neon-sync] Resetting Neon branch "${branchName}" from production.`)
 
   execNeon(['branches', 'reset', branchName, '--parent'], {
     stdio: 'inherit',
@@ -193,8 +193,72 @@ function normaliseYesNoAnswer(answer) {
   return undefined
 }
 
-async function askYesNoWithReadline(question) {
-  const rl = createInterface({ input, output })
+function getTerminalStreams() {
+  if (stdin.isTTY) {
+    return {
+      input: stdin,
+      output: stdout,
+      close: () => {},
+    }
+  }
+
+  if (process.platform === 'win32') {
+    const inputPaths = ['CONIN$', '\\\\.\\CONIN$']
+    const outputPaths = ['CONOUT$', '\\\\.\\CONOUT$']
+
+    for (const inputPath of inputPaths) {
+      for (const outputPath of outputPaths) {
+        try {
+          const input = fs.createReadStream(inputPath)
+          const output = fs.createWriteStream(outputPath)
+
+          return {
+            input,
+            output,
+            close: () => {
+              input.destroy()
+              output.end()
+            },
+          }
+        } catch {
+          // Try next option
+        }
+      }
+    }
+
+    return undefined
+  }
+
+  if (fs.existsSync('/dev/tty')) {
+    const input = fs.createReadStream('/dev/tty')
+    const output = fs.createWriteStream('/dev/tty')
+
+    return {
+      input,
+      output,
+      close: () => {
+        input.destroy()
+        output.end()
+      },
+    }
+  }
+
+  return undefined
+}
+
+async function askYesNo(question) {
+  const terminal = getTerminalStreams()
+
+  if (!terminal) {
+    console.log('[neon-sync] Could not access terminal input for a prompt.')
+    return undefined
+  }
+
+  const rl = createInterface({
+    input: terminal.input,
+    output: terminal.output,
+    terminal: true,
+  })
 
   try {
     while (true) {
@@ -207,82 +271,8 @@ async function askYesNoWithReadline(question) {
     }
   } finally {
     rl.close()
+    terminal.close()
   }
-}
-
-function askYesNoWithPowerShell(question) {
-  const escapedQuestion = question.replaceAll("'", "''")
-
-  while (true) {
-    const answer = execFileSync(
-      'powershell.exe',
-      [
-        '-NoProfile',
-        '-Command',
-        `$answer = Read-Host -Prompt '${escapedQuestion} (y/n)'; Write-Output $answer`,
-      ],
-      {
-        cwd: PROJECT_ROOT,
-        stdio: ['inherit', 'pipe', 'inherit'],
-        encoding: 'utf8',
-      },
-    ).trim()
-
-    const parsedAnswer = normaliseYesNoAnswer(answer)
-
-    if (parsedAnswer !== undefined) return parsedAnswer
-
-    console.log('[neon-sync] Please enter y or n.')
-  }
-}
-
-function askYesNoWithDevTty(question) {
-  const escapedQuestion = question.replaceAll("'", "'\\''")
-
-  while (true) {
-    const answer = execFileSync(
-      'sh',
-      [
-        '-c',
-        `printf '${escapedQuestion} (y/n): ' > /dev/tty; read answer < /dev/tty; printf '%s' "$answer"`,
-      ],
-      {
-        cwd: PROJECT_ROOT,
-        stdio: ['ignore', 'pipe', 'inherit'],
-        encoding: 'utf8',
-      },
-    ).trim()
-
-    const parsedAnswer = normaliseYesNoAnswer(answer)
-
-    if (parsedAnswer !== undefined) return parsedAnswer
-
-    console.log('[neon-sync] Please enter y or n.')
-  }
-}
-
-async function askYesNo(question) {
-  if (process.stdin.isTTY) {
-    return askYesNoWithReadline(question)
-  }
-
-  console.log(
-    '[neon-sync] Git hook is non-interactive. Trying to prompt through the terminal directly.',
-  )
-
-  try {
-    if (process.platform === 'win32') {
-      return askYesNoWithPowerShell(question)
-    }
-
-    if (fs.existsSync('/dev/tty')) {
-      return askYesNoWithDevTty(question)
-    }
-  } catch {
-    console.log('[neon-sync] Could not open an interactive prompt.')
-  }
-
-  return undefined
 }
 
 async function getAutopushDecision(gitBranch, neonBranch) {
