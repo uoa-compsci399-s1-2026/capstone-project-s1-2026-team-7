@@ -213,6 +213,7 @@ export interface Staff {
 export interface Study {
   id: number
   title: string
+  subtitle?: string | null
   /**
    * URL-friendly version of the title, e.g. nutrition-study-2026
    */
@@ -424,6 +425,7 @@ export interface StaffSelect<T extends boolean = true> {
  */
 export interface StudiesSelect<T extends boolean = true> {
   title?: T
+  subtitle?: T
   slug?: T
   banner?: T
   description?: T

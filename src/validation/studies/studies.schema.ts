@@ -4,6 +4,7 @@ import { mediaSchema } from '@/validation'
 export const studySchema = z.object({
   id: z.number(),
   title: z.string().default(''),
+  subtitle: z.string().default(''),
   slug: z.string().default(''),
   banner: mediaSchema,
   description: z.any().default(''),

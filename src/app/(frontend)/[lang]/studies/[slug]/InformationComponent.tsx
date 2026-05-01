@@ -1,10 +1,10 @@
 import type { LucideIcon } from 'lucide-react'
 
 export type InformationComponentProps = {
-  Icon: LucideIcon
+  Icon?: LucideIcon
   title: string
   description: string
-  link: string
+  link?: string
 }
 
 export default function InformationComponent({
@@ -14,25 +14,25 @@ export default function InformationComponent({
   link,
 }: InformationComponentProps) {
   return (
-    <div className="flex h-52.5 w-full max-w-73.75 flex-col justify-between rounded-[28px] bg-[#D0D6E7] px-5 py-7 md:h-84.25 md:max-w-none md:w-[525.79px] md:rounded-[42px] md:px-9 md:py-10">
+    <div className="flex min-h-80 w-full flex-col justify-between rounded-[42px] bg-[#D0D6E7] px-9 py-10">
       <div>
-        <div className="mb-7 flex items-center gap-3 md:mb-10 md:gap-4">
-          <Icon className="h-5 w-5 text-black md:h-8 md:w-8" strokeWidth={2.2} />
+        <div className="mb-7 flex items-center gap-3">
+          {Icon && <Icon className="h-8 w-8 text-black" strokeWidth={2.2} />}
 
-          <h3 className="text-base font-bold text-[#05083D] md:text-2xl">{title}</h3>
+          <h3 className="text-2xl font-bold text-[#05083D]">{title}</h3>
         </div>
 
-        <p className="max-w-107.5 text-xs leading-snug text-black md:text-base md:leading-relaxed">
-          {description}
-        </p>
+        <p className="max-w-107.5 text-base leading-relaxed text-black md:text-lg">{description}</p>
       </div>
 
-      <a
-        href={link}
-        className="text-xs font-bold text-[#355CFF] underline underline-offset-2 md:text-base"
-      >
-        Learn more
-      </a>
+      {link && (
+        <a
+          href={link}
+          className="mt-6 text-base font-bold text-[#355CFF] underline underline-offset-2"
+        >
+          Learn more
+        </a>
+      )}
     </div>
   )
 }

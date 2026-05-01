@@ -4,6 +4,14 @@ export const Studies: CollectionConfig = {
   slug: 'studies',
   fields: [
     { name: 'title', type: 'text', required: true, localized: true },
+
+    {
+      name: 'subtitle',
+      type: 'text',
+      localized: true,
+      required: false,
+    },
+
     {
       name: 'slug',
       type: 'text',
@@ -13,6 +21,7 @@ export const Studies: CollectionConfig = {
         description: 'URL-friendly version of the title, e.g. nutrition-study-2026',
       },
     },
+
     { name: 'banner', type: 'upload', relationTo: 'media' },
     { name: 'description', type: 'richText', required: true, localized: true },
     { name: 'sortOrder', type: 'number' },

@@ -1,9 +1,10 @@
 import { getPayloadClient } from '@/lib/payload'
 import { studiesDTOSchema, StudiesPageDTO } from '@/validation'
-import { Lang } from '@/types/lang'
-const payload = await getPayloadClient()
+import type { Lang } from '@/types/lang'
 
 export async function getStudiesPage(locale: Lang = 'en'): Promise<StudiesPageDTO> {
+  const payload = await getPayloadClient()
+
   const data = await payload.findGlobal({
     slug: 'studies-page',
     locale,
