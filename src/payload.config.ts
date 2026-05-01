@@ -9,7 +9,6 @@ import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 
 import { Users } from './collections/Users'
 import { Media } from './collections/Media'
-import { Pages } from './collections/Pages'
 import { Studies } from './collections/Studies'
 import { Staff } from './collections/Staff'
 import { Research } from './collections/Research'
@@ -52,7 +51,7 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
-  collections: [Users, Media, Pages, Staff, Studies, Research, ResearchCategories],
+  collections: [Users, Media, Staff, Studies, Research, ResearchCategories],
 
   globals: [HomePage, OurTeamPage, StudiesPage, ResearchPage, NavigationBar, ContactPage, Footer],
 

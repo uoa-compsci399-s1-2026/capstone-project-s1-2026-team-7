@@ -69,7 +69,6 @@ export interface Config {
   collections: {
     users: User
     media: Media
-    pages: Page
     staff: Staff
     studies: Study
     research: Research
@@ -83,7 +82,6 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>
     media: MediaSelect<false> | MediaSelect<true>
-    pages: PagesSelect<false> | PagesSelect<true>
     staff: StaffSelect<false> | StaffSelect<true>
     studies: StudiesSelect<false> | StudiesSelect<true>
     research: ResearchSelect<false> | ResearchSelect<true>
@@ -188,32 +186,6 @@ export interface Media {
   height?: number | null
   focalX?: number | null
   focalY?: number | null
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pages".
- */
-export interface Page {
-  id: number
-  title: string
-  content?: {
-    root: {
-      type: string
-      children: {
-        type: any
-        version: number
-        [k: string]: unknown
-      }[]
-      direction: ('ltr' | 'rtl') | null
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
-      indent: number
-      version: number
-    }
-    [k: string]: unknown
-  } | null
-  updatedAt: string
-  createdAt: string
-  _status?: ('draft' | 'published') | null
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -332,10 +304,6 @@ export interface PayloadLockedDocument {
         value: number | Media
       } | null)
     | ({
-        relationTo: 'pages'
-        value: number | Page
-      } | null)
-    | ({
         relationTo: 'staff'
         value: number | Staff
       } | null)
@@ -432,17 +400,6 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T
   focalX?: T
   focalY?: T
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "pages_select".
- */
-export interface PagesSelect<T extends boolean = true> {
-  title?: T
-  content?: T
-  updatedAt?: T
-  createdAt?: T
-  _status?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
