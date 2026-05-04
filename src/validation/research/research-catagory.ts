@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const researchCategorySchema = z.object({
-  id: z.string(),
+  id: z.number(),
   title: z.string(),
 })
 

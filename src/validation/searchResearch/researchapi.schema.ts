@@ -4,11 +4,11 @@ import { mediaSchema, DEFAULT_GENERAL_PIC } from '../common/media.schema'
 import { researchCategorySchema } from '../research/research-catagory'
 
 export const researchDTOSchema = z.object({
-  id: z.string(),
+  id: z.number(),
   title: z.string().default(''),
   link: z.string().default('https://auckland.ac.nz'),
   image: mediaSchema.nullish().transform((value) => value ?? DEFAULT_GENERAL_PIC),
-  date: string,
+  date: z.string().default(''),
   staff: z.array(staffSchema).default([]),
   categories: z.array(researchCategorySchema).default([]),
   order: z

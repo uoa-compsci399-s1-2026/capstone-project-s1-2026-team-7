@@ -1,5 +1,5 @@
 import { Url } from 'next/dist/shared/lib/router/router'
-import { StaffDTO } from '@/validation'
+import { ResearchCategoryDTO, StaffDTO } from '@/validation'
 import { ResearchCategory } from '@/payload-types'
 
 export type ResearchPageProps = {
@@ -12,7 +12,7 @@ export type ResearchPageProps = {
 }
 
 export type ResearchEntry = {
-  id: string
+  id: number
   title: string
   link: string
   image: {
@@ -21,5 +21,5 @@ export type ResearchEntry = {
   }
   date: string
   staff: StaffDTO[]
-  categories: ResearchCategory[]
+  categories: ResearchCategoryDTO[]
 }

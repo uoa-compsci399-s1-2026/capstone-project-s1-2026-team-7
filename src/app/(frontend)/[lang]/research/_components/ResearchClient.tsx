@@ -9,7 +9,7 @@ import Pagination from './Pagination'
 import ResearchFilters from './ResearchFilters'
 
 type Props = {
-  categories: { id: string; title: string }[]
+  categories: { id: number; title: string }[]
   research: ResearchEntry[]
 }
 
@@ -32,7 +32,7 @@ export function ResearchClient({ categories, research }: Props) {
     .filter((item) =>
       selectedCategory === 'All' || selectedCategory === null
         ? true
-        : item.categories.includes(selectedCategory),
+        : item.categories.some((cat) => cat.title === selectedCategory),
     )
     .sort((a, b) => {
       if (sortOption === 'newest') {
@@ -57,7 +57,7 @@ export function ResearchClient({ categories, research }: Props) {
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
-      <div className="max-w-screen-xl mx-auto w-full px-4 mt-8">
+      <div className="max-w-7xl mx-auto w-full px-4 mt-8">
         <div className="lg:hidden mt-4">
           <button
             onClick={() => setMobileCategoriesOpen(!mobileCategoriesOpen)}
