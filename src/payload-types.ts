@@ -504,45 +504,74 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface HomePage {
   id: number
-  hero: {
-    title: string
-    description: string
-    'portrait hero image': number | Media
-    'mobile hero image': number | Media
-    buttons?:
-      | {
-          label: string
-          url: string
-          variant: 'primary' | 'secondary'
-          id?: string | null
-        }[]
-      | null
-  }
-  studiesSection: {
-    title: string
-    studiesDisplay?: (number | Study)[] | null
-  }
-  aboutSection: {
-    heading: string
-    body: string
-    'portrait image': number | Media
-    'mobile image': number | Media
-  }
-  partnersSection?: {
-    partners?:
-      | {
-          logo: number | Media
-          alt: string
-          id?: string | null
-        }[]
-      | null
-  }
+  layout: (HeroBlock | StudiesBlock | AboutBlock | PartnersBlock)[]
   seo?: {
     metaTitle?: string | null
     metaDescription?: string | null
   }
   updatedAt?: string | null
   createdAt?: string | null
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroBlock".
+ */
+export interface HeroBlock {
+  title: string
+  description: string
+  portraitHeroImage: number | Media
+  mobileHeroImage: number | Media
+  buttons?:
+    | {
+        label: string
+        url: string
+        variant: 'primary' | 'secondary'
+        id?: string | null
+      }[]
+    | null
+  id?: string | null
+  blockName?: string | null
+  blockType: 'hero'
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StudiesBlock".
+ */
+export interface StudiesBlock {
+  title: string
+  studiesDisplay?: (number | Study)[] | null
+  id?: string | null
+  blockName?: string | null
+  blockType: 'studies'
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutBlock".
+ */
+export interface AboutBlock {
+  heading: string
+  body: string
+  portraitImage: number | Media
+  mobileImage: number | Media
+  id?: string | null
+  blockName?: string | null
+  blockType: 'about'
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PartnersBlock".
+ */
+export interface PartnersBlock {
+  partners?:
+    | {
+        logo: number | Media
+        alt: string
+        id?: string | null
+      }[]
+    | null
+  id?: string | null
+  blockName?: string | null
+  blockType: 'partners'
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -675,46 +704,13 @@ export interface Footer {
  * via the `definition` "home-page_select".
  */
 export interface HomePageSelect<T extends boolean = true> {
-  hero?:
+  layout?:
     | T
     | {
-        title?: T
-        description?: T
-        'portrait hero image'?: T
-        'mobile hero image'?: T
-        buttons?:
-          | T
-          | {
-              label?: T
-              url?: T
-              variant?: T
-              id?: T
-            }
-      }
-  studiesSection?:
-    | T
-    | {
-        title?: T
-        studiesDisplay?: T
-      }
-  aboutSection?:
-    | T
-    | {
-        heading?: T
-        body?: T
-        'portrait image'?: T
-        'mobile image'?: T
-      }
-  partnersSection?:
-    | T
-    | {
-        partners?:
-          | T
-          | {
-              logo?: T
-              alt?: T
-              id?: T
-            }
+        hero?: T | HeroBlockSelect<T>
+        studies?: T | StudiesBlockSelect<T>
+        about?: T | AboutBlockSelect<T>
+        partners?: T | PartnersBlockSelect<T>
       }
   seo?:
     | T
@@ -725,6 +721,63 @@ export interface HomePageSelect<T extends boolean = true> {
   updatedAt?: T
   createdAt?: T
   globalType?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroBlock_select".
+ */
+export interface HeroBlockSelect<T extends boolean = true> {
+  title?: T
+  description?: T
+  portraitHeroImage?: T
+  mobileHeroImage?: T
+  buttons?:
+    | T
+    | {
+        label?: T
+        url?: T
+        variant?: T
+        id?: T
+      }
+  id?: T
+  blockName?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StudiesBlock_select".
+ */
+export interface StudiesBlockSelect<T extends boolean = true> {
+  title?: T
+  studiesDisplay?: T
+  id?: T
+  blockName?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "AboutBlock_select".
+ */
+export interface AboutBlockSelect<T extends boolean = true> {
+  heading?: T
+  body?: T
+  portraitImage?: T
+  mobileImage?: T
+  id?: T
+  blockName?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PartnersBlock_select".
+ */
+export interface PartnersBlockSelect<T extends boolean = true> {
+  partners?:
+    | T
+    | {
+        logo?: T
+        alt?: T
+        id?: T
+      }
+  id?: T
+  blockName?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
