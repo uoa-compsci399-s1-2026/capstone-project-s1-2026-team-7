@@ -504,7 +504,15 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface HomePage {
   id: number
-  layout: (HeroBlock | StudiesBlock | AboutBlock | PartnersBlock)[]
+  layout: (
+    | HeroBlock
+    | ResearchBlock
+    | PartnersBlock
+    | CardBlock
+    | InfoBlock
+    | StatsBlock
+    | TimelineBlock
+  )[]
   seo?: {
     metaTitle?: string | null
     metaDescription?: string | null
@@ -535,27 +543,14 @@ export interface HeroBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "StudiesBlock".
+ * via the `definition` "ResearchBlock".
  */
-export interface StudiesBlock {
+export interface ResearchBlock {
   title: string
-  studiesDisplay?: (number | Study)[] | null
+  researchDisplay?: (number | Research)[] | null
   id?: string | null
   blockName?: string | null
-  blockType: 'studies'
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "AboutBlock".
- */
-export interface AboutBlock {
-  heading: string
-  body: string
-  portraitImage: number | Media
-  mobileImage: number | Media
-  id?: string | null
-  blockName?: string | null
-  blockType: 'about'
+  blockType: 'research'
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -572,6 +567,42 @@ export interface PartnersBlock {
   id?: string | null
   blockName?: string | null
   blockType: 'partners'
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardBlock".
+ */
+export interface CardBlock {
+  id?: string | null
+  blockName?: string | null
+  blockType: 'card'
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "InfoBlock".
+ */
+export interface InfoBlock {
+  id?: string | null
+  blockName?: string | null
+  blockType: 'info'
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatsBlock".
+ */
+export interface StatsBlock {
+  id?: string | null
+  blockName?: string | null
+  blockType: 'stats'
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TimelineBlock".
+ */
+export interface TimelineBlock {
+  id?: string | null
+  blockName?: string | null
+  blockType: 'timeline'
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -708,9 +739,12 @@ export interface HomePageSelect<T extends boolean = true> {
     | T
     | {
         hero?: T | HeroBlockSelect<T>
-        studies?: T | StudiesBlockSelect<T>
-        about?: T | AboutBlockSelect<T>
+        research?: T | ResearchBlockSelect<T>
         partners?: T | PartnersBlockSelect<T>
+        card?: T | CardBlockSelect<T>
+        info?: T | InfoBlockSelect<T>
+        stats?: T | StatsBlockSelect<T>
+        timeline?: T | TimelineBlockSelect<T>
       }
   seo?:
     | T
@@ -744,23 +778,11 @@ export interface HeroBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "StudiesBlock_select".
+ * via the `definition` "ResearchBlock_select".
  */
-export interface StudiesBlockSelect<T extends boolean = true> {
+export interface ResearchBlockSelect<T extends boolean = true> {
   title?: T
-  studiesDisplay?: T
-  id?: T
-  blockName?: T
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "AboutBlock_select".
- */
-export interface AboutBlockSelect<T extends boolean = true> {
-  heading?: T
-  body?: T
-  portraitImage?: T
-  mobileImage?: T
+  researchDisplay?: T
   id?: T
   blockName?: T
 }
@@ -776,6 +798,38 @@ export interface PartnersBlockSelect<T extends boolean = true> {
         alt?: T
         id?: T
       }
+  id?: T
+  blockName?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CardBlock_select".
+ */
+export interface CardBlockSelect<T extends boolean = true> {
+  id?: T
+  blockName?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "InfoBlock_select".
+ */
+export interface InfoBlockSelect<T extends boolean = true> {
+  id?: T
+  blockName?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatsBlock_select".
+ */
+export interface StatsBlockSelect<T extends boolean = true> {
+  id?: T
+  blockName?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TimelineBlock_select".
+ */
+export interface TimelineBlockSelect<T extends boolean = true> {
   id?: T
   blockName?: T
 }

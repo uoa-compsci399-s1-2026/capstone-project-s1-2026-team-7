@@ -1,24 +1,24 @@
 import type { Block } from 'payload'
 
-export const StudiesBlock: Block = {
-  slug: 'studies',
-  interfaceName: 'StudiesBlock',
+export const ResearchBlock: Block = {
+  slug: 'research',
+  interfaceName: 'ResearchBlock',
   labels: {
-    singular: 'Studies Section',
-    plural: 'Studies Sections',
+    singular: 'Research Section',
+    plural: 'Research Sections',
   },
   fields: [
     {
       name: 'title',
       type: 'text',
-      label: 'Our Studies Section Title',
+      label: 'Research Section Title',
       localized: true,
       required: true,
     },
     {
-      name: 'studiesDisplay',
+      name: 'researchDisplay',
       type: 'relationship',
-      relationTo: 'studies',
+      relationTo: 'research',
       hasMany: true,
       admin: {
         allowCreate: true,

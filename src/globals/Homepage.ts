@@ -1,9 +1,13 @@
 import type { GlobalConfig } from 'payload'
 
 import { HeroBlock } from '../blocks/home/HeroBlock'
-import { StudiesBlock } from '../blocks/home/StudiesBook'
-import { AboutBlock } from '../blocks/home/AboutBlock'
+import { ResearchBlock } from '../blocks/home/ResearchBlock'
 import { PartnersBlock } from '../blocks/home/PartnersBlock'
+
+import { CardBlock } from '../blocks/home/CardBlock'
+import { InfoBlock } from '../blocks/home/InfoBlock'
+import { StatsBlock } from '../blocks/home/StatsBlock'
+import { TimelineBlock } from '../blocks/home/TimelineBlock'
 
 export const HomePage: GlobalConfig = {
   slug: 'home-page',
@@ -17,7 +21,15 @@ export const HomePage: GlobalConfig = {
       admin: {
         initCollapsed: true,
       },
-      blocks: [HeroBlock, StudiesBlock, AboutBlock, PartnersBlock],
+      blocks: [
+        HeroBlock,
+        ResearchBlock,
+        PartnersBlock,
+        CardBlock,
+        InfoBlock,
+        StatsBlock,
+        TimelineBlock,
+      ],
     },
     {
       name: 'seo',

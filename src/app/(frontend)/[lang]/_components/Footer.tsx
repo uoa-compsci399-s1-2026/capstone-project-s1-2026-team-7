@@ -1,10 +1,5 @@
-import React from 'react'
-import { cn } from '@/lib/utils'
-import Link from 'next/link'
 import Image from 'next/image'
-import { Icon } from '../../[lang]/_components/icons'
 import { FooterDTO } from '@/validation'
-import { Media } from '@/payload-types'
 import { FooterLogos } from './FooterLogos'
 import { FooterColumn } from './FooterColumns'
 
