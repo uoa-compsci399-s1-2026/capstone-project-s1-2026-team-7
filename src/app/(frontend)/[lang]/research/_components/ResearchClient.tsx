@@ -32,7 +32,7 @@ export function ResearchClient({ categories, research }: Props) {
     .filter((item) =>
       selectedCategory === 'All' || selectedCategory === null
         ? true
-        : item.categoryId === selectedCategory,
+        : item.categories.includes(selectedCategory),
     )
     .sort((a, b) => {
       if (sortOption === 'newest') {

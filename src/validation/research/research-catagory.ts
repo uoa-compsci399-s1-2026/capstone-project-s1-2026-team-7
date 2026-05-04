@@ -1,9 +1,8 @@
 import { z } from 'zod'
 
 export const researchCategorySchema = z.object({
-  id: z.number(),
+  id: z.string(),
   title: z.string(),
-  slug: z.string(),
 })
 
 export type ResearchCategoryDTO = z.infer<typeof researchCategorySchema>
