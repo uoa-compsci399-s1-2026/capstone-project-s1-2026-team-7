@@ -19,7 +19,7 @@ export async function searchResearch(
         },
         {
           categories: {
-            equals: catagoryId,
+            contains: catagoryId,
           },
         },
       ],

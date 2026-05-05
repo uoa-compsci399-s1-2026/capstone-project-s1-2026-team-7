@@ -246,17 +246,12 @@ export interface Research {
   id: number
   title: string
   doi: string
-  researchLink: string
+  link: string
   date?: string | null
   /**
    * Used for manual sorting (lower comes first)
    */
   order?: number | null
-  /**
-   * Select related staff members
-   */
-  staff?: (number | Staff)[] | null
-  categories?: (number | ResearchCategory)[] | null
   updatedAt: string
   createdAt: string
 }
@@ -440,11 +435,9 @@ export interface StudiesSelect<T extends boolean = true> {
 export interface ResearchSelect<T extends boolean = true> {
   title?: T
   doi?: T
-  researchLink?: T
+  link?: T
   date?: T
   order?: T
-  staff?: T
-  categories?: T
   updatedAt?: T
   createdAt?: T
 }
