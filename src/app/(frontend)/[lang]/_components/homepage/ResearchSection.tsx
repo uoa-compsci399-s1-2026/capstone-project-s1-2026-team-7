@@ -1,7 +1,7 @@
 import React from 'react'
 import CurrentStudies from './CurrentStudies'
 
-export const StudiesSection = () => {
+export const ResearchSection = () => {
   return (
     <section className="bg-[#f8f8f8] px-6 pt-18 pb-20 md:px-12 md:pt-32 xl:px-20">
       <div className="mx-auto max-w-6xl">

@@ -1,13 +1,7 @@
 import { getHomePage } from '@/queries/homepage'
 import type { HomepageDTO } from '@/validation'
 import type { Lang } from '@/types/lang'
-import HeroSection from './_components/HeroSection'
-import AboutSection from './_components/AboutSection'
-import { StudiesSection } from './_components/StudiesSection'
-import { PartnersSection } from './_components/PartnersSection'
-import ParticipantsStats from './_components/ParticipantsStats'
-import ServicesSection from './_components/ServicesSection'
-import ContactCTA from './_components/ContactCTA'
+import HomepageRenderer from './_components/homepage/HomepageRenderer'
 
 type PageProps = {
   params: Promise<{
@@ -21,14 +15,17 @@ export default async function HomePage({ params }: PageProps) {
   const currentLang: Lang = lang === 'zh' ? 'zh' : 'en'
 
   return (
-    <>
+    <main>
+      <HomepageRenderer blocks={data.layout} />
+    </main>
+  )
+}
+/*
       <HeroSection prop={data.hero} />
-      <StudiesSection />
+      <ResearchSection />
       <AboutSection data={data.aboutSection} />
       <ServicesSection />
       <ParticipantsStats />
       <PartnersSection partnersSection={data.partnersSection} />
       <ContactCTA currentLang={currentLang} />
-    </>
-  )
-}
+*/
