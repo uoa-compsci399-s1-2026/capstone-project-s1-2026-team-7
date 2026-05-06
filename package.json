@@ -23,7 +23,8 @@
     "seed:team": "tsx scripts/seedHomepage.ts",
     "seed:homepage": "tsx scripts/seedOurteampage.ts",
     "load": "tsx -r dotenv/config scripts/loadResearch.ts",
-    "payload:init": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/initPayload.ts"
+    "payload:init": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/initPayload.ts",
+    "export:research": "tsx -r dotenv/config scripts/exportResearch/exportResearchCsv.ts"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
