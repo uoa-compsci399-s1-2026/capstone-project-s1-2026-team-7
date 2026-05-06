@@ -1,7 +1,11 @@
 import React from 'react'
 
 function StatsSection() {
-  return <div>StatsSection</div>
+  return (
+    <section>
+      <div className="bg-blue-950 rounded-full">hello</div>
+    </section>
+  )
 }
 
 export default StatsSection
