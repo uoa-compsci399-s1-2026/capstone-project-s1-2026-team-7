@@ -1,7 +1,3 @@
-export type PersonWithOrcidAndAffiliations = nameWithORcid & {
-  affiliations: string[]
-}
-
 export type CsvResearchRow = {
   title: string
   doi: string
@@ -10,7 +6,6 @@ export type CsvResearchRow = {
   staffNames: string
   staffIds: string
   orcidIds: string
-  affiliations: string
 }
 
 export type OrcidEmploymentSummary = {

@@ -1,4 +1,4 @@
-import { CsvResearchRow, PersonWithOrcidAndAffiliations, SharedArticle } from './types'
+import { CsvResearchRow, nameWithORcid, SharedArticle } from './types'
 import { mkdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
 
@@ -21,7 +21,6 @@ function convertToCsv(rows: CsvResearchRow[]): string {
     'staffNames',
     'staffIds',
     'orcidIds',
-    'affiliations',
   ]
 
   const csvRows = rows.map((row) => headers.map((header) => escapeCsvValue(row[header])).join(','))
@@ -31,13 +30,12 @@ function convertToCsv(rows: CsvResearchRow[]): string {
 
 export function buildCsvRows(
   cleanedResearch: SharedArticle[],
-  people: PersonWithOrcidAndAffiliations[],
+  people: nameWithORcid[],
 ): CsvResearchRow[] {
   return cleanedResearch.map((item) => {
     const linkedPeople = people.filter((person) => item.staffIds.includes(person.staffId))
 
     const orcidIds = linkedPeople.map((person) => person.orcid)
-    const affiliations = linkedPeople.flatMap((person) => person.affiliations)
 
     return {
       title: item.article.title,
@@ -47,7 +45,6 @@ export function buildCsvRows(
       staffNames: item.people.join('; '),
       staffIds: item.staffIds.join('; '),
       orcidIds: [...new Set(orcidIds)].join('; '),
-      affiliations: [...new Set(affiliations)].join('; '),
     }
   })
 }

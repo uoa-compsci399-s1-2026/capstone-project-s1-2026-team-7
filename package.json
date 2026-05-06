@@ -24,7 +24,7 @@
     "seed:homepage": "tsx scripts/seedOurteampage.ts",
     "load": "tsx -r dotenv/config scripts/loadResearch.ts",
     "payload:init": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/initPayload.ts",
-    "export:research": "tsx -r dotenv/config scripts/exportResearch/exportResearchCsv.ts"
+    "export:research": "tsx -r dotenv/config scripts/exportResearch/main.ts"
   },
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
