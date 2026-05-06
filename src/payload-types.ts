@@ -247,7 +247,13 @@ export interface Research {
   title: string
   doi: string
   link: string
+  image?: (number | null) | Media
   date?: string | null
+  /**
+   * Select related staff members
+   */
+  staff?: (number | Staff)[] | null
+  categories?: (number | ResearchCategory)[] | null
   /**
    * Used for manual sorting (lower comes first)
    */
@@ -436,7 +442,10 @@ export interface ResearchSelect<T extends boolean = true> {
   title?: T
   doi?: T
   link?: T
+  image?: T
   date?: T
+  staff?: T
+  categories?: T
   order?: T
   updatedAt?: T
   createdAt?: T

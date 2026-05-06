@@ -5,10 +5,10 @@ export const Research: CollectionConfig = {
   fields: [
     { name: 'title', type: 'text', required: true, localized: true },
     { name: 'doi', type: 'text', required: true },
-    { name: 'link', label: 'Research Link', type: 'text', required: true },
-    /*{ name: 'image', label: 'image', type: 'upload', relationTo: 'media' },*/
+    { name: 'link', label: 'link', type: 'text', required: true },
+    { name: 'image', label: 'image', type: 'upload', relationTo: 'media' },
     { name: 'date', label: 'Date Uploaded', type: 'text' },
-    /*{
+    {
       name: 'staff',
       type: 'relationship',
       relationTo: 'staff',
@@ -16,7 +16,7 @@ export const Research: CollectionConfig = {
       required: false,
       admin: { description: 'Select related staff members' },
     },
-    { name: 'categories', type: 'relationship', relationTo: 'research-categories', hasMany: true },*/
+    { name: 'categories', type: 'relationship', relationTo: 'research-categories', hasMany: true },
     {
       name: 'order',
       type: 'number',
