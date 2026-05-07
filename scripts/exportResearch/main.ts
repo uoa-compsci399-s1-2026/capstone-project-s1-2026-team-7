@@ -7,7 +7,7 @@ import dummydata from './dummydata'
 import { getStaff } from '@/queries/getStaff'
 
 async function main() {
-  const staff: StaffDTO[] = getStaff()
+  const staff: StaffDTO[] = await getStaff()
   const people: nameWithORcid[] = await getOrcidList(staff)
 
   const data: PerPersonOutputType[] = await getData(people)
