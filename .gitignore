@@ -51,3 +51,5 @@ node_modules/
 
 # Neon 
 .neon
+
+/pnpm-lock.yaml

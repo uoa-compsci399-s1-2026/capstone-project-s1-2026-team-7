@@ -9,6 +9,10 @@ import { InfoBlock } from '../blocks/home/InfoBlock'
 import { StatsBlock } from '../blocks/home/StatsBlock'
 import { TimelineBlock } from '../blocks/home/TimelineBlock'
 
+import { WhoWeAreBlock } from '../blocks/home/WhoWeAreBlock'
+import { WhatWeDoBlock } from '../blocks/home/WhatWeDoBlock'
+import { DonationSectionBlock } from '../blocks/home/DonationSectionBlock'
+
 export const HomePage: GlobalConfig = {
   slug: 'home-page',
   label: 'Home Page',
@@ -29,6 +33,9 @@ export const HomePage: GlobalConfig = {
         InfoBlock,
         StatsBlock,
         TimelineBlock,
+        WhoWeAreBlock,
+        WhatWeDoBlock,
+        DonationSectionBlock,
       ],
     },
     {

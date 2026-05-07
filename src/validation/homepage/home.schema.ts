@@ -132,6 +132,18 @@ const timelineBlockSchema = blockBaseSchema.extend({
   blockType: z.literal('timeline'),
 })
 
+const whoWeAreBlockSchema = blockBaseSchema.extend({
+  blockType: z.literal('who-we-are'),
+})
+
+const whatWeDoBlockSchema = blockBaseSchema.extend({
+  blockType: z.literal('what-we-do'),
+})
+
+const donationSectionBlockSchema = blockBaseSchema.extend({
+  blockType: z.literal('donation-section'),
+})
+
 export const homepageBlockSchema = z.discriminatedUnion('blockType', [
   heroBlockSchema,
   researchBlockSchema,
@@ -140,6 +152,9 @@ export const homepageBlockSchema = z.discriminatedUnion('blockType', [
   infoBlockSchema,
   statsBlockSchema,
   timelineBlockSchema,
+  whoWeAreBlockSchema,
+  whatWeDoBlockSchema,
+  donationSectionBlockSchema,
 ])
 
 export const homepageSchema = z.object({
@@ -163,3 +178,6 @@ export type CardBlockDTO = Extract<HomepageBlockDTO, { blockType: 'card' }>
 export type InfoBlockDTO = Extract<HomepageBlockDTO, { blockType: 'info' }>
 export type StatsBlockDTO = Extract<HomepageBlockDTO, { blockType: 'stats' }>
 export type TimelineBlockDTO = Extract<HomepageBlockDTO, { blockType: 'timeline' }>
+export type WhoWeAreBlockDTO = Extract<HomepageBlockDTO, { blockType: 'who-we-are' }>
+export type WhatWeDoBlockDTO = Extract<HomepageBlockDTO, { blockType: 'what-we-do' }>
+export type DonationSectionBlockDTO = Extract<HomepageBlockDTO, { blockType: 'donation-section' }>
