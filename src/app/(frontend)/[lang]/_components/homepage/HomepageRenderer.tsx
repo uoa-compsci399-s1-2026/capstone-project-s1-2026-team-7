@@ -6,6 +6,10 @@ import CardSection from './CardSection'
 import InfoSection from './InfoSection'
 import StatsSection from './StatsSection'
 import TimelineSection from './TimelineSection'
+import WhoWeAreSection from './WhoWeAreSection'
+import WhatWeDoSection from './WhatWeDoSection'
+import DonationSection from './DonationSection'
+
 export default function RenderHomeBlocks({ blocks }: { blocks: HomepageBlockDTO[] }) {
   return (
     <>
@@ -31,6 +35,15 @@ export default function RenderHomeBlocks({ blocks }: { blocks: HomepageBlockDTO[
 
           case 'timeline':
             return <TimelineSection key={block.id || index} />
+
+          case 'who-we-are':
+            return <WhoWeAreSection key={block.id || index} />
+
+          case 'what-we-do':
+            return <WhatWeDoSection key={block.id || index} />
+
+          case 'donation-section':
+            return <DonationSection key={block.id || index} />
 
           default:
             return null
