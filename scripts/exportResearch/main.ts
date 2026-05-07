@@ -1,12 +1,13 @@
 import { StaffDTO } from '@/validation'
-import { getOrcidList, fetchResearchOrcid, compareEntries, getData } from './input'
+import { getOrcidList, compareEntries, getData } from './input'
 import { buildCsvRows, exportCsv } from './output'
+import { getEnabledCategories } from './getcategories'
 import { nameWithORcid, PerPersonOutputType } from './types'
-import { getStaff } from '@/queries/getStaff' // await getStaff() @ LINE 9
-import dummydata from './dummydata' // dummydata@ line 9
+import dummydata from './dummydata'
+import { getStaff } from '@/queries/getStaff'
 
 async function main() {
-  const staff: StaffDTO[] = dummydata
+  const staff: StaffDTO[] = getStaff()
   const people: nameWithORcid[] = await getOrcidList(staff)
 
   const data: PerPersonOutputType[] = await getData(people)
@@ -14,9 +15,20 @@ async function main() {
   const cleanedResearch = compareEntries(data)
   const rows = buildCsvRows(cleanedResearch, people)
 
-  await exportCsv(rows)
+  const categoryResults = await getEnabledCategories(rows)
 
-  return rows
+  const rowsWithCategories = rows.map((row) => {
+    const matchingCategoryResult = categoryResults.find((result) => result.title === row.title)
+
+    return {
+      ...row,
+      categories: matchingCategoryResult?.categories.join('; ') ?? '',
+    }
+  })
+
+  await exportCsv(rowsWithCategories)
+
+  return rowsWithCategories
 }
 
 main().catch((error) => {

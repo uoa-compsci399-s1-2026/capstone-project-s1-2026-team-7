@@ -6,6 +6,7 @@ export type CsvResearchRow = {
   staffNames: string
   staffIds: string
   orcidIds: string
+  categories: string
 }
 
 export type OrcidEmploymentSummary = {

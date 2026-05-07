@@ -21,6 +21,7 @@ function convertToCsv(rows: CsvResearchRow[]): string {
     'staffNames',
     'staffIds',
     'orcidIds',
+    'categories',
   ]
 
   const csvRows = rows.map((row) => headers.map((header) => escapeCsvValue(row[header])).join(','))
@@ -45,6 +46,7 @@ export function buildCsvRows(
       staffNames: item.people.join('; '),
       staffIds: item.staffIds.join('; '),
       orcidIds: [...new Set(orcidIds)].join('; '),
+      categories: '',
     }
   })
 }
