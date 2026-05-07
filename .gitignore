@@ -52,4 +52,5 @@ node_modules/
 # Neon 
 .neon
 
-/src/csv
+pnpm-lock.yaml
+src/csv
