@@ -73,7 +73,7 @@ export function ResearchClient({ categories, research }: Props) {
                 categories={categories}
                 selectedCategoryId={selectedCategory}
                 onSelect={(id) => {
-                  setSelectedCategory(id)
+                  setSelectedCategory((prev) => (prev === id ? null : id))
                   setMobileCategoriesOpen(false)
                 }}
                 hideTitle={true}
@@ -87,7 +87,9 @@ export function ResearchClient({ categories, research }: Props) {
             <CategorySidebar
               categories={categories}
               selectedCategoryId={selectedCategory}
-              onSelect={setSelectedCategory}
+              onSelect={(id) => {
+                setSelectedCategory((prev) => (prev === id ? null : id))
+              }}
               hideTitle={false}
             />
           </div>

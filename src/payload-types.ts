@@ -581,7 +581,7 @@ export interface ResearchPage {
   title: string
   'portrait image': number | Media
   'mobile image': number | Media
-  researchCatagoriesDisplay?: (number | ResearchCategory)[] | null
+  researchCategoriesDisplay?: (number | ResearchCategory)[] | null
   seo?: {
     metaTitle?: string | null
     metaDescription?: string | null
@@ -762,7 +762,7 @@ export interface ResearchPageSelect<T extends boolean = true> {
   title?: T
   'portrait image'?: T
   'mobile image'?: T
-  researchCatagoriesDisplay?: T
+  researchCategoriesDisplay?: T
   seo?:
     | T
     | {

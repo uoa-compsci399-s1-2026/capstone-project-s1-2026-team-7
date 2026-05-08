@@ -7,13 +7,12 @@ import { searchResearch } from '@/queries/searchResearch'
 
 export default async function page() {
   const researchpage = await getResearchPage()
-  const research = await searchResearch('', 1)
+  const research = await searchResearch('')
 
   return (
     <div className="w-full mx-auto">
       <ResearchHero title={researchpage.title} backgroundImage="/research/hero_desktop.jpg" />
-
-      <ResearchClient categories={researchpage.researchCatagoriesDisplay} research={research} />
+      <ResearchClient categories={researchpage.researchCategoriesDisplay} research={research} />
     </div>
   )
 }
