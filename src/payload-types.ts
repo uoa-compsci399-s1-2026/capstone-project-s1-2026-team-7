@@ -512,6 +512,9 @@ export interface HomePage {
     | InfoBlock
     | StatsBlock
     | TimelineBlock
+    | WhoWeAreBlock
+    | WhatWeDoBlock
+    | DonationSectionBlock
   )[]
   seo?: {
     metaTitle?: string | null
@@ -603,6 +606,33 @@ export interface TimelineBlock {
   id?: string | null
   blockName?: string | null
   blockType: 'timeline'
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhoWeAreBlock".
+ */
+export interface WhoWeAreBlock {
+  id?: string | null
+  blockName?: string | null
+  blockType: 'who-we-are'
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhatWeDoBlock".
+ */
+export interface WhatWeDoBlock {
+  id?: string | null
+  blockName?: string | null
+  blockType: 'what-we-do'
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DonationSectionBlock".
+ */
+export interface DonationSectionBlock {
+  id?: string | null
+  blockName?: string | null
+  blockType: 'donation-section'
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -745,6 +775,9 @@ export interface HomePageSelect<T extends boolean = true> {
         info?: T | InfoBlockSelect<T>
         stats?: T | StatsBlockSelect<T>
         timeline?: T | TimelineBlockSelect<T>
+        'who-we-are'?: T | WhoWeAreBlockSelect<T>
+        'what-we-do'?: T | WhatWeDoBlockSelect<T>
+        'donation-section'?: T | DonationSectionBlockSelect<T>
       }
   seo?:
     | T
@@ -830,6 +863,30 @@ export interface StatsBlockSelect<T extends boolean = true> {
  * via the `definition` "TimelineBlock_select".
  */
 export interface TimelineBlockSelect<T extends boolean = true> {
+  id?: T
+  blockName?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhoWeAreBlock_select".
+ */
+export interface WhoWeAreBlockSelect<T extends boolean = true> {
+  id?: T
+  blockName?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhatWeDoBlock_select".
+ */
+export interface WhatWeDoBlockSelect<T extends boolean = true> {
+  id?: T
+  blockName?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DonationSectionBlock_select".
+ */
+export interface DonationSectionBlockSelect<T extends boolean = true> {
   id?: T
   blockName?: T
 }
