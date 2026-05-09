@@ -22,6 +22,7 @@ export const Studies: CollectionConfig = {
       },
     },
 
+    // -------------------- Hero strip --------------------
     {
       name: 'duration',
       type: 'text',
@@ -33,12 +34,33 @@ export const Studies: CollectionConfig = {
     },
 
     {
+      name: 'compensation',
+      type: 'text',
+      required: true,
+      localized: true,
+      admin: {
+        description: 'Payment offered to participants, e.g. "NZ$ 1,200" or "Unpaid".',
+      },
+    },
+
+    {
+      name: 'location',
+      type: 'text',
+      required: true,
+      localized: true,
+      admin: {
+        description: 'Where the study takes place, e.g. "Mt Eden".',
+      },
+    },
+
+    // -------------------- Listing card summary --------------------
+    {
       name: 'eligibility',
       type: 'text',
       required: true,
       localized: true,
       admin: {
-        description: 'Short label, e.g. "Adults 25–55, BMI 22–32".',
+        description: 'Short summary used on the listing card, e.g. "Adults 25–55, BMI 22–32".',
       },
     },
 
@@ -53,7 +75,79 @@ export const Studies: CollectionConfig = {
     },
 
     { name: 'banner', type: 'upload', relationTo: 'media' },
-    { name: 'description', type: 'richText', required: true, localized: true },
+
+    // -------------------- About body --------------------
+    {
+      name: 'description',
+      type: 'richText',
+      required: true,
+      localized: true,
+      label: 'About / Why this study matters',
+    },
+
+    // -------------------- Participation steps --------------------
+    {
+      name: 'participationItems',
+      type: 'array',
+      label: 'Participation steps',
+      admin: {
+        description:
+          'Bulleted "What you\'ll be asked to do" items. Each row has a short title and a 1–2 sentence description.',
+      },
+      fields: [
+        { name: 'title', type: 'text', required: true, localized: true },
+        { name: 'description', type: 'textarea', required: true, localized: true },
+      ],
+    },
+
+    // -------------------- Eligibility lists --------------------
+    {
+      name: 'eligibilityInclusion',
+      type: 'array',
+      label: 'Eligibility — You can join if',
+      fields: [{ name: 'item', type: 'text', required: true, localized: true }],
+    },
+
+    {
+      name: 'eligibilityExclusion',
+      type: 'array',
+      label: 'Eligibility — You cannot join if',
+      fields: [{ name: 'item', type: 'text', required: true, localized: true }],
+    },
+
+    // -------------------- FAQ --------------------
+    {
+      name: 'faqs',
+      type: 'array',
+      label: 'FAQ',
+      admin: {
+        description: 'Frequently asked questions specific to this study.',
+      },
+      fields: [
+        { name: 'question', type: 'text', required: true, localized: true },
+        { name: 'answer', type: 'richText', required: true, localized: true },
+      ],
+    },
+
+    // -------------------- Sidebar CTA / ethics --------------------
+    {
+      name: 'surveyUrl',
+      type: 'text',
+      required: true,
+      admin: {
+        description: 'URL the "Take eligibility Survey" button links to.',
+      },
+    },
+
+    {
+      name: 'ethicsApprovalRef',
+      type: 'text',
+      required: true,
+      admin: {
+        description: 'Ethics approval reference, e.g. "AHREC ref 12345".',
+      },
+    },
+
     { name: 'sortOrder', type: 'number' },
   ],
 }
