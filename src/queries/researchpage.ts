@@ -9,7 +9,7 @@ export async function getResearchPage(locale: Lang = 'en'): Promise<ResearchPage
     slug: 'research-page',
     locale,
     fallbackLocale: 'en',
-    depth: 2,
+    depth: 3,
   })
 
   return researchPageDTOSchema.parse(data)

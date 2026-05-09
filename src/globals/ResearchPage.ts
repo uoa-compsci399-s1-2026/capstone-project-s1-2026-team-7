@@ -30,7 +30,7 @@ export const ResearchPage: GlobalConfig = {
     //Content will be fetched by a separate API
 
     {
-      name: 'researchCatagoriesDisplay',
+      name: 'researchCategoriesDisplay',
       type: 'relationship',
       relationTo: 'research-categories',
       hasMany: true,
