@@ -26,7 +26,12 @@
     "createmigration": "npm run payload -- migrate:create"
   },
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "*.{ts,tsx,js,jsx}": [
+      "prettier --write"
+    ],
+    "*.{json,css,scss,md,mdx,yml,yaml}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.1045.0",
