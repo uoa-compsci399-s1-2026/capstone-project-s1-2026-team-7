@@ -215,6 +215,18 @@ export interface Study {
   title: string
   subtitle?: string | null
   /**
+   * Public study identifier, e.g. HNU-2025-014. Must be unique.
+   */
+  studyCode: string
+  /**
+   * Short label, e.g. "6 weeks · 4 visits".
+   */
+  duration: string
+  /**
+   * Short label, e.g. "Adults 25–55, BMI 22–32".
+   */
+  eligibility: string
+  /**
    * URL-friendly version of the title, e.g. nutrition-study-2026
    */
   slug: string
@@ -426,6 +438,9 @@ export interface StaffSelect<T extends boolean = true> {
 export interface StudiesSelect<T extends boolean = true> {
   title?: T
   subtitle?: T
+  studyCode?: T
+  duration?: T
+  eligibility?: T
   slug?: T
   banner?: T
   description?: T
