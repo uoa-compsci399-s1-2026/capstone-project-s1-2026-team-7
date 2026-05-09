@@ -7,7 +7,7 @@ export type UploadResearchDTO = {
   link: string
   image: Media
   date: string
-  staff: Staff[]
+  staffID: number[]
   categories: ResearchCategory[]
   order: number
 }
@@ -33,7 +33,7 @@ export async function uploadResearch(article: UploadResearchDTO): Promise<void> 
       link: article.link,
       image: article.image,
       date: article.date,
-      staff: article.staff,
+      staff: article.staffID,
       categories: article.categories,
       order: article.order,
     },

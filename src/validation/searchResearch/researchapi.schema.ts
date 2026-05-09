@@ -8,7 +8,10 @@ export const researchDTOSchema = z.object({
   title: z.string().default(''),
   link: z.string().default('https://auckland.ac.nz'),
   image: mediaSchema.nullish().transform((value) => value ?? DEFAULT_GENERAL_PIC),
-  date: z.string().default(''),
+  date: z
+    .string()
+    .nullish()
+    .transform((value) => value ?? '1 / 1 / 2050'),
   staff: z.array(staffSchema).default([]),
   categories: z.array(researchCategorySchema).default([]),
   order: z

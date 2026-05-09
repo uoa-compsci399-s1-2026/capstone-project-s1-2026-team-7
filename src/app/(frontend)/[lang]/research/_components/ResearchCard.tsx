@@ -1,8 +1,8 @@
-import { ResearchEntry } from '../_types/types'
+import { ResearchDTO } from '@/validation'
 import Link from 'next/link'
 
 type Props = {
-  item: ResearchEntry
+  item: ResearchDTO
   viewMode: 'grid' | 'list'
 }
 

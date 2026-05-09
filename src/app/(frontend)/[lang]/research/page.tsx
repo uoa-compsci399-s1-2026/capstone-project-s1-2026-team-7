@@ -1,7 +1,6 @@
 import ResearchHero from './_components/ResearchHero'
 import ResearchFilters from './_components/ResearchFilters'
 import { ResearchClient } from './_components/ResearchClient'
-import { ResearchPageProps } from './_types/types'
 import { getResearchPage } from '@/queries/researchpage'
 import { searchResearch } from '@/queries/searchResearch'
 

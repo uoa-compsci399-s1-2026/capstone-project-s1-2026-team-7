@@ -4,13 +4,13 @@ import { useState } from 'react'
 import CategorySidebar from './CategorySidebar'
 import ResearchArticles from './ResearchArticles'
 import ResearchTopBar from './ResearchTopBar'
-import { ResearchEntry } from '../_types/types'
 import Pagination from './Pagination'
 import ResearchFilters from './ResearchFilters'
+import { ResearchDTO } from '@/validation'
 
 type Props = {
   categories: { id: number; title: string }[]
-  research: ResearchEntry[]
+  research: ResearchDTO[]
 }
 
 export function ResearchClient({ categories, research }: Props) {

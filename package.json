@@ -22,7 +22,6 @@
     "clean": "powershell -Command \"Remove-Item -Recurse -Force .next,node_modules -ErrorAction SilentlyContinue\"",
     "seed:team": "tsx scripts/seedHomepage.ts",
     "seed:homepage": "tsx scripts/seedOurteampage.ts",
-    "load": "tsx -r dotenv/config scripts/loadResearch.ts",
     "payload:init": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/initPayload.ts",
     "export:research": "tsx -r dotenv/config scripts/exportResearch/main.ts"
   },
