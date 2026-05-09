@@ -40,13 +40,14 @@ export default function Navbar(props: navbarProps) {
           {/* Nav links */}
           <nav className="flex flex-1 flex-col px-4 pt-2">
             {props.data.navbarLinks.map((item, index) => (
-              <a
+              <Link
                 key={index}
                 href={`/${props.currentLang}${item.navURL}`}
                 className="border-b border-[#E8E8E8] py-4 text-[22px] font-medium text-[#0C0C48] transition hover:opacity-70"
+                prefetch={true}
               >
                 {item.navTitle}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -87,6 +88,7 @@ export default function Navbar(props: navbarProps) {
                   key={index}
                   href={`/${props.currentLang}${item.navURL}`}
                   className="text-[#0C0C48] text-[13px] font-medium transition hover:opacity-70"
+                  prefetch={true}
                 >
                   {item.navTitle}
                 </Link>
@@ -147,9 +149,9 @@ export default function Navbar(props: navbarProps) {
 
 export const NavigationButton = ({ children }: PropsWithChildren) => {
   return (
-    <a href="#" className="text-[#0C0C48] text-[13px] font-medium transition hover:opacity-70">
+    <Link href="#" className="text-[#0C0C48] text-[13px] font-medium transition hover:opacity-70">
       {children}
-    </a>
+    </Link>
   )
 }
 

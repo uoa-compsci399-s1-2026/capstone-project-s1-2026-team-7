@@ -2,6 +2,7 @@ import Image from 'next/image'
 import { FooterDTO } from '@/validation'
 import { FooterLogos } from './FooterLogos'
 import { FooterColumn } from './FooterColumns'
+import Link from 'next/link'
 
 type footerProps = {
   data: FooterDTO
@@ -24,7 +25,7 @@ export default function Footer(props: footerProps) {
             <h3 className="mb-4 text-[18px] font-semibold leading-none">Connect with us</h3>
             <div className="flex items-center gap-4">
               {socialLinks.map((item) => (
-                <a
+                <Link
                   key={item.footerURL}
                   href={item.footerURL}
                   target="_blank"
@@ -39,7 +40,7 @@ export default function Footer(props: footerProps) {
                     height={24}
                     className="block"
                   />
-                </a>
+                </Link>
               ))}
             </div>
           </div>
