@@ -1,7 +1,7 @@
 'use client'
 
 type Props = {
-  categories: { id: string; title: string }[]
+  categories: { id: number; title: string }[]
   onSelect: (categoryId: string) => void
   selectedCategoryId: string | null
   hideTitle?: boolean
@@ -25,17 +25,17 @@ export default function CategorySidebar({
         {categories.map((category) => (
           <button
             key={category.id}
-            onClick={() => onSelect(category.id)}
+            onClick={() => onSelect(category.title)}
             className="flex items-center gap-3 cursor-pointer text-left w-full"
           >
             <div
               className={`w-4 h-4 border border-gray-300 rounded-sm mr-4 flex ${
-                selectedCategoryId === category.id ? 'bg-blue-500 border-blue-500' : ''
+                selectedCategoryId === category.title ? 'bg-blue-500 border-blue-500' : ''
               }`}
             />
             <span
               className={`text-sm ${
-                selectedCategoryId === category.id ? 'font-medium' : 'text-gray-700'
+                selectedCategoryId === category.title ? 'font-medium' : 'text-gray-700'
               }`}
             >
               {category.title}

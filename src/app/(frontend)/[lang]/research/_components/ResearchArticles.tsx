@@ -1,8 +1,8 @@
-import { ResearchEntry } from '../_types/types'
+import { ResearchDTO } from '@/validation'
 import ResearchCard from './ResearchCard'
 
 type Props = {
-  research: ResearchEntry[]
+  research: ResearchDTO[]
   viewMode: 'grid' | 'list'
 }
 

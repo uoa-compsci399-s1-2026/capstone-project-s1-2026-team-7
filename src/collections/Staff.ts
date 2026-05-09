@@ -2,7 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 export const Staff: CollectionConfig = {
   slug: 'staff',
-
+  timestamps: true,
   admin: {
     useAsTitle: 'firstname',
   },

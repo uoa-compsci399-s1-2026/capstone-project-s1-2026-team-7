@@ -320,17 +320,18 @@ export interface Research {
   id: number
   title: string
   doi: string
-  researchLink: string
+  link: string
+  image?: (number | null) | Media
   date?: string | null
-  /**
-   * Used for manual sorting (lower comes first)
-   */
-  order?: number | null
   /**
    * Select related staff members
    */
   staff?: (number | Staff)[] | null
   categories?: (number | ResearchCategory)[] | null
+  /**
+   * Used for manual sorting (lower comes first)
+   */
+  order?: number | null
   updatedAt: string
   createdAt: string
 }
@@ -547,11 +548,12 @@ export interface StudiesSelect<T extends boolean = true> {
 export interface ResearchSelect<T extends boolean = true> {
   title?: T
   doi?: T
-  researchLink?: T
+  link?: T
+  image?: T
   date?: T
-  order?: T
   staff?: T
   categories?: T
+  order?: T
   updatedAt?: T
   createdAt?: T
 }
@@ -790,7 +792,7 @@ export interface ResearchPage {
   title: string
   'portrait image': number | Media
   'mobile image': number | Media
-  researchCatagoriesDisplay?: (number | ResearchCategory)[] | null
+  researchCategoriesDisplay?: (number | ResearchCategory)[] | null
   seo?: {
     metaTitle?: string | null
     metaDescription?: string | null
@@ -1052,7 +1054,7 @@ export interface ResearchPageSelect<T extends boolean = true> {
   title?: T
   'portrait image'?: T
   'mobile image'?: T
-  researchCatagoriesDisplay?: T
+  researchCategoriesDisplay?: T
   seo?:
     | T
     | {
