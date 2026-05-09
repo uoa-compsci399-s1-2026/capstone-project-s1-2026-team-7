@@ -8,7 +8,7 @@ export const researchPageDTOSchema = z.object({
   description: z.string().default(''),
   mobileImage: mediaSchema.default(DEFAULT_GENERAL_PIC),
   portraitImage: mediaSchema.default(DEFAULT_GENERAL_PIC),
-  researchCatagoriesDisplay: z.array(researchCategorySchema).default([]),
+  researchCategoriesDisplay: z.array(researchCategorySchema).default([]),
   seo: seoSchema,
 })
 

@@ -4,13 +4,13 @@ import { useState } from 'react'
 import CategorySidebar from './CategorySidebar'
 import ResearchArticles from './ResearchArticles'
 import ResearchTopBar from './ResearchTopBar'
-import { ResearchEntry } from '../_types/types'
 import Pagination from './Pagination'
 import ResearchFilters from './ResearchFilters'
+import { ResearchDTO } from '@/validation'
 
 type Props = {
-  categories: { id: string; title: string }[]
-  research: ResearchEntry[]
+  categories: { id: number; title: string }[]
+  research: ResearchDTO[]
 }
 
 export function ResearchClient({ categories, research }: Props) {
@@ -32,7 +32,7 @@ export function ResearchClient({ categories, research }: Props) {
     .filter((item) =>
       selectedCategory === 'All' || selectedCategory === null
         ? true
-        : item.categoryId === selectedCategory,
+        : item.categories.some((cat) => cat.title === selectedCategory),
     )
     .sort((a, b) => {
       if (sortOption === 'newest') {
@@ -57,7 +57,7 @@ export function ResearchClient({ categories, research }: Props) {
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
-      <div className="max-w-screen-xl mx-auto w-full px-4 mt-8">
+      <div className="max-w-7xl mx-auto w-full px-4 mt-8">
         <div className="lg:hidden mt-4">
           <button
             onClick={() => setMobileCategoriesOpen(!mobileCategoriesOpen)}
@@ -73,7 +73,7 @@ export function ResearchClient({ categories, research }: Props) {
                 categories={categories}
                 selectedCategoryId={selectedCategory}
                 onSelect={(id) => {
-                  setSelectedCategory(id)
+                  setSelectedCategory((prev) => (prev === id ? null : id))
                   setMobileCategoriesOpen(false)
                 }}
                 hideTitle={true}
@@ -87,7 +87,9 @@ export function ResearchClient({ categories, research }: Props) {
             <CategorySidebar
               categories={categories}
               selectedCategoryId={selectedCategory}
-              onSelect={setSelectedCategory}
+              onSelect={(id) => {
+                setSelectedCategory((prev) => (prev === id ? null : id))
+              }}
               hideTitle={false}
             />
           </div>

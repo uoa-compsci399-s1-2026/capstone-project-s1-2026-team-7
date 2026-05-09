@@ -1,17 +1,21 @@
 import { getPayloadClient } from '@/lib/payload'
-
+import { Media, Staff, ResearchCategory } from '@/payload-types'
 export type UploadResearchDTO = {
+  id: number
   title: string
   doi: string
-  url: string
-  publicationDate: string
-  staffIds: number[]
+  link: string
+  image: Media
+  date: string
+  staffID: number[]
+  categories: ResearchCategory[]
+  order: number
 }
 
 export async function uploadResearch(article: UploadResearchDTO): Promise<void> {
   const payload = await getPayloadClient()
 
-  if (!article.url) {
+  if (!article.link) {
     console.log(`Skipping article with no URL: ${article.title}`)
     return
   }
@@ -26,9 +30,12 @@ export async function uploadResearch(article: UploadResearchDTO): Promise<void> 
     data: {
       title: article.title,
       doi: article.doi,
-      researchLink: article.url,
-      date: article.publicationDate,
-      staff: article.staffIds,
+      link: article.link,
+      image: article.image,
+      date: article.date,
+      staff: article.staffID,
+      categories: article.categories,
+      order: article.order,
     },
   })
 }
