@@ -23,50 +23,109 @@ describe('getHomePage integration', () => {
     const payloadHomePage = {
       id: 1,
 
-      hero: {
-        title: 'Welcome',
-        description: 'Homepage description',
+      layout: [
+        {
+          id: 'hero-block-1',
+          blockType: 'hero',
+          title: 'Welcome',
+          description: 'Homepage description',
 
-        'portrait hero image': null,
-        'mobile hero image': null,
-
-        buttons: [
-          {
-            id: 'button-1',
-            label: 'Learn more',
-            url: '/about',
-            variant: 'primary',
+          portraitHeroImage: {
+            id: 100,
+            url: '/hero-portrait.jpg',
+            alt: 'Hero portrait image',
           },
-          {
-            id: 'button-2',
-            label: 'Contact us',
-            url: '/contact',
-            variant: 'secondary',
+
+          mobileHeroImage: {
+            id: 101,
+            url: '/hero-mobile.jpg',
+            alt: 'Hero mobile image',
           },
-        ],
-      },
 
-      studiesSection: {
-        title: 'Our Studies',
-        studiesDisplay: [
-          {
-            id: 10,
-            title: 'Study One',
-            description: 'Study description',
-            sortOrder: 1,
-            updatedAt: '2024-01-01T00:00:00.000Z',
-            createdAt: '2024-01-01T00:00:00.000Z',
-          },
-        ],
-      },
+          buttons: [
+            {
+              id: 'button-1',
+              label: 'Learn more',
+              url: '/about',
+              variant: 'primary',
+            },
+            {
+              id: 'button-2',
+              label: 'Contact us',
+              url: '/contact',
+              variant: 'secondary',
+            },
+          ],
+        },
 
-      aboutSection: {
-        heading: 'About us',
-        body: 'We do research.',
+        {
+          id: 'research-block-1',
+          blockType: 'research',
+          title: 'Our Research',
+          researchDisplay: [
+            {
+              id: 10,
+              title: 'Research One',
+              researchLink: 'https://example.com/research-one',
+              date: '2024-01-01',
+              order: 1,
+              updatedAt: '2024-01-01T00:00:00.000Z',
+              createdAt: '2024-01-01T00:00:00.000Z',
+            },
+          ],
+        },
 
-        'portrait image': null,
-        'mobile image': null,
-      },
+        {
+          id: 'partners-block-1',
+          blockType: 'partners',
+          partners: [
+            {
+              id: 'partner-1',
+              alt: 'Partner logo',
+              logo: {
+                id: 200,
+                url: '/partner-logo.png',
+                alt: 'Partner logo',
+              },
+            },
+          ],
+        },
+
+        {
+          id: 'card-block-1',
+          blockType: 'card',
+        },
+
+        {
+          id: 'info-block-1',
+          blockType: 'info',
+        },
+
+        {
+          id: 'stats-block-1',
+          blockType: 'stats',
+        },
+
+        {
+          id: 'timeline-block-1',
+          blockType: 'timeline',
+        },
+
+        {
+          id: 'who-we-are-block-1',
+          blockType: 'who-we-are',
+        },
+
+        {
+          id: 'what-we-do-block-1',
+          blockType: 'what-we-do',
+        },
+
+        {
+          id: 'donation-section-block-1',
+          blockType: 'donation-section',
+        },
+      ],
 
       seo: {
         metaTitle: 'Homepage SEO',
@@ -92,42 +151,83 @@ describe('getHomePage integration', () => {
     expect(result).toMatchObject({
       id: 1,
 
-      hero: {
-        title: 'Welcome',
-        description: 'Homepage description',
-        buttons: [
-          {
-            id: 'button-1',
-            label: 'Learn more',
-            url: '/about',
-            variant: 'primary',
-          },
-          {
-            id: 'button-2',
-            label: 'Contact us',
-            url: '/contact',
-            variant: 'secondary',
-          },
-        ],
-      },
+      layout: [
+        {
+          id: 'hero-block-1',
+          blockType: 'hero',
+          title: 'Welcome',
+          description: 'Homepage description',
+          buttons: [
+            {
+              id: 'button-1',
+              label: 'Learn more',
+              url: '/about',
+              variant: 'primary',
+            },
+            {
+              id: 'button-2',
+              label: 'Contact us',
+              url: '/contact',
+              variant: 'secondary',
+            },
+          ],
+        },
 
-      studiesSection: {
-        title: 'Our Studies',
-        researchList: [
-          {
-            id: 10,
-            title: 'Study One',
-            description: 'Study description',
-            sortOrder: 1,
-          },
-        ],
-      },
+        {
+          id: 'research-block-1',
+          blockType: 'research',
+          title: 'Our Research',
+          researchDisplay: [
+            {
+              id: 10,
+              title: 'Research One',
+              researchLink: 'https://example.com/research-one',
+              date: '2024-01-01',
+              order: 1,
+            },
+          ],
+        },
 
-      aboutSection: {
-        eyebrow: '',
-        heading: 'About us',
-        body: 'We do research.',
-      },
+        {
+          id: 'partners-block-1',
+          blockType: 'partners',
+        },
+
+        {
+          id: 'card-block-1',
+          blockType: 'card',
+        },
+
+        {
+          id: 'info-block-1',
+          blockType: 'info',
+        },
+
+        {
+          id: 'stats-block-1',
+          blockType: 'stats',
+        },
+
+        {
+          id: 'timeline-block-1',
+          blockType: 'timeline',
+        },
+
+        {
+          id: 'who-we-are-block-1',
+          blockType: 'who-we-are',
+        },
+
+        {
+          id: 'what-we-do-block-1',
+          blockType: 'what-we-do',
+        },
+
+        {
+          id: 'donation-section-block-1',
+          blockType: 'donation-section',
+        },
+      ],
 
       seo: {
         metaTitle: 'Homepage SEO',
@@ -135,35 +235,46 @@ describe('getHomePage integration', () => {
       },
     })
 
-    expect(result.hero.heroHorizontal).toBeDefined()
-    expect(result.hero.heroMobile).toBeDefined()
-    expect(result.aboutSection.image).toBeDefined()
-    expect(result.aboutSection.mobileImage).toBeDefined()
+    const heroBlock = result.layout.find((block) => block.blockType === 'hero')
+
+    expect(heroBlock).toBeDefined()
+    expect(heroBlock?.heroHorizontal).toBeDefined()
+    expect(heroBlock?.heroMobile).toBeDefined()
   })
 
   it('passes the requested locale to Payload', async () => {
     mocks.findGlobal.mockResolvedValue({
       id: 1,
 
-      hero: {
-        title: '首頁',
-        description: '描述',
-        'portrait hero image': null,
-        'mobile hero image': null,
-        buttons: null,
-      },
+      layout: [
+        {
+          id: 'hero-block-1',
+          blockType: 'hero',
+          title: '首頁',
+          description: '描述',
 
-      studiesSection: {
-        title: '研究',
-        studiesDisplay: null,
-      },
+          portraitHeroImage: {
+            id: 100,
+            url: '/hero-portrait.jpg',
+            alt: 'Hero portrait image',
+          },
 
-      aboutSection: {
-        heading: '關於我們',
-        body: '內容',
-        'portrait image': null,
-        'mobile image': null,
-      },
+          mobileHeroImage: {
+            id: 101,
+            url: '/hero-mobile.jpg',
+            alt: 'Hero mobile image',
+          },
+
+          buttons: null,
+        },
+
+        {
+          id: 'research-block-1',
+          blockType: 'research',
+          title: '研究',
+          researchDisplay: null,
+        },
+      ],
 
       seo: {
         metaTitle: null,
@@ -182,17 +293,20 @@ describe('getHomePage integration', () => {
       depth: 1,
     })
 
-    expect(result.hero.title).toBe('首頁')
-    expect(result.hero.buttons).toEqual([])
-    expect(result.studiesSection.researchList).toEqual([])
+    const heroBlock = result.layout.find((block) => block.blockType === 'hero')
+    const researchBlock = result.layout.find((block) => block.blockType === 'research')
+
+    expect(heroBlock?.title).toBe('首頁')
+    expect(heroBlock?.buttons).toEqual([])
+
+    expect(researchBlock?.title).toBe('研究')
+    expect(researchBlock?.researchList).toEqual([])
   })
 
   it('throws when Payload returns invalid homepage data', async () => {
     mocks.findGlobal.mockResolvedValue({
       id: 1,
-      hero: null,
-      studiesSection: null,
-      aboutSection: null,
+      layout: null,
       seo: null,
     })
 
