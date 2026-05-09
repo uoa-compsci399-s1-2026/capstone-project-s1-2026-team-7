@@ -1,15 +1,20 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { MediaDTO } from '@/validation'
+import { Lang } from '@/types/lang'
 
 export type FooterLogosProps = {
   uoa: MediaDTO
   hnu: MediaDTO
+  language: Lang
 }
-export const FooterLogos = ({ uoa, hnu }: FooterLogosProps) => {
+export const FooterLogos = ({ uoa, hnu, language }: FooterLogosProps) => {
   return (
     <div className="flex items-start gap-5 max-md:gap-4">
-      <Link href="/" className="relative block h-14 w-28 shrink-0 max-md:h-12 max-md:w-24">
+      <Link
+        href={`/${language}`}
+        className="relative block h-14 w-28 shrink-0 max-md:h-12 max-md:w-24"
+      >
         <Image
           src={uoa.url}
           alt={uoa.alt}
@@ -21,7 +26,10 @@ export const FooterLogos = ({ uoa, hnu }: FooterLogosProps) => {
 
       <div className="h-16 w-px bg-[#BFC4CC] max-md:h-12" />
 
-      <Link href="/" className="relative block h-14 w-24 shrink-0 max-md:h-12 max-md:w-20">
+      <Link
+        href={`/${language}`}
+        className="relative block h-14 w-24 shrink-0 max-md:h-12 max-md:w-20"
+      >
         <Image
           src={hnu.url}
           alt={hnu.alt}
