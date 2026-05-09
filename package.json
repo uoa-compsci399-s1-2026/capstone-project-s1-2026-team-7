@@ -29,6 +29,7 @@
     "**/*": "prettier --write --ignore-unknown"
   },
   "dependencies": {
+    "@aws-sdk/client-bedrock-runtime": "^3.1045.0",
     "@payloadcms/db-postgres": "^3.82.1",
     "@payloadcms/email-nodemailer": "^3.82.1",
     "@payloadcms/next": "^3.82.1",
