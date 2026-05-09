@@ -7,103 +7,177 @@ const stringWithDefault = z
   .nullish()
   .transform((value) => value ?? '')
 
+const optionalBlockId = z
+  .string()
+  .nullish()
+  .transform((value) => value ?? '')
+
 const mediaWithDefault = mediaSchema.nullish().transform((value) => value ?? DEFAULT_GENERAL_PIC)
 
+const blockBaseSchema = z.object({
+  id: optionalBlockId,
+  blockName: z.string().nullish().optional(),
+})
+
 const buttonSchema = z.object({
-  id: z.string(),
+  id: z
+    .string()
+    .nullish()
+    .transform((value) => value ?? ''),
   label: stringWithDefault,
   url: stringWithDefault,
   variant: z.enum(['primary', 'secondary']).default('primary'),
 })
 
-const heroPayloadSchema = z
-  .object({
+const heroBlockSchema = blockBaseSchema
+  .extend({
+    blockType: z.literal('hero'),
+
     title: stringWithDefault,
     description: stringWithDefault,
 
-    'portrait hero image': mediaWithDefault,
-    'mobile hero image': mediaWithDefault,
+    portraitHeroImage: mediaWithDefault,
+    mobileHeroImage: mediaWithDefault,
 
     buttons: z
       .array(buttonSchema)
       .nullish()
       .transform((value) => value ?? []),
   })
-  .transform((hero) => ({
-    title: hero.title,
-    description: hero.description,
-    heroHorizontal: hero['portrait hero image'],
-    heroMobile: hero['mobile hero image'],
-    buttons: hero.buttons,
+  .transform((block) => ({
+    id: block.id,
+    blockType: block.blockType,
+
+    title: block.title,
+    description: block.description,
+
+    heroHorizontal: block.portraitHeroImage,
+    heroMobile: block.mobileHeroImage,
+
+    buttons: block.buttons,
   }))
 
-const studyDisplaySchema = z.object({
-  id: z.number(),
-  title: stringWithDefault,
-  description: z.unknown().optional(),
-  sortOrder: z.number().nullish().optional(),
-  updatedAt: z.string().optional(),
-  createdAt: z.string().optional(),
-})
-
-const studiesSectionPayloadSchema = z
+const researchItemSchema = z
   .object({
+    id: z.number(),
     title: stringWithDefault,
-    studiesDisplay: z
-      .array(studyDisplaySchema)
+    researchLink: stringWithDefault,
+    doi: stringWithDefault,
+    date: stringWithDefault,
+    order: z
+      .number()
+      .nullish()
+      .transform((value) => value ?? 0),
+    updatedAt: z.string().optional(),
+    createdAt: z.string().optional(),
+  })
+  .passthrough()
+
+const researchRelationshipSchema = z.union([z.number(), researchItemSchema])
+
+const researchBlockSchema = blockBaseSchema
+  .extend({
+    blockType: z.literal('research'),
+
+    title: stringWithDefault,
+
+    researchDisplay: z
+      .array(researchRelationshipSchema)
       .nullish()
       .transform((value) => value ?? []),
   })
-  .transform((section) => ({
-    title: section.title,
-    researchList: section.studiesDisplay,
-  }))
+  .transform((block) => ({
+    id: block.id,
+    blockType: block.blockType,
 
-const aboutSectionPayloadSchema = z
-  .object({
-    eyebrow: stringWithDefault,
-    heading: stringWithDefault,
-    body: stringWithDefault,
-
-    'portrait image': mediaWithDefault,
-    'mobile image': mediaWithDefault,
-  })
-  .transform((section) => ({
-    eyebrow: section.eyebrow,
-    heading: section.heading,
-    body: section.body,
-    image: section['portrait image'],
-    mobileImage: section['mobile image'],
+    title: block.title,
+    researchList: block.researchDisplay,
   }))
 
 const partnerLogoSchema = z.object({
-  id: z.string().optional(),
+  id: z.string().nullish().optional(),
   logo: mediaWithDefault,
   alt: stringWithDefault,
 })
 
-export const partnersSectionPayloadSchema = z
-  .object({
+export const partnersBlockSchema = blockBaseSchema
+  .extend({
+    blockType: z.literal('partners'),
+
     partners: z
       .array(partnerLogoSchema)
       .nullish()
       .transform((value) => value ?? []),
   })
-  .transform((section) => ({
-    partners: section.partners,
+  .transform((block) => ({
+    id: block.id,
+    blockType: block.blockType,
+
+    partners: block.partners,
   }))
+
+const cardBlockSchema = blockBaseSchema.extend({
+  blockType: z.literal('card'),
+})
+
+const infoBlockSchema = blockBaseSchema.extend({
+  blockType: z.literal('info'),
+})
+
+const statsBlockSchema = blockBaseSchema.extend({
+  blockType: z.literal('stats'),
+})
+
+const timelineBlockSchema = blockBaseSchema.extend({
+  blockType: z.literal('timeline'),
+})
+
+const whoWeAreBlockSchema = blockBaseSchema.extend({
+  blockType: z.literal('who-we-are'),
+})
+
+const whatWeDoBlockSchema = blockBaseSchema.extend({
+  blockType: z.literal('what-we-do'),
+})
+
+const donationSectionBlockSchema = blockBaseSchema.extend({
+  blockType: z.literal('donation-section'),
+})
+
+export const homepageBlockSchema = z.discriminatedUnion('blockType', [
+  heroBlockSchema,
+  researchBlockSchema,
+  partnersBlockSchema,
+  cardBlockSchema,
+  infoBlockSchema,
+  statsBlockSchema,
+  timelineBlockSchema,
+  whoWeAreBlockSchema,
+  whatWeDoBlockSchema,
+  donationSectionBlockSchema,
+])
 
 export const homepageSchema = z.object({
   id: z.number(),
-  hero: heroPayloadSchema,
-  studiesSection: studiesSectionPayloadSchema,
-  aboutSection: aboutSectionPayloadSchema,
-  partnersSection: partnersSectionPayloadSchema,
+
+  layout: z
+    .array(homepageBlockSchema)
+    .nullish()
+    .transform((value) => value ?? []),
+
   seo: seoSchema,
 })
 
 export type HomepageDTO = z.infer<typeof homepageSchema>
-export type HeroDTO = HomepageDTO['hero']
-export type AboutSectionDTO = HomepageDTO['aboutSection']
-export type StudiesSectionDTO = HomepageDTO['studiesSection']
-export type PartnersSectionDTO = HomepageDTO['partnersSection']
+export type HomepageBlockDTO = z.infer<typeof homepageBlockSchema>
+
+export type HeroBlockDTO = Extract<HomepageBlockDTO, { blockType: 'hero' }>
+export type ResearchBlockDTO = Extract<HomepageBlockDTO, { blockType: 'research' }>
+export type PartnersBlockDTO = Extract<HomepageBlockDTO, { blockType: 'partners' }>
+export type CardBlockDTO = Extract<HomepageBlockDTO, { blockType: 'card' }>
+export type InfoBlockDTO = Extract<HomepageBlockDTO, { blockType: 'info' }>
+export type StatsBlockDTO = Extract<HomepageBlockDTO, { blockType: 'stats' }>
+export type TimelineBlockDTO = Extract<HomepageBlockDTO, { blockType: 'timeline' }>
+export type WhoWeAreBlockDTO = Extract<HomepageBlockDTO, { blockType: 'who-we-are' }>
+export type WhatWeDoBlockDTO = Extract<HomepageBlockDTO, { blockType: 'what-we-do' }>
+export type DonationSectionBlockDTO = Extract<HomepageBlockDTO, { blockType: 'donation-section' }>

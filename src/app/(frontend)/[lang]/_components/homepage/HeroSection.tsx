@@ -1,24 +1,22 @@
 import Image from 'next/image'
-import mobile_hero from '@/../public/mobile_hero.png'
-import MainButton from './MainButton'
-import { HeroDTO } from '@/validation'
+import mobileHeroFallback from '@/../public/mobile_hero.png'
+import MainButton from '../MainButton'
+import type { HeroBlockDTO } from '@/validation/homepage/home.schema'
 
-type HeroSectionProp = {
-  prop: HeroDTO
+type HeroSectionProps = {
+  data: HeroBlockDTO
 }
 
-export default function HeroSection({ prop }: HeroSectionProp) {
-  const { title, description, heroHorizontal, buttons } = prop
-  const button1 = buttons[0]
-  const button2 = buttons[1]
+export default function HeroSection({ data }: HeroSectionProps) {
+  const { title, description, heroHorizontal, heroMobile, buttons } = data
 
   return (
     <section className="relative h-128.5 w-full md:h-126.75 xl:h-175">
       {/* Mobile image — below 450px */}
       <div className="absolute inset-0 block overflow-hidden min-[450px]:hidden">
         <Image
-          src={mobile_hero}
-          alt="Mobile hero"
+          src={heroMobile.url || mobileHeroFallback}
+          alt={heroMobile.alt || 'Mobile hero image'}
           fill
           priority
           sizes="(max-width: 449px) 100vw, 0vw"
@@ -52,10 +50,17 @@ export default function HeroSection({ prop }: HeroSectionProp) {
             {description}
           </p>
 
-          <div className="flex flex-wrap justify-center gap-3 max-[449px]:mb-4 md:gap-4 xl:mt-4 [&_button]:border-2 lg:[&_button]:w-45">
-            <MainButton title={button1.label} variant={button1.variant} />
-            <MainButton title={button2.label} variant={button2.variant} />
-          </div>
+          {buttons.length > 0 && (
+            <div className="flex flex-wrap justify-center gap-3 max-[449px]:mb-4 md:gap-4 xl:mt-4 [&_button]:border-2 lg:[&_button]:w-45">
+              {buttons.slice(0, 2).map((button) => (
+                <MainButton
+                  key={button.id || `${button.label}-${button.url}`}
+                  title={button.label}
+                  variant={button.variant}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>
