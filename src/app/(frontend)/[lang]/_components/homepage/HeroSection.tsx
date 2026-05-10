@@ -25,18 +25,18 @@ export default function HeroSection({ data }: HeroSectionProps) {
       )}
 
       {/* Content */}
-      <div className="relative z-10 mx-auto grid min-h-[560px] max-w-7xl grid-cols-1 items-center justify-items-center gap-10 px-6 py-16 md:min-h-[520px] md:grid-cols-2 md:justify-items-stretch md:px-12 lg:min-h-[692px] lg:gap-12 lg:px-16 xl:px-20">
+      <div className="relative z-10 mx-auto grid min-h-[560px] w-full max-w-5xl grid-cols-1 items-center justify-items-center gap-10 px-5 py-16 md:min-h-[520px] md:grid-cols-2 md:justify-items-stretch md:px-8 lg:min-h-[692px] lg:gap-12 lg:px-12">
         {/* Text */}
         <div className="w-full max-w-xl text-center md:text-left">
-          <h1 className="text-xl leading-tight font-bold text-white sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl px-6">
+          <h1 className="text-xl leading-tight font-bold text-white sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
             {title}
           </h1>
 
-          <p className="mt-5 text-base leading-relaxed text-white sm:text-lg md:text-lg lg:text-xl px-6">
+          <p className="mt-5 text-base leading-relaxed text-white sm:text-lg md:text-lg lg:text-xl">
             {description}
           </p>
 
-          <div className="mt-8 flex flex-wrap  justify-center gap-3 md:justify-start [&_button]:border-3 [&_button]:px-4 [&_button]:py-2 px-6">
+          <div className="mt-8 flex flex-wrap justify-center gap-3 md:justify-start [&_button]:border-3 [&_button]:px-4 [&_button]:py-2">
             <MainButton title="Read more" variant="primary" />
             <MainButton title="Participate in a Study" variant="secondary" />
           </div>

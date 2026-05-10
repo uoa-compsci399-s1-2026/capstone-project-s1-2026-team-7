@@ -8,7 +8,6 @@ import type { LucideIcon } from 'lucide-react'
 type Stat = {
   icon: LucideIcon
   value: number
-
   label: string
 }
 
@@ -16,37 +15,26 @@ const stats: Stat[] = [
   {
     icon: GraduationCap,
     value: 25,
-
     label: 'Postgraduate students supported since 2020',
   },
   {
     icon: BookOpen,
     value: 70,
-
     label: 'Peer-reviewed publications',
   },
   {
     icon: Handshake,
     value: 14,
-
     label: 'F&B industry partners',
   },
   {
     icon: UsersRound,
     value: 1000,
-
     label: 'Participants involved in HNU studies',
   },
 ]
 
-function CountUpNumber({
-  end,
-  duration = 800,
-}: {
-  end: number
-
-  duration?: number
-}) {
+function CountUpNumber({ end, duration = 800 }: { end: number; duration?: number }) {
   const [count, setCount] = useState(0)
   const hasAnimated = useRef(false)
   const numberRef = useRef<HTMLSpanElement | null>(null)
@@ -68,8 +56,6 @@ function CountUpNumber({
 
           const elapsed = currentTime - startTime
           const progress = Math.min(elapsed / duration, 1)
-
-          // Fast at the start, slows near the end
           const easedProgress = 1 - Math.pow(1 - progress, 5)
 
           setCount(Math.floor(easedProgress * end))
@@ -96,46 +82,56 @@ function CountUpNumber({
 
 function StatsSection() {
   return (
-    <section className="px-4 py-12 md:px-8">
-      <div className="relative mx-auto min-h-[295px] max-w-7xl overflow-hidden rounded-[24px]">
-        <Image
-          src="/stats-bg.png"
-          alt="Microscope cell background"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
+    <section className="bg-white px-[26px] py-8 md:px-8 lg:px-12">
+      <div className="mx-auto w-full max-w-5xl">
+        <div className="relative aspect-[292/229] w-full overflow-hidden rounded-[8px] bg-[linear-gradient(180deg,#3636B7_0%,#3434B0_0.01%,#272785_13.16%,#181851_74.52%)] md:aspect-auto md:h-[330px] md:rounded-[24px]">
+          <Image
+            src="/stats-bg.png"
+            alt="Microscope cell background"
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover opacity-[0.35] mix-blend-screen"
+          />
 
-        <div className="absolute inset-0 bg-[#05083f]/80" />
+          <div className="absolute inset-0 bg-[#05083f]/25" />
 
-        <div className="relative z-10 grid min-h-[295px] grid-cols-1 gap-y-10 px-6 py-10 text-white sm:grid-cols-2 md:grid-cols-4 md:gap-y-0 md:px-10 md:py-8">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon
+          {/* Mobile middle divider lines only */}
+          <div className="absolute top-1/4 left-1/2 z-10 h-12 -translate-x-1/2 -translate-y-1/2 border-l border-dotted border-white/60 md:hidden" />
+          <div className="absolute top-3/4 left-1/2 z-10 h-12 -translate-x-1/2 -translate-y-1/2 border-l border-dotted border-white/60 md:hidden" />
 
-            return (
-              <div
-                key={stat.label}
-                className="relative grid grid-rows-[56px_72px_72px] place-items-center text-center"
-              >
-                {index !== 0 && (
-                  <div className="absolute left-0 top-1/2 hidden h-[65px] -translate-y-1/2 border-l border-dotted border-white/60 md:block" />
-                )}
+          <div className="relative z-20 grid h-full grid-cols-2 grid-rows-2 gap-4 px-8 py-3 text-white md:grid-cols-4 md:grid-rows-1 md:gap-0 md:px-10 md:py-8">
+            {stats.map((stat, index) => {
+              const Icon = stat.icon
 
-                <div className="flex h-14 items-center justify-center">
-                  <Icon className="h-10 w-10 stroke-[1.8] md:h-12 md:w-12" />
+              return (
+                <div
+                  key={stat.label}
+                  className="relative grid h-full content-center grid-rows-[24px_34px_38px] place-items-center px-1 text-center md:flex md:flex-col md:items-center md:justify-center md:px-3"
+                >
+                  {/* Desktop dividers only */}
+                  {index !== 0 && (
+                    <div className="absolute top-1/2 left-0 hidden h-[100px] -translate-y-1/2 border-l border-dotted border-white/60 md:block" />
+                  )}
+
+                  {/* Icon row */}
+                  <div className="flex items-center justify-center md:h-auto md:-translate-y-7">
+                    <Icon className="h-5 w-5 stroke-[1.8] sm:h-6 sm:w-6 md:h-10 md:w-10 lg:h-12 lg:w-12 xl:h-12 xl:w-12" />
+                  </div>
+
+                  {/* Number row */}
+                  <h2 className="flex items-center justify-center text-2xl leading-none font-medium tracking-tight sm:text-3xl md:h-16 md:-translate-y-7 md:text-5xl lg:h-[72px] lg:text-6xl xl:h-20 xl:text-6xl">
+                    <CountUpNumber end={stat.value} />+
+                  </h2>
+
+                  {/* Label row */}
+                  <p className="flex max-w-[92px] items-start justify-center text-[9px] leading-tight font-light sm:max-w-[110px] sm:text-[10px] md:h-16 md:max-w-[190px] md:translate-y-2 md:text-base lg:h-[72px] lg:max-w-[230px] lg:text-lg xl:h-20 xl:max-w-[250px] xl:text-xl">
+                    {stat.label}
+                  </p>
                 </div>
-
-                <h2 className="flex h-[72px] items-center justify-center text-5xl font-semibold leading-none tracking-tight md:text-6xl">
-                  <CountUpNumber end={stat.value} />
-                </h2>
-
-                <p className="flex h-[72px] max-w-[230px] items-start justify-center text-lg font-medium leading-snug md:text-xl">
-                  {stat.label}
-                </p>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
       </div>
     </section>
