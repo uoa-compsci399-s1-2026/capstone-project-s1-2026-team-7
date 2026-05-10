@@ -23,13 +23,19 @@
     "seed:team": "tsx scripts/seedHomepage.ts",
     "seed:homepage": "tsx scripts/seedOurteampage.ts",
     "payload:init": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/initPayload.ts",
-    "export:research": "tsx -r dotenv/config scripts/exportResearch/main.ts"
+    "createmigration": "npm run payload -- migrate:create"
   },
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,scss,md,mdx,yml,yaml}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
-    "@aws-sdk/client-bedrock-runtime": "^3.1044.0",
+    "@aws-sdk/client-bedrock-runtime": "^3.1045.0",
     "@payloadcms/db-postgres": "^3.82.1",
     "@payloadcms/email-nodemailer": "^3.82.1",
     "@payloadcms/next": "^3.82.1",
