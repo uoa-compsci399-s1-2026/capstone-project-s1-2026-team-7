@@ -83,14 +83,14 @@ function CountUpNumber({ end, duration = 800 }: { end: number; duration?: number
 function StatsSection() {
   return (
     <section className="bg-white px-[26px] py-8 md:px-8 lg:px-12">
-      <div className="mx-auto w-full max-w-5xl">
-        <div className="relative aspect-[292/229] w-full overflow-hidden rounded-[8px] bg-[linear-gradient(180deg,#3636B7_0%,#3434B0_0.01%,#272785_13.16%,#181851_74.52%)] md:aspect-auto md:h-[330px] md:rounded-[24px]">
+      <div className="mx-auto w-full max-w-[1150px]">
+        <div className="relative aspect-[292/229] w-full overflow-hidden rounded-[8px] bg-[linear-gradient(180deg,#3636B7_0%,#3434B0_0.01%,#272785_13.16%,#181851_74.52%)] md:aspect-[1150/330] md:rounded-[24px]">
           <Image
             src="/stats-bg.png"
             alt="Microscope cell background"
             fill
             priority
-            sizes="100vw"
+            sizes="(max-width: 768px) calc(100vw - 52px), 1150px"
             className="object-cover opacity-[0.35] mix-blend-screen"
           />
 
@@ -120,7 +120,7 @@ function StatsSection() {
                   </div>
 
                   {/* Number row */}
-                  <h2 className="flex items-center justify-center text-2xl leading-none font-medium tracking-tight sm:text-3xl md:h-16 md:-translate-y-7 md:text-5xl lg:h-[72px] lg:text-6xl xl:h-20 xl:text-6xl">
+                  <h2 className="flex items-center justify-center text-2xl leading-none font-medium tracking-tight sm:text-3xl md:h-16 md:-translate-y-7 md:text-5xl lg:h-[72px] lg:text-6xl xl:h-20 xl:text-6xl sm:mb-2">
                     <CountUpNumber end={stat.value} />+
                   </h2>
 

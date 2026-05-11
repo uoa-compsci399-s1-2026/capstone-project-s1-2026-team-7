@@ -3,7 +3,7 @@ import Image from 'next/image'
 export default function WhoWeAreSection() {
   return (
     <section className="bg-white px-[26px] py-10 md:px-8 md:py-20 lg:px-12">
-      <div className="mx-auto w-full max-w-5xl">
+      <div className="mx-auto w-full max-w-[1150px]">
         <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-[42%_52%] md:gap-[6%]">
           {/* Text - first on mobile, right on desktop */}
           <div className="order-1 text-left md:order-2">
