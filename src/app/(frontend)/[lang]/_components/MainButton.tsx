@@ -1,5 +1,6 @@
-import { HTMLAttributes, MouseEventHandler } from 'react'
-type MainButtonProps = HTMLAttributes<HTMLButtonElement> & {
+import { ButtonHTMLAttributes, MouseEventHandler } from 'react'
+
+type MainButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   title: string
   onClick?: MouseEventHandler<HTMLButtonElement>
   type?: 'button' | 'submit' | 'reset'
