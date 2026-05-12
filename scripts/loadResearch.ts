@@ -1,4 +1,4 @@
-import { config as loadEnv } from 'dotenv'
+/*import { config as loadEnv } from 'dotenv'
 import {
   OrcidWorksResponse,
   OrcidWorkSummary,
@@ -128,16 +128,6 @@ function compareEntries(data: PerPersonOutputType[]): SharedArticle[] {
 
   return Array.from(articleMap.values())
 }
-/*
-async function uploadToDatabase(data: ArticleOutput): Promise<void> {
-  await uploadResearch({
-    title: data.title,
-    doi: data.doi || '',
-    url: data.url || '',
-    publicationDate: data.publicationDate || '',
-  })
-}
-*/
 
 async function main() {
   const nameidpair: nameWithORcid[] = await getOrcidList()
@@ -160,9 +150,10 @@ async function main() {
     await uploadResearch({
       title: item.article.title,
       doi: item.article.doi ?? '',
-      url: item.article.url ?? '',
-      publicationDate: item.article.publicationDate ?? '',
-      staffIds: item.staffIds,
+      link: item.article.url ?? '',
+      date: item.article.publicationDate ?? '',
+      staffID: item.staffIds,
+      categories: ["other","health"]
     })
   }
 
@@ -171,31 +162,4 @@ async function main() {
 }
 
 main()
-
-/*
-
-async function main() {
-  const nameidpair: nameWithORcid[] = await getOrcidList()
-
-  const data: PerPersonOutputType[] = await Promise.all(
-    nameidpair.map(async (pair) => {
-      const articles = await fetchResearchOrcid(pair.orcid)
-
-      return {
-        name: pair.name,
-        articles,
-      }
-    }),
-  )
-
-  const cleaned: SharedArticle[] = compareEntries(data)
-  await Promise.all(cleaned.map((data) => uploadToDatabase(data.article)))
-  console.log(cleaned)
-  return cleaned
-}
-
-main().catch((error) => {
-  console.error(error)
-  process.exit(1)
-})
 */

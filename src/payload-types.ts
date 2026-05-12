@@ -215,6 +215,26 @@ export interface Study {
   title: string
   subtitle?: string | null
   /**
+   * Public study identifier, e.g. HNU-2025-014. Must be unique.
+   */
+  studyCode: string
+  /**
+   * Short label, e.g. "6 weeks · 4 visits".
+   */
+  duration: string
+  /**
+   * Payment offered to participants, e.g. "NZ$ 1,200" or "Unpaid".
+   */
+  compensation: string
+  /**
+   * Where the study takes place, e.g. "Mt Eden".
+   */
+  location: string
+  /**
+   * Short summary used on the listing card, e.g. "Adults 25–55, BMI 22–32".
+   */
+  eligibility: string
+  /**
    * URL-friendly version of the title, e.g. nutrition-study-2026
    */
   slug: string
@@ -234,6 +254,60 @@ export interface Study {
     }
     [k: string]: unknown
   }
+  /**
+   * Bulleted "What you'll be asked to do" items. Each row has a short title and a 1–2 sentence description.
+   */
+  participationItems?:
+    | {
+        title: string
+        description: string
+        id?: string | null
+      }[]
+    | null
+  eligibilityInclusion?:
+    | {
+        item: string
+        id?: string | null
+      }[]
+    | null
+  eligibilityExclusion?:
+    | {
+        item: string
+        id?: string | null
+      }[]
+    | null
+  /**
+   * Frequently asked questions specific to this study.
+   */
+  faqs?:
+    | {
+        question: string
+        answer: {
+          root: {
+            type: string
+            children: {
+              type: any
+              version: number
+              [k: string]: unknown
+            }[]
+            direction: ('ltr' | 'rtl') | null
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | ''
+            indent: number
+            version: number
+          }
+          [k: string]: unknown
+        }
+        id?: string | null
+      }[]
+    | null
+  /**
+   * URL the "Take eligibility Survey" button links to.
+   */
+  surveyUrl: string
+  /**
+   * Ethics approval reference, e.g. "AHREC ref 12345".
+   */
+  ethicsApprovalRef: string
   sortOrder?: number | null
   updatedAt: string
   createdAt: string
@@ -246,17 +320,18 @@ export interface Research {
   id: number
   title: string
   doi: string
-  researchLink: string
+  link: string
+  image?: (number | null) | Media
   date?: string | null
-  /**
-   * Used for manual sorting (lower comes first)
-   */
-  order?: number | null
   /**
    * Select related staff members
    */
   staff?: (number | Staff)[] | null
   categories?: (number | ResearchCategory)[] | null
+  /**
+   * Used for manual sorting (lower comes first)
+   */
+  order?: number | null
   updatedAt: string
   createdAt: string
 }
@@ -426,9 +501,42 @@ export interface StaffSelect<T extends boolean = true> {
 export interface StudiesSelect<T extends boolean = true> {
   title?: T
   subtitle?: T
+  studyCode?: T
+  duration?: T
+  compensation?: T
+  location?: T
+  eligibility?: T
   slug?: T
   banner?: T
   description?: T
+  participationItems?:
+    | T
+    | {
+        title?: T
+        description?: T
+        id?: T
+      }
+  eligibilityInclusion?:
+    | T
+    | {
+        item?: T
+        id?: T
+      }
+  eligibilityExclusion?:
+    | T
+    | {
+        item?: T
+        id?: T
+      }
+  faqs?:
+    | T
+    | {
+        question?: T
+        answer?: T
+        id?: T
+      }
+  surveyUrl?: T
+  ethicsApprovalRef?: T
   sortOrder?: T
   updatedAt?: T
   createdAt?: T
@@ -440,11 +548,12 @@ export interface StudiesSelect<T extends boolean = true> {
 export interface ResearchSelect<T extends boolean = true> {
   title?: T
   doi?: T
-  researchLink?: T
+  link?: T
+  image?: T
   date?: T
-  order?: T
   staff?: T
   categories?: T
+  order?: T
   updatedAt?: T
   createdAt?: T
 }
@@ -636,6 +745,33 @@ export interface DonationSectionBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhoWeAreBlock".
+ */
+export interface WhoWeAreBlock {
+  id?: string | null
+  blockName?: string | null
+  blockType: 'who-we-are'
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhatWeDoBlock".
+ */
+export interface WhatWeDoBlock {
+  id?: string | null
+  blockName?: string | null
+  blockType: 'what-we-do'
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DonationSectionBlock".
+ */
+export interface DonationSectionBlock {
+  id?: string | null
+  blockName?: string | null
+  blockType: 'donation-section'
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "our-team-page".
  */
 export interface OurTeamPage {
@@ -657,6 +793,20 @@ export interface StudiesPage {
   title: string
   banner: number | Media
   studiesDisplay?: (number | Study)[] | null
+  contact: {
+    /**
+     * e.g. info@aucklandunit.ac.nz
+     */
+    email: string
+    /**
+     * Multi-line postal address. Localized so place names can be transliterated.
+     */
+    address: string
+    /**
+     * e.g. 021 1234 5678
+     */
+    phone: string
+  }
   updatedAt?: string | null
   createdAt?: string | null
 }
@@ -669,7 +819,7 @@ export interface ResearchPage {
   title: string
   'portrait image': number | Media
   'mobile image': number | Media
-  researchCatagoriesDisplay?: (number | ResearchCategory)[] | null
+  researchCategoriesDisplay?: (number | ResearchCategory)[] | null
   seo?: {
     metaTitle?: string | null
     metaDescription?: string | null
@@ -892,6 +1042,30 @@ export interface DonationSectionBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhoWeAreBlock_select".
+ */
+export interface WhoWeAreBlockSelect<T extends boolean = true> {
+  id?: T
+  blockName?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhatWeDoBlock_select".
+ */
+export interface WhatWeDoBlockSelect<T extends boolean = true> {
+  id?: T
+  blockName?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "DonationSectionBlock_select".
+ */
+export interface DonationSectionBlockSelect<T extends boolean = true> {
+  id?: T
+  blockName?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "our-team-page_select".
  */
 export interface OurTeamPageSelect<T extends boolean = true> {
@@ -912,6 +1086,13 @@ export interface StudiesPageSelect<T extends boolean = true> {
   title?: T
   banner?: T
   studiesDisplay?: T
+  contact?:
+    | T
+    | {
+        email?: T
+        address?: T
+        phone?: T
+      }
   updatedAt?: T
   createdAt?: T
   globalType?: T
@@ -924,7 +1105,7 @@ export interface ResearchPageSelect<T extends boolean = true> {
   title?: T
   'portrait image'?: T
   'mobile image'?: T
-  researchCatagoriesDisplay?: T
+  researchCategoriesDisplay?: T
   seo?:
     | T
     | {

@@ -12,7 +12,6 @@ type PageProps = {
 export default async function HomePage({ params }: PageProps) {
   const { lang } = await params
   const data: HomepageDTO = await getHomePage(lang)
-  const currentLang: Lang = lang === 'zh' ? 'zh' : 'en'
 
   return (
     <main>

@@ -20,9 +20,9 @@ export default async function LangLayout({
   const footerData = await getFooter(currentLang)
   return (
     <>
-      <Navbar data={navbarData} currentLang={currentLang} />
+      <Navbar data={navbarData} language={currentLang} />
       <main>{children}</main>
-      <Footer data={footerData} />
+      <Footer data={footerData} language={currentLang} />
     </>
   )
 }

@@ -20,12 +20,7 @@ export default function StudyList({ studypage }: StudyListProps) {
       md:mt-20
       m-15"
       >
-        <div
-          className="grid justify-center justify-items-center grid-cols-1 grid-auto-rows max-w-5xl max-hxl w-full h-full
-        xl:gap-12.5
-        md:gap-7.5
-        gap-7.5"
-        >
+        <div className="grid grid-cols-1 max-w-5xl w-full xl:gap-6 md:gap-5 gap-4">
           {studypage.studiesDisplay.map((study, index) => (
             <StudyCard key={index} study={study} />
           ))}
