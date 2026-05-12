@@ -13,7 +13,7 @@ export default function MainButton({ title, variant, ...props }: MainButtonProps
 
   if (variant === 'primary') {
     className +=
-      ' border border-transparent bg-blue-950 text-white hover:-translate-y-0.5 hover:bg-blue-900 hover:shadow-md'
+      ' border border-transparent bg-[#1F2BD4] text-white hover:-translate-y-0.5 hover:bg-blue-900 hover:shadow-md'
   } else if (variant === 'secondary') {
     className +=
       ' border border-white text-white hover:-translate-y-0.5 hover:bg-white hover:text-blue-950 hover:shadow-md'

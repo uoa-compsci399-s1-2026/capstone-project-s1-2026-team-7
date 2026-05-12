@@ -19,12 +19,3 @@ export default async function HomePage({ params }: PageProps) {
     </main>
   )
 }
-/*
-      <HeroSection prop={data.hero} />
-      <ResearchSection />
-      <AboutSection data={data.aboutSection} />
-      <ServicesSection />
-      <ParticipantsStats />
-      <PartnersSection partnersSection={data.partnersSection} />
-      <ContactCTA currentLang={currentLang} />
-*/
