@@ -21,6 +21,7 @@ import { ResearchPage } from './globals/ResearchPage'
 import { NavigationBar } from './globals/NavigationBar'
 import { Footer } from './globals/Footer'
 import { ContactPage } from './globals/ContactPage'
+import { EnquiryTags } from './collections/EnquiryTags'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -51,7 +52,7 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
-  collections: [Users, Media, Staff, Studies, Research, ResearchCategories],
+  collections: [Users, Media, Staff, Studies, Research, ResearchCategories, EnquiryTags],
 
   globals: [HomePage, OurTeamPage, StudiesPage, ResearchPage, NavigationBar, ContactPage, Footer],
 

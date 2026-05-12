@@ -84,6 +84,19 @@ export const ContactPage: GlobalConfig = {
           defaultValue: 'Let us know how we can help',
         },
         {
+          name: 'enquiryTypeLabel',
+          type: 'text',
+          localized: true,
+          defaultValue: 'Enquiry Type',
+          required: true,
+        },
+        {
+          name: 'enquiryTypePlaceholder',
+          type: 'text',
+          localized: true,
+          defaultValue: 'Please select…',
+        },
+        {
           name: 'buttonTitle',
           type: 'text',
           localized: true,
@@ -92,10 +105,14 @@ export const ContactPage: GlobalConfig = {
         },
         {
           name: 'recipientEmail',
-          label: 'Recipient Email',
+          label: 'Fallback Recipient Email',
           type: 'email',
           required: true,
           defaultValue: 'example@auckland.ac.nz',
+          admin: {
+            description:
+              'Used only if no enquiry tag is selected or the selected tag no longer exists.',
+          },
         },
       ],
     },
