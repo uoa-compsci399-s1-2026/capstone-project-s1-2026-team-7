@@ -745,33 +745,6 @@ export interface DonationSectionBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "WhoWeAreBlock".
- */
-export interface WhoWeAreBlock {
-  id?: string | null
-  blockName?: string | null
-  blockType: 'who-we-are'
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "WhatWeDoBlock".
- */
-export interface WhatWeDoBlock {
-  id?: string | null
-  blockName?: string | null
-  blockType: 'what-we-do'
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "DonationSectionBlock".
- */
-export interface DonationSectionBlock {
-  id?: string | null
-  blockName?: string | null
-  blockType: 'donation-section'
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "our-team-page".
  */
 export interface OurTeamPage {
@@ -1013,30 +986,6 @@ export interface StatsBlockSelect<T extends boolean = true> {
  * via the `definition` "TimelineBlock_select".
  */
 export interface TimelineBlockSelect<T extends boolean = true> {
-  id?: T
-  blockName?: T
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "WhoWeAreBlock_select".
- */
-export interface WhoWeAreBlockSelect<T extends boolean = true> {
-  id?: T
-  blockName?: T
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "WhatWeDoBlock_select".
- */
-export interface WhatWeDoBlockSelect<T extends boolean = true> {
-  id?: T
-  blockName?: T
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "DonationSectionBlock_select".
- */
-export interface DonationSectionBlockSelect<T extends boolean = true> {
   id?: T
   blockName?: T
 }
