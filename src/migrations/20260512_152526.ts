@@ -1,41 +1,28 @@
 import { MigrateUpArgs, MigrateDownArgs, sql } from '@payloadcms/db-postgres'
 
-export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
+export async function up({ db }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
-   CREATE TABLE "enquiry_tags" (
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"recipient_email" varchar NOT NULL,
-  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
-  );
-  
-  CREATE TABLE "enquiry_tags_locales" (
-  	"label" varchar NOT NULL,
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"_locale" "_locales" NOT NULL,
-  	"_parent_id" integer NOT NULL
-  );
-  
-  ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "enquiry_tags_id" integer;
-  ALTER TABLE "contact_page_locales" ADD COLUMN "form_enquiry_type_label" varchar DEFAULT 'Enquiry Type' NOT NULL;
-  ALTER TABLE "contact_page_locales" ADD COLUMN "form_enquiry_type_placeholder" varchar DEFAULT 'Please select…';
-  ALTER TABLE "enquiry_tags_locales" ADD CONSTRAINT "enquiry_tags_locales_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."enquiry_tags"("id") ON DELETE cascade ON UPDATE no action;
-  CREATE INDEX "enquiry_tags_updated_at_idx" ON "enquiry_tags" USING btree ("updated_at");
-  CREATE INDEX "enquiry_tags_created_at_idx" ON "enquiry_tags" USING btree ("created_at");
-  CREATE UNIQUE INDEX "enquiry_tags_locales_locale_parent_id_unique" ON "enquiry_tags_locales" USING btree ("_locale","_parent_id");
-  ALTER TABLE "payload_locked_documents_rels" ADD CONSTRAINT "payload_locked_documents_rels_enquiry_tags_fk" FOREIGN KEY ("enquiry_tags_id") REFERENCES "public"."enquiry_tags"("id") ON DELETE cascade ON UPDATE no action;
-  CREATE INDEX "payload_locked_documents_rels_enquiry_tags_id_idx" ON "payload_locked_documents_rels" USING btree ("enquiry_tags_id");`)
+    ALTER TABLE "research" ADD COLUMN IF NOT EXISTS "link" varchar;
+    UPDATE "research" SET "link" = COALESCE("research_link", '') WHERE "link" IS NULL;
+    ALTER TABLE "research" ALTER COLUMN "link" SET NOT NULL;
+    ALTER TABLE "research" ADD COLUMN IF NOT EXISTS "image_id" integer;
+    ALTER TABLE "research" DROP COLUMN IF EXISTS "research_link";
+    DO $$ BEGIN
+      ALTER TABLE "research" ADD CONSTRAINT "research_image_id_media_id_fk"
+        FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
+    EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+    CREATE INDEX IF NOT EXISTS "research_image_idx" ON "research" USING btree ("image_id");
+  `)
 }
 
-export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
+export async function down({ db }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
-   ALTER TABLE "enquiry_tags" DISABLE ROW LEVEL SECURITY;
-  ALTER TABLE "enquiry_tags_locales" DISABLE ROW LEVEL SECURITY;
-  DROP TABLE "enquiry_tags" CASCADE;
-  DROP TABLE "enquiry_tags_locales" CASCADE;
-  ALTER TABLE "payload_locked_documents_rels" DROP CONSTRAINT "payload_locked_documents_rels_enquiry_tags_fk";
-  DROP INDEX "payload_locked_documents_rels_enquiry_tags_id_idx";
-  ALTER TABLE "payload_locked_documents_rels" DROP COLUMN "enquiry_tags_id";
-  ALTER TABLE "contact_page_locales" DROP COLUMN "form_enquiry_type_label";
-  ALTER TABLE "contact_page_locales" DROP COLUMN "form_enquiry_type_placeholder";`)
+    DROP INDEX IF EXISTS "research_image_idx";
+    ALTER TABLE "research" DROP CONSTRAINT IF EXISTS "research_image_id_media_id_fk";
+    ALTER TABLE "research" DROP COLUMN IF EXISTS "image_id";
+    ALTER TABLE "research" ADD COLUMN IF NOT EXISTS "research_link" varchar;
+    UPDATE "research" SET "research_link" = COALESCE("link", '') WHERE "research_link" IS NULL OR "research_link" = '';
+    ALTER TABLE "research" ALTER COLUMN "research_link" SET NOT NULL;
+    ALTER TABLE "research" DROP COLUMN IF EXISTS "link";
+  `)
 }
