@@ -653,6 +653,7 @@ export interface HomePage {
     | WhoWeAreBlock
     | WhatWeDoBlock
     | DonationSectionBlock
+    | CurrentStudiesBlock
   )[]
   seo?: {
     metaTitle?: string | null
@@ -771,6 +772,15 @@ export interface DonationSectionBlock {
   id?: string | null
   blockName?: string | null
   blockType: 'donation-section'
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CurrentStudiesBlock".
+ */
+export interface CurrentStudiesBlock {
+  id?: string | null
+  blockName?: string | null
+  blockType: 'current-studies'
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -934,6 +944,7 @@ export interface HomePageSelect<T extends boolean = true> {
         'who-we-are'?: T | WhoWeAreBlockSelect<T>
         'what-we-do'?: T | WhatWeDoBlockSelect<T>
         'donation-section'?: T | DonationSectionBlockSelect<T>
+        'current-studies'?: T | CurrentStudiesBlockSelect<T>
       }
   seo?:
     | T
@@ -1043,6 +1054,14 @@ export interface WhatWeDoBlockSelect<T extends boolean = true> {
  * via the `definition` "DonationSectionBlock_select".
  */
 export interface DonationSectionBlockSelect<T extends boolean = true> {
+  id?: T
+  blockName?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CurrentStudiesBlock_select".
+ */
+export interface CurrentStudiesBlockSelect<T extends boolean = true> {
   id?: T
   blockName?: T
 }

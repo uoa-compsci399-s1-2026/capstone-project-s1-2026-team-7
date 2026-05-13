@@ -99,6 +99,9 @@ const partnerLogoSchema = z.object({
   logo: mediaWithDefault,
   alt: stringWithDefault,
 })
+const currentStudiesBlockSchema = blockBaseSchema.extend({
+  blockType: z.literal('current-studies'),
+})
 
 export const partnersBlockSchema = blockBaseSchema
   .extend({
@@ -155,6 +158,7 @@ export const homepageBlockSchema = z.discriminatedUnion('blockType', [
   whoWeAreBlockSchema,
   whatWeDoBlockSchema,
   donationSectionBlockSchema,
+  currentStudiesBlockSchema,
 ])
 
 export const homepageSchema = z.object({
@@ -181,3 +185,4 @@ export type TimelineBlockDTO = Extract<HomepageBlockDTO, { blockType: 'timeline'
 export type WhoWeAreBlockDTO = Extract<HomepageBlockDTO, { blockType: 'who-we-are' }>
 export type WhatWeDoBlockDTO = Extract<HomepageBlockDTO, { blockType: 'what-we-do' }>
 export type DonationSectionBlockDTO = Extract<HomepageBlockDTO, { blockType: 'donation-section' }>
+export type CurrentStudiesBlockDTO = Extract<HomepageBlockDTO, { blockType: 'current-studies' }>
