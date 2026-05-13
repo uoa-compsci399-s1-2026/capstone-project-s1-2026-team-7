@@ -6,12 +6,18 @@ import { searchResearch } from '@/features/research/searchResearch'
 
 export default async function page() {
   const researchpage = await getResearchPage()
-  const research = await searchResearch('')
-
+  const researchResult = await searchResearch({
+    page: 1,
+    limit: 16,
+  })
   return (
     <div className="w-full mx-auto">
       <ResearchHero title={researchpage.title} backgroundImage="/research/hero_desktop.jpg" />
-      <ResearchClient categories={researchpage.researchCategoriesDisplay} research={research} />
+      <ResearchClient
+        categories={researchpage.researchCategoriesDisplay}
+        initialResearch={researchResult.docs}
+        initialTotalDocs={researchResult.totalDocs}
+      />
     </div>
   )
 }
