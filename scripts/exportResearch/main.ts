@@ -32,7 +32,12 @@ async function main() {
   return rowsWithCategories
 }
 
-main().catch((error) => {
-  console.error(error)
-  process.exit(1)
-})
+main()
+  .then(() => {
+    console.log('Export research script finished.')
+    process.exit(0)
+  })
+  .catch((error) => {
+    console.error(error)
+    process.exit(1)
+  })

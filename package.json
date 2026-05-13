@@ -25,7 +25,7 @@
     "payload:init": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/initPayload.ts",
     "createmigration": "npm run payload -- migrate:create",
     "export:research": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/exportResearch/main.ts",
-    "import:research": "tsx scripts/importResearch/uploadCsv.ts"
+    "import:research": "tsx -r dotenv/config scripts/importResearch/uploadCsv.ts"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
