@@ -1756,6 +1756,146 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.enquiry_tags": {
+      "name": "enquiry_tags",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "recipient_email": {
+          "name": "recipient_email",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp(3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "enquiry_tags_updated_at_idx": {
+          "name": "enquiry_tags_updated_at_idx",
+          "columns": [
+            {
+              "expression": "updated_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "enquiry_tags_created_at_idx": {
+          "name": "enquiry_tags_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.enquiry_tags_locales": {
+      "name": "enquiry_tags_locales",
+      "schema": "",
+      "columns": {
+        "label": {
+          "name": "label",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "id": {
+          "name": "id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "_locale": {
+          "name": "_locale",
+          "type": "_locales",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "_parent_id": {
+          "name": "_parent_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "enquiry_tags_locales_locale_parent_id_unique": {
+          "name": "enquiry_tags_locales_locale_parent_id_unique",
+          "columns": [
+            {
+              "expression": "_locale",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "_parent_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "enquiry_tags_locales_parent_id_fk": {
+          "name": "enquiry_tags_locales_parent_id_fk",
+          "tableFrom": "enquiry_tags_locales",
+          "tableTo": "enquiry_tags",
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.payload_kv": {
       "name": "payload_kv",
       "schema": "",
@@ -1951,6 +2091,12 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false
+        },
+        "enquiry_tags_id": {
+          "name": "enquiry_tags_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -2088,6 +2234,21 @@
           "concurrently": false,
           "method": "btree",
           "with": {}
+        },
+        "payload_locked_documents_rels_enquiry_tags_id_idx": {
+          "name": "payload_locked_documents_rels_enquiry_tags_id_idx",
+          "columns": [
+            {
+              "expression": "enquiry_tags_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
         }
       },
       "foreignKeys": {
@@ -2150,6 +2311,15 @@
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "research_categories",
           "columnsFrom": ["research_categories_id"],
+          "columnsTo": ["id"],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "payload_locked_documents_rels_enquiry_tags_fk": {
+          "name": "payload_locked_documents_rels_enquiry_tags_fk",
+          "tableFrom": "payload_locked_documents_rels",
+          "tableTo": "enquiry_tags",
+          "columnsFrom": ["enquiry_tags_id"],
           "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
@@ -5375,6 +5545,20 @@
           "notNull": false,
           "default": "'Let us know how we can help'"
         },
+        "form_enquiry_type_label": {
+          "name": "form_enquiry_type_label",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'Enquiry Type'"
+        },
+        "form_enquiry_type_placeholder": {
+          "name": "form_enquiry_type_placeholder",
+          "type": "varchar",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'Please select…'"
+        },
         "form_button_title": {
           "name": "form_button_title",
           "type": "varchar",
@@ -6140,6 +6324,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "e30d6e8f-b3f1-4bf6-992b-0d22282a9340",
+  "id": "1b2533fc-d73f-438a-a31a-2251e8310f76",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }

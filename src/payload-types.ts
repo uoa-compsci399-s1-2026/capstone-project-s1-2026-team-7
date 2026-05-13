@@ -73,6 +73,7 @@ export interface Config {
     studies: Study
     research: Research
     'research-categories': ResearchCategory
+    'enquiry-tags': EnquiryTag
     'payload-kv': PayloadKv
     'payload-locked-documents': PayloadLockedDocument
     'payload-preferences': PayloadPreference
@@ -86,6 +87,7 @@ export interface Config {
     studies: StudiesSelect<false> | StudiesSelect<true>
     research: ResearchSelect<false> | ResearchSelect<true>
     'research-categories': ResearchCategoriesSelect<false> | ResearchCategoriesSelect<true>
+    'enquiry-tags': EnquiryTagsSelect<false> | EnquiryTagsSelect<true>
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>
     'payload-locked-documents':
       | PayloadLockedDocumentsSelect<false>
@@ -347,6 +349,19 @@ export interface ResearchCategory {
   createdAt: string
 }
 /**
+ * Tags shown in the contact form dropdown. Each tag routes submissions to its recipient email.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "enquiry-tags".
+ */
+export interface EnquiryTag {
+  id: number
+  label: string
+  recipientEmail: string
+  updatedAt: string
+  createdAt: string
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -393,6 +408,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'research-categories'
         value: number | ResearchCategory
+      } | null)
+    | ({
+        relationTo: 'enquiry-tags'
+        value: number | EnquiryTag
       } | null)
   globalSlug?: string | null
   user: {
@@ -564,6 +583,16 @@ export interface ResearchSelect<T extends boolean = true> {
 export interface ResearchCategoriesSelect<T extends boolean = true> {
   title?: T
   slug?: T
+  updatedAt?: T
+  createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "enquiry-tags_select".
+ */
+export interface EnquiryTagsSelect<T extends boolean = true> {
+  label?: T
+  recipientEmail?: T
   updatedAt?: T
   createdAt?: T
 }
@@ -836,7 +865,12 @@ export interface ContactPage {
     emailPlaceholder?: string | null
     phonePlaceholder?: string | null
     messagePlaceholder?: string | null
+    enquiryTypeLabel: string
+    enquiryTypePlaceholder?: string | null
     buttonTitle: string
+    /**
+     * Used only if no enquiry tag is selected or the selected tag no longer exists.
+     */
     recipientEmail: string
   }
   mapSrc: string
@@ -1102,6 +1136,8 @@ export interface ContactPageSelect<T extends boolean = true> {
         emailPlaceholder?: T
         phonePlaceholder?: T
         messagePlaceholder?: T
+        enquiryTypeLabel?: T
+        enquiryTypePlaceholder?: T
         buttonTitle?: T
         recipientEmail?: T
       }

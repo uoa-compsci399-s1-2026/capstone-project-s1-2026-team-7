@@ -1,5 +1,4 @@
 import Image from 'next/image'
-import mobileHeroFallback from '@/../public/mobile_hero.png'
 import MainButton from '../MainButton'
 import type { HeroBlockDTO } from '@/validation/homepage/home.schema'
 
@@ -8,59 +7,59 @@ type HeroSectionProps = {
 }
 
 export default function HeroSection({ data }: HeroSectionProps) {
-  const { title, description, heroHorizontal, heroMobile, buttons } = data
+  const { title, description, heroHorizontal } = data
 
   return (
-    <section className="relative h-128.5 w-full md:h-126.75 xl:h-175">
-      {/* Mobile image — below 450px */}
-      <div className="absolute inset-0 block overflow-hidden min-[450px]:hidden">
+    <section className="relative isolate min-h-[560px] w-full overflow-hidden bg-[linear-gradient(180deg,#3636B7_0%,#3434B0_0.01%,#272785_13.16%,#181851_74.52%)] md:min-h-[520px] lg:min-h-[540px]">
+      {/* Background image from CMS */}
+      {heroHorizontal.url && (
         <Image
-          src={heroMobile.url || mobileHeroFallback}
-          alt={heroMobile.alt || 'Mobile hero image'}
+          src={heroHorizontal.url}
+          alt={heroHorizontal.alt || 'Hero background image'}
           fill
           priority
-          sizes="(max-width: 449px) 100vw, 0vw"
-          className="object-cover object-top"
+          quality={100}
+          sizes="100vw"
+          className="object-cover object-center opacity-[0.75] mix-blend-multiply"
         />
-      </div>
+      )}
 
-      {/* Desktop/tablet image — 450px and above */}
-      <div className="absolute inset-0 hidden overflow-hidden min-[450px]:block">
-        {heroHorizontal.url && (
-          <Image
-            src={heroHorizontal.url}
-            alt={heroHorizontal.alt || 'Hero image'}
-            fill
-            priority
-            quality={100}
-            sizes="(min-width: 450px) 100vw, 0vw"
-            className="object-cover object-top"
-          />
-        )}
-      </div>
-
-      {/* Overlay */}
-      <div className="absolute inset-0 flex items-end justify-center px-4 pb-15 text-center text-pretty min-[450px]:pb-30 sm:pb-20 lg:pb-18 xl:pb-30">
-        <div className="flex flex-col items-center gap-3 md:gap-3 lg:gap-4">
-          <h1 className="text-xl font-medium text-white sm:text-3xl min-[1024px]:text-4xl xl:text-5xl lg:font-semibold xl:font-bold">
+      {/* Content */}
+      <div className="relative z-10 mx-auto grid min-h-[560px] w-full max-w-5xl grid-cols-1 items-center justify-items-center gap-10 px-5 py-16 md:min-h-[520px] md:grid-cols-2 md:justify-items-stretch md:px-8 lg:min-h-[692px] lg:gap-12 lg:px-12">
+        {/* Text */}
+        <div className="w-full max-w-xl text-center md:text-left">
+          <h1 className="text-xl leading-tight font-bold text-white sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
             {title}
           </h1>
 
-          <p className="max-w-md text-xs text-white sm:max-w-xl sm:text-lg md:max-w-xl md:text-xl lg:max-w-2xl xl:text-2xl">
+          <p className="mt-5 text-base leading-relaxed text-white sm:text-lg md:text-lg lg:text-xl">
             {description}
           </p>
 
-          {buttons.length > 0 && (
-            <div className="flex flex-wrap justify-center gap-3 max-[449px]:mb-4 md:gap-4 xl:mt-4 [&_button]:border-2 lg:[&_button]:w-45">
-              {buttons.slice(0, 2).map((button) => (
-                <MainButton
-                  key={button.id || `${button.label}-${button.url}`}
-                  title={button.label}
-                  variant={button.variant}
-                />
-              ))}
+          <div className="mt-8 flex flex-wrap justify-center gap-3 md:justify-start [&_button]:border-3 [&_button]:px-4 [&_button]:py-2">
+            <MainButton title="Read more" variant="primary" />
+            <MainButton title="Participate in a Study" variant="secondary" />
+          </div>
+        </div>
+
+        {/* Portrait image - hidden below md */}
+        <div className="hidden w-full md:flex md:justify-center">
+          <div className="relative w-full max-w-[320px] lg:max-w-[360px] xl:max-w-[400px]">
+            {/* Blue offset block */}
+            <div className="absolute -top-2 -left-2 h-full w-full rounded-3xl bg-[#1F2BD4]" />
+
+            <div className="relative aspect-[6/7] overflow-hidden rounded-3xl shadow-2xl">
+              <Image
+                src="/hero-portrait-image.png"
+                alt="Hero portrait image"
+                fill
+                priority
+                quality={100}
+                sizes="(max-width: 767px) 0px, 35vw"
+                className="object-cover object-center"
+              />
             </div>
-          )}
+          </div>
         </div>
       </div>
     </section>
