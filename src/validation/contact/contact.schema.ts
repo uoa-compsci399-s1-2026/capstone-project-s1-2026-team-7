@@ -1,6 +1,12 @@
 import { z } from 'zod'
 import { mediaSchema } from '@/validation'
 
+export const enquiryTagSchema = z.object({
+  id: z.union([z.string(), z.number()]),
+  label: z.string(),
+  recipientEmail: z.string().email(),
+})
+
 export const contactFormSchema = z.object({
   name: z.string().default('Name'),
   email: z.string().default('Email Address'),
@@ -10,6 +16,8 @@ export const contactFormSchema = z.object({
   emailPlaceholder: z.string().default('example@gmail.com'),
   phonePlaceholder: z.string().default('0226461819'),
   messagePlaceholder: z.string().default('Let us know how we can help'),
+  enquiryTypeLabel: z.string().default('Enquiry Type'),
+  enquiryTypePlaceholder: z.string().default('Please select…'),
   buttonTitle: z.string().default('Send Message'),
   recipientEmail: z.string().email().default('example@auckland.ac.nz'),
 })
@@ -26,5 +34,6 @@ export const contactPageDTOSchema = z.object({
     ),
 })
 
+export type EnquiryTagDTO = z.infer<typeof enquiryTagSchema>
 export type ContactFormDTO = z.infer<typeof contactFormSchema>
 export type ContactPageDTO = z.infer<typeof contactPageDTOSchema>
