@@ -57,7 +57,7 @@ function WhatWeDoSection() {
                   {item.title}
                 </h3>
 
-                <ul className="list-disc space-y-1 pl-4 text-[9px] leading-snug font-normal text-[#08084f] sm:text-xs  lg:text-[16px]">
+                <ul className="list-disc space-y-1 pl-4 text-[9px] leading-snug font-normal text-[#08084f] sm:text-xs lg:text-[16px]">
                   {item.points.map((point) => (
                     <li key={point}>{point}</li>
                   ))}

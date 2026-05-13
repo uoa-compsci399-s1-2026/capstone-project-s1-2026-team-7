@@ -34,7 +34,7 @@ const stats: Stat[] = [
   },
 ]
 
-function CountUpNumber({ end, duration = 800 }: { end: number; duration?: number }) {
+function CountUpNumber({ end, duration = 1500 }: { end: number; duration?: number }) {
   const [count, setCount] = useState(0)
   const hasAnimated = useRef(false)
   const numberRef = useRef<HTMLSpanElement | null>(null)
