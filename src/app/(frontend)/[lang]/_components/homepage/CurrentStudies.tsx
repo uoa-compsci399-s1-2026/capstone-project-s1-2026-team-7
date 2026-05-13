@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { getStudiesPage } from '@/queries/studiespage'
+import { getStudiesPage } from '@/features/studies'
 import type { Lang } from '@/types/lang'
 import StudySummaryCard from './StudySummaryCard'
 type CurrentStudiesProps = {

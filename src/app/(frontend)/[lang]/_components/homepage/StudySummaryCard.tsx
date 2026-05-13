@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import type { StudyDTO } from '@/validation/studies'
+import type { StudyDTO } from '@/features'
 
 type StudySummaryCardProps = {
   study: Pick<StudyDTO, 'title' | 'subtitle' | 'duration' | 'eligibility' | 'slug' | 'banner'>
