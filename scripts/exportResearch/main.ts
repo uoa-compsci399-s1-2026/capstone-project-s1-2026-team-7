@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { StaffDTO } from '@/validation'
 import { getOrcidList, compareEntries, getData } from './input'
 import { buildCsvRows, exportCsv } from './output'
