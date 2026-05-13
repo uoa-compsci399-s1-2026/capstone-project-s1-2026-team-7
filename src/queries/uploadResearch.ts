@@ -1,15 +1,15 @@
 import { getPayloadClient } from '@/lib/payload'
-import { Media, Staff, ResearchCategory } from '@/payload-types'
+import { Media, ResearchCategory } from '@/payload-types'
+
 export type UploadResearchDTO = {
-  id: number
   title: string
   doi: string
   link: string
-  image: Media
   date: string
   staffID: number[]
-  categories: ResearchCategory[]
-  order: number
+  image?: Media
+  categories?: ResearchCategory[]
+  order?: number
 }
 
 export async function uploadResearch(article: UploadResearchDTO): Promise<void> {
@@ -34,8 +34,8 @@ export async function uploadResearch(article: UploadResearchDTO): Promise<void> 
       image: article.image,
       date: article.date,
       staff: article.staffID,
-      categories: article.categories,
-      order: article.order,
+      categories: article.categories ?? [],
+      order: article.order ?? 0,
     },
   })
 }

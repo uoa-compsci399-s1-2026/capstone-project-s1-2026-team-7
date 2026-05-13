@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { StaffDTO } from '@/validation'
 import { getOrcidList, compareEntries, getData } from './input'
 import { buildCsvRows, exportCsv } from './output'
@@ -31,7 +32,12 @@ async function main() {
   return rowsWithCategories
 }
 
-main().catch((error) => {
-  console.error(error)
-  process.exit(1)
-})
+main()
+  .then(() => {
+    console.log('Export research script finished.')
+    process.exit(0)
+  })
+  .catch((error) => {
+    console.error(error)
+    process.exit(1)
+  })

@@ -8,7 +8,7 @@ type Props = {
 
 export default function ResearchCard({ item, viewMode }: Props) {
   return (
-    <Link href={`research/${item.link}`}>
+    <a href={`${item.link}`}>
       <div
         className={
           viewMode === 'grid'
@@ -30,6 +30,6 @@ export default function ResearchCard({ item, viewMode }: Props) {
           <p className="text-lg text-gray-400 mt-2">{item.date}</p>
         </div>
       </div>
-    </Link>
+    </a>
   )
 }
