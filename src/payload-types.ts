@@ -741,6 +741,14 @@ export interface StatsBlock {
  * via the `definition` "TimelineBlock".
  */
 export interface TimelineBlock {
+  eyebrow: string
+  title: string
+  description: string
+  items: {
+    year: string
+    description: string
+    id?: string | null
+  }[]
   id?: string | null
   blockName?: string | null
   blockType: 'timeline'
@@ -762,6 +770,16 @@ export interface WhoWeAreBlock {
  * via the `definition` "WhatWeDoBlock".
  */
 export interface WhatWeDoBlock {
+  title: string
+  sections: {
+    heading: string
+    items: {
+      text: string
+      id?: string | null
+    }[]
+    id?: string | null
+  }[]
+  image: number | Media
   id?: string | null
   blockName?: string | null
   blockType: 'what-we-do'
@@ -1022,6 +1040,16 @@ export interface StatsBlockSelect<T extends boolean = true> {
  * via the `definition` "TimelineBlock_select".
  */
 export interface TimelineBlockSelect<T extends boolean = true> {
+  eyebrow?: T
+  title?: T
+  description?: T
+  items?:
+    | T
+    | {
+        year?: T
+        description?: T
+        id?: T
+      }
   id?: T
   blockName?: T
 }
@@ -1041,6 +1069,20 @@ export interface WhoWeAreBlockSelect<T extends boolean = true> {
  * via the `definition` "WhatWeDoBlock_select".
  */
 export interface WhatWeDoBlockSelect<T extends boolean = true> {
+  title?: T
+  sections?:
+    | T
+    | {
+        heading?: T
+        items?:
+          | T
+          | {
+              text?: T
+              id?: T
+            }
+        id?: T
+      }
+  image?: T
   id?: T
   blockName?: T
 }

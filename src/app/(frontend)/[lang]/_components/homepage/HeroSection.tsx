@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import MainButton from '../MainButton'
-import type { HeroBlockDTO } from '@/validation/homepage/home.schema'
+import type { HeroBlockDTO } from '@/features/homepage/home.schema'
 
 type HeroSectionProps = {
   data: HeroBlockDTO

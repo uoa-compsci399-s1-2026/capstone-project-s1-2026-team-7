@@ -1,11 +1,11 @@
 import 'dotenv/config'
-import { StaffDTO } from '@/validation'
+import { StaffDTO } from '@/features'
 import { getOrcidList, compareEntries, getData } from './input'
 import { buildCsvRows, exportCsv } from './output'
 import { getEnabledCategories } from './getcategories'
 import { nameWithORcid, PerPersonOutputType } from './types'
 import dummydata from './dummydata'
-import { getStaff } from '@/queries/getStaff'
+import { getStaff } from '@/features/our-team/getStaff.query'
 
 async function main() {
   const staff: StaffDTO[] = await getStaff()

@@ -1,6 +1,6 @@
 import { Lang } from '@/types/lang'
-import { getStudyBySlug } from '@/queries/getStudyBySlug'
-import { getStudiesPage } from '@/queries/studiespage'
+import { getStudyBySlug } from '@/features/studies/getStudyBySlug.query'
+import { getStudiesPage } from '@/features/studies/studiespage.query'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import Banner from '../../_components/Banner'

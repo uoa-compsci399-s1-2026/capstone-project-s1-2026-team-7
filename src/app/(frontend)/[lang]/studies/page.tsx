@@ -1,6 +1,6 @@
 import React from 'react'
-import { getStudiesPage } from '@/queries/studiespage'
-import { StudiesPageDTO } from '@/validation/studies'
+import { getStudiesPage } from '@/features/studies/studiespage.query'
+import { StudiesPageDTO } from '@/features/studies'
 import StudyCard from './StudyCard'
 import StudyList from './StudyList'
 

@@ -1,5 +1,5 @@
 'use client'
-
+import { TimelineBlockDTO } from '@/features'
 import { useEffect, useRef, useState } from 'react'
 
 type TimelineItem = {
@@ -34,7 +34,13 @@ const timelineItems: TimelineItem[] = [
   },
 ]
 
-function TimelineSection() {
+type TimelineSectionProps = {
+  data: TimelineBlockDTO
+}
+
+function TimelineSection({ data }: TimelineSectionProps) {
+  const { eyebrow, title, description, items } = data
+
   const sectionRef = useRef<HTMLElement | null>(null)
   const viewportRef = useRef<HTMLDivElement | null>(null)
   const trackRef = useRef<HTMLDivElement | null>(null)
@@ -115,24 +121,23 @@ function TimelineSection() {
   }, [])
 
   return (
-    <section ref={sectionRef} className="bg-white px-[26px] py-12 md:px-8 lg:px-12">
-      <div className="mx-auto w-full max-w-[1150px]">
+    <section ref={sectionRef} className="bg-white px-6.5 py-12 md:px-8 lg:px-12">
+      <div className="mx-auto w-full max-w-287.5">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-[320px_1fr] md:items-start md:gap-10">
           {/* Left content */}
           <div className="text-left">
             <p className="text-[10px] font-semibold text-[#1F2BD4] sm:text-xs md:text-sm">
-              About the HNU
+              {eyebrow}
             </p>
 
             <h2 className="mt-2 text-[20px] leading-tight font-extrabold text-[#08084f] sm:text-2xl md:text-3xl">
-              Our History
+              {title}
             </h2>
 
-            <div className="mt-3 h-[3px] w-16 rounded-full bg-[#08084f]" />
+            <div className="mt-3 h-0.75 w-16 rounded-full bg-[#08084f]" />
 
-            <p className="mt-5 max-w-[330px] text-[11px] leading-snug text-[#08084f] sm:text-xs md:text-sm">
-              Our journey, marked by self-sustaining growth, reflects our enduring commitment to
-              defining the gold standard in human nutrition research.
+            <p className="mt-5 max-w-82.5 text-[11px] leading-snug text-[#08084f] sm:text-xs md:text-sm">
+              {description}
             </p>
           </div>
 
@@ -143,10 +148,10 @@ function TimelineSection() {
               className="flex w-max transition-transform duration-100 ease-out"
               style={{ transform: `translateX(-${translateX}px)` }}
             >
-              {timelineItems.map((item, index) => (
+              {items.map((item, index) => (
                 <div
                   key={`${item.year}-${index}`}
-                  className="grid w-[220px] shrink-0 grid-rows-[96px_38px] md:w-[260px] md:grid-rows-[110px_42px] lg:w-[290px]"
+                  className="grid w-55 shrink-0 grid-rows-[96px_38px] md:w-65 md:grid-rows-[110px_42px] lg:w-72.5"
                 >
                   {/* Text */}
                   <div className="pr-6">
@@ -154,7 +159,7 @@ function TimelineSection() {
                       {item.year}
                     </h3>
 
-                    <p className="mt-2 max-w-[190px] text-[10px] leading-snug text-[#08084f] md:max-w-[230px] md:text-xs">
+                    <p className="mt-2 max-w-47.5 text-[10px] leading-snug text-[#08084f] md:max-w-57.5 md:text-xs">
                       {item.description}
                     </p>
                   </div>

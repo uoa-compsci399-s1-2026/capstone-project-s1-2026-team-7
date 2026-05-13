@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import path from 'node:path'
-import { uploadResearchCsv } from '@/queries/uploadResearchCsv'
+import { uploadResearchCsv } from '@/features/research/uploadResearchCsv.query'
 
 function getCsvPath(): string {
   const filePathArg = process.argv.find((arg) => arg.endsWith('.csv'))

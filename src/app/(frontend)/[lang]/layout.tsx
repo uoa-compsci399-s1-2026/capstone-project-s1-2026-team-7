@@ -1,9 +1,9 @@
 import React from 'react'
 import Navbar from '@/app/(frontend)/[lang]/_components/Navbar'
 import Footer from '@/app/(frontend)/[lang]/_components/Footer'
-import { getNavigationBar } from '@/queries/navigation'
+import { getNavigationBar } from '@/features/navigationBar/navigation.query'
 import { Lang } from '@/types/lang'
-import { getFooter } from '@/queries/footer'
+import { getFooter } from '@/features/footer/footer.query'
 
 export default async function LangLayout({
   children,

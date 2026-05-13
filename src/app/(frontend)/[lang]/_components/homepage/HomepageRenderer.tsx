@@ -1,4 +1,4 @@
-import { HomepageBlockDTO } from '@/validation/homepage/home.schema'
+import { HomepageBlockDTO } from '@/features/homepage/home.schema'
 import HeroSection from './HeroSection'
 import { ResearchSection } from './ResearchSection'
 import { PartnersSection } from './PartnersSection'
@@ -34,13 +34,13 @@ export default function RenderHomeBlocks({ blocks }: { blocks: HomepageBlockDTO[
             return <StatsSection key={block.id || index} />
 
           case 'timeline':
-            return <TimelineSection key={block.id || index} />
+            return <TimelineSection key={block.id || index} data={block} />
 
           case 'who-we-are':
-            return <WhoWeAreSection key={block.id || index} />
+            return <WhoWeAreSection key={block.id || index} data={block} />
 
           case 'what-we-do':
-            return <WhatWeDoSection key={block.id || index} />
+            return <WhatWeDoSection key={block.id || index} data={block} />
 
           case 'donation-section':
             return <DonationSection key={block.id || index} />

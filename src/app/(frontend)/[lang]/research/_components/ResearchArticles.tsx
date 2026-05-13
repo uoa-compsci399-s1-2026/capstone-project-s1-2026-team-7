@@ -1,4 +1,4 @@
-import { ResearchDTO } from '@/validation'
+import { ResearchDTO } from '@/features'
 import ResearchCard from './ResearchCard'
 
 type Props = {
