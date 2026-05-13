@@ -22,6 +22,7 @@ import { NavigationBar } from './globals/NavigationBar'
 import { Footer } from './globals/Footer'
 import { ContactPage } from './globals/ContactPage'
 import { EnquiryTags } from './collections/EnquiryTags'
+import { translateEndpoint } from './endpoints/translate'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -55,6 +56,8 @@ export default buildConfig({
   collections: [Users, Media, Staff, Studies, Research, ResearchCategories, EnquiryTags],
 
   globals: [HomePage, OurTeamPage, StudiesPage, ResearchPage, NavigationBar, ContactPage, Footer],
+
+  endpoints: [translateEndpoint],
 
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
