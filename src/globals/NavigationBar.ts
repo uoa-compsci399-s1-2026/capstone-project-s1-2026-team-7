@@ -31,6 +31,13 @@ export const NavigationBar: GlobalConfig = {
           label: 'Navigation Title',
           required: true,
           localized: true,
+          admin: {
+            components: {
+              afterInput: [
+                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+              ],
+            },
+          },
         },
         {
           name: 'navURL',

@@ -855,7 +855,6 @@ export interface ContactPage {
   id: number
   heroTitle: string
   heroImage?: (number | null) | Media
-  heroImageAlt?: string | null
   form: {
     name: string
     email: string
@@ -1124,7 +1123,6 @@ export interface NavigationBarSelect<T extends boolean = true> {
 export interface ContactPageSelect<T extends boolean = true> {
   heroTitle?: T
   heroImage?: T
-  heroImageAlt?: T
   form?:
     | T
     | {

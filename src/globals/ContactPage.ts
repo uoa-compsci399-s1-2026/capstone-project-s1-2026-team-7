@@ -11,6 +11,11 @@ export const ContactPage: GlobalConfig = {
       localized: true,
       required: true,
       defaultValue: 'Contact Us',
+      admin: {
+        components: {
+          afterInput: ['/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton'],
+        },
+      },
     },
     {
       name: 'heroImage',
@@ -18,13 +23,6 @@ export const ContactPage: GlobalConfig = {
       type: 'upload',
       relationTo: 'media',
       required: false,
-    },
-    {
-      name: 'heroImageAlt',
-      label: 'Hero Image Alt Text',
-      type: 'text',
-      localized: true,
-      defaultValue: 'Contact page hero image',
     },
     {
       name: 'form',
@@ -37,6 +35,13 @@ export const ContactPage: GlobalConfig = {
           localized: true,
           defaultValue: 'Name',
           required: true,
+          admin: {
+            components: {
+              afterInput: [
+                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+              ],
+            },
+          },
         },
         {
           name: 'email',
@@ -44,6 +49,13 @@ export const ContactPage: GlobalConfig = {
           localized: true,
           defaultValue: 'Email Address',
           required: true,
+          admin: {
+            components: {
+              afterInput: [
+                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+              ],
+            },
+          },
         },
         {
           name: 'phone',
@@ -51,6 +63,13 @@ export const ContactPage: GlobalConfig = {
           localized: true,
           defaultValue: 'Phone Number',
           required: true,
+          admin: {
+            components: {
+              afterInput: [
+                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+              ],
+            },
+          },
         },
         {
           name: 'message',
@@ -58,29 +77,32 @@ export const ContactPage: GlobalConfig = {
           localized: true,
           defaultValue: 'Your Message',
           required: true,
+          admin: {
+            components: {
+              afterInput: [
+                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+              ],
+            },
+          },
         },
         {
           name: 'namePlaceholder',
           type: 'text',
-          localized: true,
           defaultValue: 'John Doe',
         },
         {
           name: 'emailPlaceholder',
           type: 'text',
-          localized: true,
           defaultValue: 'example@gmail.com',
         },
         {
           name: 'phonePlaceholder',
           type: 'text',
-          localized: true,
           defaultValue: '0226461819',
         },
         {
           name: 'messagePlaceholder',
           type: 'text',
-          localized: true,
           defaultValue: 'Let us know how we can help',
         },
         {
@@ -89,11 +111,17 @@ export const ContactPage: GlobalConfig = {
           localized: true,
           defaultValue: 'Enquiry Type',
           required: true,
+          admin: {
+            components: {
+              afterInput: [
+                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+              ],
+            },
+          },
         },
         {
           name: 'enquiryTypePlaceholder',
           type: 'text',
-          localized: true,
           defaultValue: 'Please select…',
         },
         {
@@ -102,6 +130,13 @@ export const ContactPage: GlobalConfig = {
           localized: true,
           defaultValue: 'Send Message',
           required: true,
+          admin: {
+            components: {
+              afterInput: [
+                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+              ],
+            },
+          },
         },
         {
           name: 'recipientEmail',

@@ -14,6 +14,11 @@ export const HeroBlock: Block = {
       label: 'Hero Title',
       localized: true,
       required: true,
+      admin: {
+        components: {
+          afterInput: ['/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton'],
+        },
+      },
     },
     {
       name: 'description',
@@ -21,6 +26,11 @@ export const HeroBlock: Block = {
       label: 'Hero Description',
       localized: true,
       required: true,
+      admin: {
+        components: {
+          afterInput: ['/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton'],
+        },
+      },
     },
     {
       name: 'portraitHeroImage',
@@ -48,6 +58,13 @@ export const HeroBlock: Block = {
           type: 'text',
           localized: true,
           required: true,
+          admin: {
+            components: {
+              afterInput: [
+                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+              ],
+            },
+          },
         },
         {
           name: 'url',
