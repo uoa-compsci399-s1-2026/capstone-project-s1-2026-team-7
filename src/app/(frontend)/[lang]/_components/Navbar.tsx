@@ -14,7 +14,7 @@ type navbarProps = {
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { NavigationBarDTO } from '@/validation/navigationBar'
+import { NavigationBarDTO } from '@/features/navigationBar'
 
 export default function Navbar(props: navbarProps) {
   const [searchOpen, setSearchOpen] = useState(false)

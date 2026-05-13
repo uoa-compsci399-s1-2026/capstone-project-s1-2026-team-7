@@ -1,5 +1,5 @@
 import React from 'react'
-import { StudyDTO } from '@/validation/studies'
+import { StudyDTO } from '@/features/studies'
 import Link from 'next/link'
 import Image from 'next/image'
 import MainButton from '../_components/MainButton'

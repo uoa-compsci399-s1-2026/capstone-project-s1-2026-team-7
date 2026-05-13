@@ -6,7 +6,7 @@ import ResearchArticles from './ResearchArticles'
 import ResearchTopBar from './ResearchTopBar'
 import Pagination from './Pagination'
 import ResearchFilters from './ResearchFilters'
-import { ResearchDTO } from '@/validation'
+import { ResearchDTO } from '@/features'
 
 type Props = {
   categories: { id: number; title: string }[]

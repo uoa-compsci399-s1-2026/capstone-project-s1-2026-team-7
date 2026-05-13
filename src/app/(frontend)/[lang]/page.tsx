@@ -1,5 +1,5 @@
-import { getHomePage } from '@/queries/homepage'
-import type { HomepageDTO } from '@/validation'
+import { getHomePage } from '@/features/homepage/homepage.query'
+import type { HomepageDTO } from '@/features'
 import type { Lang } from '@/types/lang'
 import HomepageRenderer from './_components/homepage/HomepageRenderer'
 

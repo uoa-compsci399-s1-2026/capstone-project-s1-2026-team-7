@@ -3,7 +3,7 @@
 import { useActionState, useEffect, useRef } from 'react'
 import ContactInput from './ContactInput'
 import MainButton from '../../_components/MainButton'
-import type { EnquiryTagDTO } from '@/validation/contact/contact.schema'
+import type { EnquiryTagDTO } from '@/features/contact/contact.schema'
 import { type ContactFormState, contactFormInitialState } from '@/types/contact'
 
 type ContactFormProps = {

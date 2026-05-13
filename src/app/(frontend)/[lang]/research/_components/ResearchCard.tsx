@@ -1,4 +1,4 @@
-import { ResearchDTO } from '@/validation'
+import { ResearchDTO } from '@/features'
 import Link from 'next/link'
 
 type Props = {

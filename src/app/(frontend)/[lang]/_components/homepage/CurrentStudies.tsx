@@ -1,46 +1,42 @@
 import Link from 'next/link'
-import StudyPreviewCard from './StudyPreviewCard'
+import { getStudiesPage } from '@/features/studies'
+import type { Lang } from '@/types/lang'
+import StudySummaryCard from './StudySummaryCard'
+type CurrentStudiesProps = {
+  lang?: Lang
+  limit?: number
+}
 
-const currentStudies = [
-  {
-    title: 'NZ Synergy',
-    slug: 'nz-synergy-study',
-    imageUrl: '/nz-synergy.svg',
-    imageAlt: 'Participant in a nutrition study room',
-  },
-  {
-    title: 'Food & Beverage',
-    slug: 'food-and-beverage',
-    imageUrl: '/food-beverage.svg',
-    imageAlt: 'Food and beverage study image',
-  },
-]
+export default async function CurrentStudies({ lang = 'en', limit = 3 }: CurrentStudiesProps) {
+  const studiesPage = await getStudiesPage(lang)
+  const studies = studiesPage.studiesDisplay.slice(0, limit)
 
-export default function CurrentStudies() {
+  if (studies.length === 0) return null
+
   return (
-    <div>
-      <div className="mb-8 flex items-center justify-between">
-        <h2 className="text-xl font-bold text-[#08084f] md:text-2xl">Current Studies</h2>
+    <section className="bg-white px-6.5 py-10 md:px-8 md:py-20 lg:px-12">
+      <div className="mx-auto w-full max-w-287.5">
+        <div className="mb-8 flex items-center justify-between">
+          <h2 className="text-[16px] leading-tight font-extrabold text-[#08084f] sm:text-xl md:text-3xl lg:text-4xl">
+            Current Studies
+          </h2>
 
-        <Link
-          href="/en/studies"
-          className="text-base font-bold text-[#08084f] transition hover:opacity-70 md:text-xl"
-        >
-          Browse all studies &gt;
-        </Link>
-      </div>
-
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:gap-12">
-        {currentStudies.map((study) => (
-          <Link key={study.title} href={`en/studies/${study.slug}`}>
-            <StudyPreviewCard
-              title={study.title}
-              imageUrl={study.imageUrl}
-              imageAlt={study.imageAlt}
-            />
+          <Link
+            href={`/${lang}/studies`}
+            className="text-sm font-bold text-[#08084f] transition hover:opacity-70 md:text-lg"
+          >
+            Browse all studies &gt;
           </Link>
-        ))}
+        </div>
+
+        <div className="mt-4 h-0.75 w-16 rounded-full bg-[#08084f] md:h-1" />
+
+        <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+          {studies.map((study) => (
+            <StudySummaryCard key={study.id} study={study} lang={lang} />
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   )
 }

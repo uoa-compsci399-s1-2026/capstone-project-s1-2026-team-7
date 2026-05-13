@@ -1,8 +1,8 @@
 import ResearchHero from './_components/ResearchHero'
 import ResearchFilters from './_components/ResearchFilters'
 import { ResearchClient } from './_components/ResearchClient'
-import { getResearchPage } from '@/queries/researchpage'
-import { searchResearch } from '@/queries/searchResearch'
+import { getResearchPage } from '@/features/research/researchpage.query'
+import { searchResearch } from '@/features/research/searchResearch'
 
 export default async function page() {
   const researchpage = await getResearchPage()

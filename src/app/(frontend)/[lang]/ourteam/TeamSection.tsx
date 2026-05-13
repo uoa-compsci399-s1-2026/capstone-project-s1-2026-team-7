@@ -2,8 +2,8 @@
 import React from 'react'
 import ProfileCard from './Profile'
 import { useState } from 'react'
-import { OurTeamPageDTO } from '@/validation/our-team'
-import { StaffDTO } from '@/validation/our-team'
+import { OurTeamPageDTO } from '@/features/our-team'
+import { StaffDTO } from '@/features/our-team'
 import Banner from '../_components/Banner'
 
 export type teamSectionProps = {

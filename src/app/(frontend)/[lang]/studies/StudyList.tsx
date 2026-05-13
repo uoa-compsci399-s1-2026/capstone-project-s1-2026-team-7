@@ -1,5 +1,5 @@
 import React from 'react'
-import { StudiesPageDTO } from '@/validation/studies'
+import { StudiesPageDTO } from '@/features/studies'
 import StudyCard from './StudyCard'
 import Banner from '../_components/Banner'
 

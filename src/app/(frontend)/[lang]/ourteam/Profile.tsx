@@ -1,5 +1,5 @@
 import React from 'react'
-import { StaffDTO } from '@/validation/our-team'
+import { StaffDTO } from '@/features/our-team'
 import { Mail, UserRound } from 'lucide-react'
 import Image from 'next/image'
 export type ProfileProps = {

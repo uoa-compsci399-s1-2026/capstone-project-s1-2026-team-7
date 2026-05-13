@@ -653,6 +653,7 @@ export interface HomePage {
     | WhoWeAreBlock
     | WhatWeDoBlock
     | DonationSectionBlock
+    | CurrentStudiesBlock
   )[]
   seo?: {
     metaTitle?: string | null
@@ -741,6 +742,14 @@ export interface StatsBlock {
  * via the `definition` "TimelineBlock".
  */
 export interface TimelineBlock {
+  eyebrow: string
+  title: string
+  description: string
+  items: {
+    year: string
+    description: string
+    id?: string | null
+  }[]
   id?: string | null
   blockName?: string | null
   blockType: 'timeline'
@@ -750,6 +759,9 @@ export interface TimelineBlock {
  * via the `definition` "WhoWeAreBlock".
  */
 export interface WhoWeAreBlock {
+  title: string
+  description: string
+  image: number | Media
   id?: string | null
   blockName?: string | null
   blockType: 'who-we-are'
@@ -759,6 +771,16 @@ export interface WhoWeAreBlock {
  * via the `definition` "WhatWeDoBlock".
  */
 export interface WhatWeDoBlock {
+  title: string
+  sections: {
+    heading: string
+    items: {
+      text: string
+      id?: string | null
+    }[]
+    id?: string | null
+  }[]
+  image: number | Media
   id?: string | null
   blockName?: string | null
   blockType: 'what-we-do'
@@ -771,6 +793,15 @@ export interface DonationSectionBlock {
   id?: string | null
   blockName?: string | null
   blockType: 'donation-section'
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CurrentStudiesBlock".
+ */
+export interface CurrentStudiesBlock {
+  id?: string | null
+  blockName?: string | null
+  blockType: 'current-studies'
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -934,6 +965,7 @@ export interface HomePageSelect<T extends boolean = true> {
         'who-we-are'?: T | WhoWeAreBlockSelect<T>
         'what-we-do'?: T | WhatWeDoBlockSelect<T>
         'donation-section'?: T | DonationSectionBlockSelect<T>
+        'current-studies'?: T | CurrentStudiesBlockSelect<T>
       }
   seo?:
     | T
@@ -1019,6 +1051,16 @@ export interface StatsBlockSelect<T extends boolean = true> {
  * via the `definition` "TimelineBlock_select".
  */
 export interface TimelineBlockSelect<T extends boolean = true> {
+  eyebrow?: T
+  title?: T
+  description?: T
+  items?:
+    | T
+    | {
+        year?: T
+        description?: T
+        id?: T
+      }
   id?: T
   blockName?: T
 }
@@ -1027,6 +1069,9 @@ export interface TimelineBlockSelect<T extends boolean = true> {
  * via the `definition` "WhoWeAreBlock_select".
  */
 export interface WhoWeAreBlockSelect<T extends boolean = true> {
+  title?: T
+  description?: T
+  image?: T
   id?: T
   blockName?: T
 }
@@ -1035,6 +1080,20 @@ export interface WhoWeAreBlockSelect<T extends boolean = true> {
  * via the `definition` "WhatWeDoBlock_select".
  */
 export interface WhatWeDoBlockSelect<T extends boolean = true> {
+  title?: T
+  sections?:
+    | T
+    | {
+        heading?: T
+        items?:
+          | T
+          | {
+              text?: T
+              id?: T
+            }
+        id?: T
+      }
+  image?: T
   id?: T
   blockName?: T
 }
@@ -1043,6 +1102,14 @@ export interface WhatWeDoBlockSelect<T extends boolean = true> {
  * via the `definition` "DonationSectionBlock_select".
  */
 export interface DonationSectionBlockSelect<T extends boolean = true> {
+  id?: T
+  blockName?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CurrentStudiesBlock_select".
+ */
+export interface CurrentStudiesBlockSelect<T extends boolean = true> {
   id?: T
   blockName?: T
 }

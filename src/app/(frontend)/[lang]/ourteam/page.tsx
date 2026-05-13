@@ -1,16 +1,8 @@
-import React from 'react'
-import ProfileCard from './Profile'
 import TeamSection from './TeamSection'
-import { getOurTeamPage } from '@/queries/ourteampage'
-import { OurTeamPageDTO, StaffDTO } from '@/validation/our-team'
-import { select } from 'payload/shared'
+import { getOurTeamPage } from '@/features/our-team/ourteampage.query'
+import { OurTeamPageDTO } from '@/features/our-team'
 
 export default async function OurTeam() {
-  {
-    /* Import from backend*/
-  }
-
   const pageData: OurTeamPageDTO = await getOurTeamPage('en')
-
   return <TeamSection teamSection={pageData} />
 }

@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
+import { WhatWeDoBlockDTO } from '@/features/homepage'
 
 const whatWeDoItems = [
   {
@@ -34,13 +35,18 @@ const whatWeDoItems = [
   },
 ]
 
-function WhatWeDoSection() {
+type WhatWeDoSectionProps = {
+  data: WhatWeDoBlockDTO
+}
+
+function WhatWeDoSection({ data }: WhatWeDoSectionProps) {
+  const { title, blockType, sections } = data
   return (
     <section className="w-full bg-white px-[26px] py-5 md:px-8 lg:px-12">
       <div className="mx-auto w-full max-w-[1120px]">
         <div className="mb-[17px]">
           <h2 className="text-[22px] leading-tight font-extrabold text-[#08084f] sm:text-2xl md:text-[28px] lg:text-[32px] xl:text-4xl">
-            What We Do
+            {title}
           </h2>
 
           <div className="mt-3 h-[3px] w-16 rounded-full bg-[#08084f] sm:w-18 md:h-1 md:w-20 lg:w-22 xl:w-24" />
@@ -48,18 +54,18 @@ function WhatWeDoSection() {
 
         <div className="grid grid-cols-1 gap-[17px] md:grid-cols-[57fr_43fr] md:items-stretch lg:grid-cols-[63fr_37fr]">
           <div className="divide-y divide-gray-200 border-b border-gray-200">
-            {whatWeDoItems.map((item) => (
+            {sections.map((section) => (
               <div
-                key={item.title}
+                key={section.heading}
                 className="grid grid-cols-[95px_1fr] gap-3 py-8 sm:grid-cols-[105px_1fr] sm:gap-4 sm:py-9 md:grid-cols-[110px_1fr] md:gap-5 lg:grid-cols-[160px_1fr] lg:gap-6 lg:py-11 xl:grid-cols-[170px_1fr]"
               >
                 <h3 className="text-[15px] leading-tight font-bold text-[#1f2bd4] sm:text-base md:text-lg lg:text-xl xl:text-2xl">
-                  {item.title}
+                  {section.heading}
                 </h3>
 
                 <ul className="list-disc space-y-1 pl-4 text-[9px] leading-snug font-normal text-[#08084f] sm:text-xs lg:text-[16px]">
-                  {item.points.map((point) => (
-                    <li key={point}>{point}</li>
+                  {section.items.map((point) => (
+                    <li key={point.id}>{point.text}</li>
                   ))}
                 </ul>
               </div>
