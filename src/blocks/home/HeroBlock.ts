@@ -58,6 +58,13 @@ export const HeroBlock: Block = {
           type: 'text',
           localized: true,
           required: true,
+          admin: {
+            components: {
+              afterInput: [
+                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+              ],
+            },
+          },
         },
         {
           name: 'url',

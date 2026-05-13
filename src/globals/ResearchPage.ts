@@ -10,6 +10,11 @@ export const ResearchPage: GlobalConfig = {
       type: 'text',
       required: true,
       localized: true,
+      admin: {
+        components: {
+          afterInput: ['/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton'],
+        },
+      },
     },
     {
       name: 'portrait image',

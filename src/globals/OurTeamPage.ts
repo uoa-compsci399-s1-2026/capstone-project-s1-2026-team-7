@@ -9,6 +9,11 @@ export const OurTeamPage: GlobalConfig = {
       type: 'text',
       localized: true,
       required: true,
+      admin: {
+        components: {
+          afterInput: ['/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton'],
+        },
+      },
     },
 
     {
@@ -24,6 +29,11 @@ export const OurTeamPage: GlobalConfig = {
       required: true,
       localized: true,
       defaultValue: 'Board Of Directors',
+      admin: {
+        components: {
+          afterInput: ['/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton'],
+        },
+      },
     },
     {
       name: 'staffTabLabel',
@@ -31,6 +41,11 @@ export const OurTeamPage: GlobalConfig = {
       required: true,
       localized: true,
       defaultValue: 'Research Team',
+      admin: {
+        components: {
+          afterInput: ['/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton'],
+        },
+      },
     },
 
     {

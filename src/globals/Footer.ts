@@ -33,6 +33,13 @@ export const Footer: GlobalConfig = {
           label: 'Footer Title',
           required: true,
           localized: true,
+          admin: {
+            components: {
+              afterInput: [
+                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+              ],
+            },
+          },
         },
         {
           name: 'footerURL',
@@ -59,6 +66,13 @@ export const Footer: GlobalConfig = {
           label: 'Footer Title',
           required: true,
           localized: true,
+          admin: {
+            components: {
+              afterInput: [
+                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+              ],
+            },
+          },
         },
         {
           name: 'footerURL',
@@ -111,6 +125,13 @@ export const Footer: GlobalConfig = {
           label: 'Footer Title',
           required: true,
           localized: true,
+          admin: {
+            components: {
+              afterInput: [
+                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+              ],
+            },
+          },
         },
         {
           name: 'footerURL',
