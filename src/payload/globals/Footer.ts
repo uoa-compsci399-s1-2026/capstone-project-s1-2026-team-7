@@ -36,7 +36,7 @@ export const Footer: GlobalConfig = {
           admin: {
             components: {
               afterInput: [
-                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+                '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
               ],
             },
           },
@@ -69,7 +69,7 @@ export const Footer: GlobalConfig = {
           admin: {
             components: {
               afterInput: [
-                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+                '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
               ],
             },
           },
@@ -128,7 +128,7 @@ export const Footer: GlobalConfig = {
           admin: {
             components: {
               afterInput: [
-                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+                '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
               ],
             },
           },

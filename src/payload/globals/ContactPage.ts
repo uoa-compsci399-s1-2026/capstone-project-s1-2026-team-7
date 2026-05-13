@@ -13,7 +13,9 @@ export const ContactPage: GlobalConfig = {
       defaultValue: 'Contact Us',
       admin: {
         components: {
-          afterInput: ['/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton'],
+          afterInput: [
+            '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+          ],
         },
       },
     },
@@ -38,7 +40,7 @@ export const ContactPage: GlobalConfig = {
           admin: {
             components: {
               afterInput: [
-                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+                '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
               ],
             },
           },
@@ -52,7 +54,7 @@ export const ContactPage: GlobalConfig = {
           admin: {
             components: {
               afterInput: [
-                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+                '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
               ],
             },
           },
@@ -66,7 +68,7 @@ export const ContactPage: GlobalConfig = {
           admin: {
             components: {
               afterInput: [
-                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+                '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
               ],
             },
           },
@@ -80,7 +82,7 @@ export const ContactPage: GlobalConfig = {
           admin: {
             components: {
               afterInput: [
-                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+                '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
               ],
             },
           },
@@ -114,7 +116,7 @@ export const ContactPage: GlobalConfig = {
           admin: {
             components: {
               afterInput: [
-                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+                '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
               ],
             },
           },
@@ -133,7 +135,7 @@ export const ContactPage: GlobalConfig = {
           admin: {
             components: {
               afterInput: [
-                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+                '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
               ],
             },
           },

@@ -34,7 +34,7 @@ export const NavigationBar: GlobalConfig = {
           admin: {
             components: {
               afterInput: [
-                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+                '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
               ],
             },
           },

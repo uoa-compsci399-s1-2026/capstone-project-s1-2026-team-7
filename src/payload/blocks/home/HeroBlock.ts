@@ -16,7 +16,9 @@ export const HeroBlock: Block = {
       required: true,
       admin: {
         components: {
-          afterInput: ['/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton'],
+          afterInput: [
+            '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+          ],
         },
       },
     },
@@ -28,7 +30,9 @@ export const HeroBlock: Block = {
       required: true,
       admin: {
         components: {
-          afterInput: ['/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton'],
+          afterInput: [
+            '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+          ],
         },
       },
     },
@@ -61,7 +65,7 @@ export const HeroBlock: Block = {
           admin: {
             components: {
               afterInput: [
-                '/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+                '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
               ],
             },
           },

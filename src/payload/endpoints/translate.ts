@@ -1,5 +1,5 @@
 import type { Endpoint } from 'payload'
-import { translateText } from '../lib/translate'
+import { translateText } from '../../lib/translate'
 
 export const translateEndpoint: Endpoint = {
   path: '/translate',

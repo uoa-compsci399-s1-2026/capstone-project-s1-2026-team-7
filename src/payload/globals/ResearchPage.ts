@@ -12,7 +12,9 @@ export const ResearchPage: GlobalConfig = {
       localized: true,
       admin: {
         components: {
-          afterInput: ['/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton'],
+          afterInput: [
+            '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+          ],
         },
       },
     },

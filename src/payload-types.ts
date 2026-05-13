@@ -750,6 +750,9 @@ export interface TimelineBlock {
  * via the `definition` "WhoWeAreBlock".
  */
 export interface WhoWeAreBlock {
+  title: string
+  description: string
+  image: number | Media
   id?: string | null
   blockName?: string | null
   blockType: 'who-we-are'
@@ -1027,6 +1030,9 @@ export interface TimelineBlockSelect<T extends boolean = true> {
  * via the `definition` "WhoWeAreBlock_select".
  */
 export interface WhoWeAreBlockSelect<T extends boolean = true> {
+  title?: T
+  description?: T
+  image?: T
   id?: T
   blockName?: T
 }

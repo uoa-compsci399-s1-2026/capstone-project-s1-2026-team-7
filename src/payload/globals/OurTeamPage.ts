@@ -11,7 +11,9 @@ export const OurTeamPage: GlobalConfig = {
       required: true,
       admin: {
         components: {
-          afterInput: ['/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton'],
+          afterInput: [
+            '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+          ],
         },
       },
     },
@@ -31,7 +33,9 @@ export const OurTeamPage: GlobalConfig = {
       defaultValue: 'Board Of Directors',
       admin: {
         components: {
-          afterInput: ['/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton'],
+          afterInput: [
+            '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+          ],
         },
       },
     },
@@ -43,7 +47,9 @@ export const OurTeamPage: GlobalConfig = {
       defaultValue: 'Research Team',
       admin: {
         components: {
-          afterInput: ['/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton'],
+          afterInput: [
+            '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+          ],
         },
       },
     },

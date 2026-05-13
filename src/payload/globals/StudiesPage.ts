@@ -11,7 +11,9 @@ export const StudiesPage: GlobalConfig = {
       required: true,
       admin: {
         components: {
-          afterInput: ['/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton'],
+          afterInput: [
+            '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
+          ],
         },
       },
     },
