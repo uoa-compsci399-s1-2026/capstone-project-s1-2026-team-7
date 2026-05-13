@@ -10,7 +10,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
   const { title, description, heroHorizontal } = data
 
   return (
-    <section className="relative isolate min-h-[560px] w-full overflow-hidden bg-[linear-gradient(180deg,#3636B7_0%,#3434B0_0.01%,#272785_13.16%,#181851_74.52%)] md:min-h-[520px] lg:min-h-[540px]">
+    <section className="relative isolate min-h-[560px] w-full overflow-hidden md:min-h-[520px] lg:min-h-[540px]">
       {/* Background image from CMS */}
       {heroHorizontal.url && (
         <Image
@@ -20,7 +20,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
           priority
           quality={100}
           sizes="100vw"
-          className="object-cover object-center opacity-[0.75] mix-blend-multiply"
+          className="object-cover object-center"
         />
       )}
 
