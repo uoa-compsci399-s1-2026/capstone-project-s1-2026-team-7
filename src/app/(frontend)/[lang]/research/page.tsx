@@ -3,9 +3,18 @@ import ResearchFilters from './_components/ResearchFilters'
 import { ResearchClient } from './_components/ResearchClient'
 import { getResearchPage } from '@/features/research/researchpage.query'
 import { searchResearch } from '@/features/research/searchResearch'
+import { Lang } from '@/types/lang'
 
-export default async function page() {
-  const researchpage = await getResearchPage()
+type PageProps = {
+  params: Promise<{
+    lang: Lang
+  }>
+}
+
+export default async function page({ params }: PageProps) {
+  const { lang } = await params
+  const researchpage = await getResearchPage(lang)
+
   const researchResult = await searchResearch({
     page: 1,
     limit: 16,

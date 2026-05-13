@@ -7,7 +7,7 @@ type HeroSectionProps = {
 }
 
 export default function HeroSection({ data }: HeroSectionProps) {
-  const { title, description, heroHorizontal } = data
+  const { title, description, heroHorizontal, buttons } = data
 
   return (
     <section className="relative isolate min-h-[560px] w-full overflow-hidden md:min-h-[520px] lg:min-h-[540px]">
@@ -37,8 +37,13 @@ export default function HeroSection({ data }: HeroSectionProps) {
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-3 md:justify-start [&_button]:border-3 [&_button]:px-4 [&_button]:py-2">
-            <MainButton title="Read more" variant="primary" />
-            <MainButton title="Participate in a Study" variant="secondary" />
+            {buttons.map((button) => (
+              <MainButton
+                key={button.id || button.label}
+                title={button.label}
+                variant={button.variant}
+              />
+            ))}
           </div>
         </div>
 
