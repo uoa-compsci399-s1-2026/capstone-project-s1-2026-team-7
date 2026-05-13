@@ -113,6 +113,9 @@ jobs:
       - name: Sync Neon branch and write .env
         run: node scripts/sync-neon-branch.mjs
 
+      - name: Run Payload migrations
+        run: npm run payload -- migrate
+
       - name: Install Playwright browsers
         run: npx playwright install chromium --with-deps
 
