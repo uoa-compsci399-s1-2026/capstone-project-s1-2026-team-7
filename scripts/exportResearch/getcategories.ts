@@ -154,12 +154,12 @@ async function callBedrockForCategories(
   const region = process.env.S3_REGION
   const modelId = MODEL_ID
 
-  const accessKeyId = process.env.AWS_ACCESS_KEY
+  const accessKeyId = process.env.AWS_ACCESS_KEY_ID
   const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
 
   if (!accessKeyId || !secretAccessKey) {
     throw new Error(
-      'Missing AWS credentials. Add AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY or AWS_ACCESS_KEY/AWS_SECRET_ACCESS_KEY to .env.',
+      'Missing AWS credentials. Add AWS_ACCESS_KEY_ID_ID/AWS_SECRET_ACCESS_KEY or AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY to .env.',
     )
   }
 
