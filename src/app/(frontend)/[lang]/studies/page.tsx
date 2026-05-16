@@ -1,7 +1,7 @@
 import React from 'react'
 import { getStudiesPage } from '@/features/studies/studiespage.query'
 import { StudiesPageDTO } from '@/features/studies'
-import StudyList from './StudyList'
+import StudyList from './_components/StudyList'
 import { Lang } from '@/types/lang'
 
 type PageProps = {

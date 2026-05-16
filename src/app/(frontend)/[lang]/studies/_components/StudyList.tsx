@@ -1,7 +1,7 @@
 import React from 'react'
 import { StudiesPageDTO } from '@/features/studies'
 import StudyCard from './StudyCard'
-import Banner from '../_components/Banner'
+import Banner from '../../_components/Banner'
 
 export type StudyListProps = {
   studypage: StudiesPageDTO
