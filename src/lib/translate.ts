@@ -7,7 +7,7 @@ export async function translateText(text: string) {
 
   if (!accessKeyId || !secretAccessKey) {
     throw new Error(
-      'Missing AWS credentials. Check AWS_ACCESS_KEY_ID_ID and AWS_SECRET_ACCESS_KEY in .env.local',
+      'Missing AWS credentials. Check AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY in .env.local',
     )
   }
 
