@@ -69,6 +69,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
     push: autopush,
+    migrationDir: path.resolve(process.cwd(), 'migrations'),
   }),
   sharp,
   plugins: [
