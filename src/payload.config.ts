@@ -82,6 +82,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
     push: autopush,
+    migrationDir: path.resolve(process.cwd(), 'migrations'),
   }),
   sharp,
   plugins: [
@@ -92,7 +93,7 @@ export default buildConfig({
       bucket: process.env.S3_BUCKET || '',
       config: {
         credentials: {
-          accessKeyId: process.env.AWS_ACCESS_KEY || '',
+          accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
           secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
         },
         region: process.env.S3_REGION,
