@@ -165,6 +165,7 @@ Special thanks to:
 ## Contributors
 
 - James Mullane — Full Stack Developer
+- Ayush Kumar — Frontend Developer & Design
 
 ---
 
