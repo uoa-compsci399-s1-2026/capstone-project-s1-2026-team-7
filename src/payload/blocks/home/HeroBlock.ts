@@ -74,6 +74,11 @@ export const HeroBlock: Block = {
           name: 'url',
           type: 'text',
           required: true,
+          validate: (val: string | null | undefined) => {
+            if (!val) return 'URL is required'
+            if (/^(\/|#|https?:\/\/)/.test(val)) return true
+            return 'Must start with /, #, or http(s)://'
+          },
         },
         {
           name: 'variant',

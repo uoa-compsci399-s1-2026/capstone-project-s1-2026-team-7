@@ -2,8 +2,6 @@ import React from 'react'
 import { StudyDTO } from '@/features/studies'
 import Link from 'next/link'
 import Image from 'next/image'
-import HrefButton from '../../_components/HrefButton'
-
 export type StudyCardProps = {
   study: StudyDTO
 }
