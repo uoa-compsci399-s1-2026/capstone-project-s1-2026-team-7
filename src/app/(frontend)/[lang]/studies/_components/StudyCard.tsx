@@ -2,8 +2,6 @@ import React from 'react'
 import { StudyDTO } from '@/features/studies'
 import Link from 'next/link'
 import Image from 'next/image'
-import MainButton from '../../_components/MainButton'
-
 export type StudyCardProps = {
   study: StudyDTO
 }
@@ -69,8 +67,6 @@ export default function StudyCard({ study }: StudyCardProps) {
                 <div className="text-sm text-gray-900">{study.eligibility}</div>
               </div>
             </div>
-
-            <MainButton title="View Details →" variant="primary" />
           </div>
         </div>
       </div>

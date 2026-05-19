@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import MainButton from '../MainButton'
+import HrefButton from '../HrefButton'
 import type { HeroBlockDTO } from '@/features/homepage/home.schema'
 
 type HeroSectionProps = {
@@ -38,10 +39,11 @@ export default function HeroSection({ data }: HeroSectionProps) {
 
           <div className="mt-8 flex flex-wrap justify-center gap-3 md:justify-start [&_button]:border-3 [&_button]:px-4 [&_button]:py-2">
             {buttons.map((button) => (
-              <MainButton
+              <HrefButton
                 key={button.id || button.label}
                 title={button.label}
                 variant={button.variant}
+                href={button.url}
               />
             ))}
           </div>

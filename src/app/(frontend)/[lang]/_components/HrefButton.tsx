@@ -1,12 +1,10 @@
-import { ButtonHTMLAttributes, MouseEventHandler } from 'react'
+import Link from 'next/link'
 import { Variant } from '@/types/variant'
 
-type MainButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+interface HrefButtonProps {
   title: string
-  onClick?: MouseEventHandler<HTMLButtonElement>
-  type?: 'button' | 'submit' | 'reset'
-
   variant: Variant
+  href: string
 }
 
 const baseClasses =
@@ -20,12 +18,12 @@ const variantClasses: Record<Variant, string> = {
   grey: 'border border-gray-300 bg-white text-black hover:-translate-y-0.5 hover:bg-gray-100 hover:shadow-md',
 }
 
-export default function MainButton({ title, variant, ...props }: MainButtonProps) {
+export default function HrefButton({ title, variant, href }: HrefButtonProps) {
   const className = `${baseClasses} ${variantClasses[variant]}`
 
   return (
-    <button {...props} className={className}>
+    <Link href={href} className={className}>
       {title}
-    </button>
+    </Link>
   )
 }

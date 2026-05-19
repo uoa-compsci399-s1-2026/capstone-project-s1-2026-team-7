@@ -8,7 +8,7 @@ type WhoWeAreBlockProps = {
 export default function WhoWeAreSection({ data }: WhoWeAreBlockProps) {
   const { title, description, image } = data
   return (
-    <section className="w-full bg-white px-6.5 py-8 md:px-8 md:py-12 lg:px-12">
+    <section id="who-we-are" className="w-full bg-white px-6.5 py-8 md:px-8 md:py-12 lg:px-12">
       <div className="mx-auto w-full max-w-287.5">
         <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-[42%_52%] md:gap-[6%]">
           {/* Text - first on mobile, right on desktop */}
