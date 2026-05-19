@@ -22,6 +22,8 @@ import { StrikethroughFeatureClient as StrikethroughFeatureClient_e70f5e05f09f93
 import { UnderlineFeatureClient as UnderlineFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { BoldFeatureClient as BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
+import { HNUIcon as HNUIcon_8626532e401102f7c77f9596f9cb4e05 } from '../../../payload/components/admin/HNUIcon'
+import { HNULogo as HNULogo_8a91984c01b16801db0c11c1eff8e804 } from '../../../payload/components/admin/HNULogo'
 import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
@@ -74,6 +76,8 @@ export const importMap = {
     BoldFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   '@payloadcms/richtext-lexical/client#ItalicFeatureClient':
     ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
+  '/payload/components/admin/HNUIcon#HNUIcon': HNUIcon_8626532e401102f7c77f9596f9cb4e05,
+  '/payload/components/admin/HNULogo#HNULogo': HNULogo_8a91984c01b16801db0c11c1eff8e804,
   '@payloadcms/storage-s3/client#S3ClientUploadHandler':
     S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24,
   '@payloadcms/next/rsc#CollectionCards': CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1,

@@ -34,6 +34,19 @@ export default buildConfig({
     importMap: {
       baseDir: path.resolve(dirname),
     },
+    theme: 'light',
+    meta: {
+      titleSuffix: ' — HNU Admin',
+      title: 'HNU Admin',
+      description: 'Human Nutrition Unit content management',
+      icons: [{ rel: 'icon', type: 'image/png', url: '/HNU%20logo%20HD.png' }],
+    },
+    components: {
+      graphics: {
+        Logo: '/payload/components/admin/HNULogo#HNULogo',
+        Icon: '/payload/components/admin/HNUIcon#HNUIcon',
+      },
+    },
   },
 
   email: nodemailerAdapter({
