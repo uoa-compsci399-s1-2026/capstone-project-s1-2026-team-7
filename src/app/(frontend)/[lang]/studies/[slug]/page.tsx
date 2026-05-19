@@ -4,12 +4,12 @@ import { getStudiesPage } from '@/features/studies/studiespage.query'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import Banner from '../../_components/Banner'
-import HeroStats from './HeroStats'
-import AboutSection from './AboutSection'
-import ParticipationList from './ParticipationList'
-import EligibilityCriteria from './EligibilityCriteria'
-import FAQList from './FAQList'
-import StickySidebar from './StickySidebar'
+import HeroStats from './_components/HeroStats'
+import AboutSection from './_components/AboutSection'
+import ParticipationList from './_components/ParticipationList'
+import EligibilityCriteria from './_components/EligibilityCriteria'
+import FAQList from './_components/FAQList'
+import StickySidebar from './_components/StickySidebar'
 
 export type StudiesPageProps = {
   params: Promise<{

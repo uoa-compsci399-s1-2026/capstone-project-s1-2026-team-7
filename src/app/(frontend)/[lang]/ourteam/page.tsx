@@ -1,4 +1,4 @@
-import TeamSection from './TeamSection'
+import TeamSection from './_components/TeamSection'
 import { getOurTeamPage } from '@/features/our-team/ourteampage.query'
 import { OurTeamPageDTO } from '@/features/our-team'
 import { Lang } from '@/types/lang'
