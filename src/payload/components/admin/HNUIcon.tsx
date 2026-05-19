@@ -1,17 +1,12 @@
-import React from 'react'
+import Image from 'next/image'
 
 export function HNUIcon() {
   return (
-    <img
+    <Image
       src="/HNU%20logo%20HD.png"
       alt="HNU"
-      style={{
-        height: 32,
-        width: 'auto',
-        maxWidth: 'none',
-        objectFit: 'contain',
-        display: 'block',
-      }}
+      width={120}
+      height={90} // tweak width/height here to fit
     />
   )
 }

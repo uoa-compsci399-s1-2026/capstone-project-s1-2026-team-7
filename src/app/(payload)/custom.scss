@@ -13,12 +13,16 @@
 
 .payload__logo,
 .nav__brand img,
-.nav-toggler img {
+.nav-toggler img,
+.app-header .graphic-icon,
+.nav .graphic-icon {
   max-height: 48px;
   max-width: none;
   width: auto;
+  height: 48px;
   object-fit: contain;
 }
+
 .dashboard {
   padding-top: 1rem;
 }

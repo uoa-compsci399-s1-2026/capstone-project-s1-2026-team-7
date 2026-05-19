@@ -1,32 +1,24 @@
-import { usePathname, useRouter } from 'next/navigation'
+'use client'
+
 import { useState, useRef, useEffect, HTMLAttributes } from 'react'
 import type { Lang } from '@/types/lang'
 import { languages } from '@/types/lang'
 import { cn } from '@/lib/utils'
 import { Icon } from './icons'
+import { useLanguage } from '@/context/LanguageContext'
 
-type LanguageDropdownProps = HTMLAttributes<HTMLDivElement> & {
-  currentLang: Lang
-}
+type LanguageDropdownProps = HTMLAttributes<HTMLDivElement>
 
 export const LanguageDropdown = (props: LanguageDropdownProps) => {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
-  const router = useRouter()
-  const pathname = usePathname()
+  const { lang, setLang } = useLanguage()
 
-  const selected = languages.find((lang) => lang.code === props.currentLang) ?? languages[0]
+  const selected = languages.find((l) => l.code === lang) ?? languages[0]
 
-  const changeLanguage = (newLang: Lang) => {
-    const segments = pathname.split('/')
-    if (segments[1] === 'en' || segments[1] === 'zh') {
-      segments[1] = newLang
-    } else {
-      segments.splice(1, 0, newLang)
-    }
-
-    router.push(segments.join('/'))
+  const handleSelect = (newLang: Lang) => {
+    setLang(newLang)
     setOpen(false)
   }
 
@@ -60,16 +52,16 @@ export const LanguageDropdown = (props: LanguageDropdownProps) => {
 
       {open && (
         <div className="absolute left-0 top-[calc(100%+6px)] z-50 min-w-32.5 overflow-hidden rounded-xl border border-[#C9CDD4] bg-white shadow-md">
-          {languages.map((lang) => (
+          {languages.map((l) => (
             <button
-              key={lang.code}
-              onClick={() => changeLanguage(lang.code as Lang)}
+              key={l.code}
+              onClick={() => handleSelect(l.code as Lang)}
               className={cn(
                 'flex w-full items-center gap-2 px-3 py-2 text-left text-[12px] font-medium text-[#0C0C48] transition hover:bg-[#F2F4F7]',
-                selected.code === lang.code && 'bg-[#F2F4F7]',
+                selected.code === l.code && 'bg-[#F2F4F7]',
               )}
             >
-              <span>{lang.label}</span>
+              <span>{l.label}</span>
             </button>
           ))}
         </div>

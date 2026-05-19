@@ -4,22 +4,22 @@ import { cn } from '@/lib/utils'
 import { Icon } from './icons'
 import { LanguageDropdown } from './LanguageDropdown'
 import { useRouter } from 'next/navigation'
-import type { Lang } from '@/types/lang'
 import getLocalizedHref from '@/lib/localizedHref'
-
-type navbarProps = {
-  data: NavigationBarDTO
-  language: Lang
-}
+import { useLanguage } from '@/context/LanguageContext'
 
 import Link from 'next/link'
 import Image from 'next/image'
 import { NavigationBarDTO } from '@/features/navigationBar'
 
+type navbarProps = {
+  data: NavigationBarDTO
+}
+
 export default function Navbar(props: navbarProps) {
   const [searchOpen, setSearchOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const router = useRouter()
+  const { lang } = useLanguage()
 
   return (
     <>
@@ -28,7 +28,7 @@ export default function Navbar(props: navbarProps) {
         <div className="fixed inset-0 z-50 flex flex-col bg-[#F7F7F7] md:hidden">
           {/* Top row — mirrors the header */}
           <div className="flex h-17 shrink-0 items-center justify-between px-4">
-            <NavigationLogos data={props.data} language={props.language} />
+            <NavigationLogos data={props.data} />
             <button
               onClick={() => setMobileMenuOpen(false)}
               aria-label="Close menu"
@@ -43,7 +43,7 @@ export default function Navbar(props: navbarProps) {
             {props.data.navbarLinks.map((item, index) => (
               <Link
                 key={index}
-                href={getLocalizedHref(item.navURL, props.language)}
+                href={getLocalizedHref(item.navURL, lang)}
                 className="border-b border-[#E8E8E8] py-4 text-[22px] font-medium text-[#0C0C48] transition hover:opacity-70"
               >
                 {item.navTitle}
@@ -69,7 +69,7 @@ export default function Navbar(props: navbarProps) {
               </button>
             </div>
             <button
-              onClick={() => router.push(`/${props.language}/contact`)}
+              onClick={() => router.push(`/${lang}/contact`)}
               className="h-11 w-full rounded-full bg-[#2F3FE6] text-[13px] font-medium text-white transition hover:opacity-90"
             >
               Contact
@@ -80,13 +80,13 @@ export default function Navbar(props: navbarProps) {
 
       <header className="w-full border-b border-border bg-[#F7F7F7]">
         <div className="mx-auto flex h-17 max-w-360 items-center justify-between px-8 max-md:px-4">
-          <NavigationLogos data={props.data} language={props.language} />
+          <NavigationLogos data={props.data} />
           {!searchOpen && (
             <nav className="hidden md:flex items-center gap-8 text-[#0C0C48]">
               {props.data.navbarLinks.map((item, index) => (
                 <Link
                   key={index}
-                  href={getLocalizedHref(item.navURL, props.language)}
+                  href={getLocalizedHref(item.navURL, lang)}
                   className="text-[#0C0C48] text-[13px] font-medium transition hover:opacity-70"
                 >
                   {item.navTitle}
@@ -98,14 +98,8 @@ export default function Navbar(props: navbarProps) {
           <div className="flex items-center gap-3">
             {!searchOpen ? (
               <>
-                {/* should hide on mobile */}
-                <LanguageDropdown className="hidden md:inline-flex" currentLang={props.language} />
-                {/* should hide on mobile */}
-                <ContactButton
-                  language={props.language}
-                  className="hidden md:inline-flex h-8 w-18 items-center justify-center rounded-full bg-[#2F3FE6] text-[12px] font-medium text-white transition hover:opacity-90"
-                />
-                {/* always on */}
+                <LanguageDropdown className="hidden md:inline-flex" />
+                <ContactButton className="hidden md:inline-flex h-8 w-18 items-center justify-center rounded-full bg-[#2F3FE6] text-[12px] font-medium text-white transition hover:opacity-90" />
                 <SearchButton
                   className=""
                   onClick={() => {
@@ -113,7 +107,6 @@ export default function Navbar(props: navbarProps) {
                     setMobileMenuOpen(false)
                   }}
                 />
-                {/* should hidden on desktop */}
                 <MenuButton className="" onClick={() => setMobileMenuOpen((prev) => !prev)} />
               </>
             ) : (
@@ -151,14 +144,19 @@ export const NavigationButton = ({ children }: PropsWithChildren) => {
   )
 }
 
-export const NavigationLogos = (props: navbarProps) => {
+type NavigationLogosProps = {
+  data: NavigationBarDTO
+}
+
+export const NavigationLogos = ({ data }: NavigationLogosProps) => {
+  const { lang } = useLanguage()
   return (
     <div className="flex shrink-0 items-center gap-4 max-md:gap-3">
       <div className="flex items-center shrink-0 relative h-8 w-16">
-        <Link href={`/${props.language}`}>
+        <Link href={`/${lang}`}>
           <Image
-            src={props.data.uoaLogo.url}
-            alt={props.data.uoaLogo.alt}
+            src={data.uoaLogo.url}
+            alt={data.uoaLogo.alt}
             sizes="80px"
             fill
             className="object-contain"
@@ -167,10 +165,10 @@ export const NavigationLogos = (props: navbarProps) => {
       </div>
       <div className="h-9 w-px bg-[#BFC4CC]" />
       <div className="flex h-8 items-center shrink-0 w-16 relative">
-        <Link href={`/${props.language}`}>
+        <Link href={`/${lang}`}>
           <Image
-            src={props.data.hnuLogo.url}
-            alt={props.data.hnuLogo.alt}
+            src={data.hnuLogo.url}
+            alt={data.hnuLogo.alt}
             fill
             sizes="80px"
             className="object-contain"
@@ -182,14 +180,14 @@ export const NavigationLogos = (props: navbarProps) => {
 }
 
 type ContactButtonProps = {
-  language: Lang
   className: string
 }
 
-const ContactButton = ({ language, className }: ContactButtonProps) => {
+const ContactButton = ({ className }: ContactButtonProps) => {
   const router = useRouter()
+  const { lang } = useLanguage()
   return (
-    <button onClick={() => router.push(`/${language}/contact`)} className={className}>
+    <button onClick={() => router.push(`/${lang}/contact`)} className={className}>
       Contact
     </button>
   )
