@@ -81,12 +81,48 @@ export const researchCsvImportEndpoint: Endpoint = {
       kind: 'imports',
     })
 
-    const result = await uploadResearchCsvContent(content, { dryRun })
+    const encoder = new TextEncoder()
+    const stream = new ReadableStream<Uint8Array>({
+      start(controller) {
+        const write = (obj: unknown) => {
+          try {
+            controller.enqueue(encoder.encode(JSON.stringify(obj) + '\n'))
+          } catch {}
+        }
 
-    return Response.json({
-      ...result,
-      s3Bucket: storedCsv.bucket,
-      s3Key: storedCsv.key,
+        ;(async () => {
+          try {
+            const result = await uploadResearchCsvContent(content, {
+              dryRun,
+              onProgress: (evt) => {
+                write({ type: 'progress', ...evt })
+              },
+            })
+            write({
+              type: 'complete',
+              result: { ...result, s3Bucket: storedCsv.bucket, s3Key: storedCsv.key },
+            })
+          } catch (error) {
+            write({
+              type: 'error',
+              error: error instanceof Error ? error.message : 'CSV import failed.',
+            })
+          } finally {
+            try {
+              controller.close()
+            } catch {}
+          }
+        })()
+      },
+    })
+
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'application/x-ndjson; charset=utf-8',
+        'Cache-Control': 'no-cache, no-transform',
+        'X-Accel-Buffering': 'no',
+        'Content-Encoding': 'identity',
+      },
     })
   },
 }

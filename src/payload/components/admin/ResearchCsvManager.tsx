@@ -70,6 +70,7 @@ export function ResearchCsvManager() {
   const [message, setMessage] = useState<StatusMessage | null>(null)
   const [importResult, setImportResult] = useState<ImportResult | null>(null)
   const [exportS3Key, setExportS3Key] = useState<string | null>(null)
+  const [lastProgress, setLastProgress] = useState<string | null>(null)
 
   async function handleExport() {
     setExporting(true)
@@ -116,17 +117,16 @@ export function ResearchCsvManager() {
     setMessage(null)
     setImportResult(null)
     setExportS3Key(null)
+    setLastProgress(null)
 
     try {
       const file = fileInputRef.current?.files?.[0]
-
       if (!file) {
         throw new Error('Choose a CSV file first.')
       }
 
       const formData = new FormData()
       formData.append('file', file)
-      //formData.append('dryRun', String(dryRun))
 
       const response = await fetch('/api/research-csv/import', {
         method: 'POST',
@@ -134,17 +134,63 @@ export function ResearchCsvManager() {
         body: formData,
       })
 
-      const result = await response.json()
-
       if (!response.ok) {
-        throw new Error(result?.error ?? 'CSV import failed.')
+        const error = await response.json().catch(() => null)
+        throw new Error(error?.error ?? 'CSV import failed.')
       }
 
-      setImportResult(result)
-      setMessage({
-        tone: 'success',
-        text: 'Import complete.',
-      })
+      if (!response.body) {
+        throw new Error('No response body.')
+      }
+
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder()
+      let buffer = ''
+      let finalResult: ImportResult | null = null
+      let streamError: string | null = null
+
+      const handleEvent = (raw: string) => {
+        const line = raw.trim()
+        if (!line) return
+
+        let evt: any
+        try {
+          evt = JSON.parse(line)
+        } catch {
+          return
+        }
+
+        if (evt.type === 'progress') {
+          const suffix = evt.error ? ` — ${evt.error}` : ''
+          const text = `${evt.status} row ${evt.index}/${evt.total}: ${evt.title}${suffix}`
+          setLastProgress(text)
+        } else if (evt.type === 'complete') {
+          finalResult = evt.result as ImportResult
+        } else if (evt.type === 'error') {
+          streamError = String(evt.error ?? 'CSV import failed.')
+        }
+      }
+
+      while (true) {
+        const { value, done } = await reader.read()
+        if (done) break
+        buffer += decoder.decode(value, { stream: true })
+
+        let newlineIndex = buffer.indexOf('\n')
+        while (newlineIndex !== -1) {
+          handleEvent(buffer.slice(0, newlineIndex))
+          buffer = buffer.slice(newlineIndex + 1)
+          newlineIndex = buffer.indexOf('\n')
+        }
+      }
+
+      if (buffer.trim()) handleEvent(buffer)
+
+      if (streamError) throw new Error(streamError)
+      if (!finalResult) throw new Error('Import ended without a result.')
+
+      setImportResult(finalResult)
+      setMessage({ tone: 'success', text: 'Import complete.' })
     } catch (error) {
       setMessage({
         tone: 'error',
@@ -206,7 +252,6 @@ export function ResearchCsvManager() {
               Upload a CSV with columns: title, doi, url, publicationDate, staffIds, and optional
               categories. The uploaded file is stored in S3 before the CMS import runs.
             </p>
-
             <form onSubmit={handleImport}>
               <input
                 ref={fileInputRef}
@@ -220,6 +265,23 @@ export function ResearchCsvManager() {
                 {importing ? 'Importing...' : 'Import CSV to CMS'}
               </button>
             </form>
+
+            {(importing || lastProgress) && (
+              <div
+                style={{
+                  marginTop: '1rem',
+                  fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+                  fontSize: '0.85rem',
+                  color: '#0c0c48',
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+                title={lastProgress ?? undefined}
+              >
+                {lastProgress ?? 'Importing… waiting for first row.'}
+              </div>
+            )}
           </section>
         </div>
 

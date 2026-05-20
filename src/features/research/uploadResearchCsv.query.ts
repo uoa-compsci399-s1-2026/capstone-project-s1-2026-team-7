@@ -22,6 +22,14 @@ type ParsedResearchRow = {
   categoryNames: string[]
 }
 
+export type UploadResearchCsvProgressEvent = {
+  index: number
+  total: number
+  status: 'created' | 'updated' | 'skipped' | 'failed'
+  title: string
+  error?: string
+}
+
 export type UploadResearchCsvResult = {
   totalRows: number
   validRows: number
@@ -227,9 +235,11 @@ export async function uploadResearchCsvContent(
   content: string,
   options?: {
     dryRun?: boolean
+    onProgress?: (event: UploadResearchCsvProgressEvent) => void
   },
 ): Promise<UploadResearchCsvResult> {
   const dryRun = options?.dryRun ?? false
+  const onProgress = options?.onProgress
   const rawRows = parseCsv(content)
 
   const rows = rawRows
@@ -245,6 +255,12 @@ export async function uploadResearchCsvContent(
     try {
       if (dryRun) {
         console.log(`[DRY RUN] Would upload row ${index + 1}: ${row.title}`)
+        onProgress?.({
+          index: index + 1,
+          total: rows.length,
+          status: 'skipped',
+          title: row.title,
+        })
         continue
       }
 
@@ -268,10 +284,24 @@ export async function uploadResearchCsvContent(
       }
 
       console.log(`${result.status} row ${index + 1}/${rows.length}: ${row.title}`)
+      onProgress?.({
+        index: index + 1,
+        total: rows.length,
+        status:
+          result.status === 'created' || result.status === 'updated' ? result.status : 'skipped',
+        title: row.title,
+      })
     } catch (error) {
       failedRows++
       console.error(`Failed to upload row ${index + 1}: ${row.title}`)
       console.error(error)
+      onProgress?.({
+        index: index + 1,
+        total: rows.length,
+        status: 'failed',
+        title: row.title,
+        error: error instanceof Error ? error.message : String(error),
+      })
     }
   }
 
