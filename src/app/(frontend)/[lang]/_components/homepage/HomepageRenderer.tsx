@@ -9,14 +9,20 @@ import WhoWeAreSection from './WhoWeAreSection'
 import WhatWeDoSection from './WhatWeDoSection'
 import DonationSection from './DonationSection'
 import CurrentStudies from './CurrentStudies'
+import type { Lang } from '@/types/lang'
 
-export default function RenderHomeBlocks({ blocks }: { blocks: HomepageBlockDTO[] }) {
+type Props = {
+  blocks: HomepageBlockDTO[]
+  lang: Lang
+}
+
+export default function RenderHomeBlocks({ blocks, lang }: Props) {
   return (
     <>
       {blocks.map((block, index) => {
         switch (block.blockType) {
           case 'hero':
-            return <HeroSection key={block.id || index} data={block} />
+            return <HeroSection key={block.id || index} data={block} lang={lang} />
 
           case 'partners':
             return <PartnersSection key={block.id || index} data={block} />

@@ -1,17 +1,19 @@
 import Image from 'next/image'
-import MainButton from '../MainButton'
 import HrefButton from '../HrefButton'
 import type { HeroBlockDTO } from '@/features/homepage/home.schema'
+import { withLang } from '@/lib/withLang'
+import type { Lang } from '@/types/lang'
 
 type HeroSectionProps = {
   data: HeroBlockDTO
+  lang: Lang
 }
 
-export default function HeroSection({ data }: HeroSectionProps) {
+export default function HeroSection({ data, lang }: HeroSectionProps) {
   const { title, description, heroHorizontal, buttons } = data
 
   return (
-    <section className="relative isolate min-h-[560px] w-full overflow-hidden md:min-h-[520px] lg:min-h-[540px]">
+    <section className="relative isolate min-h-140 w-full overflow-hidden md:min-h-130 lg:min-h-135">
       {/* Background image from CMS */}
       {heroHorizontal.url && (
         <Image
@@ -26,7 +28,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
       )}
 
       {/* Content */}
-      <div className="relative z-10 mx-auto grid min-h-[560px] w-full max-w-5xl grid-cols-1 items-center justify-items-center gap-10 px-5 py-16 md:min-h-[520px] md:grid-cols-2 md:justify-items-stretch md:px-8 lg:min-h-[692px] lg:gap-12 lg:px-12">
+      <div className="relative z-10 mx-auto grid min-h-140 w-full max-w-5xl grid-cols-1 items-center justify-items-center gap-10 px-5 py-16 md:min-h-130 md:grid-cols-2 md:justify-items-stretch md:px-8 lg:min-h-173 lg:gap-12 lg:px-12">
         {/* Text */}
         <div className="w-full max-w-xl text-center md:text-left">
           <h1 className="text-xl leading-tight font-bold text-white sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
@@ -43,7 +45,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
                 key={button.id || button.label}
                 title={button.label}
                 variant={button.variant}
-                href={button.url}
+                href={withLang(button.url, lang)}
               />
             ))}
           </div>
@@ -51,11 +53,11 @@ export default function HeroSection({ data }: HeroSectionProps) {
 
         {/* Portrait image - hidden below md */}
         <div className="hidden w-full md:flex md:justify-center">
-          <div className="relative w-full max-w-[320px] lg:max-w-[360px] xl:max-w-[400px]">
+          <div className="relative w-full max-w-[320px] lg:max-w-90 xl:max-w-100">
             {/* Blue offset block */}
             <div className="absolute -top-2 -left-2 h-full w-full rounded-3xl bg-[#1F2BD4]" />
 
-            <div className="relative aspect-[6/7] overflow-hidden rounded-3xl shadow-2xl">
+            <div className="relative aspect-6/7 overflow-hidden rounded-3xl shadow-2xl">
               <Image
                 src="/hero-portrait-image.png"
                 alt="Hero portrait image"
