@@ -3,6 +3,7 @@ type ContactInputProps = {
   name: string
   placeholder: string
   type?: string
+  required?: boolean
 }
 
 export default function ContactInput({
@@ -10,11 +11,17 @@ export default function ContactInput({
   name,
   placeholder,
   type = 'text',
+  required = false,
 }: ContactInputProps) {
   return (
     <div className="flex flex-col gap-2">
       <label htmlFor={name} className="text-[20px] font-semibold text-black">
         {label}
+        {required && (
+          <span aria-hidden="true" className="ml-1 text-red-600">
+            *
+          </span>
+        )}
       </label>
 
       <input
@@ -22,7 +29,8 @@ export default function ContactInput({
         name={name}
         type={type}
         placeholder={placeholder}
-        className="h-13 w-full rounded-xl bg-[#D9D9D9] px-6 text-[18px] text-black outline-none placeholder:text-[#8A8A8A] focus:ring-2 focus:ring-[#0C0C48]"
+        required={required}
+        className="h-13 w-full rounded-xl bg-white px-6 text-[18px] text-black outline-1 placeholder:text-[#8A8A8A] focus:ring-2 focus:ring-[#0C0C48]"
       />
     </div>
   )
