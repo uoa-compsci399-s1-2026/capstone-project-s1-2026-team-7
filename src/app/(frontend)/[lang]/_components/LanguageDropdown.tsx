@@ -5,7 +5,7 @@ import type { Lang } from '@/types/lang'
 import { languages } from '@/types/lang'
 import { cn } from '@/lib/utils'
 import { Icon } from './icons'
-import { useLanguage } from '@/context/LanguageContext'
+import { useLanguage } from '@/app/context/LanguageContext'
 
 type LanguageDropdownProps = HTMLAttributes<HTMLDivElement>
 

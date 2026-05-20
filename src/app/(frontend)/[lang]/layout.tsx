@@ -4,8 +4,7 @@ import Footer from '@/app/(frontend)/[lang]/_components/Footer'
 import { getNavigationBar } from '@/features/navigationBar/navigation.query'
 import { Lang } from '@/types/lang'
 import { getFooter } from '@/features/footer/footer.query'
-import { LanguageProvider } from '@/context/LanguageContext'
-
+import { LanguageProvider } from '@/app/context/LanguageContext'
 export default async function LangLayout({
   children,
   params,

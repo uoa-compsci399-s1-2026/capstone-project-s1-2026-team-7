@@ -5,7 +5,7 @@ import { Icon } from './icons'
 import { LanguageDropdown } from './LanguageDropdown'
 import { useRouter } from 'next/navigation'
 import getLocalizedHref from '@/lib/localizedHref'
-import { useLanguage } from '@/context/LanguageContext'
+import { useLanguage } from '@/app/context/LanguageContext'
 
 import Link from 'next/link'
 import Image from 'next/image'
