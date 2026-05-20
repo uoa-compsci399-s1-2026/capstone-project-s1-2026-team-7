@@ -1,0 +1,28 @@
+:root {
+  --color-base-1000: #0c0c48;
+  --theme-success-500: #1f2bd4;
+  --theme-elevation-800: #0c0c48;
+  --theme-bg: #ffffff;
+  --theme-text: #0c0c48;
+}
+
+[data-theme='light'] {
+  --theme-bg: #ffffff;
+  --theme-text: #0c0c48;
+}
+
+.payload__logo,
+.nav__brand img,
+.nav-toggler img,
+.app-header .graphic-icon,
+.nav .graphic-icon {
+  max-height: 48px;
+  max-width: none;
+  width: auto;
+  height: 48px;
+  object-fit: contain;
+}
+
+.dashboard {
+  padding-top: 1rem;
+}
