@@ -1,4 +1,5 @@
 import { readFile } from 'node:fs/promises'
+import { getPayloadClient } from '@/lib/payload'
 import { uploadResearch } from './uploadResearch.query'
 
 type ResearchCsvRow = {
@@ -18,12 +19,16 @@ type ParsedResearchRow = {
   url: string
   publicationDate: string
   staffIds: number[]
+  categoryNames: string[]
 }
 
 export type UploadResearchCsvResult = {
   totalRows: number
   validRows: number
   uploadedRows: number
+  createdRows: number
+  updatedRows: number
+  skippedRows: number
   failedRows: number
 }
 
@@ -111,6 +116,19 @@ function parseStaffIds(value: string | undefined): number[] {
     .filter((id) => Number.isInteger(id) && id > 0)
 }
 
+function parseCategoryNames(value: string | undefined): string[] {
+  if (!value) {
+    return []
+  }
+
+  const separator = value.includes(';') ? /;/ : /,/
+
+  return value
+    .split(separator)
+    .map((category) => category.trim())
+    .filter(Boolean)
+}
+
 function normalizeDoi(value: string | undefined): string {
   if (!value) {
     return ''
@@ -121,6 +139,14 @@ function normalizeDoi(value: string | undefined): string {
     .toLowerCase()
     .replace(/^https?:\/\/(dx\.)?doi\.org\//, '')
     .replace(/^doi:/, '')
+}
+
+function slugify(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
 }
 
 function normalizeResearchCsvRow(
@@ -142,25 +168,77 @@ function normalizeResearchCsvRow(
     url: csvRow.url?.trim() ?? '',
     publicationDate: csvRow.publicationDate?.trim() ?? '',
     staffIds: parseStaffIds(csvRow.staffIds),
+    categoryNames: parseCategoryNames(csvRow.categories),
   }
 }
 
-export async function uploadResearchCsv(
-  csvPath: string,
+async function resolveCategoryIDs(categoryNames: string[], dryRun: boolean): Promise<number[]> {
+  if (dryRun || categoryNames.length === 0) {
+    return []
+  }
+
+  const payload = await getPayloadClient()
+  const categoryIDs: number[] = []
+
+  for (const categoryName of [...new Set(categoryNames)]) {
+    const slug = slugify(categoryName)
+
+    const existing = await payload.find({
+      collection: 'research-categories',
+      where: {
+        or: [
+          {
+            title: {
+              equals: categoryName,
+            },
+          },
+          {
+            slug: {
+              equals: slug,
+            },
+          },
+        ],
+      },
+      limit: 1,
+    })
+
+    const existingCategory = existing.docs[0]
+
+    if (existingCategory) {
+      categoryIDs.push(existingCategory.id)
+      continue
+    }
+
+    const createdCategory = await payload.create({
+      collection: 'research-categories',
+      data: {
+        title: categoryName,
+        slug,
+      },
+    })
+
+    categoryIDs.push(createdCategory.id)
+  }
+
+  return categoryIDs
+}
+
+export async function uploadResearchCsvContent(
+  content: string,
   options?: {
     dryRun?: boolean
   },
 ): Promise<UploadResearchCsvResult> {
   const dryRun = options?.dryRun ?? false
-
-  const content = await readFile(csvPath, 'utf8')
   const rawRows = parseCsv(content)
 
   const rows = rawRows
     .map((row, index) => normalizeResearchCsvRow(row, index + 2))
     .filter((row): row is ParsedResearchRow => row !== null)
 
-  let uploadedRows = 0
+  let createdRows = 0
+  let updatedRows = 0
+  let skippedRows = 0
   let failedRows = 0
 
   for (const [index, row] of rows.entries()) {
@@ -170,16 +248,26 @@ export async function uploadResearchCsv(
         continue
       }
 
-      await uploadResearch({
+      const categoryIDs = await resolveCategoryIDs(row.categoryNames, dryRun)
+
+      const result = await uploadResearch({
         title: row.title,
         doi: row.doi,
         link: row.url,
         date: row.publicationDate,
         staffID: row.staffIds,
+        categoryIDs,
       })
 
-      uploadedRows++
-      console.log(`Uploaded ${uploadedRows}/${rows.length}: ${row.title}`)
+      if (result.status === 'created') {
+        createdRows++
+      } else if (result.status === 'updated') {
+        updatedRows++
+      } else {
+        skippedRows++
+      }
+
+      console.log(`${result.status} row ${index + 1}/${rows.length}: ${row.title}`)
     } catch (error) {
       failedRows++
       console.error(`Failed to upload row ${index + 1}: ${row.title}`)
@@ -190,7 +278,21 @@ export async function uploadResearchCsv(
   return {
     totalRows: rawRows.length,
     validRows: rows.length,
-    uploadedRows,
+    uploadedRows: createdRows + updatedRows,
+    createdRows,
+    updatedRows,
+    skippedRows,
     failedRows,
   }
+}
+
+export async function uploadResearchCsv(
+  csvPath: string,
+  options?: {
+    dryRun?: boolean
+  },
+): Promise<UploadResearchCsvResult> {
+  const content = await readFile(csvPath, 'utf8')
+
+  return uploadResearchCsvContent(content, options)
 }

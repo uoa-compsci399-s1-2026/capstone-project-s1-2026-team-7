@@ -73,6 +73,7 @@ export interface Config {
     studies: Study
     research: Research
     'research-categories': ResearchCategory
+    'research-csv-tools': ResearchCsvTool
     'enquiry-tags': EnquiryTag
     'payload-kv': PayloadKv
     'payload-locked-documents': PayloadLockedDocument
@@ -87,6 +88,7 @@ export interface Config {
     studies: StudiesSelect<false> | StudiesSelect<true>
     research: ResearchSelect<false> | ResearchSelect<true>
     'research-categories': ResearchCategoriesSelect<false> | ResearchCategoriesSelect<true>
+    'research-csv-tools': ResearchCsvToolsSelect<false> | ResearchCsvToolsSelect<true>
     'enquiry-tags': EnquiryTagsSelect<false> | EnquiryTagsSelect<true>
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>
     'payload-locked-documents':
@@ -349,6 +351,18 @@ export interface ResearchCategory {
   createdAt: string
 }
 /**
+ * Export ORCID research to CSV and import research CSV files into the CMS.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research-csv-tools".
+ */
+export interface ResearchCsvTool {
+  id: number
+  title?: string | null
+  updatedAt: string
+  createdAt: string
+}
+/**
  * Tags shown in the contact form dropdown. Each tag routes submissions to its recipient email.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -583,6 +597,15 @@ export interface ResearchSelect<T extends boolean = true> {
 export interface ResearchCategoriesSelect<T extends boolean = true> {
   title?: T
   slug?: T
+  updatedAt?: T
+  createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research-csv-tools_select".
+ */
+export interface ResearchCsvToolsSelect<T extends boolean = true> {
+  title?: T
   updatedAt?: T
   createdAt?: T
 }

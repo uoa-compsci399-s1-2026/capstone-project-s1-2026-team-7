@@ -7,7 +7,7 @@ import {
   PerPersonOutputType,
   SharedArticle,
 } from './types'
-import { StaffDTO } from '@/features'
+import type { StaffDTO } from '@/features/our-team/staff.schema'
 
 type CrossrefDate = {
   'date-parts'?: number[][]
