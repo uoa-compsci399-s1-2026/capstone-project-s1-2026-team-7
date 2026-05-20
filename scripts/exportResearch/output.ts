@@ -12,7 +12,7 @@ function escapeCsvValue(value: string | number | null | undefined): string {
   return stringValue
 }
 
-function convertToCsv(rows: CsvResearchRow[]): string {
+export function convertToCsv(rows: CsvResearchRow[]): string {
   const headers: Array<keyof CsvResearchRow> = [
     'title',
     'doi',
@@ -52,7 +52,7 @@ export function buildCsvRows(
 }
 
 export async function exportCsv(rows: CsvResearchRow[]): Promise<void> {
-  const outputDirectory = path.resolve(process.cwd(), 'src', 'csv')
+  const outputDirectory = process.cwd()
   const outputPath = path.join(outputDirectory, 'research.csv')
 
   await mkdir(outputDirectory, { recursive: true })

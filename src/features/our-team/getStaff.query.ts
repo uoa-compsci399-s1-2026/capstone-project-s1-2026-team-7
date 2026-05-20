@@ -1,7 +1,8 @@
 import { getPayloadClient } from '@/lib/payload'
-import { Staff } from '@/payload-types'
-import { PaginatedDocs } from 'payload'
-import { staffSchema, StaffDTO } from '@/features'
+import type { Staff } from '@/payload-types'
+import type { PaginatedDocs } from 'payload'
+import { staffSchema } from './staff.schema'
+import type { StaffDTO } from './staff.schema'
 
 export async function getStaff(): Promise<StaffDTO[]> {
   const payload = await getPayloadClient()

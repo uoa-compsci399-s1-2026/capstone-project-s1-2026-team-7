@@ -13,6 +13,7 @@ import { Studies } from './payload/collections/Studies'
 import { Staff } from './payload/collections/Staff'
 import { Research } from './payload/collections/Research'
 import { ResearchCategories } from './payload/collections/ResearchCategories'
+import { ResearchCsvTools } from './payload/collections/ResearchCsvTools'
 
 import { HomePage } from './payload/globals/Homepage'
 import { OurTeamPage } from './payload/globals/OurTeamPage'
@@ -23,6 +24,10 @@ import { Footer } from './payload/globals/Footer'
 import { ContactPage } from './payload/globals/ContactPage'
 import { EnquiryTags } from './payload/collections/EnquiryTags'
 import { translateEndpoint } from './payload/endpoints/translate'
+import {
+  researchCsvExportEndpoint,
+  researchCsvImportEndpoint,
+} from './payload/endpoints/researchCsv'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -66,11 +71,20 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
-  collections: [Users, Media, Staff, Studies, Research, ResearchCategories, EnquiryTags],
+  collections: [
+    Users,
+    Media,
+    Staff,
+    Studies,
+    Research,
+    ResearchCategories,
+    ResearchCsvTools,
+    EnquiryTags,
+  ],
 
   globals: [HomePage, OurTeamPage, StudiesPage, ResearchPage, NavigationBar, ContactPage, Footer],
 
-  endpoints: [translateEndpoint],
+  endpoints: [translateEndpoint, researchCsvExportEndpoint, researchCsvImportEndpoint],
 
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
@@ -93,7 +107,7 @@ export default buildConfig({
       bucket: process.env.S3_BUCKET || '',
       config: {
         credentials: {
-          accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
+          accessKeyId: process.env.AWS_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY || '',
           secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
         },
         region: process.env.S3_REGION,

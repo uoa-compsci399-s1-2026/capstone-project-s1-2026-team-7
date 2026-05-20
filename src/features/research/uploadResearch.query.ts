@@ -1,5 +1,5 @@
 import { getPayloadClient } from '@/lib/payload'
-import { Media, ResearchCategory } from '@/payload-types'
+import type { Media, ResearchCategory } from '@/payload-types'
 
 export type UploadResearchDTO = {
   title: string
@@ -9,33 +9,78 @@ export type UploadResearchDTO = {
   staffID: number[]
   image?: Media
   categories?: ResearchCategory[]
+  categoryIDs?: number[]
   order?: number
 }
 
-export async function uploadResearch(article: UploadResearchDTO): Promise<void> {
+export type UploadResearchResult = {
+  id?: number | string
+  reason?: string
+  status: 'created' | 'skipped' | 'updated'
+}
+
+function normalizeDoi(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/^https?:\/\/(dx\.)?doi\.org\//, '')
+    .replace(/^doi:/, '')
+}
+
+export async function uploadResearch(article: UploadResearchDTO): Promise<UploadResearchResult> {
   const payload = await getPayloadClient()
 
   if (!article.link) {
     console.log(`Skipping article with no URL: ${article.title}`)
-    return
+    return { status: 'skipped', reason: 'Missing URL' }
   }
 
   if (!article.doi) {
     console.log(`Skipping article with no DOI: ${article.title}`)
-    return
+    return { status: 'skipped', reason: 'Missing DOI' }
   }
 
-  await payload.create({
+  const doi = normalizeDoi(article.doi)
+  const categoryIDs =
+    article.categoryIDs ?? article.categories?.map((category) => category.id) ?? []
+
+  const data = {
+    title: article.title,
+    doi,
+    link: article.link,
+    image: article.image,
+    date: article.date,
+    staff: article.staffID,
+    categories: categoryIDs,
+    order: article.order ?? 0,
+  }
+
+  const existing = await payload.find({
     collection: 'research',
-    data: {
-      title: article.title,
-      doi: article.doi,
-      link: article.link,
-      image: article.image,
-      date: article.date,
-      staff: article.staffID,
-      categories: article.categories ?? [],
-      order: article.order ?? 0,
+    where: {
+      doi: {
+        equals: doi,
+      },
     },
+    limit: 1,
   })
+
+  const existingDoc = existing.docs[0]
+
+  if (existingDoc) {
+    await payload.update({
+      collection: 'research',
+      id: existingDoc.id,
+      data,
+    })
+
+    return { id: existingDoc.id, status: 'updated' }
+  }
+
+  const created = await payload.create({
+    collection: 'research',
+    data,
+  })
+
+  return { id: created.id, status: 'created' }
 }
