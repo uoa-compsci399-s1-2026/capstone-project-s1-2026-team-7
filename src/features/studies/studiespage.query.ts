@@ -9,7 +9,7 @@ export async function getStudiesPage(locale: Lang = 'en'): Promise<StudiesPageDT
     slug: 'studies-page',
     locale,
     fallbackLocale: 'en',
-    depth: 2,
+    depth: 3,
   })
 
   return studiesDTOSchema.parse(data)

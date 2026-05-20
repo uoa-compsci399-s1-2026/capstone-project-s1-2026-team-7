@@ -1,6 +1,10 @@
 import { z } from 'zod'
 import { mediaSchema } from '@/features'
 
+// -------------------- Shared / reusable schemas --------------------
+
+const richTextSchema = z.any().default('')
+
 const participationItemSchema = z.object({
   id: z.string().optional(),
   title: z.string().default(''),
@@ -15,8 +19,7 @@ const eligibilityCriterionSchema = z.object({
 const faqItemSchema = z.object({
   id: z.string().optional(),
   question: z.string().default(''),
-
-  answer: z.any().default(''),
+  answer: richTextSchema,
 })
 
 const contactSchema = z.object({
@@ -25,34 +28,238 @@ const contactSchema = z.object({
   phone: z.string().default(''),
 })
 
+// -------------------- Study detail template schemas --------------------
+// These come from the Studies Page global.
+// They control reusable static labels/text across all study detail pages.
+
+const heroStatsTemplateSchema = z
+  .object({
+    durationLabel: z.string().default('Duration'),
+    compensationLabel: z.string().default('Compensation'),
+    locationLabel: z.string().default('Location'),
+  })
+  .default({
+    durationLabel: 'Duration',
+    compensationLabel: 'Compensation',
+    locationLabel: 'Location',
+  })
+
+const aboutSectionTemplateSchema = z
+  .object({
+    eyebrow: z.string().default('About'),
+    heading: z.string().default('Why this study matters'),
+  })
+  .default({
+    eyebrow: 'About',
+    heading: 'Why this study matters',
+  })
+
+const participationSectionTemplateSchema = z
+  .object({
+    eyebrow: z.string().default('Participation'),
+    heading: z.string().default("What you'll be asked to do"),
+  })
+  .default({
+    eyebrow: 'Participation',
+    heading: "What you'll be asked to do",
+  })
+
+const eligibilitySectionTemplateSchema = z
+  .object({
+    eyebrow: z.string().default('Eligibility'),
+    heading: z.string().default("Who we're looking for"),
+    inclusionHeading: z.string().default('You can join if'),
+    exclusionHeading: z.string().default('You cannot join if'),
+  })
+  .default({
+    eyebrow: 'Eligibility',
+    heading: "Who we're looking for",
+    inclusionHeading: 'You can join if',
+    exclusionHeading: 'You cannot join if',
+  })
+
+const faqSectionTemplateSchema = z
+  .object({
+    eyebrow: z.string().default('FAQ'),
+    heading: z.string().default('Common questions'),
+  })
+  .default({
+    eyebrow: 'FAQ',
+    heading: 'Common questions',
+  })
+
+const applyCardTemplateSchema = z
+  .object({
+    eyebrow: z.string().default('Apply'),
+    heading: z.string().default("Check if you're eligible"),
+    buttonLabel: z.string().default('Take eligibility Survey'),
+    helperText: z
+      .string()
+      .default(
+        "Survey takes ~5 min. We'll contact you within 2 working days if you qualify for screening.",
+      ),
+  })
+  .default({
+    eyebrow: 'Apply',
+    heading: "Check if you're eligible",
+    buttonLabel: 'Take eligibility Survey',
+    helperText:
+      "Survey takes ~5 min. We'll contact you within 2 working days if you qualify for screening.",
+  })
+
+const ethicsCardTemplateSchema = z
+  .object({
+    heading: z.string().default('Ethics approved'),
+    approvedByPrefix: z.string().default('Approved by the'),
+    committeeName: z.string().default('Southern Health and Disability Ethics Committee'),
+  })
+  .default({
+    heading: 'Ethics approved',
+    approvedByPrefix: 'Approved by the',
+    committeeName: 'Southern Health and Disability Ethics Committee',
+  })
+
+const contactCardTemplateSchema = z
+  .object({
+    heading: z.string().default('Contact'),
+  })
+  .default({
+    heading: 'Contact',
+  })
+
+const studyDetailTemplateSchema = z
+  .object({
+    backButtonLabel: z.string().default('Studies'),
+
+    heroStats: heroStatsTemplateSchema,
+
+    aboutSection: aboutSectionTemplateSchema,
+
+    participationSection: participationSectionTemplateSchema,
+
+    eligibilitySection: eligibilitySectionTemplateSchema,
+
+    faqSection: faqSectionTemplateSchema,
+
+    applyCard: applyCardTemplateSchema,
+
+    ethicsCard: ethicsCardTemplateSchema,
+
+    contactCard: contactCardTemplateSchema,
+  })
+  .default({
+    backButtonLabel: 'Studies',
+
+    heroStats: {
+      durationLabel: 'Duration',
+      compensationLabel: 'Compensation',
+      locationLabel: 'Location',
+    },
+
+    aboutSection: {
+      eyebrow: 'About',
+      heading: 'Why this study matters',
+    },
+
+    participationSection: {
+      eyebrow: 'Participation',
+      heading: "What you'll be asked to do",
+    },
+
+    eligibilitySection: {
+      eyebrow: 'Eligibility',
+      heading: "Who we're looking for",
+      inclusionHeading: 'You can join if',
+      exclusionHeading: 'You cannot join if',
+    },
+
+    faqSection: {
+      eyebrow: 'FAQ',
+      heading: 'Common questions',
+    },
+
+    applyCard: {
+      eyebrow: 'Apply',
+      heading: "Check if you're eligible",
+      buttonLabel: 'Take eligibility Survey',
+      helperText:
+        "Survey takes ~5 min. We'll contact you within 2 working days if you qualify for screening.",
+    },
+
+    ethicsCard: {
+      heading: 'Ethics approved',
+      approvedByPrefix: 'Approved by the',
+      committeeName: 'Southern Health and Disability Ethics Committee',
+    },
+
+    contactCard: {
+      heading: 'Contact',
+    },
+  })
+
+// -------------------- Study collection DTO --------------------
+// This maps one document from the Studies collection.
+
 export const studySchema = z.object({
   id: z.number(),
+
   title: z.string().default(''),
   subtitle: z.string().default(''),
   studyCode: z.string().default(''),
+
   duration: z.string().default(''),
   compensation: z.string().default(''),
   location: z.string().default(''),
+
   eligibility: z.string().default(''),
   slug: z.string().default(''),
-  banner: mediaSchema,
-  description: z.any().default(''),
+
+  banner: mediaSchema.nullable().optional().default(null),
+
+  description: richTextSchema,
+
   participationItems: z.array(participationItemSchema).default([]),
+
   eligibilityInclusion: z.array(eligibilityCriterionSchema).default([]),
+
   eligibilityExclusion: z.array(eligibilityCriterionSchema).default([]),
+
   faqs: z.array(faqItemSchema).default([]),
+
   surveyUrl: z.string().default(''),
+
   ethicsApprovalRef: z.string().default(''),
+
   sortOrder: z.number().default(100000),
 })
 
 export type StudyDTO = z.infer<typeof studySchema>
 
+// -------------------- Studies Page global DTO --------------------
+// This maps the studies-page Payload global.
+
+const listingPageSchema = z
+  .object({
+    title: z.string().default(''),
+    banner: mediaSchema.nullable().optional().default(null),
+    studiesDisplay: z.array(studySchema).default([]),
+  })
+  .default({
+    title: '',
+    banner: null,
+    studiesDisplay: [],
+  })
+
 export const studiesDTOSchema = z.object({
-  title: z.string().default(''),
-  banner: mediaSchema,
-  studiesDisplay: z.array(studySchema).default([]),
-  contact: contactSchema.default({ email: '', address: '', phone: '' }),
+  listingPage: listingPageSchema,
+
+  contact: contactSchema.default({
+    email: '',
+    address: '',
+    phone: '',
+  }),
+
+  detailTemplate: studyDetailTemplateSchema,
 })
 
 export type StudiesPageDTO = z.infer<typeof studiesDTOSchema>

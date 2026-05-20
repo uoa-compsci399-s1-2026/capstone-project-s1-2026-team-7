@@ -9,7 +9,7 @@ type CurrentStudiesProps = {
 
 export default async function CurrentStudies({ lang = 'en', limit = 3 }: CurrentStudiesProps) {
   const studiesPage = await getStudiesPage(lang)
-  const studies = studiesPage.studiesDisplay.slice(0, limit)
+  const studies = studiesPage.listingPage.studiesDisplay.slice(0, limit)
 
   if (studies.length === 0) return null
 

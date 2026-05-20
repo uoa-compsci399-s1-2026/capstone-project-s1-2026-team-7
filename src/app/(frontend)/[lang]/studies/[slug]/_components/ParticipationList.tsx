@@ -5,18 +5,20 @@ type ParticipationItem = {
 }
 
 type ParticipationListProps = {
+  eyebrow: string
+  heading: string
   items: ParticipationItem[]
 }
 
-export default function ParticipationList({ items }: ParticipationListProps) {
+export default function ParticipationList({ eyebrow, heading, items }: ParticipationListProps) {
   if (!items || items.length === 0) return null
 
   return (
     <section>
-      <p className="text-xs font-semibold uppercase tracking-wider text-[#2448FF]">Participation</p>
-      <h2 className="mt-2 text-2xl font-bold text-[#05083D] md:text-3xl">
-        What you&apos;ll be asked to do
-      </h2>
+      <p className="text-xs font-semibold uppercase tracking-wider text-[#2448FF]">{eyebrow}</p>
+
+      <h2 className="mt-2 text-2xl font-bold text-[#05083D] md:text-3xl">{heading}</h2>
+
       <ul className="mt-6 space-y-5">
         {items.map((item, index) => (
           <li key={item.id ?? index} className="flex items-start gap-3">

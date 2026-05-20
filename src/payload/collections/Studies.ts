@@ -2,6 +2,12 @@ import type { CollectionConfig } from 'payload'
 
 export const Studies: CollectionConfig = {
   slug: 'studies',
+  admin: {
+    useAsTitle: 'title',
+    defaultColumns: ['title', 'studyCode', 'slug', 'sortOrder'],
+    listSearchableFields: ['title', 'studyCode', 'slug'],
+  },
+
   fields: [
     {
       name: 'title',
