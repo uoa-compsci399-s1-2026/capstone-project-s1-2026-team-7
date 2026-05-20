@@ -15,7 +15,7 @@ export default async function HomePage({ params }: PageProps) {
 
   return (
     <main>
-      <HomepageRenderer blocks={data.layout} />
+      <HomepageRenderer blocks={data.layout} lang={lang} />
     </main>
   )
 }

@@ -42,7 +42,7 @@ type WhatWeDoSectionProps = {
 function WhatWeDoSection({ data }: WhatWeDoSectionProps) {
   const { title, blockType, sections } = data
   return (
-    <section className="w-full bg-white px-[26px] py-5 md:px-8 lg:px-12">
+    <section className="w-full bg-white px-[26px] py-16 md:px-8 md:py-24 lg:px-12">
       <div className="mx-auto w-full max-w-[1120px]">
         <div className="mb-[17px]">
           <h2 className="text-[22px] leading-tight font-extrabold text-[#08084f] sm:text-2xl md:text-[28px] lg:text-[32px] xl:text-4xl">

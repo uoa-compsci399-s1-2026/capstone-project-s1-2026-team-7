@@ -1,4 +1,7 @@
+'use client'
+
 import Link from 'next/link'
+import { useLenis } from 'lenis/react'
 import { Variant } from '@/types/variant'
 
 interface HrefButtonProps {
@@ -19,7 +22,27 @@ const variantClasses: Record<Variant, string> = {
 }
 
 export default function HrefButton({ title, variant, href }: HrefButtonProps) {
+  const lenis = useLenis()
   const className = `${baseClasses} ${variantClasses[variant]}`
+
+  if (href.startsWith('#')) {
+    return (
+      <Link
+        href={href}
+        className={className}
+        onClick={(e) => {
+          e.preventDefault()
+          if (lenis) {
+            lenis.scrollTo(href, { offset: 0 })
+          } else {
+            document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' })
+          }
+        }}
+      >
+        {title}
+      </Link>
+    )
+  }
 
   return (
     <Link href={href} className={className}>

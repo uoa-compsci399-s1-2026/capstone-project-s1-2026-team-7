@@ -121,7 +121,7 @@ function TimelineSection({ data }: TimelineSectionProps) {
   }, [])
 
   return (
-    <section ref={sectionRef} className="bg-white px-6.5 py-12 md:px-8 lg:px-12">
+    <section ref={sectionRef} className="bg-white px-6.5 py-16 md:px-8 md:py-24 lg:px-12">
       <div className="mx-auto w-full max-w-287.5">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-[320px_1fr] md:items-start md:gap-10">
           {/* Left content */}
