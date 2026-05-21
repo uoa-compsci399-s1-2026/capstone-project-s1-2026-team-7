@@ -1,15 +1,25 @@
 type HeroStatsProps = {
+  durationLabel: string
+  compensationLabel: string
+  locationLabel: string
   duration: string
   compensation: string
   location: string
 }
 
-export default function HeroStats({ duration, compensation, location }: HeroStatsProps) {
+export default function HeroStats({
+  durationLabel,
+  compensationLabel,
+  locationLabel,
+  duration,
+  compensation,
+  location,
+}: HeroStatsProps) {
   return (
     <div className="grid grid-cols-1 divide-y divide-gray-200 rounded-2xl border border-gray-200 bg-white sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-      <Stat label="Duration" value={duration} />
-      <Stat label="Compensation" value={compensation} />
-      <Stat label="Location" value={location} />
+      <Stat label={durationLabel} value={duration} />
+      <Stat label={compensationLabel} value={compensation} />
+      <Stat label={locationLabel} value={location} />
     </div>
   )
 }

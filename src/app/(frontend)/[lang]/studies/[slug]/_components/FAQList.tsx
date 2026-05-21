@@ -7,16 +7,20 @@ type FaqItem = {
 }
 
 type FAQListProps = {
+  eyebrow: string
+  heading: string
   items: FaqItem[]
 }
 
-export default function FAQList({ items }: FAQListProps) {
+export default function FAQList({ eyebrow, heading, items }: FAQListProps) {
   if (!items || items.length === 0) return null
 
   return (
     <section>
-      <p className="text-xs font-semibold uppercase tracking-wider text-[#2448FF]">FAQ</p>
-      <h2 className="mt-2 text-2xl font-bold text-[#05083D] md:text-3xl">Common questions</h2>
+      <p className="text-xs font-semibold uppercase tracking-wider text-[#2448FF]">{eyebrow}</p>
+
+      <h2 className="mt-2 text-2xl font-bold text-[#05083D] md:text-3xl">{heading}</h2>
+
       <div className="mt-6 space-y-3">
         {items.map((faq, index) => (
           <details
@@ -27,6 +31,7 @@ export default function FAQList({ items }: FAQListProps) {
               <span>{faq.question}</span>
               <span className="text-xl text-[#05083D] transition group-open:rotate-45">+</span>
             </summary>
+
             <div className="mt-3 leading-relaxed text-gray-700">
               <RichTextRenderer data={faq.answer} />
             </div>
