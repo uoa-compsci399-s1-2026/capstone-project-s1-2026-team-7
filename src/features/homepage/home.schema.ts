@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { mediaSchema, DEFAULT_GENERAL_PIC } from '../common/media.schema'
 import { seoSchema } from '../common/seo.schema'
+import { studySchema } from '../studies'
 
 const stringWithDefault = z
   .string()
@@ -99,9 +100,42 @@ const partnerLogoSchema = z.object({
   logo: mediaWithDefault,
   alt: stringWithDefault,
 })
-const currentStudiesBlockSchema = blockBaseSchema.extend({
-  blockType: z.literal('current-studies'),
-})
+const currentStudiesLinkSchema = z
+  .object({
+    title: stringWithDefault,
+    href: stringWithDefault,
+  })
+  .default({
+    title: 'View all studies',
+    href: '/studies',
+  })
+
+const studyRelationshipSchema = z.union([z.number(), studySchema])
+
+const currentStudiesBlockSchema = blockBaseSchema
+  .extend({
+    blockType: z.literal('current-studies'),
+
+    title: stringWithDefault,
+
+    link: currentStudiesLinkSchema,
+
+    studies: z
+      .array(studyRelationshipSchema)
+      .nullish()
+      .transform((value) => value ?? []),
+  })
+  .transform((block) => ({
+    id: block.id,
+    blockType: block.blockType,
+
+    title: block.title,
+    link: block.link,
+
+    studies: block.studies.filter(
+      (study): study is z.infer<typeof studySchema> => typeof study !== 'number',
+    ),
+  }))
 
 export const partnersBlockSchema = blockBaseSchema
   .extend({

@@ -822,6 +822,24 @@ export interface DonationSectionBlock {
  * via the `definition` "CurrentStudiesBlock".
  */
 export interface CurrentStudiesBlock {
+  /**
+   * Main title shown for the current studies section.
+   */
+  title: string
+  link: {
+    /**
+     * Text shown on the button/link.
+     */
+    title: string
+    /**
+     * Link URL, e.g. /studies or https://example.com
+     */
+    href: string
+  }
+  /**
+   * Choose which studies appear in this homepage section.
+   */
+  studies?: (number | Study)[] | null
   id?: string | null
   blockName?: string | null
   blockType: 'current-studies'
@@ -1180,6 +1198,14 @@ export interface DonationSectionBlockSelect<T extends boolean = true> {
  * via the `definition` "CurrentStudiesBlock_select".
  */
 export interface CurrentStudiesBlockSelect<T extends boolean = true> {
+  title?: T
+  link?:
+    | T
+    | {
+        title?: T
+        href?: T
+      }
+  studies?: T
   id?: T
   blockName?: T
 }
