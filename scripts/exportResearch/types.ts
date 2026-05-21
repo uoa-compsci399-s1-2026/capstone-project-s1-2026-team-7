@@ -147,3 +147,25 @@ export type OrcidWorksResponse = {
   'last-modified-date': OrcidDateValue
   group: OrcidWorkGroup[]
 }
+
+export type ResearchExportProgressStage =
+  | 'staff'
+  | 'orcid'
+  | 'rows'
+  | 'categories'
+  | 'csv'
+  | 'storage'
+  | 'complete'
+
+export type ResearchExportProgressEvent = {
+  progress: number
+  stage: ResearchExportProgressStage
+  status: string
+  current?: number
+  total?: number
+}
+
+export type ResearchExportProgressOptions = {
+  onProgress?: (event: ResearchExportProgressEvent) => void
+  signal?: AbortSignal
+}

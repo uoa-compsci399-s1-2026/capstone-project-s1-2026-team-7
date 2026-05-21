@@ -19,6 +19,16 @@ function getUploadedFilename(file: File): string {
   return file.name?.trim() || `research-import-${getToday()}.csv`
 }
 
+function isStreamRequest(req: PayloadRequest): boolean {
+  return (
+    new URL(req.url ?? 'http://localhost', 'http://localhost').searchParams.get('stream') === '1'
+  )
+}
+
+function getRequestSignal(req: PayloadRequest): AbortSignal | undefined {
+  return (req as unknown as Request).signal
+}
+
 export const researchCsvExportEndpoint: Endpoint = {
   path: '/research-csv/export',
   method: 'get',
@@ -27,22 +37,104 @@ export const researchCsvExportEndpoint: Endpoint = {
       return unauthorizedResponse()
     }
 
-    const { csv, rows } = await getResearchExportCsv()
-    const today = getToday()
-    const filename = `research-export-${today}.csv`
-    const storedCsv = await storeResearchCsvInS3({
-      content: csv,
-      filename,
-      kind: 'exports',
+    const signal = getRequestSignal(req)
+
+    if (!isStreamRequest(req)) {
+      const { csv, rows } = await getResearchExportCsv({ signal })
+      const today = getToday()
+      const filename = `research-export-${today}.csv`
+      const storedCsv = await storeResearchCsvInS3({
+        content: csv,
+        filename,
+        kind: 'exports',
+      })
+
+      return new Response(csv, {
+        headers: {
+          'Content-Type': 'text/csv; charset=utf-8',
+          'Content-Disposition': `attachment; filename="${filename}"`,
+          'X-Research-Row-Count': String(rows.length),
+          'X-Research-S3-Bucket': storedCsv.bucket,
+          'X-Research-S3-Key': storedCsv.key,
+        },
+      })
+    }
+
+    const encoder = new TextEncoder()
+    const stream = new ReadableStream<Uint8Array>({
+      start(controller) {
+        const write = (obj: unknown) => {
+          try {
+            controller.enqueue(encoder.encode(JSON.stringify(obj) + '\n'))
+          } catch {}
+        }
+
+        ;(async () => {
+          try {
+            write({
+              type: 'progress',
+              progress: 0,
+              stage: 'staff',
+              status: 'Starting export.',
+            })
+
+            const { csv, rows } = await getResearchExportCsv({
+              signal,
+              onProgress: (event) => write({ type: 'progress', ...event }),
+            })
+
+            const today = getToday()
+            const filename = `research-export-${today}.csv`
+
+            write({
+              type: 'progress',
+              progress: 96,
+              stage: 'storage',
+              status: 'Saving CSV backup to S3.',
+            })
+
+            const storedCsv = await storeResearchCsvInS3({
+              content: csv,
+              filename,
+              kind: 'exports',
+            })
+
+            write({
+              type: 'complete',
+              progress: 100,
+              result: {
+                csv,
+                filename,
+                rowCount: rows.length,
+                s3Bucket: storedCsv.bucket,
+                s3Key: storedCsv.key,
+              },
+            })
+          } catch (error) {
+            write({
+              type: signal?.aborted ? 'cancelled' : 'error',
+              error:
+                error instanceof Error
+                  ? error.message
+                  : signal?.aborted
+                    ? 'Export cancelled.'
+                    : 'CSV export failed.',
+            })
+          } finally {
+            try {
+              controller.close()
+            } catch {}
+          }
+        })()
+      },
     })
 
-    return new Response(csv, {
+    return new Response(stream, {
       headers: {
-        'Content-Type': 'text/csv; charset=utf-8',
-        'Content-Disposition': `attachment; filename="${filename}"`,
-        'X-Research-Row-Count': String(rows.length),
-        'X-Research-S3-Bucket': storedCsv.bucket,
-        'X-Research-S3-Key': storedCsv.key,
+        'Content-Type': 'application/x-ndjson; charset=utf-8',
+        'Cache-Control': 'no-cache, no-transform',
+        'X-Accel-Buffering': 'no',
+        'Content-Encoding': 'identity',
       },
     })
   },
@@ -100,7 +192,11 @@ export const researchCsvImportEndpoint: Endpoint = {
             })
             write({
               type: 'complete',
-              result: { ...result, s3Bucket: storedCsv.bucket, s3Key: storedCsv.key },
+              result: {
+                ...result,
+                s3Bucket: storedCsv.bucket,
+                s3Key: storedCsv.key,
+              },
             })
           } catch (error) {
             write({
