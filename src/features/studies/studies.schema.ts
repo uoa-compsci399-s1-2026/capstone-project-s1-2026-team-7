@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { mediaSchema } from '@/features'
+import { mediaSchema, DEFAULT_GENERAL_PIC } from '@/features'
 
 // -------------------- Shared / reusable schemas --------------------
 
@@ -214,7 +214,7 @@ export const studySchema = z.object({
   eligibility: z.string().default(''),
   slug: z.string().default(''),
 
-  banner: mediaSchema.nullable().optional().default(null),
+  banner: mediaSchema.default(DEFAULT_GENERAL_PIC),
 
   description: richTextSchema,
 
@@ -241,12 +241,12 @@ export type StudyDTO = z.infer<typeof studySchema>
 const listingPageSchema = z
   .object({
     title: z.string().default(''),
-    banner: mediaSchema.nullable().optional().default(null),
+    banner: mediaSchema.default(DEFAULT_GENERAL_PIC),
     studiesDisplay: z.array(studySchema).default([]),
   })
   .default({
     title: '',
-    banner: null,
+    banner: DEFAULT_GENERAL_PIC,
     studiesDisplay: [],
   })
 
