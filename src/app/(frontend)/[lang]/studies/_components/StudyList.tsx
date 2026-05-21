@@ -7,12 +7,16 @@ export type StudyListProps = {
   studypage: StudiesPageDTO
 }
 export default function StudyList({ studypage }: StudyListProps) {
+  const listingPage = studypage.listingPage
+  const bannerUrl = listingPage.banner?.url ?? ''
+  const bannerAlt = listingPage.banner?.alt ?? listingPage.title
+
   return (
     <div>
       <Banner
-        title={studypage.title}
-        imageUrl={studypage.banner.url}
-        imageAlt={studypage.banner.alt}
+        title={studypage.listingPage.title}
+        imageUrl={bannerUrl || ''}
+        imageAlt={bannerAlt || ''}
       ></Banner>
       <div
         className="flex justify-center
@@ -21,7 +25,7 @@ export default function StudyList({ studypage }: StudyListProps) {
       m-15"
       >
         <div className="grid grid-cols-1 max-w-5xl w-full xl:gap-6 md:gap-5 gap-4">
-          {studypage.studiesDisplay.map((study, index) => (
+          {studypage.listingPage.studiesDisplay.map((study, index) => (
             <StudyCard key={index} study={study} />
           ))}
         </div>
