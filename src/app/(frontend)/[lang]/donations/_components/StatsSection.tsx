@@ -84,7 +84,7 @@ function StatsSection() {
   return (
     <section className="bg-white px-6.5 py-8 md:px-8 lg:px-12">
       <div className="mx-auto w-full max-w-287.5">
-        <div className="relative aspect-292/229 w-full overflow-hidden rounded-lg bg-[linear-gradient(180deg,#3636B7_0%,#3434B0_0.01%,#272785_13.16%,#181851_74.52%)] md:aspect-1150/330 md:rounded-3xl">
+        <div className="relative aspect-292/229 text-center w-full h-135 overflow-hidden rounded-lg bg-[linear-gradient(180deg,#3636B7_0%,#3434B0_0.01%,#272785_13.16%,#181851_74.52%)] md:aspect-1150/330 md:rounded-3xl">
           <Image
             src="/stats-bg.png"
             alt="Microscope cell background"
@@ -99,8 +99,14 @@ function StatsSection() {
           {/* Mobile middle divider lines only */}
           <div className="absolute top-1/4 left-1/2 z-10 h-12 -translate-x-1/2 -translate-y-1/2 border-l border-dotted border-white/60 md:hidden" />
           <div className="absolute top-3/4 left-1/2 z-10 h-12 -translate-x-1/2 -translate-y-1/2 border-l border-dotted border-white/60 md:hidden" />
-
-          <div className="relative z-20 grid h-full grid-cols-2 grid-rows-2 gap-4 px-8 py-3 text-white md:grid-cols-4 md:grid-rows-1 md:gap-0 md:px-10 md:py-8">
+          <div className="mt-7.5 text-center text-white font-bold text-5xl">{'Your Impact'}</div>
+          <div className="mt-5 w-24 h-1 bg-white mx-auto rounded-full"></div>
+          <div className="mx-auto mt-5 w-216 text-center  text-white text-xl">
+            {
+              'Every contribution, big or small, fuels breakthroughs that benefit society today and for generations to come'
+            }
+          </div>
+          <div className="relative z-20 mt-14 grid grid-cols-2 grid-rows-2 gap-4 px-8 py-3 text-white md:grid-cols-4 md:grid-rows-1 md:gap-0 md:px-10 md:py-8">
             {stats.map((stat, index) => {
               const Icon = stat.icon
 
@@ -125,7 +131,7 @@ function StatsSection() {
                   </h2>
 
                   {/* Label row */}
-                  <p className="flex max-w-23ms-start justify-center text-[9px] leading-tight font-light sm:max-w-27.5 sm:text-[10px] md:h-16 md:max-w-47.5 md:translate-y-2 md:text-base lg:h-18 lg:max-w-57.5 lg:text-lg xl:h-20 xl:max-w-62.5 xl:text-xl">
+                  <p className="flex max-w-23 items-start justify-center text-[9px] leading-tight font-light sm:max-w-27.5 sm:text-[10px] md:h-16 md:max-w-47.5 md:translate-y-2 md:text-base lg:h-18 lg:max-w-57.5 lg:text-lg xl:h-20 xl:max-w-62.5 xl:text-xl">
                     {stat.label}
                   </p>
                 </div>
