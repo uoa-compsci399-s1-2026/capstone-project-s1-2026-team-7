@@ -10,6 +10,7 @@ import WhatWeDoSection from './WhatWeDoSection'
 import DonationSection from './DonationSection'
 import CurrentStudies from './CurrentStudies'
 import type { Lang } from '@/types/lang'
+import MediaSection from './MediaSection'
 
 type Props = {
   blocks: HomepageBlockDTO[]
@@ -51,6 +52,8 @@ export default function RenderHomeBlocks({ blocks, lang }: Props) {
           case 'donation-section':
             return <DonationSection key={block.id || index} />
 
+          case 'media-section':
+            return <MediaSection key={block.id || index} /> // MediaSection is rendered separately in the homepage
           default:
             return null
         }

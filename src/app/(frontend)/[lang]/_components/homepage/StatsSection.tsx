@@ -82,9 +82,9 @@ function CountUpNumber({ end, duration = 1500 }: { end: number; duration?: numbe
 
 function StatsSection() {
   return (
-    <section className="bg-white px-[26px] py-16 md:px-8 md:py-24 lg:px-12">
-      <div className="mx-auto w-full max-w-[1150px] min-[500px]:max-w-[480px] sm:max-w-[520px] md:max-w-[1150px]">
-        <div className="relative aspect-[292/229] w-full overflow-hidden rounded-[8px] bg-[linear-gradient(180deg,#3636B7_0%,#3434B0_0.01%,#272785_13.16%,#181851_74.52%)] md:aspect-[1150/295] md:rounded-[24px]">
+    <section className="bg-white px-6.5 py-16 md:px-8 md:py-24 lg:px-12">
+      <div className="mx-auto w-full max-w-287.5 min-[500px]:max-w-120 sm:max-w-130 md:max-w-287.5">
+        <div className="relative aspect-292/229 w-full overflow-hidden rounded-lg bg-[linear-gradient(180deg,#3636B7_0%,#3434B0_0.01%,#272785_13.16%,#181851_74.52%)] md:aspect-1150/295 md:rounded-3xl">
           <Image
             src="/stats-bg.png"
             alt="Microscope cell background"
