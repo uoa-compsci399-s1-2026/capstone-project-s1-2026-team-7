@@ -1,12 +1,20 @@
 import React from 'react'
-
+import Image from 'next/image'
 type DonationsHeroProps = {
   title: string
   blurb: string
   donobutton: string
+  imageUrl: string
+  imageAlt: string
 }
 
-export default function DonationsHero({ title, blurb, donobutton }: DonationsHeroProps) {
+export default function DonationsHero({
+  title,
+  blurb,
+  donobutton,
+  imageUrl,
+  imageAlt,
+}: DonationsHeroProps) {
   return (
     <section className="relative w-full bg-cover bg-center bg-linear-to-b from-[#4671ff] to-[#232375] via-[#3535bb] h-165.25 ">
       <div className="max-w-6xl mx-auto flex items-center justify-between gap-12">
@@ -21,7 +29,7 @@ export default function DonationsHero({ title, blurb, donobutton }: DonationsHer
         </div>
 
         <div className="bg-blue-[#1F2BD4] p-3 rounded-2xl">
-          <img src="/Rectangle 43.png" alt="..." className="rounded-xl w-75 h-75 object-cover" />
+          <Image src={imageUrl} alt={imageAlt} className="rounded-xl w-75 h-75 object-cover" />
         </div>
       </div>
     </section>

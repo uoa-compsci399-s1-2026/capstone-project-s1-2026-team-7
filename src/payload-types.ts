@@ -102,6 +102,7 @@ export interface Config {
   globals: {
     'home-page': HomePage
     'our-team-page': OurTeamPage
+    'donations-page': DonationsPage
     'studies-page': StudiesPage
     'research-page': ResearchPage
     'navigation-bar': NavigationBar
@@ -111,6 +112,7 @@ export interface Config {
   globalsSelect: {
     'home-page': HomePageSelect<false> | HomePageSelect<true>
     'our-team-page': OurTeamPageSelect<false> | OurTeamPageSelect<true>
+    'donations-page': DonationsPageSelect<false> | DonationsPageSelect<true>
     'studies-page': StudiesPageSelect<false> | StudiesPageSelect<true>
     'research-page': ResearchPageSelect<false> | ResearchPageSelect<true>
     'navigation-bar': NavigationBarSelect<false> | NavigationBarSelect<true>
@@ -788,6 +790,52 @@ export interface OurTeamPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "donations-page".
+ */
+export interface DonationsPage {
+  id: number
+  hero: {
+    title: string
+    blurb: string
+    buttonLabel?: string | null
+    image?: (number | null) | Media
+  }
+  supportSection: {
+    heading: string
+  }
+  stats: {
+    title: string
+    description: string
+    stats?:
+      | {
+          key: 'graduates' | 'publications' | 'partners' | 'participants'
+          value: number
+          label: string
+          id?: string | null
+        }[]
+      | null
+  }
+  partners?:
+    | {
+        logo: number | Media
+        alt: string
+        id?: string | null
+      }[]
+    | null
+  donationLink: {
+    title: string
+    description: string
+    backgroundImage: number | Media
+    button: {
+      label: string
+      url: string
+    }
+  }
+  updatedAt?: string | null
+  createdAt?: string | null
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "studies-page".
  */
 export interface StudiesPage {
@@ -1057,6 +1105,62 @@ export interface OurTeamPageSelect<T extends boolean = true> {
   boardTabLabel?: T
   staffTabLabel?: T
   staffMembers?: T
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "donations-page_select".
+ */
+export interface DonationsPageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        title?: T
+        blurb?: T
+        buttonLabel?: T
+        image?: T
+      }
+  supportSection?:
+    | T
+    | {
+        heading?: T
+      }
+  stats?:
+    | T
+    | {
+        title?: T
+        description?: T
+        stats?:
+          | T
+          | {
+              key?: T
+              value?: T
+              label?: T
+              id?: T
+            }
+      }
+  partners?:
+    | T
+    | {
+        logo?: T
+        alt?: T
+        id?: T
+      }
+  donationLink?:
+    | T
+    | {
+        title?: T
+        description?: T
+        backgroundImage?: T
+        button?:
+          | T
+          | {
+              label?: T
+              url?: T
+            }
+      }
   updatedAt?: T
   createdAt?: T
   globalType?: T

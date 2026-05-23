@@ -9,7 +9,7 @@ import SupportSection from './_components/SupportSection'
 import StatsSection from './_components/StatsSection'
 import { PartnersSection } from './_components/PartnersSection'
 import { PartnersBlockDTO } from '@/validation'
-import MakeDonationBlock from './_components/MakeDonationBlock'
+import DonationLink from './_components/DonationLink'
 
 export default async function Donations() {
   {
@@ -77,11 +77,24 @@ export default async function Donations() {
         title="Donations That Change The World"
         blurb="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas dictum imperdiet ornare. Cras elementum mauris nec leo consectetur scelerisque. Nulla dictum ipsum ut quam mollis, eget feugiat quam consectetur. Mauris ut lacinia arcu. Quisque a fringilla sapien. Cras vestibulum ex vitae tempus gravida. Cras vel eros quis massa eleifend elementum. Suspendisse lacinia velit massa, non finibus lorem dignissim quis. Nullam placerat diam nunc, vitae placerat justo ultrices quis. Sed sit amet dolor sed nunc commodo facilisis."
         donobutton="Make a donation"
+        imageUrl="this is an image URL"
+        imageAlt="image"
       ></DonationsHero>
       <SupportSection heading={'What Your Support Enables'}></SupportSection>
-      <StatsSection></StatsSection>
+      <StatsSection title={''} description={''} stats={[]}></StatsSection>
       <PartnersSection data={partnersBlockData}></PartnersSection>
-      <MakeDonationBlock></MakeDonationBlock>
+      <DonationLink
+        title={''}
+        description={''}
+        backgroundImage={{
+          url: '',
+          alt: '',
+        }}
+        button={{
+          label: '',
+          url: '',
+        }}
+      ></DonationLink>
     </div>
   )
 }

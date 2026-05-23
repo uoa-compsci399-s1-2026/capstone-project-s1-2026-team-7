@@ -9,10 +9,11 @@ export async function getDonationsPage(locale: Lang = 'en'): Promise<DonationsPa
   const payload = await getPayloadClient()
 
   const data = await payload.findGlobal({
-    slug: 'studies-page',
+    slug: 'donations-page',
     locale,
     fallbackLocale: 'en',
-    depth: 1,
+    depth: 2,
   })
+
   return DonationsPageDTOSchema.parse(data)
 }

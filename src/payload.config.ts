@@ -18,6 +18,7 @@ import { HomePage } from './globals/Homepage'
 import { OurTeamPage } from './globals/OurTeamPage'
 import { StudiesPage } from './globals/StudiesPage'
 import { ResearchPage } from './globals/ResearchPage'
+import { DonationsPage } from './globals/DonationsPage'
 import { NavigationBar } from './globals/NavigationBar'
 import { Footer } from './globals/Footer'
 import { ContactPage } from './globals/ContactPage'
@@ -54,7 +55,16 @@ export default buildConfig({
   },
   collections: [Users, Media, Staff, Studies, Research, ResearchCategories, EnquiryTags],
 
-  globals: [HomePage, OurTeamPage, StudiesPage, ResearchPage, NavigationBar, ContactPage, Footer],
+  globals: [
+    HomePage,
+    OurTeamPage,
+    DonationsPage,
+    StudiesPage,
+    ResearchPage,
+    NavigationBar,
+    ContactPage,
+    Footer,
+  ],
 
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
