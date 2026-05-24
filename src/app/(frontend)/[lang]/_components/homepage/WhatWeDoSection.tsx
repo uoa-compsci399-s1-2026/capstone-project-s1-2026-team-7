@@ -18,9 +18,9 @@ function WhatWeDoSection({ data }: WhatWeDoSectionProps) {
   const { ref, inView } = useInView<HTMLElement>()
 
   return (
-    <section ref={ref} className="w-full bg-white px-[26px] py-16 md:px-8 md:py-24 lg:px-12">
-      <div className="mx-auto w-full max-w-[1120px]">
-        <div className="mb-[17px]">
+    <section ref={ref} className="w-full bg-white px-6.5 py-16 md:px-8 md:py-24 lg:px-12">
+      <div className="mx-auto w-full max-w-280">
+        <div className="mb-4.25">
           <h2
             className={clsx(
               FADE_BASE,
@@ -35,13 +35,13 @@ function WhatWeDoSection({ data }: WhatWeDoSectionProps) {
             className={clsx(
               FADE_BASE,
               inView ? FADE_SHOWN : FADE_HIDDEN,
-              'mt-3 h-[3px] w-16 rounded-full bg-[#08084f] sm:w-18 md:h-1 md:w-20 lg:w-22 xl:w-24',
+              'mt-3 h-0.75 w-16 rounded-full bg-[#08084f] sm:w-18 md:h-1 md:w-20 lg:w-22 xl:w-24',
             )}
             style={{ transitionDelay: inView ? '100ms' : '0ms' }}
           />
         </div>
 
-        <div className="grid grid-cols-1 gap-[17px] md:grid-cols-[57fr_43fr] md:items-stretch lg:grid-cols-[63fr_37fr]">
+        <div className="grid grid-cols-1 gap-4.25 md:grid-cols-[57fr_43fr] md:items-stretch lg:grid-cols-[63fr_37fr]">
           <div className="divide-y divide-gray-200 border-b border-gray-200">
             {sections.map((section, idx) => (
               <div
@@ -71,7 +71,7 @@ function WhatWeDoSection({ data }: WhatWeDoSectionProps) {
               className={clsx(
                 FADE_BASE,
                 inView ? FADE_SHOWN : FADE_HIDDEN,
-                'relative aspect-[292/162] w-full overflow-hidden rounded-[20px] min-[500px]:mx-auto min-[500px]:max-w-[480px] sm:max-w-[520px] md:mx-0 md:aspect-auto md:h-full md:max-w-none',
+                'relative aspect-292/162 w-full overflow-hidden rounded-[20px] min-[500px]:mx-auto min-[500px]:max-w-120 sm:max-w-130 md:mx-0 md:aspect-auto md:h-full md:max-w-none',
               )}
               style={{ transitionDelay: inView ? '200ms' : '0ms' }}
             >

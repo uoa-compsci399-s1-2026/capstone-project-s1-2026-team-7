@@ -45,7 +45,14 @@ function TimelineSection({ data }: TimelineSectionProps) {
     if (viewportRef.current) resizeObserver.observe(viewportRef.current)
     if (trackRef.current) resizeObserver.observe(trackRef.current)
 
-    return () => resizeObserver.disconnect()
+    // Zoom changes viewport metrics but doesn't always trip the ResizeObserver
+    // cleanly, so also recalc on the window resize event (which zoom fires).
+    window.addEventListener('resize', recalc)
+
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener('resize', recalc)
+    }
   }, [items.length])
 
   useLenis(
@@ -79,10 +86,12 @@ function TimelineSection({ data }: TimelineSectionProps) {
       ref={sectionRef}
       id="our-history"
       className="relative bg-white"
+      // Dynamic, measured pixel height — cannot be expressed as a Tailwind class.
+
       style={{ height: extra > 0 ? `calc(100vh + ${extra}px)` : '100vh' }}
     >
       <div className="sticky top-0 flex h-screen items-center overflow-hidden">
-        <div ref={inViewRef} className="mx-auto w-full max-w-280 px-6.5 md:px-8 lg:px-0">
+        <div ref={inViewRef} className="mx-auto w-full max-w-280 px-6.5 md:px-8 lg:px-12 xl:px-0">
           <article
             className={clsx(FADE_BASE, inView ? FADE_SHOWN : FADE_HIDDEN, 'mb-10 md:hidden')}
           >
@@ -92,11 +101,13 @@ function TimelineSection({ data }: TimelineSectionProps) {
 
             <div className="mt-4 h-1 w-20 rounded-full bg-[#08084f]" />
 
-            <p className="mt-6 max-w-80 text-base leading-snug text-[#08084f]">{description}</p>
+            <p className="mt-6 max-w-80 text-base leading-snug font-normal text-[#08084f]">
+              {description}
+            </p>
           </article>
 
           <div ref={viewportRef} className="overflow-hidden">
-            <div ref={trackRef} className="flex w-max items-start will-change-transform">
+            <div ref={trackRef} className="relative flex w-max items-start will-change-transform">
               <article
                 className={clsx(
                   FADE_BASE,
@@ -112,7 +123,7 @@ function TimelineSection({ data }: TimelineSectionProps) {
 
                 <div className="mt-5 h-1 w-24 rounded-full bg-[#08084f] lg:w-32" />
 
-                <p className="mt-8 max-w-100 text-lg leading-snug text-[#08084f] lg:text-xl">
+                <p className="mt-8 max-w-100 text-lg leading-snug font-normal text-[#08084f] lg:text-xl">
                   {description}
                 </p>
               </article>
@@ -126,13 +137,11 @@ function TimelineSection({ data }: TimelineSectionProps) {
                     className={clsx(
                       FADE_BASE,
                       inView ? FADE_SHOWN : FADE_HIDDEN,
-                      'relative grid h-75 w-60 shrink-0 grid-rows-[1fr_3.5rem] md:h-88 md:w-72 md:grid-rows-[1fr_4rem] lg:w-80',
-                      index !== items.length - 1 &&
-                        'after:absolute after:bottom-7 after:left-5 after:-right-5 after:z-0 after:h-px after:bg-[#08084f]/70 md:after:bottom-8 md:after:left-6 md:after:-right-6 lg:after:left-8 lg:after:-right-8',
+                      'relative grid h-75 w-60 shrink-0 grid-rows-[1fr_4rem] md:h-88 md:w-72 md:grid-rows-[1fr_5rem] lg:w-80',
                     )}
-                    style={{
-                      transitionDelay: inView ? `${150 + index * 100}ms` : '0ms',
-                    }}
+                    // Staggered per-item delay computed from index — not a static class.
+
+                    style={{ transitionDelay: inView ? `${150 + index * 100}ms` : '0ms' }}
                   >
                     <div className="pr-8 md:pr-10">
                       <h3
@@ -144,34 +153,30 @@ function TimelineSection({ data }: TimelineSectionProps) {
                         {item.year}
                       </h3>
 
-                      <p className="mt-4 max-w-55 text-sm leading-snug text-[#08084f] md:max-w-64 md:text-lg">
+                      <p className="mt-4 max-w-55 text-xs leading-snug font-normal text-[#08084f] md:max-w-64 md:text-sm">
                         {item.description}
                       </p>
                     </div>
 
-                    <div className="relative z-10 flex items-center">
+                    {/* node sits on top of the single continuous line drawn below */}
+                    <div className="relative flex items-center">
                       <span
                         aria-hidden="true"
-                        className="relative z-10 flex h-10 w-16 items-center bg-white pr-2 md:h-12 md:w-20 lg:h-16 lg:w-24"
-                      >
-                        <span
-                          className={clsx(
-                            'h-0.5 flex-1 transition-colors duration-300',
-                            isActive ? 'bg-[#1F2BD4]' : 'bg-black',
-                          )}
-                        />
-
-                        <span
-                          className={clsx(
-                            '-ml-2 block h-3 w-3 rotate-[-45deg] border-r-2 border-b-2 transition-colors duration-300 md:h-4 md:w-4 lg:h-5 lg:w-5 lg:border-r-4 lg:border-b-4',
-                            isActive ? 'border-[#1F2BD4]' : 'border-black',
-                          )}
-                        />
-                      </span>
+                        className={clsx(
+                          'relative z-10 block h-7 w-7 rounded-full ring-4 ring-white transition-colors duration-300 md:h-9 md:w-9 lg:h-11 lg:w-11',
+                          isActive ? 'bg-[#1F2BD4]' : 'bg-black',
+                        )}
+                      />
                     </div>
                   </article>
                 )
               })}
+
+              {/* Single continuous thin black line behind all the dots. */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute left-0 right-0 bottom-8 z-0 h-px bg-black md:bottom-10"
+              />
             </div>
           </div>
 
@@ -181,6 +186,8 @@ function TimelineSection({ data }: TimelineSectionProps) {
               inView ? FADE_SHOWN : FADE_HIDDEN,
               'mt-8 flex items-center gap-3 text-xs font-bold tracking-[0.22em] text-[#1F2BD4] uppercase md:text-sm',
             )}
+            // Single static delay value driven by a runtime condition.
+
             style={{ transitionDelay: inView ? '500ms' : '0ms' }}
           >
             <span>{isTimelineComplete ? 'Timeline complete' : 'Scroll to explore'}</span>

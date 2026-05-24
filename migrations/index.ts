@@ -9,8 +9,9 @@ import * as migration_20260509_070050 from './20260509_070050'
 import * as migration_20260512_152526 from './20260512_152526'
 import * as migration_20260513_121859 from './20260513_121859'
 import * as migration_20260513_123521 from './20260513_123521'
-import * as migration_20260513_173014 from './20260513_173014'
 import * as migration_20260513_164709 from './20260513_164709'
+import * as migration_20260513_173014 from './20260513_173014'
+import * as migration_20260523_135153_add_video_block from './20260523_135153_add_video_block'
 
 export const migrations = [
   {
@@ -69,13 +70,18 @@ export const migrations = [
     name: '20260513_123521',
   },
   {
+    up: migration_20260513_164709.up,
+    down: migration_20260513_164709.down,
+    name: '20260513_164709',
+  },
+  {
     up: migration_20260513_173014.up,
     down: migration_20260513_173014.down,
     name: '20260513_173014',
   },
   {
-    up: migration_20260513_164709.up,
-    down: migration_20260513_164709.down,
-    name: '20260513_164709',
+    up: migration_20260523_135153_add_video_block.up,
+    down: migration_20260523_135153_add_video_block.down,
+    name: '20260523_135153_add_video_block',
   },
 ]

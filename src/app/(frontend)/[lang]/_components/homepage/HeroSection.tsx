@@ -31,11 +31,11 @@ export default function HeroSection({ data, lang }: HeroSectionProps) {
       <div className="relative z-10 mx-auto grid min-h-140 w-full max-w-5xl grid-cols-1 items-center justify-items-center gap-10 px-5 py-16 md:min-h-130 md:grid-cols-2 md:justify-items-stretch md:px-8 lg:min-h-173 lg:gap-12 lg:px-12">
         {/* Text */}
         <div className="w-full max-w-xl text-center md:text-left">
-          <h1 className="text-xl leading-tight font-bold text-white sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
+          <h1 className="text-xl leading-tight font-bold text-white sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">
             {title}
           </h1>
 
-          <p className="mt-5 text-base leading-relaxed text-white sm:text-lg md:text-lg lg:text-xl">
+          <p className="mt-5 text-base leading-relaxed font-normal text-white md:text-md lg:text-lg">
             {description}
           </p>
 

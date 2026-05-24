@@ -17,63 +17,63 @@ export default function WhoWeAreSection({ data }: WhoWeAreBlockProps) {
   const { ref, inView } = useInView<HTMLElement>()
 
   return (
-    <section
-      ref={ref}
-      id="who-we-are"
-      className="w-full bg-white px-6.5 py-16 md:px-8 md:py-24 lg:px-12"
-    >
-      <div className="mx-auto w-full max-w-287.5">
-        <div className="grid grid-cols-1 items-center gap-10 md:grid-cols-[42%_52%] md:gap-[6%]">
-          {/* Text - first on mobile, right on desktop */}
-          <div className="order-1 text-left md:order-2">
-            <div className="w-full md:max-w-none">
-              <h2
-                className={clsx(
-                  FADE_BASE,
-                  inView ? FADE_SHOWN : FADE_HIDDEN,
-                  'text-[22px] leading-tight font-extrabold text-[#08084f] sm:text-2xl md:text-[28px] lg:text-[32px] xl:text-4xl',
-                )}
-              >
-                {title}
-              </h2>
-
+    <section ref={ref} id="who-we-are" className="w-full bg-white py-16 md:py-24">
+      <div className="mx-auto w-full max-w-280 px-6.5 md:px-8 lg:px-12 xl:px-0">
+        <div className="w-full rounded-2xl bg-[#0a0a3d] px-7 py-11">
+          <div className="grid grid-cols-1 items-center gap-7 sm:grid-cols-2 sm:gap-x-7 md:gap-x-[4%] xl:gap-x-7">
+            {/* Image — below sm: second, sm+: left */}
+            <div className="order-2 sm:order-1">
               <div
                 className={clsx(
                   FADE_BASE,
                   inView ? FADE_SHOWN : FADE_HIDDEN,
-                  'mt-4 h-0.75 w-16 rounded-full bg-[#08084f] sm:w-18 md:h-1 md:w-20 lg:w-22 xl:w-24',
-                )}
-                style={{ transitionDelay: inView ? '100ms' : '0ms' }}
-              />
-
-              <div
-                className={clsx(
-                  FADE_BASE,
-                  inView ? FADE_SHOWN : FADE_HIDDEN,
-                  'mt-5 space-y-4 text-xs leading-snug font-normal text-[#08084f] sm:text-sm md:mt-6 md:space-y-5 md:text-base lg:text-lg xl:text-xl',
+                  'relative mx-auto aspect-296/192 w-full overflow-hidden rounded-[10px] min-[500px]:max-w-120 sm:max-w-130 md:mx-0 md:aspect-481/386 md:max-w-none md:rounded-2xl',
                 )}
                 style={{ transitionDelay: inView ? '200ms' : '0ms' }}
               >
-                <p>{description}</p>
+                <Image
+                  src={image.url}
+                  alt="Researchers working with a participant in the Human Nutrition Unit"
+                  fill
+                  sizes="(max-width: 499px) calc(100vw - 52px), (max-width: 767px) 520px, 42vw"
+                  className="object-cover object-center"
+                />
               </div>
             </div>
-          </div>
-          <div className="order-2 md:order-1">
-            <div
-              className={clsx(
-                FADE_BASE,
-                inView ? FADE_SHOWN : FADE_HIDDEN,
-                'relative mx-auto aspect-296/192 w-full overflow-hidden rounded-[10px] min-[500px]:max-w-120 sm:max-w-130 md:mx-0 md:aspect-481/386 md:max-w-none md:rounded-2xl',
-              )}
-              style={{ transitionDelay: inView ? '200ms' : '0ms' }}
-            >
-              <Image
-                src={image.url}
-                alt="Researchers working with a participant in the Human Nutrition Unit"
-                fill
-                sizes="(max-width: 499px) calc(100vw - 52px), (max-width: 767px) 520px, 42vw"
-                className="object-cover object-center"
-              />
+
+            {/* Text — below sm: first, sm+: right */}
+            <div className="order-1 sm:order-2 flex flex-col justify-center text-left">
+              <div className="mx-auto w-full max-w-sm">
+                <h2
+                  className={clsx(
+                    FADE_BASE,
+                    inView ? FADE_SHOWN : FADE_HIDDEN,
+                    'text-xl font-extrabold leading-tight text-white sm:text-2xl md:text-2xl lg:text-3xl xl:text-4xl',
+                  )}
+                >
+                  {title}
+                </h2>
+
+                <div
+                  className={clsx(
+                    FADE_BASE,
+                    inView ? FADE_SHOWN : FADE_HIDDEN,
+                    'mt-4 h-1 w-16 rounded-full bg-white md:w-20 lg:w-24',
+                  )}
+                  style={{ transitionDelay: inView ? '100ms' : '0ms' }}
+                />
+
+                <div
+                  className={clsx(
+                    FADE_BASE,
+                    inView ? FADE_SHOWN : FADE_HIDDEN,
+                    'mt-5 space-y-4 text-xs font-normal leading-relaxed text-white/90 sm:text-xs md:mt-6 md:space-y-5 md:text-sm lg:text-base xl:text-lg',
+                  )}
+                  style={{ transitionDelay: inView ? '200ms' : '0ms' }}
+                >
+                  <p>{description}</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
