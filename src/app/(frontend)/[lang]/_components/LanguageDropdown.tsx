@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, HTMLAttributes } from 'react'
 import type { Lang } from '@/types/lang'
 import { languages } from '@/types/lang'
 import { cn } from '@/lib/utils'
-import { Icon } from './icons'
+import Image from 'next/image'
 import { useLanguage } from '@/app/context/LanguageContext'
 
 type LanguageDropdownProps = HTMLAttributes<HTMLDivElement>
@@ -46,7 +46,7 @@ export const LanguageDropdown = (props: LanguageDropdownProps) => {
         </span>
 
         <span className={cn('transition-transform duration-200', open && 'rotate-180')}>
-          <Icon.V />
+          <Image src="/VIcon.svg" alt="" width={12} height={12} aria-hidden />
         </span>
       </button>
 
