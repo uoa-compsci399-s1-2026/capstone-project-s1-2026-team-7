@@ -1,4 +1,4 @@
-import { StaffDTO } from '@/validation'
+import type { StaffDTO } from '@/features/our-team/staff.schema'
 
 const dummydata: StaffDTO[] = [
   {

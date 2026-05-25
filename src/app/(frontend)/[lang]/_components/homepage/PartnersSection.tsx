@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import useEmblaCarousel from 'embla-carousel-react'
 import AutoScroll from 'embla-carousel-auto-scroll'
-import type { PartnersBlockDTO } from '@/validation/homepage/home.schema'
+import type { PartnersBlockDTO } from '@/features/homepage/home.schema'
 
 type PartnersSectionProps = {
   data: PartnersBlockDTO

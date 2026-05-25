@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { FooterDTO } from '@/validation'
+import { FooterDTO } from '@/features'
 import { FooterLogos } from './FooterLogos'
 import { FooterColumn } from './FooterColumns'
 import localizedHref from '@/lib/localizedHref'

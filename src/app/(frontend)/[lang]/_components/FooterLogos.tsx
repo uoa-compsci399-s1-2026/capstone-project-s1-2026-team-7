@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { MediaDTO } from '@/validation'
+import { MediaDTO } from '@/features'
 import { Lang } from '@/types/lang'
 
 export type FooterLogosProps = {

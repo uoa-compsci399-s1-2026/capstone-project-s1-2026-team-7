@@ -3,7 +3,7 @@
 import { useActionState, useEffect, useRef } from 'react'
 import ContactInput from './ContactInput'
 import MainButton from '../../_components/MainButton'
-import type { EnquiryTagDTO } from '@/validation/contact/contact.schema'
+import type { EnquiryTagDTO } from '@/features/contact/contact.schema'
 import { type ContactFormState, contactFormInitialState } from '@/types/contact'
 
 type ContactFormProps = {
@@ -36,13 +36,19 @@ export default function ContactForm({ content, tags, action }: ContactFormProps)
 
   return (
     <form ref={formRef} action={formAction} className="flex w-full max-w-140 flex-col gap-7">
-      <ContactInput label={content.name} name="name" placeholder={content.namePlaceholder} />
+      <ContactInput
+        label={content.name}
+        name="name"
+        placeholder={content.namePlaceholder}
+        required
+      />
 
       <ContactInput
         label={content.email}
         name="email"
         type="email"
         placeholder={content.emailPlaceholder}
+        required
       />
 
       <ContactInput
@@ -55,6 +61,9 @@ export default function ContactForm({ content, tags, action }: ContactFormProps)
       <div className="flex flex-col gap-2">
         <label htmlFor="enquiryTagId" className="text-[20px] font-semibold text-black">
           {content.enquiryTypeLabel}
+          <span aria-hidden="true" className="ml-1 text-red-600">
+            *
+          </span>
         </label>
 
         <select
@@ -62,7 +71,7 @@ export default function ContactForm({ content, tags, action }: ContactFormProps)
           name="enquiryTagId"
           required
           defaultValue=""
-          className="h-13 w-full rounded-xl bg-[#D9D9D9] px-6 text-[18px] text-black outline-none focus:ring-2 focus:ring-[#0C0C48]"
+          className="h-13 w-full rounded-xl bg-white px-6 text-[18px] text-black outline-1 focus:ring-2 focus:ring-[#0C0C48]"
         >
           <option value="" disabled>
             {content.enquiryTypePlaceholder}
@@ -78,14 +87,18 @@ export default function ContactForm({ content, tags, action }: ContactFormProps)
       <div className="flex flex-col gap-2">
         <label htmlFor="message" className="text-[20px] font-semibold text-black">
           {content.message}
+          <span aria-hidden="true" className="ml-1 text-red-600">
+            *
+          </span>
         </label>
 
         <textarea
           id="message"
           name="message"
+          required
           placeholder={content.messagePlaceholder}
           rows={6}
-          className="w-full resize-none rounded-xl bg-[#D9D9D9] px-6 py-4 text-[18px] text-black outline-none placeholder:text-[#8A8A8A] focus:ring-2 focus:ring-[#0C0C48]"
+          className="w-full resize-none rounded-xl bg-white px-6 py-4 text-[18px] text-black outline-1 placeholder:text-[#8A8A8A] focus:ring-2 focus:ring-[#0C0C48]"
         />
       </div>
 

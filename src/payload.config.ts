@@ -7,22 +7,28 @@ import sharp from 'sharp'
 import { s3Storage } from '@payloadcms/storage-s3'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 
-import { Users } from './collections/Users'
-import { Media } from './collections/Media'
-import { Studies } from './collections/Studies'
-import { Staff } from './collections/Staff'
-import { Research } from './collections/Research'
-import { ResearchCategories } from './collections/ResearchCategories'
+import { Users } from './payload/collections/Users'
+import { Media } from './payload/collections/Media'
+import { Studies } from './payload/collections/Studies'
+import { Staff } from './payload/collections/Staff'
+import { Research } from './payload/collections/Research'
+import { ResearchCategories } from './payload/collections/ResearchCategories'
+import { ResearchCsvTools } from './payload/collections/ResearchCsvTools'
 
-import { HomePage } from './globals/Homepage'
-import { OurTeamPage } from './globals/OurTeamPage'
-import { StudiesPage } from './globals/StudiesPage'
-import { ResearchPage } from './globals/ResearchPage'
+import { HomePage } from './payload/globals/Homepage'
+import { OurTeamPage } from './payload/globals/OurTeamPage'
+import { StudiesPage } from './payload/globals/StudiesPage'
+import { ResearchPage } from './payload/globals/ResearchPage'
 import { DonationsPage } from './globals/DonationsPage'
-import { NavigationBar } from './globals/NavigationBar'
-import { Footer } from './globals/Footer'
-import { ContactPage } from './globals/ContactPage'
-import { EnquiryTags } from './collections/EnquiryTags'
+import { NavigationBar } from './payload/globals/NavigationBar'
+import { Footer } from './payload/globals/Footer'
+import { ContactPage } from './payload/globals/ContactPage'
+import { EnquiryTags } from './payload/collections/EnquiryTags'
+import { translateEndpoint } from './payload/endpoints/translate'
+import {
+  researchCsvExportEndpoint,
+  researchCsvImportEndpoint,
+} from './payload/endpoints/researchCsv'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -33,6 +39,19 @@ export default buildConfig({
     user: Users.slug,
     importMap: {
       baseDir: path.resolve(dirname),
+    },
+    theme: 'light',
+    meta: {
+      titleSuffix: ' — HNU Admin',
+      title: 'HNU Admin',
+      description: 'Human Nutrition Unit content management',
+      icons: [{ rel: 'icon', type: 'image/png', url: '/HNU%20logo%20HD.png' }],
+    },
+    components: {
+      graphics: {
+        Logo: '/payload/components/admin/HNULogo#HNULogo',
+        Icon: '/payload/components/admin/HNUIcon#HNUIcon',
+      },
     },
   },
 
@@ -53,7 +72,16 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
-  collections: [Users, Media, Staff, Studies, Research, ResearchCategories, EnquiryTags],
+  collections: [
+    Users,
+    Media,
+    Staff,
+    Studies,
+    Research,
+    ResearchCategories,
+    ResearchCsvTools,
+    EnquiryTags,
+  ],
 
   globals: [
     HomePage,
@@ -66,6 +94,8 @@ export default buildConfig({
     Footer,
   ],
 
+  endpoints: [translateEndpoint, researchCsvExportEndpoint, researchCsvImportEndpoint],
+
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
@@ -76,6 +106,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URL || '',
     },
     push: autopush,
+    migrationDir: path.resolve(process.cwd(), 'migrations'),
   }),
   sharp,
   plugins: [
@@ -86,7 +117,7 @@ export default buildConfig({
       bucket: process.env.S3_BUCKET || '',
       config: {
         credentials: {
-          accessKeyId: process.env.AWS_ACCESS_KEY || '',
+          accessKeyId: process.env.AWS_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY || '',
           secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
         },
         region: process.env.S3_REGION,

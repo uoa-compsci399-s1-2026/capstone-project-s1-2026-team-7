@@ -2,8 +2,8 @@ import Banner from '../_components/Banner'
 import ContactForm from './_components/ContactForm'
 import ContactMap from './_components/ContactMap'
 import type { Lang } from '@/types/lang'
-import { getContactPage } from '@/queries/contactPage'
-import { getEnquiryTags } from '@/queries/enquiryTags'
+import { getContactPage } from '@/features/contact/contactPage.query'
+import { getEnquiryTags } from '@/features/contact/enquiryTags.query'
 import { sendContactEmail } from './action'
 
 type ContactPageProps = {

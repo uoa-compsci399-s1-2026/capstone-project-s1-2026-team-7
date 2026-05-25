@@ -1,5 +1,5 @@
-import { getHomePage } from '@/queries/homepage'
-import type { HomepageDTO } from '@/validation'
+import { getHomePage } from '@/features/homepage/homepage.query'
+import type { HomepageDTO } from '@/features'
 import type { Lang } from '@/types/lang'
 import HomepageRenderer from './_components/homepage/HomepageRenderer'
 
@@ -15,7 +15,7 @@ export default async function HomePage({ params }: PageProps) {
 
   return (
     <main>
-      <HomepageRenderer blocks={data.layout} />
+      <HomepageRenderer blocks={data.layout} lang={lang} />
     </main>
   )
 }

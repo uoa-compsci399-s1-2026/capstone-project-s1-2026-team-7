@@ -1,6 +1,5 @@
-import { HomepageBlockDTO } from '@/validation/homepage/home.schema'
+import { HomepageBlockDTO } from '@/features/homepage/home.schema'
 import HeroSection from './HeroSection'
-import { ResearchSection } from './ResearchSection'
 import { PartnersSection } from './PartnersSection'
 import CardSection from './CardSection'
 import InfoSection from './InfoSection'
@@ -9,17 +8,21 @@ import TimelineSection from './TimelineSection'
 import WhoWeAreSection from './WhoWeAreSection'
 import WhatWeDoSection from './WhatWeDoSection'
 import DonationSection from './DonationSection'
+import CurrentStudies from './CurrentStudies'
+import type { Lang } from '@/types/lang'
 
-export default function RenderHomeBlocks({ blocks }: { blocks: HomepageBlockDTO[] }) {
+type Props = {
+  blocks: HomepageBlockDTO[]
+  lang: Lang
+}
+
+export default function RenderHomeBlocks({ blocks, lang }: Props) {
   return (
     <>
       {blocks.map((block, index) => {
         switch (block.blockType) {
           case 'hero':
-            return <HeroSection key={block.id || index} data={block} />
-
-          case 'research':
-            return <ResearchSection key={block.id || index} />
+            return <HeroSection key={block.id || index} data={block} lang={lang} />
 
           case 'partners':
             return <PartnersSection key={block.id || index} data={block} />
@@ -34,13 +37,16 @@ export default function RenderHomeBlocks({ blocks }: { blocks: HomepageBlockDTO[
             return <StatsSection key={block.id || index} />
 
           case 'timeline':
-            return <TimelineSection key={block.id || index} />
+            return <TimelineSection key={block.id || index} data={block} />
 
           case 'who-we-are':
-            return <WhoWeAreSection key={block.id || index} />
+            return <WhoWeAreSection key={block.id || index} data={block} />
+
+          case 'current-studies':
+            return <CurrentStudies key={block.id || index} data={block} lang={lang} />
 
           case 'what-we-do':
-            return <WhatWeDoSection key={block.id || index} />
+            return <WhatWeDoSection key={block.id || index} data={block} />
 
           case 'donation-section':
             return <DonationSection key={block.id || index} />

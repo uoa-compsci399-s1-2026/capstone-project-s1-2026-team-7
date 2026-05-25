@@ -1,6 +1,6 @@
 'use server'
 
-import { sendContactFormEmail } from '@/queries/SendEmail'
+import { sendContactFormEmail } from '@/features/contact/sendEmail.query'
 import type { ContactFormState } from '@/types/contact'
 
 export async function sendContactEmail(

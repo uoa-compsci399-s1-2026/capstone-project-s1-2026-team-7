@@ -1,17 +1,32 @@
 import ResearchHero from './_components/ResearchHero'
 import ResearchFilters from './_components/ResearchFilters'
 import { ResearchClient } from './_components/ResearchClient'
-import { getResearchPage } from '@/queries/researchpage'
-import { searchResearch } from '@/queries/searchResearch'
+import { getResearchPage } from '@/features/research/researchpage.query'
+import { searchResearch } from '@/features/research/searchResearch'
+import { Lang } from '@/types/lang'
 
-export default async function page() {
-  const researchpage = await getResearchPage()
-  const research = await searchResearch('')
+type PageProps = {
+  params: Promise<{
+    lang: Lang
+  }>
+}
 
+export default async function page({ params }: PageProps) {
+  const { lang } = await params
+  const researchpage = await getResearchPage(lang)
+
+  const researchResult = await searchResearch({
+    page: 1,
+    limit: 16,
+  })
   return (
     <div className="w-full mx-auto">
       <ResearchHero title={researchpage.title} backgroundImage="/research/hero_desktop.jpg" />
-      <ResearchClient categories={researchpage.researchCategoriesDisplay} research={research} />
+      <ResearchClient
+        categories={researchpage.researchCategoriesDisplay}
+        initialResearch={researchResult.docs}
+        initialTotalDocs={researchResult.totalDocs}
+      />
     </div>
   )
 }

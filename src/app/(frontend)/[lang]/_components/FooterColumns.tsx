@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import localizedHref from '@/lib/localizedHref'
 
-import { FooterLinkDTO } from '@/validation'
+import { FooterLinkDTO } from '@/features'
 import { Lang } from '@/types/lang'
 
 export type FooterColumnProps = {

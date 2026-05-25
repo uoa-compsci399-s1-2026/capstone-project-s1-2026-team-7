@@ -1,53 +1,86 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import CategorySidebar from './CategorySidebar'
 import ResearchArticles from './ResearchArticles'
 import ResearchTopBar from './ResearchTopBar'
 import Pagination from './Pagination'
 import ResearchFilters from './ResearchFilters'
-import { ResearchDTO } from '@/validation'
+import { ResearchDTO } from '@/features'
 
 type Props = {
   categories: { id: number; title: string }[]
-  research: ResearchDTO[]
+  initialResearch: ResearchDTO[]
+  initialTotalDocs: number
 }
 
-export function ResearchClient({ categories, research }: Props) {
+type SortOption = 'newest' | 'oldest' | 'title'
+
+export function ResearchClient({ categories, initialResearch, initialTotalDocs }: Props) {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(false)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
   const itemsPerPage = 16
-  const [page, setPage] = useState(1)
 
-  const start = (page - 1) * itemsPerPage
-  const end = start + itemsPerPage
+  const [page, setPage] = useState(1)
+  const [research, setResearch] = useState<ResearchDTO[]>(initialResearch)
+  const [totalItems, setTotalItems] = useState(initialTotalDocs)
 
   const [searchQuery, setSearchQuery] = useState('')
-  const [sortOption, setSortOption] = useState<'newest' | 'oldest' | 'title'>('newest')
+  const [sortOption, setSortOption] = useState<SortOption>('newest')
+  const [loading, setLoading] = useState(false)
 
-  const filteredResearch = research
-    .filter((item) => item.title.toLowerCase().includes(searchQuery.toLowerCase()))
-    .filter((item) =>
-      selectedCategory === 'All' || selectedCategory === null
-        ? true
-        : item.categories.some((cat) => cat.title === selectedCategory),
-    )
-    .sort((a, b) => {
-      if (sortOption === 'newest') {
-        return new Date(b.date).getTime() - new Date(a.date).getTime()
-      }
-      if (sortOption === 'oldest') {
-        return new Date(a.date).getTime() - new Date(b.date).getTime()
-      }
-      if (sortOption === 'title') {
-        return a.title.localeCompare(b.title)
-      }
-      return 0
-    })
+  useEffect(() => {
+    setPage(1)
+  }, [searchQuery, sortOption, selectedCategory])
 
-  const paginatedResearch = filteredResearch.slice(start, end)
+  useEffect(() => {
+    const controller = new AbortController()
+
+    async function loadResearchPage() {
+      setLoading(true)
+
+      try {
+        const params = new URLSearchParams({
+          page: String(page),
+          limit: String(itemsPerPage),
+          sort: sortOption,
+        })
+
+        if (searchQuery.trim()) {
+          params.set('search', searchQuery.trim())
+        }
+
+        if (selectedCategory && selectedCategory !== 'All') {
+          params.set('categoryId', selectedCategory)
+        }
+
+        const response = await fetch(`/research-api?${params.toString()}`, {
+          signal: controller.signal,
+        })
+
+        if (!response.ok) {
+          throw new Error('Failed to load research')
+        }
+
+        const data = await response.json()
+
+        setResearch(data.docs)
+        setTotalItems(data.totalDocs)
+      } catch (error) {
+        if (error instanceof Error && error.name !== 'AbortError') {
+          console.error(error)
+        }
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadResearchPage()
+
+    return () => controller.abort()
+  }, [page, searchQuery, sortOption, selectedCategory])
 
   return (
     <div className="w-full">
@@ -57,6 +90,7 @@ export function ResearchClient({ categories, research }: Props) {
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
       />
+
       <div className="max-w-7xl mx-auto w-full px-4 mt-8">
         <div className="lg:hidden mt-4">
           <button
@@ -95,24 +129,22 @@ export function ResearchClient({ categories, research }: Props) {
           </div>
 
           <main>
-            <ResearchTopBar
-              itemCount={filteredResearch.length}
-              viewMode={viewMode}
-              setViewMode={setViewMode}
-            />
+            <ResearchTopBar itemCount={totalItems} viewMode={viewMode} setViewMode={setViewMode} />
 
-            {filteredResearch.length === 0 && (
-              <p className="text-gray-500 mt-6 ml-4">No items found in this category</p>
+            {loading && <p className="text-gray-500 mt-6 ml-4">Loading...</p>}
+
+            {!loading && research.length === 0 && (
+              <p className="text-gray-500 mt-6 ml-4">No items found</p>
             )}
 
-            {filteredResearch.length > 0 && (
-              <ResearchArticles research={paginatedResearch} viewMode={viewMode} />
+            {!loading && research.length > 0 && (
+              <ResearchArticles research={research} viewMode={viewMode} />
             )}
 
-            {filteredResearch.length > itemsPerPage && (
+            {totalItems > itemsPerPage && (
               <Pagination
                 page={page}
-                totalItems={filteredResearch.length}
+                totalItems={totalItems}
                 itemsPerPage={itemsPerPage}
                 onPageChange={setPage}
               />

@@ -1,9 +1,11 @@
 import React from 'react'
 import Navbar from '@/app/(frontend)/[lang]/_components/Navbar'
 import Footer from '@/app/(frontend)/[lang]/_components/Footer'
-import { getNavigationBar } from '@/queries/navigation'
+import LenisProvider from '@/app/(frontend)/[lang]/_components/LenisProvider'
+import { getNavigationBar } from '@/features/navigationBar/navigation.query'
 import { Lang } from '@/types/lang'
-import { getFooter } from '@/queries/footer'
+import { getFooter } from '@/features/footer/footer.query'
+import { LanguageProvider } from '@/app/context/LanguageContext'
 
 export default async function LangLayout({
   children,
@@ -18,11 +20,14 @@ export default async function LangLayout({
 
   const navbarData = await getNavigationBar(currentLang)
   const footerData = await getFooter(currentLang)
+
   return (
-    <>
-      <Navbar data={navbarData} language={currentLang} />
-      <main>{children}</main>
-      <Footer data={footerData} language={currentLang} />
-    </>
+    <LanguageProvider>
+      <LenisProvider>
+        <Navbar data={navbarData} />
+        <main>{children}</main>
+        <Footer data={footerData} language={currentLang} />
+      </LenisProvider>
+    </LanguageProvider>
   )
 }
