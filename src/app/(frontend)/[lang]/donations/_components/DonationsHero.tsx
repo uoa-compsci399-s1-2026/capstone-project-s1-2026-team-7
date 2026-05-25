@@ -1,11 +1,13 @@
 import React from 'react'
 import Image from 'next/image'
+import HrefButton from '../../_components/HrefButton'
 type DonationsHeroProps = {
   title: string
   blurb: string
   donobutton: string
   imageUrl: string
   imageAlt: string
+  buttonurl: string
 }
 
 export default function DonationsHero({
@@ -14,6 +16,7 @@ export default function DonationsHero({
   donobutton,
   imageUrl,
   imageAlt,
+  buttonurl,
 }: DonationsHeroProps) {
   return (
     <section className="relative w-full bg-cover bg-center bg-linear-to-b from-[#4671ff] to-[#232375] via-[#3535bb] h-165.25 ">
@@ -21,18 +24,19 @@ export default function DonationsHero({
         <div className="max-w-xl mt-40">
           <h1 className="text-5xl font-bold text-white leading-tight">{title}</h1>
 
-          <p className="mt-6 text-lg text-gray-200">{blurb}</p>
+          <p className="mt-6 text-lg text-gray-200 mb-10">{blurb}</p>
 
-          <button
-            className="mt-8 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-medium
-          href={button.url}"
-          >
-            {donobutton}
-          </button>
+          <HrefButton title={donobutton} href={buttonurl} variant="secondary" />
         </div>
 
         <div className="bg-blue-[#1F2BD4] p-3 rounded-2xl">
-          <Image src={imageUrl} alt={imageAlt} className="rounded-xl w-75 h-75 object-cover" />
+          <Image
+            src={imageUrl}
+            alt={imageAlt}
+            width={75}
+            height={75}
+            className="rounded-xl w-auto h-75 object-cover"
+          />
         </div>
       </div>
     </section>

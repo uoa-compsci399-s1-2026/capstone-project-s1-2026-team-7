@@ -40,6 +40,13 @@ export const DonationsPage: GlobalConfig = {
         },
 
         {
+          name: 'donateUrl',
+          label: 'Donate Button URL',
+          type: 'text',
+          required: true,
+        },
+
+        {
           name: 'image',
           label: 'Hero Image',
           type: 'upload',
@@ -139,91 +146,6 @@ export const DonationsPage: GlobalConfig = {
               label: 'Label',
               type: 'text',
               localized: true,
-              required: true,
-            },
-          ],
-        },
-      ],
-    },
-
-    /**
-     * PARTNERS SECTION
-     */
-    {
-      name: 'partners',
-      label: 'Partners',
-      type: 'array',
-
-      fields: [
-        {
-          name: 'logo',
-          label: 'Logo',
-          type: 'upload',
-          relationTo: 'media',
-          required: true,
-        },
-
-        {
-          name: 'alt',
-          label: 'Alt Text',
-          type: 'text',
-          localized: true,
-          required: true,
-        },
-      ],
-    },
-
-    /**
-     * DONATION LINK SECTION
-     */
-    {
-      name: 'donationLink',
-      label: 'Donation Link Section',
-      type: 'group',
-
-      fields: [
-        {
-          name: 'title',
-          label: 'Title',
-          type: 'text',
-          localized: true,
-          required: true,
-        },
-
-        {
-          name: 'description',
-          label: 'Description',
-          type: 'textarea',
-          localized: true,
-          required: true,
-        },
-
-        {
-          name: 'backgroundImage',
-          label: 'Background Image',
-          type: 'upload',
-          relationTo: 'media',
-          required: true,
-        },
-
-        {
-          name: 'button',
-          label: 'Button',
-          type: 'group',
-
-          fields: [
-            {
-              name: 'label',
-              label: 'Button Label',
-              type: 'text',
-              localized: true,
-              required: true,
-            },
-
-            {
-              name: 'url',
-              label: 'Button URL',
-              type: 'text',
               required: true,
             },
           ],

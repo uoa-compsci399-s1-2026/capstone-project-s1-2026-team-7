@@ -1,9 +1,6 @@
 import { getPayloadClient } from '@/lib/payload'
 import type { Lang } from '@/types/lang'
-import {
-  DonationsPageDTO,
-  DonationsPageDTOSchema,
-} from '@/validation/donations/donationsPage.schema'
+import { DonationsPageDTO, DonationsPageDTOSchema } from '@/features/donations/donationsPage.schema'
 
 export async function getDonationsPage(locale: Lang = 'en'): Promise<DonationsPageDTO> {
   const payload = await getPayloadClient()
