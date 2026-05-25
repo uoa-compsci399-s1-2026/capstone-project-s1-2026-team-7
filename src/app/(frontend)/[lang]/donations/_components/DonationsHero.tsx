@@ -23,7 +23,10 @@ export default function DonationsHero({
 
           <p className="mt-6 text-lg text-gray-200">{blurb}</p>
 
-          <button className="mt-8 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-medium">
+          <button
+            className="mt-8 px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-medium
+          href={button.url}"
+          >
             {donobutton}
           </button>
         </div>

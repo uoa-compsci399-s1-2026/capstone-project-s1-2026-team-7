@@ -16,11 +16,8 @@ export default async function Donations() {
     /* Import from backend*/
   }
 
-  //const pageData: DonationsPageDTO = await getDonationsPage('en')
-  const pageData = {
-    title: 'Hello',
-    heroImage: { url: '/donopic.png', alt: 'donopic' },
-  }
+  const pageData: DonationsPageDTO = await getDonationsPage('en')
+
   const partnersBlockData: PartnersBlockDTO = {
     id: 'partners-1',
     blockType: 'partners',
@@ -74,26 +71,25 @@ export default async function Donations() {
   return (
     <div>
       <DonationsHero
-        title="Donations That Change The World"
-        blurb="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas dictum imperdiet ornare. Cras elementum mauris nec leo consectetur scelerisque. Nulla dictum ipsum ut quam mollis, eget feugiat quam consectetur. Mauris ut lacinia arcu. Quisque a fringilla sapien. Cras vestibulum ex vitae tempus gravida. Cras vel eros quis massa eleifend elementum. Suspendisse lacinia velit massa, non finibus lorem dignissim quis. Nullam placerat diam nunc, vitae placerat justo ultrices quis. Sed sit amet dolor sed nunc commodo facilisis."
-        donobutton="Make a donation"
-        imageUrl="this is an image URL"
-        imageAlt="image"
+        title={pageData.hero.title}
+        blurb={pageData.hero.blurb}
+        donobutton={pageData.hero.buttonLabel}
+        imageUrl={pageData.hero.image.url}
+        imageAlt={pageData.hero.image.alt}
+        buttonurl={pageData.donationLink.button.url}
       ></DonationsHero>
-      <SupportSection heading={'What Your Support Enables'}></SupportSection>
-      <StatsSection title={''} description={''} stats={[]}></StatsSection>
+      <SupportSection heading={pageData.supportSection.heading}></SupportSection>
+      <StatsSection
+        title={pageData.stats.title}
+        description={pageData.stats.description}
+        stats={pageData.stats.stats}
+      ></StatsSection>
       <PartnersSection data={partnersBlockData}></PartnersSection>
       <DonationLink
-        title={''}
-        description={''}
-        backgroundImage={{
-          url: '',
-          alt: '',
-        }}
-        button={{
-          label: '',
-          url: '',
-        }}
+        title={pageData.donationLink.title}
+        description={pageData.donationLink.description}
+        backgroundImage={pageData.donationLink.backgroundImage}
+        button={pageData.donationLink.button}
       ></DonationLink>
     </div>
   )
