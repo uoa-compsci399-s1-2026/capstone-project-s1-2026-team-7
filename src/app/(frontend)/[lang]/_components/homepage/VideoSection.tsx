@@ -10,10 +10,6 @@ type Props = {
 
 type PlayableVideo = VideoBlockDTO['videos'][number] & { youTubeId: string }
 
-/**
- * Pulls the 11-character video ID out of any common YouTube URL shape,
- * or returns it unchanged if the admin pasted a bare ID.
- */
 function getYouTubeId(input: string): string {
   if (!input) return ''
   const trimmed = input.trim()
@@ -41,17 +37,17 @@ export default function VideoSection({ data }: Props) {
   if (playable.length === 0) return null
 
   return (
-    <section className="w-full overflow-x-hidden bg-white py-16 text-[#0C0C48] md:py-24">
-      <div className="mx-auto w-full max-w-280 px-6.5 md:px-8 lg:px-12 xl:px-0">
+    <section className="w-full overflow-x-hidden bg-white py-16 text-[#08084f] md:py-24">
+      <div className="mx-auto w-full max-w-300 px-6.5 md:px-8 lg:px-12 xl:px-0">
         <div className="mx-auto max-w-150 text-center">
-          <h2 className="text-xl leading-tight font-extrabold sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
+          <h2 className="text-[22px] leading-tight font-extrabold text-[#08084f] sm:text-2xl md:text-[28px] lg:text-[32px] xl:text-4xl">
             {title}
           </h2>
 
-          <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-[#1F2BD4] md:w-20 lg:w-24" />
+          <div className="mx-auto mt-3 h-0.75 w-16 rounded-full bg-[#08084f] sm:w-18 md:h-1 md:w-20 lg:w-22 xl:w-24" />
 
           {description && (
-            <p className="mx-auto mt-5 text-xs leading-relaxed text-[#0C0C48]/70 sm:text-sm md:mt-6 md:text-base lg:text-lg">
+            <p className="mx-auto mt-5 text-[10px] leading-relaxed text-[#08084f]/70 sm:text-xs md:mt-6 md:text-sm lg:text-base">
               {description}
             </p>
           )}
@@ -74,9 +70,12 @@ function Carousel({ videos }: { videos: PlayableVideo[] }) {
   useEffect(() => {
     const el = stageRef.current
     if (!el) return
+
     const ro = new ResizeObserver((entries) => setWidth(entries[0].contentRect.width))
+
     ro.observe(el)
     setWidth(el.clientWidth)
+
     return () => ro.disconnect()
   }, [])
 
@@ -87,7 +86,6 @@ function Carousel({ videos }: { videos: PlayableVideo[] }) {
   const next = () => setActive((a) => (a + 1) % count)
   const prev = () => setActive((a) => (a - 1 + count) % count)
 
-  // 1 video -> single large player
   if (count === 1) {
     return (
       <div className="mt-8 md:mt-12">
@@ -103,7 +101,6 @@ function Carousel({ videos }: { videos: PlayableVideo[] }) {
     )
   }
 
-  // 2 videos -> side by side
   if (count === 2) {
     return (
       <div className="mt-8 grid grid-cols-1 gap-6 md:mt-12 md:grid-cols-2 md:gap-8">
@@ -120,7 +117,6 @@ function Carousel({ videos }: { videos: PlayableVideo[] }) {
     )
   }
 
-  // 3+ videos -> looping coverflow (3 visible, arrows cycle through)
   const isMobile = width > 0 && width < 640
   const featuredW = isMobile ? width * 0.84 : Math.min(width * 0.56, 620)
   const featuredH = featuredW * (9 / 16)
@@ -154,7 +150,9 @@ function Carousel({ videos }: { videos: PlayableVideo[] }) {
               style={{
                 width: featuredW,
                 height: featuredH,
-                transform: `translate(-50%, -50%) translateX(${rel * centerGap}px) scale(${isCenter ? 1 : sideScale})`,
+                transform: `translate(-50%, -50%) translateX(${rel * centerGap}px) scale(${
+                  isCenter ? 1 : sideScale
+                })`,
                 opacity: visible ? (isCenter ? 1 : 0.55) : 0,
                 zIndex: 10 - abs,
                 pointerEvents: visible ? 'auto' : 'none',
@@ -172,22 +170,29 @@ function Carousel({ videos }: { videos: PlayableVideo[] }) {
         })}
       </div>
 
-      {/* caption for the centered video */}
       <CenterCaption videos={videos} active={active} />
 
       <div className="mt-6 flex items-center justify-center gap-2">
-        {videos.map((v, i) => (
-          <button
-            key={v.id}
-            onClick={() => setActive(i)}
-            aria-label={`Go to video ${i + 1}`}
-            className="h-2 rounded-full transition-all"
-            style={{
-              width: i === active ? 28 : 8,
-              backgroundColor: i === active ? '#1F2BD4' : 'rgba(12,12,72,0.2)',
-            }}
-          />
-        ))}
+        <button
+          type="button"
+          onClick={prev}
+          aria-label="Previous video"
+          className="h-2 w-2 rounded-full bg-[#08084f]/25 transition hover:bg-[#08084f]/40"
+        />
+
+        <button
+          type="button"
+          onClick={() => setActive(active)}
+          aria-label="Current video"
+          className="h-2.5 w-2.5 rounded-full bg-[#08084f]/35 transition hover:bg-[#08084f]/45"
+        />
+
+        <button
+          type="button"
+          onClick={next}
+          aria-label="Next video"
+          className="h-2 w-2 rounded-full bg-[#08084f]/25 transition hover:bg-[#08084f]/40"
+        />
       </div>
     </div>
   )
@@ -195,17 +200,21 @@ function Carousel({ videos }: { videos: PlayableVideo[] }) {
 
 function CenterCaption({ videos, active }: { videos: PlayableVideo[]; active: number }) {
   const v = videos[active]
+
   if (!v || (!v.title && !v.caption)) return null
+
   return (
     <div key={v.id} className="mt-6 text-center" style={{ animation: 'hnuFade 0.4s ease both' }}>
       <style>{`@keyframes hnuFade { from { opacity: 0 } to { opacity: 1 } }`}</style>
+
       {v.title && (
-        <h3 className="text-base font-extrabold leading-tight text-[#0C0C48] sm:text-lg md:text-xl">
+        <h3 className="text-sm leading-tight font-extrabold text-[#08084f] sm:text-base md:text-lg lg:text-xl">
           {v.title}
         </h3>
       )}
+
       {v.caption && (
-        <p className="mx-auto mt-2 max-w-2xl text-xs leading-relaxed text-[#0C0C48]/70 sm:text-sm md:text-base">
+        <p className="mx-auto mt-2 max-w-2xl text-[10px] leading-relaxed text-[#08084f]/70 sm:text-xs md:text-sm lg:text-base">
           {v.caption}
         </p>
       )}
@@ -252,7 +261,9 @@ function VideoCard({
                 alt={video.title || 'Video thumbnail'}
                 className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
               />
-              <span className="absolute inset-0 bg-[#0C0C48]/25 transition group-hover:bg-[#0C0C48]/10" />
+
+              <span className="absolute inset-0 bg-[#08084f]/25 transition group-hover:bg-[#08084f]/10" />
+
               <span className="absolute inset-0 flex items-center justify-center">
                 <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#1F2BD4] transition group-hover:scale-110 md:h-16 md:w-16">
                   <Play className="ml-1 h-5 w-5 md:h-7 md:w-7" fill="currentColor" />
@@ -266,12 +277,13 @@ function VideoCard({
       {showCaption && (video.title || video.caption) && (
         <figcaption className="mt-4 text-center">
           {video.title && (
-            <h3 className="text-base font-extrabold leading-tight text-[#0C0C48] sm:text-lg md:text-xl">
+            <h3 className="text-sm leading-tight font-extrabold text-[#08084f] sm:text-base md:text-lg lg:text-xl">
               {video.title}
             </h3>
           )}
+
           {video.caption && (
-            <p className="mx-auto mt-2 max-w-2xl text-xs leading-relaxed text-[#0C0C48]/70 sm:text-sm md:text-base">
+            <p className="mx-auto mt-2 max-w-2xl text-[10px] leading-relaxed text-[#08084f]/70 sm:text-xs md:text-sm lg:text-base">
               {video.caption}
             </p>
           )}
@@ -287,7 +299,7 @@ function Arrow({ dir, onClick }: { dir: 'left' | 'right'; onClick: () => void })
       type="button"
       aria-label={dir === 'left' ? 'Previous video' : 'Next video'}
       onClick={onClick}
-      className="flex h-10 w-10 items-center justify-center rounded-full border border-[#0C0C48]/20 text-[#0C0C48] transition hover:border-[#1F2BD4] hover:bg-[#1F2BD4] hover:text-white md:h-11 md:w-11"
+      className="flex h-10 w-10 items-center justify-center rounded-full border border-[#08084f]/20 text-[#08084f] transition hover:border-[#1F2BD4] hover:bg-[#1F2BD4] hover:text-white md:h-11 md:w-11"
     >
       {dir === 'left' ? (
         <ChevronLeft className="h-5 w-5" strokeWidth={2.5} />

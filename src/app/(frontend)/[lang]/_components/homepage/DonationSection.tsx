@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react'
 function DonationSection() {
   return (
     <section className="w-full bg-white px-6.5 py-16 md:px-8 md:py-24 lg:px-12">
-      <div className="mx-auto w-full max-w-287.5 min-[500px]:max-w-120 sm:max-w-130 md:max-w-287.5">
+      <div className="mx-auto w-full max-w-300 min-[500px]:max-w-120 sm:max-w-130 md:max-w-300">
         <div className="relative aspect-300/165 w-full overflow-hidden rounded-xl bg-[#08084f] px-5 py-5 md:aspect-1150/160 md:rounded-[18px] md:px-8 md:py-0 lg:px-16">
           <Image
             src="/donation-section.png"

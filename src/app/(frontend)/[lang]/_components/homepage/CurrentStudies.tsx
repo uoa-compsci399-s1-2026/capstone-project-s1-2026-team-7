@@ -1,40 +1,74 @@
-import Link from 'next/link'
-import { getStudiesPage } from '@/features/studies'
+import Image from 'next/image'
+import HrefButton from '../HrefButton'
+import type { HeroBlockDTO } from '@/features/homepage/home.schema'
+import { withLang } from '@/lib/withLang'
 import type { Lang } from '@/types/lang'
-import StudySummaryCard from './StudySummaryCard'
-type CurrentStudiesProps = {
-  lang?: Lang
-  limit?: number
+
+type HeroSectionProps = {
+  data: HeroBlockDTO
+  lang: Lang
 }
 
-export default async function CurrentStudies({ lang = 'en', limit = 3 }: CurrentStudiesProps) {
-  const studiesPage = await getStudiesPage(lang)
-  const studies = studiesPage.studiesDisplay.slice(0, limit)
-
-  if (studies.length === 0) return null
+export default function HeroSection({ data, lang }: HeroSectionProps) {
+  const { title, description, heroHorizontal, buttons } = data
 
   return (
-    <section className="bg-white px-6.5 py-10 md:px-8 md:py-20 lg:px-12">
-      <div className="mx-auto w-full max-w-287.5">
-        <div className="mb-8 flex items-center justify-between">
-          <h2 className="text-[16px] leading-tight font-extrabold text-[#08084f] sm:text-xl md:text-3xl lg:text-4xl">
-            Current Studies
-          </h2>
+    <section className="relative isolate min-h-140 w-full overflow-hidden md:min-h-130 lg:min-h-135">
+      {/* Background image from CMS */}
+      {heroHorizontal.url && (
+        <Image
+          src={heroHorizontal.url}
+          alt={heroHorizontal.alt || 'Hero background image'}
+          fill
+          priority
+          quality={100}
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+      )}
 
-          <Link
-            href={`/${lang}/studies`}
-            className="text-sm font-bold text-[#08084f] transition hover:opacity-70 md:text-lg"
-          >
-            Browse all studies &gt;
-          </Link>
+      {/* Content */}
+      <div className="relative z-10 mx-auto grid min-h-140 w-full max-w-5xl grid-cols-1 items-center justify-items-center gap-10 px-5 py-16 md:min-h-130 md:grid-cols-2 md:justify-items-stretch md:px-8 lg:min-h-173 lg:gap-12 lg:px-12">
+        {/* Text */}
+        <div className="w-full max-w-xl text-center md:text-left">
+          <h1 className="text-xl leading-tight font-bold text-white sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">
+            {title}
+          </h1>
+
+          <p className="mt-5 text-base leading-relaxed font-normal text-white md:text-md lg:text-lg">
+            {description}
+          </p>
+
+          <div className="mt-8 flex flex-wrap justify-center gap-3 md:justify-start [&_button]:border-3 [&_button]:px-4 [&_button]:py-2">
+            {buttons.map((button) => (
+              <HrefButton
+                key={button.id || button.label}
+                title={button.label}
+                variant={button.variant}
+                href={withLang(button.url, lang)}
+              />
+            ))}
+          </div>
         </div>
 
-        <div className="mt-4 h-0.75 w-16 rounded-full bg-[#08084f] md:h-1" />
+        {/* Portrait image - hidden below md */}
+        <div className="hidden w-full md:flex md:justify-center">
+          <div className="relative w-full max-w-[320px] lg:max-w-90 xl:max-w-100">
+            {/* Blue offset block */}
+            <div className="absolute -top-2 -left-2 h-full w-full rounded-3xl bg-[#1F2BD4]" />
 
-        <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-          {studies.map((study) => (
-            <StudySummaryCard key={study.id} study={study} lang={lang} />
-          ))}
+            <div className="relative aspect-6/7 overflow-hidden rounded-3xl shadow-2xl">
+              <Image
+                src="/hero-portrait-image.png"
+                alt="Hero portrait image"
+                fill
+                priority
+                quality={100}
+                sizes="(max-width: 767px) 0px, 35vw"
+                className="object-cover object-center"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>

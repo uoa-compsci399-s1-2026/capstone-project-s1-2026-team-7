@@ -49,7 +49,7 @@ function MediaSection({ data }: MediaSectionProps) {
 
   return (
     <section className="bg-[#0C0C48] py-16 text-white md:py-24 lg:py-28">
-      <div className="mx-auto w-full max-w-280 px-6.5 md:px-8 lg:px-0">
+      <div className="mx-auto w-full max-w-300 px-6.5 md:px-8 lg:px-0">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div className="max-w-150">
             {eyebrow && (

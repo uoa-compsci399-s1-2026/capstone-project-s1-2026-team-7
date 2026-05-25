@@ -18,16 +18,16 @@ export default function WhoWeAreSection({ data }: WhoWeAreBlockProps) {
 
   return (
     <section ref={ref} id="who-we-are" className="w-full bg-white py-16 md:py-24">
-      <div className="mx-auto w-full max-w-280 px-6.5 md:px-8 lg:px-12 xl:px-0">
+      <div className="mx-auto w-full max-w-300 px-6.5 md:px-8 lg:px-12 xl:px-0">
         <div className="w-full rounded-2xl bg-[#0a0a3d] px-7 py-11">
-          <div className="grid grid-cols-1 items-center gap-7 sm:grid-cols-2 sm:gap-x-7 md:gap-x-[4%] xl:gap-x-7">
-            {/* Image — below sm: second, sm+: left */}
-            <div className="order-2 sm:order-1">
+          <div className="grid grid-cols-1 items-center gap-7 md:grid-cols-2 md:gap-x-[4%] xl:gap-x-7">
+            {/* Image — single column until md, then left on md+ */}
+            <div className="order-2 md:order-1">
               <div
                 className={clsx(
                   FADE_BASE,
                   inView ? FADE_SHOWN : FADE_HIDDEN,
-                  'relative mx-auto aspect-296/192 w-full overflow-hidden rounded-[10px] min-[500px]:max-w-120 sm:max-w-130 md:mx-0 md:aspect-481/386 md:max-w-none md:rounded-2xl',
+                  'relative mx-auto aspect-296/192 w-full overflow-hidden rounded-[10px] min-[500px]:max-w-120 sm:max-w-130 md:mx-0 md:aspect-481/386 md:rounded-2xl',
                 )}
                 style={{ transitionDelay: inView ? '200ms' : '0ms' }}
               >
@@ -35,14 +35,14 @@ export default function WhoWeAreSection({ data }: WhoWeAreBlockProps) {
                   src={image.url}
                   alt="Researchers working with a participant in the Human Nutrition Unit"
                   fill
-                  sizes="(max-width: 499px) calc(100vw - 52px), (max-width: 767px) 520px, 42vw"
+                  sizes="(max-width: 767px) 520px, 42vw"
                   className="object-cover object-center"
                 />
               </div>
             </div>
 
-            {/* Text — below sm: first, sm+: right */}
-            <div className="order-1 sm:order-2 flex flex-col justify-center text-left">
+            {/* Text — single column until md (on top), then right on md+ */}
+            <div className="order-1 md:order-2 flex flex-col justify-center text-left">
               <div className="mx-auto w-full max-w-sm">
                 <h2
                   className={clsx(

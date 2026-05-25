@@ -27,19 +27,20 @@ export default function HeroSection({ data, lang }: HeroSectionProps) {
         />
       )}
 
-      {/* Content */}
-      <div className="relative z-10 mx-auto grid min-h-140 w-full max-w-5xl grid-cols-1 items-center justify-items-center gap-10 px-5 py-16 md:min-h-130 md:grid-cols-2 md:justify-items-stretch md:px-8 lg:min-h-173 lg:gap-12 lg:px-12">
+      {/* Content — text left, image right, sized to fill the width */}
+      <div className="relative z-10 mx-auto flex min-h-140 w-full max-w-6xl flex-col items-center justify-center gap-12 px-5 py-16 md:min-h-130 md:flex-row md:justify-center md:gap-16 md:px-8 lg:min-h-135 lg:gap-24 lg:px-12">
+        {' '}
         {/* Text */}
-        <div className="w-full max-w-xl text-center md:text-left">
-          <h1 className="text-xl leading-tight font-bold text-white sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">
+        <div className="w-full max-w-md text-center md:max-w-sm md:text-left">
+          <h1 className="text-2xl leading-tight font-bold text-white md:text-3xl xl:text-4xl">
             {title}
           </h1>
 
-          <p className="mt-5 text-base leading-relaxed font-normal text-white md:text-md lg:text-lg">
+          <p className="mt-5 text-xs leading-relaxed font-normal sm:text-sm text-white md:text-base lg:text-lg">
             {description}
           </p>
 
-          <div className="mt-8 flex flex-wrap justify-center gap-3 md:justify-start [&_button]:border-3 [&_button]:px-4 [&_button]:py-2">
+          <div className="mt-8 flex  justify-center gap-3 md:justify-start *:border-3">
             {buttons.map((button) => (
               <HrefButton
                 key={button.id || button.label}
@@ -50,24 +51,21 @@ export default function HeroSection({ data, lang }: HeroSectionProps) {
             ))}
           </div>
         </div>
+        {/* Portrait — bigger, hugs the right, hidden below md */}
+        <div className="relative hidden w-[360px] shrink-0 md:block lg:w-110 xl:w-120">
+          {/* Blue offset block */}
+          <div className="absolute -top-2 -left-2 h-full w-full rounded-3xl bg-[#1F2BD4]" />
 
-        {/* Portrait image - hidden below md */}
-        <div className="hidden w-full md:flex md:justify-center">
-          <div className="relative w-full max-w-[320px] lg:max-w-90 xl:max-w-100">
-            {/* Blue offset block */}
-            <div className="absolute -top-2 -left-2 h-full w-full rounded-3xl bg-[#1F2BD4]" />
-
-            <div className="relative aspect-6/7 overflow-hidden rounded-3xl shadow-2xl">
-              <Image
-                src="/hero-portrait-image.png"
-                alt="Hero portrait image"
-                fill
-                priority
-                quality={100}
-                sizes="(max-width: 767px) 0px, 35vw"
-                className="object-cover object-center"
-              />
-            </div>
+          <div className="relative aspect-6/7 overflow-hidden rounded-3xl shadow-2xl">
+            <Image
+              src="/hero-portrait-image.png"
+              alt="Hero portrait image"
+              fill
+              priority
+              quality={100}
+              sizes="(max-width: 767px) 0px, 480px"
+              className="object-cover object-center"
+            />
           </div>
         </div>
       </div>

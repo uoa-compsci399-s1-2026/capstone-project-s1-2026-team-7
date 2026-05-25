@@ -19,7 +19,7 @@ function WhatWeDoSection({ data }: WhatWeDoSectionProps) {
 
   return (
     <section ref={ref} className="w-full bg-white px-6.5 py-16 md:px-8 md:py-24 lg:px-12">
-      <div className="mx-auto w-full max-w-280">
+      <div className="mx-auto w-full max-w-300">
         <div className="mb-4.25">
           <h2
             className={clsx(

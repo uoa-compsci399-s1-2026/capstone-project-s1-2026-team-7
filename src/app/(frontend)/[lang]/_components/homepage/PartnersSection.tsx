@@ -26,7 +26,7 @@ export const PartnersSection = ({ data }: PartnersSectionProps) => {
 
   return (
     <section className="bg-white px-6 py-20 md:px-12 xl:px-20">
-      <div className="mx-auto max-w-7xl text-center">
+      <div className="mx-auto max-w-300 text-center">
         <h2 className="text-2xl font-bold text-[#05083f] sm:text-3xl md:text-4xl lg:text-5xl">
           Industry Partners
         </h2>
