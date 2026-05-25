@@ -1,73 +1,19 @@
 import React from 'react'
-import { getDonationsPage } from '@/queries/donationspage'
-import {
-  DonationsPageDTO,
-  DonationsPageDTOSchema,
-} from '@/validation/donations/donationsPage.schema'
+import { getDonationsPage } from '@/features/contact/donationspage'
+import { DonationsPageDTO } from '@/features/donations/donationsPage.schema'
+import { getHomePage } from '@/features/homepage/homepage.query'
 import DonationsHero from './_components/DonationsHero'
 import SupportSection from './_components/SupportSection'
 import StatsSection from './_components/StatsSection'
-import { PartnersSection } from './_components/PartnersSection'
-import { PartnersBlockDTO } from '@/validation'
-import DonationLink from './_components/DonationLink'
+import { PartnersSection } from '../_components/homepage/PartnersSection'
+import DonationSection from '../_components/homepage/DonationSection'
 
 export default async function Donations() {
-  {
-    /* Import from backend*/
-  }
+  const [pageData, homeData]: [DonationsPageDTO, Awaited<ReturnType<typeof getHomePage>>] =
+    await Promise.all([getDonationsPage('en'), getHomePage('en')])
 
-  const pageData: DonationsPageDTO = await getDonationsPage('en')
+  const partnersBlock = homeData.layout.find((b) => b.blockType === 'partners')
 
-  const partnersBlockData: PartnersBlockDTO = {
-    id: 'partners-1',
-    blockType: 'partners',
-
-    partners: [
-      {
-        id: 'partner-1',
-
-        logo: {
-          url: '/logos/university-auckland.png',
-          alt: 'University of Auckland logo',
-        },
-
-        alt: 'University of Auckland logo',
-      },
-
-      {
-        id: 'partner-2',
-
-        logo: {
-          url: '/logos/health-nz.png',
-          alt: 'Health NZ logo',
-        },
-
-        alt: 'Health NZ logo',
-      },
-
-      {
-        id: 'partner-3',
-
-        logo: {
-          url: '/logos/who.png',
-          alt: 'World Health Organization logo',
-        },
-
-        alt: 'World Health Organization logo',
-      },
-
-      {
-        id: 'partner-4',
-
-        logo: {
-          url: '/logos/diabetes-foundation.png',
-          alt: 'Diabetes Research Foundation logo',
-        },
-
-        alt: 'Diabetes Research Foundation logo',
-      },
-    ],
-  }
   return (
     <div>
       <DonationsHero
@@ -76,7 +22,7 @@ export default async function Donations() {
         donobutton={pageData.hero.buttonLabel}
         imageUrl={pageData.hero.image.url}
         imageAlt={pageData.hero.image.alt}
-        buttonurl={pageData.donationLink.button.url}
+        buttonurl={pageData.hero.donateUrl}
       ></DonationsHero>
       <SupportSection heading={pageData.supportSection.heading}></SupportSection>
       <StatsSection
@@ -84,13 +30,9 @@ export default async function Donations() {
         description={pageData.stats.description}
         stats={pageData.stats.stats}
       ></StatsSection>
-      <PartnersSection data={partnersBlockData}></PartnersSection>
-      <DonationLink
-        title={pageData.donationLink.title}
-        description={pageData.donationLink.description}
-        backgroundImage={pageData.donationLink.backgroundImage}
-        button={pageData.donationLink.button}
-      ></DonationLink>
+      {partnersBlock && <PartnersSection data={partnersBlock} />}
+
+      <DonationSection />
     </div>
   )
 }

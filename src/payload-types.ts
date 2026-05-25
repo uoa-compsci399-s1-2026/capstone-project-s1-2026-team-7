@@ -861,8 +861,6 @@ export interface OurTeamPage {
   createdAt?: string | null
 }
 /**
- * Controls the Studies listing page and reusable static text shown on study detail pages.
- *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "donations-page".
  */
@@ -872,6 +870,7 @@ export interface DonationsPage {
     title: string
     blurb: string
     buttonLabel?: string | null
+    donateUrl: string
     image?: (number | null) | Media
   }
   supportSection: {
@@ -889,26 +888,12 @@ export interface DonationsPage {
         }[]
       | null
   }
-  partners?:
-    | {
-        logo: number | Media
-        alt: string
-        id?: string | null
-      }[]
-    | null
-  donationLink: {
-    title: string
-    description: string
-    backgroundImage: number | Media
-    button: {
-      label: string
-      url: string
-    }
-  }
   updatedAt?: string | null
   createdAt?: string | null
 }
 /**
+ * Controls the Studies listing page and reusable static text shown on study detail pages.
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "studies-page".
  */
@@ -1282,6 +1267,7 @@ export interface DonationsPageSelect<T extends boolean = true> {
         title?: T
         blurb?: T
         buttonLabel?: T
+        donateUrl?: T
         image?: T
       }
   supportSection?:
@@ -1301,26 +1287,6 @@ export interface DonationsPageSelect<T extends boolean = true> {
               value?: T
               label?: T
               id?: T
-            }
-      }
-  partners?:
-    | T
-    | {
-        logo?: T
-        alt?: T
-        id?: T
-      }
-  donationLink?:
-    | T
-    | {
-        title?: T
-        description?: T
-        backgroundImage?: T
-        button?:
-          | T
-          | {
-              label?: T
-              url?: T
             }
       }
   updatedAt?: T
