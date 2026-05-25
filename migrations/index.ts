@@ -14,6 +14,7 @@ import * as migration_20260513_173014 from './20260513_173014'
 import * as migration_20260520_070000_research_csv_tools from './20260520_070000_research_csv_tools'
 import * as migration_20260520_234806 from './20260520_234806'
 import * as migration_20260521_010122 from './20260521_010122'
+import * as migration_20260523_130048 from './20260523_130048'
 
 export const migrations = [
   {
@@ -60,6 +61,11 @@ export const migrations = [
     up: migration_20260512_152526.up,
     down: migration_20260512_152526.down,
     name: '20260512_152526',
+  },
+  {
+    up: migration_20260523_130048.up,
+    down: migration_20260523_130048.down,
+    name: '20260523_130048',
   },
   {
     up: migration_20260513_121859.up,

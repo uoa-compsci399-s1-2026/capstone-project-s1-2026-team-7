@@ -19,6 +19,7 @@ import { HomePage } from './payload/globals/Homepage'
 import { OurTeamPage } from './payload/globals/OurTeamPage'
 import { StudiesPage } from './payload/globals/StudiesPage'
 import { ResearchPage } from './payload/globals/ResearchPage'
+import { DonationsPage } from './globals/DonationsPage'
 import { NavigationBar } from './payload/globals/NavigationBar'
 import { Footer } from './payload/globals/Footer'
 import { ContactPage } from './payload/globals/ContactPage'
@@ -82,7 +83,16 @@ export default buildConfig({
     EnquiryTags,
   ],
 
-  globals: [HomePage, OurTeamPage, StudiesPage, ResearchPage, NavigationBar, ContactPage, Footer],
+  globals: [
+    HomePage,
+    OurTeamPage,
+    DonationsPage,
+    StudiesPage,
+    ResearchPage,
+    NavigationBar,
+    ContactPage,
+    Footer,
+  ],
 
   endpoints: [translateEndpoint, researchCsvExportEndpoint, researchCsvImportEndpoint],
 
