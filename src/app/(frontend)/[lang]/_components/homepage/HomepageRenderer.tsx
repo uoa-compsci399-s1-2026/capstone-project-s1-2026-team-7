@@ -26,7 +26,7 @@ export default function RenderHomeBlocks({ blocks, lang }: Props) {
             return <HeroSection key={block.id || index} data={block} lang={lang} />
 
           case 'video':
-            return <VideoSection key={block.id || index} data={block} lang={lang} />
+            return <VideoSection key={block.id || index} data={block} />
 
           case 'partners':
             return <PartnersSection key={block.id || index} data={block} />

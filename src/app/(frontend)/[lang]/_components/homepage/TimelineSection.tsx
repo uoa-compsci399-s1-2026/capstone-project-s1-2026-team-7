@@ -14,7 +14,7 @@ const FADE_BASE = 'transition-all duration-700 ease-out will-change-[opacity,tra
 const FADE_HIDDEN = 'opacity-0 translate-y-6'
 const FADE_SHOWN = 'opacity-100 translate-y-0'
 
-function TimelineSection({ data }: TimelineSectionProps) {
+export default function TimelineSection({ data }: TimelineSectionProps) {
   const { eyebrow, title, description, items } = data
 
   const sectionRef = useRef<HTMLElement | null>(null)
