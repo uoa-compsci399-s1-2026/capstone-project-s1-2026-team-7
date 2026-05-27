@@ -48,6 +48,17 @@ export const ResearchPage: GlobalConfig = {
     },
 
     {
+      name: 'researchStaffDisplay',
+      type: 'relationship',
+      relationTo: 'staff',
+      hasMany: true,
+      admin: {
+        allowCreate: true,
+        allowEdit: true,
+      },
+    },
+
+    {
       name: 'seo',
       type: 'group',
       fields: [
