@@ -323,8 +323,14 @@ export interface Study {
 export interface Research {
   id: number
   title: string
-  doi: string
-  link: string
+  /**
+   * Optional. Used as the preferred stable identifier for CSV imports.
+   */
+  doi?: string | null
+  /**
+   * Optional. Used with title and date as a fallback CSV import match.
+   */
+  link?: string | null
   image?: (number | null) | Media
   date?: string | null
   /**
@@ -332,6 +338,11 @@ export interface Research {
    */
   staff?: (number | Staff)[] | null
   categories?: (number | ResearchCategory)[] | null
+  /**
+   * Keeps CSV deletions persistent by hiding this record and excluding it from future ORCID CSV exports.
+   */
+  csvDeleted?: boolean | null
+  csvDeletedAt?: string | null
   /**
    * Used for manual sorting (lower comes first)
    */
@@ -586,6 +597,8 @@ export interface ResearchSelect<T extends boolean = true> {
   date?: T
   staff?: T
   categories?: T
+  csvDeleted?: T
+  csvDeletedAt?: T
   order?: T
   updatedAt?: T
   createdAt?: T

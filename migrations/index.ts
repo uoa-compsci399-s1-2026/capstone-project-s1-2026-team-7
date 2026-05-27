@@ -14,6 +14,8 @@ import * as migration_20260513_173014 from './20260513_173014'
 import * as migration_20260520_070000_research_csv_tools from './20260520_070000_research_csv_tools'
 import * as migration_20260520_234806 from './20260520_234806'
 import * as migration_20260521_010122 from './20260521_010122'
+import * as migration_20260524_000000_research_csv_deletion_persistence from './20260524_000000_research_csv_deletion_persistence'
+import * as migration_20260527_000000_research_optional_doi_link from './20260527_000000_research_optional_doi_link'
 
 export const migrations = [
   {
@@ -95,5 +97,15 @@ export const migrations = [
     up: migration_20260521_010122.up,
     down: migration_20260521_010122.down,
     name: '20260521_010122',
+  },
+  {
+    up: migration_20260524_000000_research_csv_deletion_persistence.up,
+    down: migration_20260524_000000_research_csv_deletion_persistence.down,
+    name: '20260524_000000_research_csv_deletion_persistence',
+  },
+  {
+    up: migration_20260527_000000_research_optional_doi_link.up,
+    down: migration_20260527_000000_research_optional_doi_link.down,
+    name: '20260527_000000_research_optional_doi_link',
   },
 ]

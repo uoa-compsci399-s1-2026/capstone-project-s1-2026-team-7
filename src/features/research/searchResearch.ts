@@ -1,6 +1,6 @@
 import { ResearchDTO, researchDTOSchema } from '@/features'
 import { getPayloadClient } from '@/lib/payload'
-import { PaginatedDocs } from 'payload'
+import type { PaginatedDocs, Where } from 'payload'
 import { Research } from '@/payload-types'
 
 export type ResearchSortOption = 'newest' | 'oldest' | 'title'
@@ -32,7 +32,13 @@ export async function searchResearch({
 }: SearchResearchParams = {}): Promise<SearchResearchResult> {
   const payload = await getPayloadClient()
 
-  const andFilters = []
+  const andFilters: Where[] = [
+    {
+      csvDeleted: {
+        not_equals: true,
+      },
+    },
+  ]
 
   if (searchTerm.trim()) {
     andFilters.push({
