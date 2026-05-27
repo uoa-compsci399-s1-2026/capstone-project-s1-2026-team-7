@@ -47,7 +47,7 @@ export default function RenderHomeBlocks({ blocks, lang }: Props) {
             return <WhoWeAreSection key={block.id || index} data={block} />
 
           case 'current-studies':
-            return <CurrentStudies key={block.id || index} />
+            return <CurrentStudies key={block.id || index} data={block} lang={lang} />
 
           case 'what-we-do':
             return <WhatWeDoSection key={block.id || index} data={block} />

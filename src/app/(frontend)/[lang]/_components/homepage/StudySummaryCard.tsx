@@ -15,8 +15,8 @@ export default function StudySummaryCard({ study, lang = 'en' }: StudySummaryCar
     >
       <div className="relative h-40 w-full overflow-hidden bg-[#dbe1f0] sm:h-44">
         <Image
-          src={study.banner.url}
-          alt={study.banner.alt ?? study.title}
+          src={study.banner?.url}
+          alt={study.banner?.alt ?? study.title}
           fill
           sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 320px"
           className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"

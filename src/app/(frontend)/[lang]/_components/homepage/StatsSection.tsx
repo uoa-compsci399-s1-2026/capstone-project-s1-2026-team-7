@@ -112,7 +112,7 @@ function StatsSection() {
                 >
                   {/* Desktop dividers only */}
                   {index !== 0 && (
-                    <div className="absolute top-1/2 left-0 hidden h-[80px] -translate-y-1/2 border-l border-dotted border-white/60 md:block lg:h-[90px] xl:h-[100px]" />
+                    <div className="absolute top-1/2 left-0 hidden h-[80px] -translate-y-1/2 border-l border-dotted border-white/60 md:block lg:h-22.5 xl:h-25" />
                   )}
 
                   {/* Icon row */}
@@ -126,7 +126,7 @@ function StatsSection() {
                   </h2>
 
                   {/* Label row */}
-                  <p className="flex max-w-[92px] items-start justify-center text-[9px] leading-tight font-light min-[500px]:max-w-[115px] min-[500px]:text-[10px] sm:max-w-[125px] sm:text-[10px] md:max-w-[170px] md:text-sm lg:max-w-[210px] lg:text-base xl:max-w-[250px] xl:text-xl">
+                  <p className="flex max-w-[92px] items-start justify-center text-[9px] leading-tight font-light min-[500px]:max-w-28.75 min-[500px]:text-[10px] sm:max-w-31.25 sm:text-[10px] md:max-w-42.5 md:text-sm lg:max-w-52.5 lg:text-base xl:max-w-62.5 xl:text-xl">
                     {stat.label}
                   </p>
                 </div>

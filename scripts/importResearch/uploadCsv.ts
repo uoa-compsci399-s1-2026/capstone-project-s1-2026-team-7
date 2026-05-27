@@ -9,7 +9,7 @@ function getCsvPath(): string {
     return path.resolve(process.cwd(), filePathArg)
   }
 
-  return path.resolve(process.cwd(), 'src', 'csv', 'research.csv')
+  return path.resolve(process.cwd(), 'research.csv')
 }
 
 async function main(): Promise<void> {

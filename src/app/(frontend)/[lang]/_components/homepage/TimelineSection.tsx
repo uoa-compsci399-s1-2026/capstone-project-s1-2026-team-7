@@ -221,5 +221,3 @@ function TimelineSection({ data }: TimelineSectionProps) {
     </section>
   )
 }
-
-export default TimelineSection

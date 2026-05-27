@@ -73,6 +73,7 @@ export interface Config {
     studies: Study
     research: Research
     'research-categories': ResearchCategory
+    'research-csv-tools': ResearchCsvTool
     'enquiry-tags': EnquiryTag
     'payload-kv': PayloadKv
     'payload-locked-documents': PayloadLockedDocument
@@ -87,6 +88,7 @@ export interface Config {
     studies: StudiesSelect<false> | StudiesSelect<true>
     research: ResearchSelect<false> | ResearchSelect<true>
     'research-categories': ResearchCategoriesSelect<false> | ResearchCategoriesSelect<true>
+    'research-csv-tools': ResearchCsvToolsSelect<false> | ResearchCsvToolsSelect<true>
     'enquiry-tags': EnquiryTagsSelect<false> | EnquiryTagsSelect<true>
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>
     'payload-locked-documents':
@@ -102,6 +104,7 @@ export interface Config {
   globals: {
     'home-page': HomePage
     'our-team-page': OurTeamPage
+    'donations-page': DonationsPage
     'studies-page': StudiesPage
     'research-page': ResearchPage
     'navigation-bar': NavigationBar
@@ -111,6 +114,7 @@ export interface Config {
   globalsSelect: {
     'home-page': HomePageSelect<false> | HomePageSelect<true>
     'our-team-page': OurTeamPageSelect<false> | OurTeamPageSelect<true>
+    'donations-page': DonationsPageSelect<false> | DonationsPageSelect<true>
     'studies-page': StudiesPageSelect<false> | StudiesPageSelect<true>
     'research-page': ResearchPageSelect<false> | ResearchPageSelect<true>
     'navigation-bar': NavigationBarSelect<false> | NavigationBarSelect<true>
@@ -345,6 +349,18 @@ export interface ResearchCategory {
   id: number
   title: string
   slug: string
+  updatedAt: string
+  createdAt: string
+}
+/**
+ * Export ORCID research to CSV and import research CSV files into the CMS.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research-csv-tools".
+ */
+export interface ResearchCsvTool {
+  id: number
+  title?: string | null
   updatedAt: string
   createdAt: string
 }
@@ -588,6 +604,15 @@ export interface ResearchCategoriesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research-csv-tools_select".
+ */
+export interface ResearchCsvToolsSelect<T extends boolean = true> {
+  title?: T
+  updatedAt?: T
+  createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "enquiry-tags_select".
  */
 export interface EnquiryTagsSelect<T extends boolean = true> {
@@ -800,6 +825,24 @@ export interface DonationSectionBlock {
  * via the `definition` "CurrentStudiesBlock".
  */
 export interface CurrentStudiesBlock {
+  /**
+   * Main title shown for the current studies section.
+   */
+  title: string
+  link: {
+    /**
+     * Text shown on the button/link.
+     */
+    title: string
+    /**
+     * Link URL, e.g. /studies or https://example.com
+     */
+    href: string
+  }
+  /**
+   * Choose which studies appear in this homepage section.
+   */
+  studies?: (number | Study)[] | null
   id?: string | null
   blockName?: string | null
   blockType: 'current-studies'
@@ -840,24 +883,102 @@ export interface OurTeamPage {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "donations-page".
+ */
+export interface DonationsPage {
+  id: number
+  hero: {
+    title: string
+    blurb: string
+    buttonLabel?: string | null
+    donateUrl: string
+    image?: (number | null) | Media
+  }
+  supportSection: {
+    heading: string
+  }
+  stats: {
+    title: string
+    description: string
+    stats?:
+      | {
+          key: 'graduates' | 'publications' | 'partners' | 'participants'
+          value: number
+          label: string
+          id?: string | null
+        }[]
+      | null
+  }
+  updatedAt?: string | null
+  createdAt?: string | null
+}
+/**
+ * Controls the Studies listing page and reusable static text shown on study detail pages.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "studies-page".
  */
 export interface StudiesPage {
   id: number
-  title: string
-  banner: number | Media
-  studiesDisplay?: (number | Study)[] | null
+  listingPage: {
+    title: string
+    banner: number | Media
+    /**
+     * Choose which studies appear on the Studies listing page.
+     */
+    studiesDisplay?: (number | Study)[] | null
+  }
+  detailTemplate: {
+    backButtonLabel: string
+    heroStats: {
+      durationLabel: string
+      compensationLabel: string
+      locationLabel: string
+    }
+    aboutSection: {
+      eyebrow: string
+      heading: string
+    }
+    participationSection: {
+      eyebrow: string
+      heading: string
+    }
+    eligibilitySection: {
+      eyebrow: string
+      heading: string
+      inclusionHeading: string
+      exclusionHeading: string
+    }
+    faqSection: {
+      eyebrow: string
+      heading: string
+    }
+    applyCard: {
+      eyebrow: string
+      heading: string
+      buttonLabel: string
+      helperText: string
+    }
+    ethicsCard: {
+      heading: string
+      approvedByPrefix: string
+      committeeName: string
+    }
+    contactCard: {
+      heading: string
+    }
+  }
   contact: {
     /**
-     * e.g. info@aucklandunit.ac.nz
+     * e.g. HNU_SYNERGY@auckland.ac.nz
      */
     email: string
     /**
-     * Multi-line postal address. Localized so place names can be transliterated.
+     * Multi-line address shown in the sidebar.
      */
     address: string
     /**
-     * e.g. 021 1234 5678
+     * e.g. 021 0919 5443
      */
     phone: string
   }
@@ -1132,6 +1253,14 @@ export interface DonationSectionBlockSelect<T extends boolean = true> {
  * via the `definition` "CurrentStudiesBlock_select".
  */
 export interface CurrentStudiesBlockSelect<T extends boolean = true> {
+  title?: T
+  link?:
+    | T
+    | {
+        title?: T
+        href?: T
+      }
+  studies?: T
   id?: T
   blockName?: T
 }
@@ -1169,12 +1298,111 @@ export interface OurTeamPageSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "donations-page_select".
+ */
+export interface DonationsPageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        title?: T
+        blurb?: T
+        buttonLabel?: T
+        donateUrl?: T
+        image?: T
+      }
+  supportSection?:
+    | T
+    | {
+        heading?: T
+      }
+  stats?:
+    | T
+    | {
+        title?: T
+        description?: T
+        stats?:
+          | T
+          | {
+              key?: T
+              value?: T
+              label?: T
+              id?: T
+            }
+      }
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "studies-page_select".
  */
 export interface StudiesPageSelect<T extends boolean = true> {
-  title?: T
-  banner?: T
-  studiesDisplay?: T
+  listingPage?:
+    | T
+    | {
+        title?: T
+        banner?: T
+        studiesDisplay?: T
+      }
+  detailTemplate?:
+    | T
+    | {
+        backButtonLabel?: T
+        heroStats?:
+          | T
+          | {
+              durationLabel?: T
+              compensationLabel?: T
+              locationLabel?: T
+            }
+        aboutSection?:
+          | T
+          | {
+              eyebrow?: T
+              heading?: T
+            }
+        participationSection?:
+          | T
+          | {
+              eyebrow?: T
+              heading?: T
+            }
+        eligibilitySection?:
+          | T
+          | {
+              eyebrow?: T
+              heading?: T
+              inclusionHeading?: T
+              exclusionHeading?: T
+            }
+        faqSection?:
+          | T
+          | {
+              eyebrow?: T
+              heading?: T
+            }
+        applyCard?:
+          | T
+          | {
+              eyebrow?: T
+              heading?: T
+              buttonLabel?: T
+              helperText?: T
+            }
+        ethicsCard?:
+          | T
+          | {
+              heading?: T
+              approvedByPrefix?: T
+              committeeName?: T
+            }
+        contactCard?:
+          | T
+          | {
+              heading?: T
+            }
+      }
   contact?:
     | T
     | {

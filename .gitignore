@@ -55,3 +55,7 @@ node_modules/
 pnpm-lock.yaml
 src/csv
 /.claude
+
+# generated research CSV exports
+/research.csv
+/research-*.csv

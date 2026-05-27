@@ -13,7 +13,7 @@ export default function HeroSection({ data, lang }: HeroSectionProps) {
   const { title, description, heroHorizontal, buttons } = data
 
   return (
-    <section className="relative isolate min-h-140 w-full overflow-hidden md:min-h-130 lg:min-h-135">
+    <section className="relative isolate w-full overflow-hidden min-h-130 md:min-h-145 lg:min-h-160 xl:min-h-182">
       {/* Background image from CMS */}
       {heroHorizontal.url && (
         <Image
