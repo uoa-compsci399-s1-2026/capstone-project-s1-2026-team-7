@@ -5,7 +5,7 @@ import Image from 'next/image'
 type Props = {
   title: string
   description: string
-  imageUrl?: string
+  imageUrl: string
   imageAlt?: string
 }
 
