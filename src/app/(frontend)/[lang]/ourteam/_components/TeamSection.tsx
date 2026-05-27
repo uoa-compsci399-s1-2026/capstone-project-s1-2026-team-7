@@ -1,87 +1,96 @@
 'use client'
-import React from 'react'
-import ProfileCard from './Profile'
-import { useState } from 'react'
-import { OurTeamPageDTO } from '@/features/our-team'
-import { StaffDTO } from '@/features/our-team'
+import React, { useState } from 'react'
+import { Search } from 'lucide-react'
+
+import ProfileDrawer from './ProfileDrawer'
+import { OurTeamPageDTO, StaffDTO } from '@/features/our-team'
 import Banner from '../../_components/Banner'
+import FilterPill from './FilterPill'
+import TeamGroup from './TeamGroup'
 
 export type teamSectionProps = {
   teamSection: OurTeamPageDTO
 }
 
-export default function TeamSection({ teamSection }: teamSectionProps) {
-  const [selected, setSelected] = useState<'board' | 'staff'>('staff')
+type FilterKey = 'all' | 'board' | 'staff'
 
-  const boardCount = teamSection.staff.filter((p) => p.manager).length
-  const staffCount = teamSection.staff.filter((p) => !p.manager).length
+export default function TeamSection({ teamSection }: teamSectionProps) {
+  const [filter, setFilter] = useState<FilterKey>('all')
+  const [query, setQuery] = useState('')
+  const [active, setActive] = useState<StaffDTO | null>(null)
+
+  const normalisedQuery = query.trim().toLowerCase()
+
+  const matchesQuery = (p: StaffDTO) => {
+    if (!normalisedQuery) return true
+    const haystack = `${p.firstname} ${p.lastname} ${p.jobTitle} ${p.intro}`.toLowerCase()
+    return haystack.includes(normalisedQuery)
+  }
+
+  const board = teamSection.staff.filter((p) => p.manager && matchesQuery(p))
+  const research = teamSection.staff.filter((p) => !p.manager && matchesQuery(p))
+
+  const showBoard = filter === 'all' || filter === 'board'
+  const showResearch = filter === 'all' || filter === 'staff'
 
   return (
     <>
       <Banner title={teamSection.title} imageUrl="/ourTeam.svg" imageAlt="Our team banner image" />
 
-      <div
-        className="container mx-auto text-center
-        xl:w-321.25
-        md:w-3xl
-        w-81.25"
-      >
-        <div>
-          <div
-            className="grid grid-cols-2 font-normal mx-auto
-            xl:w-96.75 xl:gap-3.5 xl:text-[18px] xl:mt-7
-            md:w-72 md:gap-3 md:text-[13.2px] md:mt-4.5
-            w-45.75 gap-2 text-[8.36px] mt-3.5"
-          >
-            <button
-              onClick={() => setSelected('board')}
-              className={`cursor-pointer text-center border
-              xl:h-12.75 xl:w-46.5 xl:rounded-[13px]
-              md:h-[38.28px] md:w-34.5 md:rounded-[9.65px]
-              h-6 w-22 rounded-md
-              ${
-                selected === 'board'
-                  ? 'bg-[#181851] border-[#181851] text-white'
-                  : 'bg-transparent border-[#181851] text-[#181851]'
-              }`}
-            >
-              {teamSection.boardTabLabel}
-            </button>
-
-            <button
-              onClick={() => setSelected('staff')}
-              className={`cursor-pointer text-center border
-              xl:h-12.75 xl:w-46.5 xl:rounded-[13px]
-              md:h-[38.28px] md:w-34.5 md:rounded-[9.65px]
-              h-6 w-22 rounded-md
-              ${
-                selected === 'staff'
-                  ? 'bg-[#181851] border-[#181851] text-white'
-                  : 'bg-transparent border-[#181851] text-[#181851]'
-              }`}
-            >
-              {teamSection.staffTabLabel} ({staffCount})
-            </button>
+      <div className="border-b border-gray-200 bg-white">
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-5 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-wrap items-center gap-2">
+            <FilterPill active={filter === 'all'} onClick={() => setFilter('all')}>
+              All
+            </FilterPill>
+            <FilterPill active={filter === 'board'} onClick={() => setFilter('board')}>
+              {teamSection.boardTabLabel || 'Board of Directors'}
+            </FilterPill>
+            <FilterPill active={filter === 'staff'} onClick={() => setFilter('staff')}>
+              {teamSection.staffTabLabel || 'Research Team'}
+            </FilterPill>
           </div>
-        </div>
 
-        <div
-          className="flex justify-center
-          xl:mt-25
-          md:mt-4
-          m-15"
-        >
-          <div className="grid justify-center justify-items-center md:grid-cols-3 grid-cols-1 gap-8 max-w-5xl w-full h-full">
-            {teamSection.staff
-              .filter((profile: StaffDTO) =>
-                selected === 'board' ? profile.manager : !profile.manager,
-              )
-              .map((profile: StaffDTO) => (
-                <ProfileCard key={profile.firstname} profile={profile} />
-              ))}
+          <div className="relative w-full md:w-80">
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search people"
+              className="w-full rounded-full border border-gray-200 bg-white py-2 pl-10 pr-4 text-sm text-gray-700 placeholder:text-gray-400 focus:border-[#1F2BD4] focus:outline-none"
+            />
           </div>
         </div>
       </div>
+
+      <main className="mx-auto max-w-7xl px-6 py-12 md:py-16">
+        {showBoard && (
+          <TeamGroup
+            title={teamSection.boardTabLabel || 'Board of Directors'}
+            people={board}
+            onSelect={setActive}
+            columns={3}
+          />
+        )}
+
+        {showBoard && showResearch && <div className="h-12 md:h-16" />}
+
+        {showResearch && (
+          <TeamGroup
+            title={teamSection.staffTabLabel}
+            people={research}
+            onSelect={setActive}
+            columns={4}
+          />
+        )}
+      </main>
+
+      <ProfileDrawer
+        profile={active}
+        action={() => setActive(null)}
+        groupLabel={active?.manager ? teamSection.boardTabLabel : teamSection.staffTabLabel}
+      />
     </>
   )
 }
