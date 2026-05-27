@@ -29,6 +29,8 @@ import {
   researchCsvImportEndpoint,
 } from './payload/endpoints/researchCsv'
 
+import { CollaborationsPage } from './payload/globals/CollaborationsPage'
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 const autopush = process.env.AUTOPUSH === 'true'
@@ -82,7 +84,16 @@ export default buildConfig({
     EnquiryTags,
   ],
 
-  globals: [HomePage, OurTeamPage, StudiesPage, ResearchPage, NavigationBar, ContactPage, Footer],
+  globals: [
+    HomePage,
+    OurTeamPage,
+    StudiesPage,
+    ResearchPage,
+    NavigationBar,
+    ContactPage,
+    Footer,
+    CollaborationsPage,
+  ],
 
   endpoints: [translateEndpoint, researchCsvExportEndpoint, researchCsvImportEndpoint],
 

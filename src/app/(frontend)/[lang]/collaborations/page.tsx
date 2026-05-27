@@ -1,20 +1,15 @@
-import Banner from '../_components/Banner'
-import CollabIntro from './_components/CollabIntro'
-import CollabPathway from './_components/CollabPathway'
-import ExploreOur from './_components/ExploreOur'
+import { getCollaborationsPage } from '@/features/collaboration/collaborationpage.query'
+import { PageProps } from '@/types/pageprops'
+import { CollaborationsPageDTO } from '@/features/collaboration/collaboration.schema'
+import CollaborationsRenderer from './_components/CollaborationsRenderer'
 
-export default function Collaborations() {
+export default async function Collaborations({ params }: PageProps) {
+  const { lang } = await params
+  const collaborationsPage: CollaborationsPageDTO = await getCollaborationsPage(lang)
+  console.log('collaborationsPage', collaborationsPage)
   return (
     <div>
-      <Banner
-        title="Collaborations"
-        imageUrl="/collaborations.svg"
-        imageAlt="Collaboration Banner"
-      />
-
-      <CollabIntro />
-      <CollabPathway />
-      <ExploreOur />
+      <CollaborationsRenderer blocks={collaborationsPage.layout} lang={lang} />
     </div>
   )
 }
