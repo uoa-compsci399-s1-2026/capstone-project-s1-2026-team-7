@@ -681,6 +681,7 @@ export interface HomePage {
     | WhatWeDoBlock
     | DonationSectionBlock
     | CurrentStudiesBlock
+    | VideoBlock
   )[]
   seo?: {
     metaTitle?: string | null
@@ -847,6 +848,26 @@ export interface CurrentStudiesBlock {
   id?: string | null
   blockName?: string | null
   blockType: 'current-studies'
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "VideoBlock".
+ */
+export interface VideoBlock {
+  title: string
+  description?: string | null
+  videos: {
+    /**
+     * Paste the full YouTube link (watch, youtu.be, shorts or embed) or the 11-character video ID.
+     */
+    url: string
+    title?: string | null
+    caption?: string | null
+    id?: string | null
+  }[]
+  id?: string | null
+  blockName?: string | null
+  blockType: 'video'
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1163,6 +1184,7 @@ export interface HomePageSelect<T extends boolean = true> {
         'what-we-do'?: T | WhatWeDoBlockSelect<T>
         'donation-section'?: T | DonationSectionBlockSelect<T>
         'current-studies'?: T | CurrentStudiesBlockSelect<T>
+        video?: T | VideoBlockSelect<T>
       }
   seo?:
     | T
@@ -1315,6 +1337,24 @@ export interface CurrentStudiesBlockSelect<T extends boolean = true> {
         href?: T
       }
   studies?: T
+  id?: T
+  blockName?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "VideoBlock_select".
+ */
+export interface VideoBlockSelect<T extends boolean = true> {
+  title?: T
+  description?: T
+  videos?:
+    | T
+    | {
+        url?: T
+        title?: T
+        caption?: T
+        id?: T
+      }
   id?: T
   blockName?: T
 }

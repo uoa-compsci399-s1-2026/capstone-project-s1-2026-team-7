@@ -11,6 +11,7 @@ import * as migration_20260513_121859 from './20260513_121859'
 import * as migration_20260513_123521 from './20260513_123521'
 import * as migration_20260513_164709 from './20260513_164709'
 import * as migration_20260513_173014 from './20260513_173014'
+import * as migration_20260523_135153_add_video_block from './20260523_135153_add_video_block'
 import * as migration_20260520_070000_research_csv_tools from './20260520_070000_research_csv_tools'
 import * as migration_20260520_234806 from './20260520_234806'
 import * as migration_20260521_010122 from './20260521_010122'
@@ -82,6 +83,11 @@ export const migrations = [
     up: migration_20260513_173014.up,
     down: migration_20260513_173014.down,
     name: '20260513_173014',
+  },
+  {
+    up: migration_20260523_135153_add_video_block.up,
+    down: migration_20260523_135153_add_video_block.down,
+    name: '20260523_135153_add_video_block',
   },
   {
     up: migration_20260520_070000_research_csv_tools.up,

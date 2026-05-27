@@ -13,7 +13,7 @@ export default function HeroSection({ data, lang }: HeroSectionProps) {
   const { title, description, heroHorizontal, buttons } = data
 
   return (
-    <section className="relative isolate w-full overflow-hidden min-h-130 md:min-h-145 lg:min-h-160 xl:min-h-182">
+    <section className="relative isolate min-h-130 w-full overflow-hidden md:min-h-145 lg:min-h-160 xl:min-h-182">
       {/* Background image from CMS */}
       {heroHorizontal.url && (
         <Image
@@ -28,31 +28,18 @@ export default function HeroSection({ data, lang }: HeroSectionProps) {
       )}
 
       {/* Content */}
-      <div className="relative z-10 mx-auto grid min-h-130 w-full max-w-280 grid-cols-1 items-center px-6.5 py-16 md:min-h-145 md:grid-cols-[55%_45%] md:gap-x-[4%] md:px-8 lg:min-h-160 lg:grid-cols-[45%_55%] lg:gap-x-[6%] lg:px-12 xl:min-h-182 xl:gap-x-[4%] xl:px-0">
-        {/* Text column */}
-        <div className="flex w-full flex-col items-center text-center md:items-start md:text-left xl:items-center xl:text-start">
-          <h1
-            className="font-bold leading-tight text-white md:max-w-xs lg:max-w-sm
-            text-xl
-            sm:text-2xl
-            md:text-3xl
-            lg:text-3xl
-            xl:text-4xl"
-          >
+      <div className="relative z-10 mx-auto flex min-h-130 w-[84%] max-w-300 flex-col items-center justify-center gap-12 py-16 md:min-h-145 md:flex-row md:justify-center md:gap-16 lg:min-h-160 lg:gap-24 xl:min-h-182">
+        {/* Text */}
+        <div className="w-full max-w-md text-center md:max-w-sm md:text-left">
+          <h1 className="text-lg leading-tight font-bold text-white sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">
             {title}
           </h1>
 
-          <p
-            className="mt-4 leading-relaxed text-white md:max-w-xs lg:max-w-sm
-            text-sm
-            md:text-sm
-            lg:text-sm
-            xl:text-base"
-          >
+          <p className="mt-5 text-xs leading-relaxed font-normal text-white sm:text-xs md:text-sm lg:text-base xl:text-lg">
             {description}
           </p>
 
-          <div className="mt-8 flex flex-row items-center justify-center gap-3 md:justify-start md:gap-6 xl:justify-center">
+          <div className="mt-8 flex justify-center gap-3 md:justify-start">
             {buttons.map((button) => (
               <HrefButton
                 key={button.id || button.label}
@@ -64,23 +51,20 @@ export default function HeroSection({ data, lang }: HeroSectionProps) {
           </div>
         </div>
 
-        {/* Portrait image — hidden below md */}
-        <div className="hidden md:flex md:items-center md:justify-center md:self-stretch">
-          <div className="relative w-full max-w-85 lg:max-w-100 xl:max-w-118 aspect-[474/519]">
-            {/* Blue offset block */}
-            <div className="absolute -top-3 -left-3 h-full w-full rounded-3xl bg-[#1F2BD4]" />
+        {/* Portrait — hidden below md */}
+        <div className="relative hidden w-90 shrink-0 md:block lg:w-110 xl:w-120">
+          <div className="absolute -top-2 -left-2 h-full w-full rounded-3xl bg-[#1F2BD4]" />
 
-            <div className="relative overflow-hidden rounded-3xl shadow-2xl h-full">
-              <Image
-                src="/hero-portrait-image.png"
-                alt="Hero portrait image"
-                fill
-                priority
-                quality={100}
-                sizes="(max-width: 767px) 0px, (max-width: 1279px) 40vw, 474px"
-                className="object-cover object-center"
-              />
-            </div>
+          <div className="relative aspect-6/7 overflow-hidden rounded-3xl shadow-2xl">
+            <Image
+              src="/hero-portrait-image.png"
+              alt="Hero portrait image"
+              fill
+              priority
+              quality={100}
+              sizes="(max-width: 767px) 0px, 480px"
+              className="object-cover object-center"
+            />
           </div>
         </div>
       </div>
