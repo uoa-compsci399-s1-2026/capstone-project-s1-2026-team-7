@@ -1,7 +1,6 @@
 'use client'
 import React, { useState, PropsWithChildren, HTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
-import { Icon } from './icons'
 import { LanguageDropdown } from './LanguageDropdown'
 import { useRouter } from 'next/navigation'
 import getLocalizedHref from '@/lib/localizedHref'
@@ -34,7 +33,7 @@ export default function Navbar(props: navbarProps) {
               aria-label="Close menu"
               className="flex h-8 w-8 items-center justify-center rounded-full border border-[#6B6F76] text-[#000000] transition hover:bg-[#ECECEC]"
             >
-              <Icon.X />
+              <Image src="/XIcon.svg" alt="" width={14} height={14} aria-hidden />
             </button>
           </div>
 
@@ -65,7 +64,13 @@ export default function Navbar(props: navbarProps) {
                 aria-label="Search"
                 className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#2F3FE6] transition hover:opacity-90"
               >
-                <Icon.WhiteMagnifyingGlass />
+                <Image
+                  src="/WhiteMagnifyingGlassIcon.svg"
+                  alt=""
+                  width={15}
+                  height={15}
+                  aria-hidden
+                />
               </button>
             </div>
             <button
@@ -112,7 +117,7 @@ export default function Navbar(props: navbarProps) {
             ) : (
               <div className="flex items-center gap-2">
                 <div className="flex h-9.5 w-70 max-md:w-45 items-center rounded-full border border-[#C9CDD4] bg-white px-4">
-                  <Icon.MagnifyingGlass />
+                  <Image src="/MagnifyingGlassIcon.svg" alt="" width={15} height={15} aria-hidden />
                   <input
                     autoFocus
                     type="text"
@@ -125,7 +130,7 @@ export default function Navbar(props: navbarProps) {
                   aria-label="Close search"
                   className="flex h-8 w-8 items-center justify-center rounded-full border border-[#6B6F76] text-[#000000] transition hover:bg-[#ECECEC]"
                 >
-                  <Icon.X />
+                  <Image src="/XIcon.svg" alt="" width={14} height={14} aria-hidden />
                 </button>
               </div>
             )}
@@ -200,7 +205,7 @@ const SearchButton = (props: HTMLAttributes<HTMLButtonElement>) => {
       aria-label="Open search"
       className="flex h-8 w-11.25 shrink-0 items-center justify-center rounded-full border border-[#6B6F76] transition hover:bg-[#ECECEC]"
     >
-      <Icon.MagnifyingGlass />
+      <Image src="/MagnifyingGlassIcon.svg" alt="" width={15} height={15} aria-hidden />
     </button>
   )
 }
@@ -215,7 +220,7 @@ const MenuButton = (props: HTMLAttributes<HTMLButtonElement>) => {
         props.className,
       )}
     >
-      <Icon.Burger />
+      <Image src="/BurgerIcon.svg" alt="" width={18} height={18} aria-hidden />
     </button>
   )
 }

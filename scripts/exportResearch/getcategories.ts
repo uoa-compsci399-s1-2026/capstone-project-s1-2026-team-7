@@ -24,6 +24,16 @@ type BedrockClaudeResponse = {
   }[]
 }
 
+type CategoryProgressEvent = {
+  current: number
+  total: number
+}
+
+type CategoryProgressOptions = {
+  onProgress?: (event: CategoryProgressEvent) => void
+  signal?: AbortSignal
+}
+
 const ENABLED_RESEARCH_CATEGORIES = [
   'Body composition',
   'Cardiometabolic health',
@@ -45,8 +55,37 @@ function getArticleId(article: CategoryArticleInput, index: number): string {
   return `${index}-${article.title.toLowerCase().trim()}`
 }
 
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms))
+function throwIfAborted(signal?: AbortSignal): void {
+  if (!signal?.aborted) return
+
+  const error = new Error('Export cancelled.')
+  error.name = 'AbortError'
+  throw error
+}
+
+function sleep(ms: number, signal?: AbortSignal): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) {
+      const error = new Error('Export cancelled.')
+      error.name = 'AbortError'
+      reject(error)
+      return
+    }
+
+    const timeout = setTimeout(() => {
+      signal?.removeEventListener('abort', onAbort)
+      resolve()
+    }, ms)
+
+    const onAbort = () => {
+      clearTimeout(timeout)
+      const error = new Error('Export cancelled.')
+      error.name = 'AbortError'
+      reject(error)
+    }
+
+    signal?.addEventListener('abort', onAbort, { once: true })
+  })
 }
 
 function getCacheKey(articles: CategoryArticleInput[], categories: readonly string[]): string {
@@ -150,7 +189,10 @@ function validateCategories(
 async function callBedrockForCategories(
   articles: CategoryArticleInput[],
   categories: readonly string[],
+  signal?: AbortSignal,
 ): Promise<CategoryResult[]> {
+  throwIfAborted(signal)
+
   const region = process.env.S3_REGION
   const modelId = MODEL_ID
 
@@ -195,7 +237,7 @@ async function callBedrockForCategories(
     }),
   })
 
-  const response = await client.send(command)
+  const response = await client.send(command, { abortSignal: signal })
   const decodedBody = new TextDecoder().decode(response.body)
   const parsed = JSON.parse(decodedBody) as BedrockClaudeResponse
 
@@ -212,19 +254,26 @@ async function processInBatches(
   articles: CategoryArticleInput[],
   categories: readonly string[],
   batchSize: number,
+  options?: CategoryProgressOptions,
 ): Promise<CategoryResult[]> {
   const results: CategoryResult[] = []
 
   for (let i = 0; i < articles.length; i += batchSize) {
+    throwIfAborted(options?.signal)
+
     const batch = articles.slice(i, i + batchSize)
 
     console.log(`Calling Bedrock for articles ${i + 1}-${i + batch.length}`)
 
-    const batchResult = await callBedrockForCategories(batch, categories)
+    const batchResult = await callBedrockForCategories(batch, categories, options?.signal)
 
     results.push(...batchResult)
+    options?.onProgress?.({
+      current: Math.min(i + batch.length, articles.length),
+      total: articles.length,
+    })
 
-    await sleep(500)
+    await sleep(500, options?.signal)
   }
 
   return results
@@ -236,6 +285,8 @@ export async function getEnabledCategories(
     categories?: readonly string[]
     batchSize?: number
     useCache?: boolean
+    onProgress?: (event: CategoryProgressEvent) => void
+    signal?: AbortSignal
   },
 ): Promise<CategoryResult[]> {
   const categories = options?.categories ?? ENABLED_RESEARCH_CATEGORIES
@@ -246,6 +297,8 @@ export async function getEnabledCategories(
     return []
   }
 
+  throwIfAborted(options?.signal)
+
   const cacheKey = getCacheKey(articles, categories)
 
   if (useCache) {
@@ -253,6 +306,10 @@ export async function getEnabledCategories(
 
     if (cached) {
       console.log('Using cached Bedrock category results.')
+      options?.onProgress?.({
+        current: articles.length,
+        total: articles.length,
+      })
       return cached
     }
   }
@@ -262,14 +319,21 @@ export async function getEnabledCategories(
       'Skipping Bedrock category call. Set BEDROCK_CATEGORIES_ENABLED=true to enable it.',
     )
 
-    return articles.map((article, index) => ({
+    const skippedResults = articles.map((article, index) => ({
       id: getArticleId(article, index),
       title: article.title,
       categories: [],
     }))
+
+    options?.onProgress?.({ current: articles.length, total: articles.length })
+
+    return skippedResults
   }
 
-  const results = await processInBatches(articles, categories, batchSize)
+  const results = await processInBatches(articles, categories, batchSize, {
+    onProgress: options?.onProgress,
+    signal: options?.signal,
+  })
 
   if (useCache) {
     await writeCachedResult(cacheKey, results)
