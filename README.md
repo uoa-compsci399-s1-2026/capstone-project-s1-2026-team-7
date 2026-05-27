@@ -72,12 +72,6 @@ Start the development server:
 npm run dev
 ```
 
-Safe development mode:
-
-```bash
-npm run devsafe
-```
-
 Build for production:
 
 ```bash
@@ -165,7 +159,6 @@ Special thanks to:
 ## Contributors
 
 - James Mullane — Full Stack Developer
-- Ayush Kumar — Frontend Developer & Design
 
 ---
 

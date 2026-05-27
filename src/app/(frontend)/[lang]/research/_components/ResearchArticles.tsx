@@ -3,20 +3,13 @@ import ResearchCard from './ResearchCard'
 
 type Props = {
   research: ResearchDTO[]
-  viewMode: 'grid' | 'list'
 }
 
-export default function ResearchArticles({ research, viewMode }: Props) {
+export default function ResearchArticles({ research }: Props) {
   return (
-    <div
-      className={
-        viewMode === 'grid'
-          ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'
-          : 'flex flex-col gap-4 mt-4'
-      }
-    >
+    <div className="flex flex-col gap-4">
       {research.map((item) => (
-        <ResearchCard key={item.id} item={item} viewMode={viewMode} />
+        <ResearchCard key={item.id} item={item} />
       ))}
     </div>
   )

@@ -1,41 +1,177 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import CategorySidebar from './CategorySidebar'
-import ResearchArticles from './ResearchArticles'
-import ResearchTopBar from './ResearchTopBar'
-import Pagination from './Pagination'
-import ResearchFilters from './ResearchFilters'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { ResearchDTO } from '@/features'
+import CategorySidebar from './CategorySidebar'
+import Pagination from './Pagination'
+import ResearchArticles from './ResearchArticles'
+import ResearchFilters from './ResearchFilters'
+import ResearchTopBar from './ResearchTopBar'
+import StaffSidebar from './StaffSidebar'
+import type { ResearchCategoryOption } from './CategorySidebar'
+import type { StaffFilter, StaffOption } from './StaffSidebar'
+import type { SortOption } from './ResearchFilters'
 
 type Props = {
-  categories: { id: number; title: string }[]
+  categories: ResearchCategoryOption[]
+  staffOptions: StaffOption[]
   initialResearch: ResearchDTO[]
   initialTotalDocs: number
 }
 
-type SortOption = 'newest' | 'oldest' | 'title'
+type CachedResearch = {
+  docs: ResearchDTO[]
+  totalDocs: number
+}
 
-export function ResearchClient({ categories, initialResearch, initialTotalDocs }: Props) {
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [mobileCategoriesOpen, setMobileCategoriesOpen] = useState(false)
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+const itemsPerPage = 12
 
-  const itemsPerPage = 16
+function useDebouncedValue<T>(value: T, delay: number) {
+  const [debouncedValue, setDebouncedValue] = useState(value)
 
+  useEffect(() => {
+    const timeout = window.setTimeout(() => setDebouncedValue(value), delay)
+    return () => window.clearTimeout(timeout)
+  }, [delay, value])
+
+  return debouncedValue
+}
+
+function getCacheKey(
+  page: number,
+  search: string,
+  sort: SortOption,
+  categoryId: string | null,
+  staffId: string | null,
+) {
+  return JSON.stringify({
+    page,
+    search: search.trim().toLowerCase(),
+    sort,
+    categoryId,
+    staffId,
+  })
+}
+
+function ResearchSkeleton() {
+  return (
+    <div className="flex flex-col gap-4" aria-hidden="true">
+      {Array.from({ length: 5 }).map((_, index) => (
+        <div
+          key={index}
+          className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm md:p-6"
+        >
+          <div className="mb-4 flex gap-2">
+            <div className="h-6 w-24 rounded-full bg-slate-100" />
+            <div className="h-6 w-28 rounded-full bg-slate-100" />
+          </div>
+          <div className="space-y-3">
+            <div className="h-6 w-11/12 rounded-full bg-slate-100" />
+            <div className="h-6 w-3/4 rounded-full bg-slate-100" />
+            <div className="h-4 w-1/2 rounded-full bg-slate-100" />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export function ResearchClient({
+  categories,
+  staffOptions,
+  initialResearch,
+  initialTotalDocs,
+}: Props) {
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null)
+  const [selectedStaff, setSelectedStaff] = useState<StaffFilter | null>(null)
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const [page, setPage] = useState(1)
   const [research, setResearch] = useState<ResearchDTO[]>(initialResearch)
   const [totalItems, setTotalItems] = useState(initialTotalDocs)
-
   const [searchQuery, setSearchQuery] = useState('')
-  const [sortOption, setSortOption] = useState<SortOption>('newest')
+  const [sortOption, setSortOptionState] = useState<SortOption>('newest')
   const [loading, setLoading] = useState(false)
+
+  const debouncedSearchQuery = useDebouncedValue(searchQuery, 350)
+  const selectedStaffId = selectedStaff?.id ?? null
+
+  const selectedCategoryLabel = useMemo(() => {
+    if (!selectedCategoryId) {
+      return null
+    }
+
+    return categories.find((category) => String(category.id) === selectedCategoryId)?.title ?? null
+  }, [categories, selectedCategoryId])
+
+  const hasActiveFilters = Boolean(
+    searchQuery.trim() || selectedCategoryId || selectedStaff || sortOption !== 'newest',
+  )
+
+  const queryKey = useMemo(
+    () => getCacheKey(page, debouncedSearchQuery, sortOption, selectedCategoryId, selectedStaffId),
+    [debouncedSearchQuery, page, selectedCategoryId, selectedStaffId, sortOption],
+  )
+
+  const cache = useRef<Map<string, CachedResearch>>(
+    new Map([
+      [
+        getCacheKey(1, '', 'newest', null, null),
+        {
+          docs: initialResearch,
+          totalDocs: initialTotalDocs,
+        },
+      ],
+    ]),
+  )
+
+  function setSortOption(value: SortOption) {
+    setSortOptionState(value)
+    setPage(1)
+  }
+
+  function handleCategorySelect(categoryId: string | null) {
+    setSelectedCategoryId(categoryId)
+    setPage(1)
+  }
+
+  function handleStaffSelect(staff: StaffFilter | null) {
+    setSelectedStaff((currentStaff) => {
+      if (!staff || currentStaff?.id === staff.id) {
+        return null
+      }
+
+      return staff
+    })
+    setPage(1)
+  }
+
+  function clearStaffFilter() {
+    setSelectedStaff(null)
+    setPage(1)
+  }
+
+  function clearFilters() {
+    setSearchQuery('')
+    setSelectedCategoryId(null)
+    setSelectedStaff(null)
+    setSortOptionState('newest')
+    setPage(1)
+  }
 
   useEffect(() => {
     setPage(1)
-  }, [searchQuery, sortOption, selectedCategory])
+  }, [debouncedSearchQuery])
 
   useEffect(() => {
+    const cached = cache.current.get(queryKey)
+
+    if (cached) {
+      setResearch(cached.docs)
+      setTotalItems(cached.totalDocs)
+      setLoading(false)
+      return
+    }
+
     const controller = new AbortController()
 
     async function loadResearchPage() {
@@ -48,12 +184,18 @@ export function ResearchClient({ categories, initialResearch, initialTotalDocs }
           sort: sortOption,
         })
 
-        if (searchQuery.trim()) {
-          params.set('search', searchQuery.trim())
+        const trimmedSearch = debouncedSearchQuery.trim()
+
+        if (trimmedSearch) {
+          params.set('search', trimmedSearch)
         }
 
-        if (selectedCategory && selectedCategory !== 'All') {
-          params.set('categoryId', selectedCategory)
+        if (selectedCategoryId) {
+          params.set('categoryId', selectedCategoryId)
+        }
+
+        if (selectedStaffId) {
+          params.set('staffId', selectedStaffId)
         }
 
         const response = await fetch(`/research-api?${params.toString()}`, {
@@ -64,8 +206,8 @@ export function ResearchClient({ categories, initialResearch, initialTotalDocs }
           throw new Error('Failed to load research')
         }
 
-        const data = await response.json()
-
+        const data = (await response.json()) as CachedResearch
+        cache.current.set(queryKey, data)
         setResearch(data.docs)
         setTotalItems(data.totalDocs)
       } catch (error) {
@@ -73,84 +215,112 @@ export function ResearchClient({ categories, initialResearch, initialTotalDocs }
           console.error(error)
         }
       } finally {
-        setLoading(false)
+        if (!controller.signal.aborted) {
+          setLoading(false)
+        }
       }
     }
 
     loadResearchPage()
 
     return () => controller.abort()
-  }, [page, searchQuery, sortOption, selectedCategory])
+  }, [debouncedSearchQuery, page, queryKey, selectedCategoryId, selectedStaffId, sortOption])
 
   return (
-    <div className="w-full">
+    <div className="w-full pb-16">
       <ResearchFilters
         sortOption={sortOption}
         setSortOption={setSortOption}
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
+        hasActiveFilters={hasActiveFilters}
+        onClearFilters={clearFilters}
       />
 
-      <div className="max-w-7xl mx-auto w-full px-4 mt-8">
-        <div className="lg:hidden mt-4">
+      <div className="mx-auto mt-8 grid w-full max-w-7xl grid-cols-1 gap-6 px-5 md:px-8 lg:grid-cols-[300px_1fr] lg:gap-8">
+        <div className="lg:hidden">
           <button
-            onClick={() => setMobileCategoriesOpen(!mobileCategoriesOpen)}
-            className="w-full flex justify-between items-center px-3 py-3 bg-gray-100 rounded-lg md:px-4"
+            type="button"
+            onClick={() => setMobileFiltersOpen((isOpen) => !isOpen)}
+            className="flex w-full items-center justify-between rounded-3xl border border-slate-200 bg-white px-5 py-4 text-left font-black text-slate-950 shadow-sm"
           >
-            <span>Categories</span>
-            <span>{mobileCategoriesOpen ? '▲' : '▼'}</span>
+            <span>Filters</span>
+            <span className="text-sm text-slate-400">
+              {mobileFiltersOpen ? 'Close' : 'Categories & staff'}
+            </span>
           </button>
 
-          {mobileCategoriesOpen && (
-            <div className="mt-2 p-3 bg-gray-50 rounded-lg md:p-4">
+          {mobileFiltersOpen && (
+            <div className="mt-3 space-y-4">
               <CategorySidebar
                 categories={categories}
-                selectedCategoryId={selectedCategory}
-                onSelect={(id) => {
-                  setSelectedCategory((prev) => (prev === id ? null : id))
-                  setMobileCategoriesOpen(false)
-                }}
-                hideTitle={true}
+                selectedCategoryId={selectedCategoryId}
+                onSelect={handleCategorySelect}
+              />
+              <StaffSidebar
+                staff={staffOptions}
+                selectedStaffId={selectedStaffId}
+                onSelect={handleStaffSelect}
               />
             </div>
           )}
         </div>
 
-        <div className="grid lg:grid-cols-[250px_1fr] grid-cols-1 gap-8">
-          <div className="hidden lg:block">
+        <div className="hidden lg:block">
+          <div className="space-y-4 lg:sticky lg:top-24">
             <CategorySidebar
               categories={categories}
-              selectedCategoryId={selectedCategory}
-              onSelect={(id) => {
-                setSelectedCategory((prev) => (prev === id ? null : id))
-              }}
-              hideTitle={false}
+              selectedCategoryId={selectedCategoryId}
+              onSelect={handleCategorySelect}
+            />
+            <StaffSidebar
+              staff={staffOptions}
+              selectedStaffId={selectedStaffId}
+              onSelect={handleStaffSelect}
             />
           </div>
+        </div>
 
-          <main>
-            <ResearchTopBar itemCount={totalItems} viewMode={viewMode} setViewMode={setViewMode} />
+        <main aria-busy={loading}>
+          <ResearchTopBar
+            itemCount={totalItems}
+            page={page}
+            itemsPerPage={itemsPerPage}
+            selectedCategoryLabel={selectedCategoryLabel}
+            selectedStaff={selectedStaff}
+            onClearStaff={clearStaffFilter}
+          />
 
-            {loading && <p className="text-gray-500 mt-6 ml-4">Loading...</p>}
-
-            {!loading && research.length === 0 && (
-              <p className="text-gray-500 mt-6 ml-4">No items found</p>
-            )}
-
-            {!loading && research.length > 0 && (
-              <ResearchArticles research={research} viewMode={viewMode} />
-            )}
-
-            {totalItems > itemsPerPage && (
+          {loading ? (
+            <ResearchSkeleton />
+          ) : research.length > 0 ? (
+            <>
+              <ResearchArticles research={research} />
               <Pagination
                 page={page}
                 totalItems={totalItems}
                 itemsPerPage={itemsPerPage}
                 onPageChange={setPage}
               />
-            )}
-          </main>
-        </div>
+            </>
+          ) : (
+            <div className="rounded-3xl border border-dashed border-slate-300 bg-white px-6 py-14 text-center shadow-sm">
+              <p className="text-lg font-black text-slate-950">No matching publications</p>
+              <p className="mx-auto mt-2 max-w-md text-sm text-slate-500">
+                Try a different search term, category, staff member, or sort option.
+              </p>
+              {hasActiveFilters && (
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="mt-6 rounded-2xl bg-[#090936] px-5 py-3 text-sm font-black text-white transition hover:bg-[#15155a]"
+                >
+                  Clear all filters
+                </button>
+              )}
+            </div>
+          )}
+        </main>
       </div>
     </div>
   )
