@@ -7,14 +7,11 @@ export type StaffFilter = {
   label: string
 }
 
-export type StaffOption = StaffFilter & {
+export type StaffOption = {
+  id: string
+  label: string
   firstname?: string | null
   lastname?: string | null
-  firstName?: string | null
-  lastName?: string | null
-  name?: string | null
-  fullName?: string | null
-  displayName?: string | null
   email?: string | null
 }
 
@@ -22,46 +19,23 @@ type Props = {
   staff: StaffOption[]
   selectedStaffId: string | null
   onSelect: (staff: StaffFilter | null) => void
-  hideTitle?: boolean
 }
 
-function getStaffLabel(member: StaffOption) {
-  const firstName = member.firstname ?? member.firstName ?? ''
-  const lastName = member.lastname ?? member.lastName ?? ''
-  const fullName = `${firstName} ${lastName}`.trim()
+function getStaffLabel(staff: StaffOption) {
+  const firstname = staff.firstname ?? ''
+  const lastname = staff.lastname ?? ''
+  const fullName = `${firstname} ${lastname}`.trim()
 
-  return (
-    fullName ||
-    member.label ||
-    member.name ||
-    member.fullName ||
-    member.displayName ||
-    member.email ||
-    `Staff member ${member.id}`
-  )
+  return fullName || staff.label || staff.email || `Staff member ${staff.id}`
 }
 
-function getUniqueStaff(staff: StaffOption[]) {
-  const seen = new Set<string>()
-
-  return staff
+export default function StaffSidebar({ staff, selectedStaffId, onSelect }: Props) {
+  const staffOptions = staff
     .map((member) => ({
       id: String(member.id),
       label: getStaffLabel(member),
     }))
-    .filter((member) => {
-      if (!member.id || seen.has(member.id)) {
-        return false
-      }
-
-      seen.add(member.id)
-      return true
-    })
-    .sort((a, b) => a.label.localeCompare(b.label))
-}
-
-export default function StaffSidebar({ staff, selectedStaffId, onSelect, hideTitle }: Props) {
-  const staffOptions = getUniqueStaff(staff)
+    .filter((member) => member.id && member.label)
 
   if (staffOptions.length === 0) {
     return null
@@ -69,19 +43,16 @@ export default function StaffSidebar({ staff, selectedStaffId, onSelect, hideTit
 
   return (
     <aside className="w-full rounded-3xl border border-slate-200 bg-white p-4 shadow-sm lg:p-5">
-      {!hideTitle && (
-        <div className="mb-5 flex items-center justify-between gap-3">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">
-              Filter by
-            </p>
-            <h2 className="mt-1 text-lg font-black text-slate-950">Staff</h2>
-          </div>
-          <div className="rounded-2xl bg-slate-100 p-2 text-slate-600">
-            <UserRound className="h-4 w-4" aria-hidden="true" />
-          </div>
+      <div className="mb-5 flex items-center justify-between gap-3">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">Filter by</p>
+          <h2 className="mt-1 text-lg font-black text-slate-950">Staff</h2>
         </div>
-      )}
+
+        <div className="rounded-2xl bg-slate-100 p-2 text-slate-600">
+          <UserRound className="h-4 w-4" aria-hidden="true" />
+        </div>
+      </div>
 
       <div className="space-y-2">
         <button
@@ -112,6 +83,7 @@ export default function StaffSidebar({ staff, selectedStaffId, onSelect, hideTit
               }`}
             >
               <span>{member.label}</span>
+
               {isActive ? (
                 <X className="h-4 w-4 text-white/80" aria-hidden="true" />
               ) : (

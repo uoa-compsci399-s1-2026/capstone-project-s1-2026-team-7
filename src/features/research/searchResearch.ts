@@ -39,6 +39,8 @@ type StaffDoc = {
   sortOrder?: number | null
 }
 
+type StaffRelationship = string | number | StaffDoc | null | undefined
+
 function toPayloadId(id: string) {
   const numericId = Number(id)
   return Number.isNaN(numericId) ? id : numericId
@@ -52,30 +54,25 @@ function getStaffLabel(staff: StaffDoc) {
   return fullName || staff.email || `Staff member ${staff.id}`
 }
 
-export async function getResearchStaffOptions(): Promise<ResearchStaffOption[]> {
-  const payload = await getPayloadClient()
+export function getResearchStaffOptions(
+  researchStaffDisplay: StaffRelationship[] | null | undefined,
+): ResearchStaffOption[] {
+  return (researchStaffDisplay ?? []).flatMap((staff) => {
+    if (!staff || typeof staff !== 'object') {
+      return []
+    }
 
-  const data = await payload.find({
-    collection: 'staff',
-    depth: 0,
-    limit: 100,
-    sort: 'sortOrder',
-  })
-
-  return data.docs.flatMap((staff) => {
-    const staffDoc = staff as StaffDoc
-
-    if (staffDoc.id === undefined || staffDoc.id === null) {
+    if (staff.id === undefined || staff.id === null) {
       return []
     }
 
     return [
       {
-        id: String(staffDoc.id),
-        label: getStaffLabel(staffDoc),
-        firstname: staffDoc.firstname ?? '',
-        lastname: staffDoc.lastname ?? '',
-        email: staffDoc.email ?? '',
+        id: String(staff.id),
+        label: getStaffLabel(staff),
+        firstname: staff.firstname ?? '',
+        lastname: staff.lastname ?? '',
+        email: staff.email ?? '',
       },
     ]
   })

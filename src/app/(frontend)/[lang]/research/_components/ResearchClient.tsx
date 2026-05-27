@@ -30,8 +30,13 @@ function useDebouncedValue<T>(value: T, delay: number) {
   const [debouncedValue, setDebouncedValue] = useState(value)
 
   useEffect(() => {
-    const timeout = window.setTimeout(() => setDebouncedValue(value), delay)
-    return () => window.clearTimeout(timeout)
+    const timeout = window.setTimeout(() => {
+      setDebouncedValue(value)
+    }, delay)
+
+    return () => {
+      window.clearTimeout(timeout)
+    }
   }, [delay, value])
 
   return debouncedValue
@@ -53,6 +58,14 @@ function getCacheKey(
   })
 }
 
+function getStaffDisplayName(staff: StaffOption) {
+  const firstname = staff.firstname ?? ''
+  const lastname = staff.lastname ?? ''
+  const fullName = `${firstname} ${lastname}`.trim()
+
+  return fullName || staff.label || staff.email || `Staff member ${staff.id}`
+}
+
 function ResearchSkeleton() {
   return (
     <div className="flex flex-col gap-4" aria-hidden="true">
@@ -65,6 +78,7 @@ function ResearchSkeleton() {
             <div className="h-6 w-24 rounded-full bg-slate-100" />
             <div className="h-6 w-28 rounded-full bg-slate-100" />
           </div>
+
           <div className="space-y-3">
             <div className="h-6 w-11/12 rounded-full bg-slate-100" />
             <div className="h-6 w-3/4 rounded-full bg-slate-100" />
@@ -95,6 +109,16 @@ export function ResearchClient({
   const debouncedSearchQuery = useDebouncedValue(searchQuery, 350)
   const selectedStaffId = selectedStaff?.id ?? null
 
+  const visibleStaffOptions = useMemo(() => {
+    return staffOptions
+      .filter((staff) => staff.id !== undefined && staff.id !== null)
+      .map((staff) => ({
+        ...staff,
+        id: String(staff.id),
+        label: getStaffDisplayName(staff),
+      }))
+  }, [staffOptions])
+
   const selectedCategoryLabel = useMemo(() => {
     if (!selectedCategoryId) {
       return null
@@ -104,7 +128,7 @@ export function ResearchClient({
   }, [categories, selectedCategoryId])
 
   const hasActiveFilters = Boolean(
-    searchQuery.trim() || selectedCategoryId || selectedStaff || sortOption !== 'newest',
+    searchQuery.trim() || selectedCategoryId || selectedStaffId || sortOption !== 'newest',
   )
 
   const queryKey = useMemo(
@@ -132,6 +156,7 @@ export function ResearchClient({
   function handleCategorySelect(categoryId: string | null) {
     setSelectedCategoryId(categoryId)
     setPage(1)
+    setMobileFiltersOpen(false)
   }
 
   function handleStaffSelect(staff: StaffFilter | null) {
@@ -142,7 +167,9 @@ export function ResearchClient({
 
       return staff
     })
+
     setPage(1)
+    setMobileFiltersOpen(false)
   }
 
   function clearStaffFilter() {
@@ -207,6 +234,7 @@ export function ResearchClient({
         }
 
         const data = (await response.json()) as CachedResearch
+
         cache.current.set(queryKey, data)
         setResearch(data.docs)
         setTotalItems(data.totalDocs)
@@ -223,7 +251,9 @@ export function ResearchClient({
 
     loadResearchPage()
 
-    return () => controller.abort()
+    return () => {
+      controller.abort()
+    }
   }, [debouncedSearchQuery, page, queryKey, selectedCategoryId, selectedStaffId, sortOption])
 
   return (
@@ -257,8 +287,9 @@ export function ResearchClient({
                 selectedCategoryId={selectedCategoryId}
                 onSelect={handleCategorySelect}
               />
+
               <StaffSidebar
-                staff={staffOptions}
+                staff={visibleStaffOptions}
                 selectedStaffId={selectedStaffId}
                 onSelect={handleStaffSelect}
               />
@@ -273,8 +304,9 @@ export function ResearchClient({
               selectedCategoryId={selectedCategoryId}
               onSelect={handleCategorySelect}
             />
+
             <StaffSidebar
-              staff={staffOptions}
+              staff={visibleStaffOptions}
               selectedStaffId={selectedStaffId}
               onSelect={handleStaffSelect}
             />
@@ -296,6 +328,7 @@ export function ResearchClient({
           ) : research.length > 0 ? (
             <>
               <ResearchArticles research={research} />
+
               <Pagination
                 page={page}
                 totalItems={totalItems}
@@ -306,9 +339,11 @@ export function ResearchClient({
           ) : (
             <div className="rounded-3xl border border-dashed border-slate-300 bg-white px-6 py-14 text-center shadow-sm">
               <p className="text-lg font-black text-slate-950">No matching publications</p>
+
               <p className="mx-auto mt-2 max-w-md text-sm text-slate-500">
                 Try a different search term, category, staff member, or sort option.
               </p>
+
               {hasActiveFilters && (
                 <button
                   type="button"

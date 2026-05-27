@@ -976,6 +976,7 @@ export interface ResearchPage {
   'portrait image': number | Media
   'mobile image': number | Media
   researchCategoriesDisplay?: (number | ResearchCategory)[] | null
+  researchStaffDisplay?: (number | Staff)[] | null
   seo?: {
     metaTitle?: string | null
     metaDescription?: string | null
@@ -1459,6 +1460,7 @@ export interface ResearchPageSelect<T extends boolean = true> {
   'portrait image'?: T
   'mobile image'?: T
   researchCategoriesDisplay?: T
+  researchStaffDisplay?: T
   seo?:
     | T
     | {
