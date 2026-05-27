@@ -9,6 +9,16 @@ import {
 } from './types'
 import type { StaffDTO } from '@/features/our-team/staff.schema'
 
+type GetDataOptions = {
+  signal?: AbortSignal
+  onPersonComplete?: (event: {
+    index: number
+    total: number
+    person: nameWithORcid
+    articles: ArticleOutput[]
+  }) => void
+}
+
 type CrossrefDate = {
   'date-parts'?: number[][]
 }
@@ -39,11 +49,25 @@ export function getOrcidList(staff: StaffDTO[]): nameWithORcid[] {
   }))
 }
 
-export async function fetchResearchOrcid(orcid: string): Promise<ArticleOutput[]> {
+function throwIfAborted(signal?: AbortSignal): void {
+  if (!signal?.aborted) return
+
+  const error = new Error('Export cancelled.')
+  error.name = 'AbortError'
+  throw error
+}
+
+export async function fetchResearchOrcid(
+  orcid: string,
+  options?: { signal?: AbortSignal },
+): Promise<ArticleOutput[]> {
+  throwIfAborted(options?.signal)
+
   const response: Response = await fetch(`https://pub.orcid.org/v3.0/${orcid}/works`, {
     headers: {
       Accept: 'application/vnd.orcid+json',
     },
+    signal: options?.signal,
   })
 
   if (!response.ok) {
@@ -52,7 +76,7 @@ export async function fetchResearchOrcid(orcid: string): Promise<ArticleOutput[]
 
   const data = (await response.json()) as OrcidWorksResponse
 
-  return getArticleOutput(data)
+  return getArticleOutput(data, options?.signal)
 }
 
 function normalizeDoi(doi: string | null | undefined): string | null {
@@ -85,8 +109,29 @@ function getOrcidPublicationDate(work: OrcidWorkSummary): string | null {
   return year ? [year, month, day].filter(Boolean).join('-') : null
 }
 
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms))
+function sleep(ms: number, signal?: AbortSignal): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) {
+      const error = new Error('Export cancelled.')
+      error.name = 'AbortError'
+      reject(error)
+      return
+    }
+
+    const timeout = setTimeout(() => {
+      signal?.removeEventListener('abort', onAbort)
+      resolve()
+    }, ms)
+
+    const onAbort = () => {
+      clearTimeout(timeout)
+      const error = new Error('Export cancelled.')
+      error.name = 'AbortError'
+      reject(error)
+    }
+
+    signal?.addEventListener('abort', onAbort, { once: true })
+  })
 }
 
 function formatDateParts(date: CrossrefDate | undefined): string | null {
@@ -132,7 +177,12 @@ function getBestCrossrefDate(message: CrossrefWorkMessage): string | null {
   return dateCandidates.sort((a, b) => getDatePrecisionScore(b) - getDatePrecisionScore(a))[0]
 }
 
-async function fetchCrossrefPublicationDate(doi: string): Promise<string | null> {
+async function fetchCrossrefPublicationDate(
+  doi: string,
+  signal?: AbortSignal,
+): Promise<string | null> {
+  throwIfAborted(signal)
+
   const normalizedDoi = normalizeDoi(doi)
 
   if (!normalizedDoi) {
@@ -158,6 +208,7 @@ async function fetchCrossrefPublicationDate(doi: string): Promise<string | null>
       headers: {
         Accept: 'application/json',
       },
+      signal,
     })
 
     if (response.ok) {
@@ -179,7 +230,7 @@ async function fetchCrossrefPublicationDate(doi: string): Promise<string | null>
         }s before retry ${attempt}/${maxAttempts}.`,
       )
 
-      await sleep(retryAfterMs)
+      await sleep(retryAfterMs, signal)
       continue
     }
 
@@ -197,11 +248,16 @@ async function fetchCrossrefPublicationDate(doi: string): Promise<string | null>
   return null
 }
 
-async function getArticleOutput(data: OrcidWorksResponse): Promise<ArticleOutput[]> {
+async function getArticleOutput(
+  data: OrcidWorksResponse,
+  signal?: AbortSignal,
+): Promise<ArticleOutput[]> {
   const works = data.group.flatMap((group) => group['work-summary'])
   const articles: ArticleOutput[] = []
 
   for (const work of works) {
+    throwIfAborted(signal)
+
     const title = work.title.title.value
     const doi = getDoiFromWork(work)
     const url = work.url?.value ?? null
@@ -211,10 +267,10 @@ async function getArticleOutput(data: OrcidWorksResponse): Promise<ArticleOutput
     let crossrefPublicationDate: string | null = null
 
     if (doi) {
-      crossrefPublicationDate = await fetchCrossrefPublicationDate(doi)
+      crossrefPublicationDate = await fetchCrossrefPublicationDate(doi, signal)
 
       // Small delay to reduce Crossref 429 rate-limit errors.
-      await sleep(500)
+      await sleep(500, signal)
     }
 
     articles.push({
@@ -267,10 +323,27 @@ export function compareEntries(data: PerPersonOutputType[]): SharedArticle[] {
   return Array.from(articleMap.values())
 }
 
-export async function getData(people: nameWithORcid[]): Promise<PerPersonOutputType[]> {
+export async function getData(
+  people: nameWithORcid[],
+  options?: GetDataOptions,
+): Promise<PerPersonOutputType[]> {
+  let completed = 0
+
   return Promise.all(
     people.map(async (person) => {
-      const articles = await fetchResearchOrcid(person.orcid)
+      throwIfAborted(options?.signal)
+
+      const articles = await fetchResearchOrcid(person.orcid, {
+        signal: options?.signal,
+      })
+
+      completed += 1
+      options?.onPersonComplete?.({
+        index: completed,
+        total: people.length,
+        person,
+        articles,
+      })
 
       return {
         name: person.name,

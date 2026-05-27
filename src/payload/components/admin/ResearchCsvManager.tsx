@@ -15,9 +15,22 @@ type ImportResult = {
   s3Key?: string
 }
 
+type ExportResult = {
+  csv: string
+  filename: string
+  rowCount: number
+  s3Bucket?: string
+  s3Key?: string
+}
+
 type StatusMessage = {
   tone: 'error' | 'success'
   text: string
+}
+
+type StreamEvent = Record<string, unknown> & {
+  type?: string
+  result?: unknown
 }
 
 const cardStyle: React.CSSProperties = {
@@ -56,15 +69,33 @@ function downloadBlob(blob: Blob, filename: string): void {
   URL.revokeObjectURL(url)
 }
 
-function getFilenameFromContentDisposition(value: string | null): string {
-  const match = value?.match(/filename="?([^";]+)"?/)
+function clampProgress(value: unknown): number {
+  const progress = Number(value)
 
-  return match?.[1] ?? `research-export-${new Date().toISOString().slice(0, 10)}.csv`
+  if (!Number.isFinite(progress)) return 0
+
+  return Math.max(0, Math.min(100, Math.round(progress)))
+}
+
+function parseStreamEvent(line: string): StreamEvent | null {
+  try {
+    const parsed: unknown = JSON.parse(line)
+
+    if (typeof parsed !== 'object' || parsed === null) {
+      return null
+    }
+
+    return parsed as StreamEvent
+  } catch {
+    return null
+  }
 }
 
 export function ResearchCsvManager() {
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const exportAbortControllerRef = useRef<AbortController | null>(null)
   const [exporting, setExporting] = useState(false)
+  const [exportProgress, setExportProgress] = useState(0)
   const [importing, setImporting] = useState(false)
   //const [dryRun, setDryRun] = useState(true)
   const [message, setMessage] = useState<StatusMessage | null>(null)
@@ -73,14 +104,19 @@ export function ResearchCsvManager() {
   const [lastProgress, setLastProgress] = useState<string | null>(null)
 
   async function handleExport() {
+    const controller = new AbortController()
+    exportAbortControllerRef.current = controller
+
     setExporting(true)
+    setExportProgress(0)
     setMessage(null)
     setImportResult(null)
     setExportS3Key(null)
 
     try {
-      const response = await fetch('/api/research-csv/export', {
+      const response = await fetch('/api/research-csv/export?stream=1', {
         credentials: 'include',
+        signal: controller.signal,
       })
 
       if (!response.ok) {
@@ -88,27 +124,89 @@ export function ResearchCsvManager() {
         throw new Error(error?.error ?? 'CSV export failed.')
       }
 
-      const rowCount = response.headers.get('X-Research-Row-Count')
-      const s3Key = response.headers.get('X-Research-S3-Key')
-      const filename = getFilenameFromContentDisposition(
-        response.headers.get('Content-Disposition'),
-      )
-      const blob = await response.blob()
+      if (!response.body) {
+        throw new Error('No response body.')
+      }
 
-      downloadBlob(blob, filename)
-      setExportS3Key(s3Key)
+      const reader = response.body.getReader()
+      const decoder = new TextDecoder()
+      let buffer = ''
+      const finalResultRef: { current: ExportResult | null } = {
+        current: null,
+      }
+      let streamError: string | null = null
+      let wasCancelled = false
+
+      const handleEvent = (raw: string) => {
+        const line = raw.trim()
+        if (!line) return
+
+        const evt = parseStreamEvent(line)
+        if (!evt) return
+
+        if (evt.type === 'progress') {
+          setExportProgress(clampProgress(evt.progress))
+        } else if (evt.type === 'complete') {
+          setExportProgress(100)
+          finalResultRef.current = evt.result as ExportResult
+        } else if (evt.type === 'cancelled') {
+          wasCancelled = true
+        } else if (evt.type === 'error') {
+          streamError = String(evt.error ?? 'CSV export failed.')
+        }
+      }
+
+      while (true) {
+        const { value, done } = await reader.read()
+        if (done) break
+        buffer += decoder.decode(value, { stream: true })
+
+        let newlineIndex = buffer.indexOf('\n')
+        while (newlineIndex !== -1) {
+          handleEvent(buffer.slice(0, newlineIndex))
+          buffer = buffer.slice(newlineIndex + 1)
+          newlineIndex = buffer.indexOf('\n')
+        }
+      }
+
+      if (buffer.trim()) handleEvent(buffer)
+
+      if (controller.signal.aborted || wasCancelled) {
+        setMessage({ tone: 'error', text: 'Export cancelled.' })
+        return
+      }
+
+      if (streamError) throw new Error(streamError)
+      const finalResult = finalResultRef.current
+      if (!finalResult) throw new Error('Export ended without a result.')
+
+      downloadBlob(
+        new Blob([finalResult.csv], { type: 'text/csv;charset=utf-8' }),
+        finalResult.filename,
+      )
+      setExportS3Key(finalResult.s3Key ?? null)
       setMessage({
         tone: 'success',
-        text: `Export complete${rowCount ? `: ${rowCount} rows downloaded.` : '.'}`,
+        text: `Export complete: ${finalResult.rowCount} rows downloaded.`,
       })
     } catch (error) {
       setMessage({
         tone: 'error',
-        text: error instanceof Error ? error.message : 'CSV export failed.',
+        text:
+          controller.signal.aborted || (error instanceof Error && error.name === 'AbortError')
+            ? 'Export cancelled.'
+            : error instanceof Error
+              ? error.message
+              : 'CSV export failed.',
       })
     } finally {
+      exportAbortControllerRef.current = null
       setExporting(false)
     }
+  }
+
+  function handleCancelExport() {
+    exportAbortControllerRef.current?.abort()
   }
 
   async function handleImport(event: FormEvent<HTMLFormElement>) {
@@ -153,16 +251,14 @@ export function ResearchCsvManager() {
         const line = raw.trim()
         if (!line) return
 
-        let evt: any
-        try {
-          evt = JSON.parse(line)
-        } catch {
-          return
-        }
+        const evt = parseStreamEvent(line)
+        if (!evt) return
 
         if (evt.type === 'progress') {
-          const suffix = evt.error ? ` — ${evt.error}` : ''
-          const text = `${evt.status} row ${evt.index}/${evt.total}: ${evt.title}${suffix}`
+          const suffix = evt.error ? ` — ${String(evt.error)}` : ''
+          const text = `${String(evt.status)} row ${String(evt.index)}/${String(evt.total)}: ${String(
+            evt.title,
+          )}${suffix}`
           setLastProgress(text)
         } else if (evt.type === 'complete') {
           finalResult = evt.result as ImportResult
@@ -241,9 +337,17 @@ export function ResearchCsvManager() {
               Storage Service), and downloads the CSV to your computer. Keep Bedrock disabled unless
               you want automatic category suggestions.
             </p>
-            <button type="button" onClick={handleExport} disabled={disabled} style={buttonStyle}>
-              {exporting ? 'Exporting...' : 'Export research CSV'}
-            </button>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+              <button type="button" onClick={handleExport} disabled={disabled} style={buttonStyle}>
+                {exporting ? `Exporting ${exportProgress}%` : 'Export research CSV'}
+              </button>
+
+              {exporting && (
+                <button type="button" onClick={handleCancelExport} style={secondaryButtonStyle}>
+                  Cancel
+                </button>
+              )}
+            </div>
           </section>
 
           <section style={cardStyle}>
