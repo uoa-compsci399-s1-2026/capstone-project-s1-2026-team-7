@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { ChevronLeft, ChevronRight, Play } from 'lucide-react'
+import clsx from 'clsx'
 import type { VideoBlockDTO } from '@/features/homepage/home.schema'
+import { useInView } from '@/app/(frontend)/[lang]/_components/useInView'
 
 type Props = {
   data: VideoBlockDTO
@@ -10,17 +12,26 @@ type Props = {
 
 type PlayableVideo = VideoBlockDTO['videos'][number] & { youTubeId: string }
 
+const FADE_BASE = 'transition-all duration-700 ease-out will-change-[opacity,transform]'
+const FADE_HIDDEN = 'opacity-0 translate-y-6'
+const FADE_SHOWN = 'opacity-100 translate-y-0'
+
+const CARD_DELAYS = ['delay-200', 'delay-300', 'delay-[400ms]', 'delay-500', 'delay-700']
+
 function getYouTubeId(input: string): string {
   if (!input) return ''
+
   const trimmed = input.trim()
 
   if (/^[a-zA-Z0-9_-]{11}$/.test(trimmed)) return trimmed
 
   try {
     const url = new URL(trimmed)
+
     if (url.hostname.includes('youtu.be')) return url.pathname.slice(1)
     if (url.pathname.startsWith('/embed/')) return url.pathname.split('/')[2] ?? ''
     if (url.pathname.startsWith('/shorts/')) return url.pathname.split('/')[2] ?? ''
+
     return url.searchParams.get('v') ?? ''
   } catch {
     return ''
@@ -28,38 +39,59 @@ function getYouTubeId(input: string): string {
 }
 
 export default function VideoSection({ data }: Props) {
-  const { title, description, videos } = data
+  const { title, description, videos = [] } = data
+  const { ref, inView } = useInView<HTMLElement>()
 
   const playable: PlayableVideo[] = videos
-    .map((v) => ({ ...v, youTubeId: getYouTubeId(v.url) }))
-    .filter((v) => v.youTubeId)
+    .map((video) => ({ ...video, youTubeId: getYouTubeId(video.url) }))
+    .filter((video) => video.youTubeId)
 
   if (playable.length === 0) return null
 
   return (
-    <section className="w-full overflow-x-hidden bg-white py-16 text-[#08084f] md:py-24">
-      <div className="mx-auto w-full max-w-300 px-6.5 md:px-8 lg:px-12 xl:px-0">
-        <div className="mx-auto max-w-150 text-center">
-          <h2 className="text-[22px] leading-tight font-extrabold text-[#08084f] sm:text-2xl md:text-[28px] lg:text-[32px] xl:text-4xl">
+    <section ref={ref} className="w-full overflow-x-hidden bg-white py-16 text-[#08084f]">
+      <div className="mx-auto w-[84%] max-w-300">
+        <div
+          className={clsx(
+            FADE_BASE,
+            inView ? FADE_SHOWN : FADE_HIDDEN,
+            'mx-auto max-w-150 text-center',
+          )}
+        >
+          <h2 className="text-lg leading-tight font-extrabold text-[#08084f] sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">
             {title}
           </h2>
 
-          <div className="mx-auto mt-3 h-0.75 w-16 rounded-full bg-[#08084f] sm:w-18 md:h-1 md:w-20 lg:w-22 xl:w-24" />
+          <div
+            className={clsx(
+              FADE_BASE,
+              inView ? FADE_SHOWN : FADE_HIDDEN,
+              inView && 'delay-100',
+              'mx-auto mt-3 h-0.75 w-16 rounded-full bg-[#08084f] sm:w-18 md:mt-4 md:h-1 md:w-20 lg:w-22 xl:w-24',
+            )}
+          />
 
           {description && (
-            <p className="mx-auto mt-5 text-[10px] leading-relaxed text-[#08084f]/70 sm:text-xs md:mt-6 md:text-sm lg:text-base">
+            <p
+              className={clsx(
+                FADE_BASE,
+                inView ? FADE_SHOWN : FADE_HIDDEN,
+                inView && 'delay-200',
+                'mx-auto mt-5 text-xs leading-relaxed font-medium text-[#08084f]/70 sm:text-xs md:mt-6 md:text-sm lg:text-base xl:text-lg',
+              )}
+            >
               {description}
             </p>
           )}
         </div>
 
-        <Carousel videos={playable} />
+        <Carousel videos={playable} inView={inView} />
       </div>
     </section>
   )
 }
 
-function Carousel({ videos }: { videos: PlayableVideo[] }) {
+function Carousel({ videos, inView }: { videos: PlayableVideo[]; inView: boolean }) {
   const count = videos.length
 
   const stageRef = useRef<HTMLDivElement | null>(null)
@@ -68,28 +100,44 @@ function Carousel({ videos }: { videos: PlayableVideo[] }) {
   const [playingId, setPlayingId] = useState<string | null>(null)
 
   useEffect(() => {
-    const el = stageRef.current
-    if (!el) return
+    const element = stageRef.current
+    if (!element) return
 
-    const ro = new ResizeObserver((entries) => setWidth(entries[0].contentRect.width))
+    const resizeObserver = new ResizeObserver((entries) => {
+      setWidth(entries[0].contentRect.width)
+    })
 
-    ro.observe(el)
-    setWidth(el.clientWidth)
+    resizeObserver.observe(element)
+    setWidth(element.clientWidth)
 
-    return () => ro.disconnect()
+    return () => resizeObserver.disconnect()
   }, [])
 
   useEffect(() => {
     setActive(Math.floor(count / 2))
   }, [count])
 
-  const next = () => setActive((a) => (a + 1) % count)
-  const prev = () => setActive((a) => (a - 1 + count) % count)
+  const next = () => {
+    setPlayingId(null)
+    setActive((current) => (current + 1) % count)
+  }
+
+  const prev = () => {
+    setPlayingId(null)
+    setActive((current) => (current - 1 + count) % count)
+  }
 
   if (count === 1) {
     return (
-      <div className="mt-8 md:mt-12">
-        <div className="mx-auto max-w-3xl">
+      <div
+        className={clsx(
+          FADE_BASE,
+          inView ? FADE_SHOWN : FADE_HIDDEN,
+          inView && 'delay-200',
+          'mt-8 sm:mt-10 md:mt-12 lg:mt-14 xl:mt-16',
+        )}
+      >
+        <div className="mx-auto max-w-4xl">
           <VideoCard
             video={videos[0]}
             playing={playingId === videos[0].id}
@@ -103,15 +151,23 @@ function Carousel({ videos }: { videos: PlayableVideo[] }) {
 
   if (count === 2) {
     return (
-      <div className="mt-8 grid grid-cols-1 gap-6 md:mt-12 md:grid-cols-2 md:gap-8">
-        {videos.map((v) => (
-          <VideoCard
-            key={v.id}
-            video={v}
-            playing={playingId === v.id}
-            onPlay={() => setPlayingId(v.id)}
-            showCaption
-          />
+      <div className="mt-8 grid grid-cols-1 items-start gap-y-12 sm:mt-10 md:mt-12 md:grid-cols-2 md:gap-x-8 md:gap-y-0 lg:mt-14 xl:mt-16">
+        {videos.map((video, index) => (
+          <div
+            key={video.id}
+            className={clsx(
+              FADE_BASE,
+              inView ? FADE_SHOWN : FADE_HIDDEN,
+              inView && CARD_DELAYS[index % CARD_DELAYS.length],
+            )}
+          >
+            <VideoCard
+              video={video}
+              playing={playingId === video.id}
+              onPlay={() => setPlayingId(video.id)}
+              showCaption
+            />
+          </div>
         ))}
       </div>
     )
@@ -123,46 +179,66 @@ function Carousel({ videos }: { videos: PlayableVideo[] }) {
   const sideScale = 0.74
   const centerGap = isMobile ? width * 0.52 : featuredW * 0.56
 
-  const offsetOf = (i: number) => {
-    let rel = (i - active + count) % count
-    if (rel > count / 2) rel -= count
-    return rel
+  const offsetOf = (index: number) => {
+    let relativePosition = (index - active + count) % count
+
+    if (relativePosition > count / 2) {
+      relativePosition -= count
+    }
+
+    return relativePosition
   }
 
   return (
-    <div className="mt-8 md:mt-12">
-      <div className="mb-5 flex items-center justify-center gap-3 md:mb-6">
+    <div className="mt-8 sm:mt-10 md:mt-12 lg:mt-14 xl:mt-16">
+      <div
+        className={clsx(
+          FADE_BASE,
+          inView ? FADE_SHOWN : FADE_HIDDEN,
+          inView && 'delay-200',
+          'mb-5 flex items-center justify-center gap-3 sm:mb-6 md:mb-7 lg:mb-8',
+        )}
+      >
         <Arrow dir="left" onClick={prev} />
         <Arrow dir="right" onClick={next} />
       </div>
 
-      <div ref={stageRef} className="relative w-full overflow-hidden" style={{ height: featuredH }}>
-        {videos.map((v, i) => {
-          const rel = offsetOf(i)
-          const abs = Math.abs(rel)
-          const visible = abs <= 1
-          const isCenter = rel === 0
+      <div
+        ref={stageRef}
+        className={clsx(
+          FADE_BASE,
+          inView ? FADE_SHOWN : FADE_HIDDEN,
+          inView && 'delay-300',
+          'relative w-full overflow-hidden',
+        )}
+        style={{ height: featuredH }}
+      >
+        {videos.map((video, index) => {
+          const relativePosition = offsetOf(index)
+          const distance = Math.abs(relativePosition)
+          const visible = distance <= 1
+          const isCenter = relativePosition === 0
 
           return (
             <div
-              key={v.id}
+              key={video.id}
               className="absolute top-1/2 left-1/2 transition-all duration-500 ease-out"
               style={{
                 width: featuredW,
                 height: featuredH,
-                transform: `translate(-50%, -50%) translateX(${rel * centerGap}px) scale(${
-                  isCenter ? 1 : sideScale
-                })`,
+                transform: `translate(-50%, -50%) translateX(${
+                  relativePosition * centerGap
+                }px) scale(${isCenter ? 1 : sideScale})`,
                 opacity: visible ? (isCenter ? 1 : 0.55) : 0,
-                zIndex: 10 - abs,
+                zIndex: 10 - distance,
                 pointerEvents: visible ? 'auto' : 'none',
                 filter: isCenter ? 'none' : 'saturate(0.85)',
               }}
             >
               <VideoCard
-                video={v}
-                playing={isCenter && playingId === v.id}
-                onPlay={() => (isCenter ? setPlayingId(v.id) : setActive(i))}
+                video={video}
+                playing={isCenter && playingId === video.id}
+                onPlay={() => (isCenter ? setPlayingId(video.id) : setActive(index))}
                 frameOnly
               />
             </div>
@@ -170,9 +246,16 @@ function Carousel({ videos }: { videos: PlayableVideo[] }) {
         })}
       </div>
 
-      <CenterCaption videos={videos} active={active} />
+      <CenterCaption videos={videos} active={active} inView={inView} />
 
-      <div className="mt-6 flex items-center justify-center gap-2">
+      <div
+        className={clsx(
+          FADE_BASE,
+          inView ? FADE_SHOWN : FADE_HIDDEN,
+          inView && 'delay-[400ms]',
+          'mt-6 flex items-center justify-center gap-2 sm:mt-7 md:mt-8',
+        )}
+      >
         <button
           type="button"
           onClick={prev}
@@ -198,24 +281,38 @@ function Carousel({ videos }: { videos: PlayableVideo[] }) {
   )
 }
 
-function CenterCaption({ videos, active }: { videos: PlayableVideo[]; active: number }) {
-  const v = videos[active]
+function CenterCaption({
+  videos,
+  active,
+  inView,
+}: {
+  videos: PlayableVideo[]
+  active: number
+  inView: boolean
+}) {
+  const video = videos[active]
 
-  if (!v || (!v.title && !v.caption)) return null
+  if (!video || (!video.title && !video.caption)) return null
 
   return (
-    <div key={v.id} className="mt-6 text-center" style={{ animation: 'hnuFade 0.4s ease both' }}>
-      <style>{`@keyframes hnuFade { from { opacity: 0 } to { opacity: 1 } }`}</style>
-
-      {v.title && (
-        <h3 className="text-sm leading-tight font-extrabold text-[#08084f] sm:text-base md:text-lg lg:text-xl">
-          {v.title}
+    <div
+      key={video.id}
+      className={clsx(
+        FADE_BASE,
+        inView ? FADE_SHOWN : FADE_HIDDEN,
+        inView && 'delay-300',
+        'mt-6 text-center sm:mt-7 md:mt-8',
+      )}
+    >
+      {video.title && (
+        <h3 className="text-sm leading-tight font-bold text-[#08084f] sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+          {video.title}
         </h3>
       )}
 
-      {v.caption && (
-        <p className="mx-auto mt-2 max-w-2xl text-[10px] leading-relaxed text-[#08084f]/70 sm:text-xs md:text-sm lg:text-base">
-          {v.caption}
+      {video.caption && (
+        <p className="mx-auto mt-2 max-w-2xl text-xs leading-relaxed text-[#08084f]/70 sm:text-xs md:text-sm lg:text-base xl:text-lg">
+          {video.caption}
         </p>
       )}
     </div>
@@ -238,52 +335,55 @@ function VideoCard({
   const thumb = `https://img.youtube.com/vi/${video.youTubeId}/hqdefault.jpg`
 
   return (
-    <figure className="h-full">
-      <div className="relative h-full overflow-hidden rounded-2xl bg-black shadow-md">
-        <div className={frameOnly ? 'relative h-full w-full' : 'relative aspect-video w-full'}>
-          {playing ? (
-            <iframe
-              className="absolute inset-0 h-full w-full"
-              src={`https://www.youtube-nocookie.com/embed/${video.youTubeId}?autoplay=1&rel=0`}
-              title={video.title || 'YouTube video'}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
+    <figure className={frameOnly ? 'h-full' : 'h-auto'}>
+      <div
+        className={clsx(
+          'relative w-full overflow-hidden rounded-xl bg-black shadow-md sm:rounded-2xl',
+          frameOnly ? 'h-full' : 'aspect-video',
+        )}
+      >
+        {playing ? (
+          <iframe
+            className="absolute inset-0 h-full w-full"
+            src={`https://www.youtube-nocookie.com/embed/${video.youTubeId}?autoplay=1&rel=0`}
+            title={video.title || 'YouTube video'}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+          />
+        ) : (
+          <button
+            type="button"
+            onClick={onPlay}
+            aria-label={`Play ${video.title || 'video'}`}
+            className="group absolute inset-0 h-full w-full"
+          >
+            <img
+              src={thumb}
+              alt={video.title || 'Video thumbnail'}
+              className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
             />
-          ) : (
-            <button
-              type="button"
-              onClick={onPlay}
-              aria-label={`Play ${video.title || 'video'}`}
-              className="group absolute inset-0 h-full w-full"
-            >
-              <img
-                src={thumb}
-                alt={video.title || 'Video thumbnail'}
-                className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-              />
 
-              <span className="absolute inset-0 bg-[#08084f]/25 transition group-hover:bg-[#08084f]/10" />
+            <span className="absolute inset-0 bg-[#08084f]/25 transition group-hover:bg-[#08084f]/10" />
 
-              <span className="absolute inset-0 flex items-center justify-center">
-                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-[#1F2BD4] transition group-hover:scale-110 md:h-16 md:w-16">
-                  <Play className="ml-1 h-5 w-5 md:h-7 md:w-7" fill="currentColor" />
-                </span>
+            <span className="absolute inset-0 flex items-center justify-center">
+              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-[#1F2BD4] transition group-hover:scale-110 sm:h-12 sm:w-12 md:h-14 md:w-14 lg:h-16 lg:w-16 xl:h-18 xl:w-18">
+                <Play className="ml-1 h-5 w-5 md:h-6 md:w-6 lg:h-7 lg:w-7" fill="currentColor" />
               </span>
-            </button>
-          )}
-        </div>
+            </span>
+          </button>
+        )}
       </div>
 
       {showCaption && (video.title || video.caption) && (
-        <figcaption className="mt-4 text-center">
+        <figcaption className="mt-5 text-center sm:mt-6 md:mt-7">
           {video.title && (
-            <h3 className="text-sm leading-tight font-extrabold text-[#08084f] sm:text-base md:text-lg lg:text-xl">
+            <h3 className="mx-auto max-w-xl text-sm leading-tight font-bold text-[#08084f] sm:text-base md:text-lg lg:text-xl">
               {video.title}
             </h3>
           )}
 
           {video.caption && (
-            <p className="mx-auto mt-2 max-w-2xl text-[10px] leading-relaxed text-[#08084f]/70 sm:text-xs md:text-sm lg:text-base">
+            <p className="mx-auto mt-2 max-w-2xl text-xs leading-relaxed text-[#08084f]/70 sm:text-xs md:text-sm lg:text-base xl:text-lg">
               {video.caption}
             </p>
           )}
@@ -299,12 +399,12 @@ function Arrow({ dir, onClick }: { dir: 'left' | 'right'; onClick: () => void })
       type="button"
       aria-label={dir === 'left' ? 'Previous video' : 'Next video'}
       onClick={onClick}
-      className="flex h-10 w-10 items-center justify-center rounded-full border border-[#08084f]/20 text-[#08084f] transition hover:border-[#1F2BD4] hover:bg-[#1F2BD4] hover:text-white md:h-11 md:w-11"
+      className="flex h-10 w-10 items-center justify-center rounded-full border border-[#08084f]/20 text-[#08084f] transition hover:border-[#1F2BD4] hover:bg-[#1F2BD4] hover:text-white sm:h-11 sm:w-11 md:h-12 md:w-12 lg:h-13 lg:w-13 xl:h-14 xl:w-14"
     >
       {dir === 'left' ? (
-        <ChevronLeft className="h-5 w-5" strokeWidth={2.5} />
+        <ChevronLeft className="h-5 w-5 md:h-6 md:w-6" strokeWidth={2.5} />
       ) : (
-        <ChevronRight className="h-5 w-5" strokeWidth={2.5} />
+        <ChevronRight className="h-5 w-5 md:h-6 md:w-6" strokeWidth={2.5} />
       )}
     </button>
   )

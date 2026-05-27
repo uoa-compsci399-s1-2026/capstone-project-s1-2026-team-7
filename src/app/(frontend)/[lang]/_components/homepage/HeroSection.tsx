@@ -13,7 +13,7 @@ export default function HeroSection({ data, lang }: HeroSectionProps) {
   const { title, description, heroHorizontal, buttons } = data
 
   return (
-    <section className="relative isolate w-full overflow-hidden min-h-130 md:min-h-145 lg:min-h-160 xl:min-h-182">
+    <section className="relative isolate min-h-130 w-full overflow-hidden md:min-h-145 lg:min-h-160 xl:min-h-182">
       {/* Background image from CMS */}
       {heroHorizontal.url && (
         <Image
@@ -27,20 +27,19 @@ export default function HeroSection({ data, lang }: HeroSectionProps) {
         />
       )}
 
-      {/* Content — text left, image right, sized to fill the width */}
-      <div className="relative z-10 mx-auto flex min-h-140 w-full max-w-6xl flex-col items-center justify-center gap-12 px-5 py-16 md:min-h-130 md:flex-row md:justify-center md:gap-16 md:px-8 lg:min-h-135 lg:gap-24 lg:px-12">
-        {' '}
+      {/* Content */}
+      <div className="relative z-10 mx-auto flex min-h-130 w-[84%] max-w-300 flex-col items-center justify-center gap-12 py-16 md:min-h-145 md:flex-row md:justify-center md:gap-16 lg:min-h-160 lg:gap-24 xl:min-h-182">
         {/* Text */}
         <div className="w-full max-w-md text-center md:max-w-sm md:text-left">
-          <h1 className="text-2xl leading-tight font-bold text-white md:text-3xl xl:text-4xl">
+          <h1 className="text-lg leading-tight font-bold text-white sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl">
             {title}
           </h1>
 
-          <p className="mt-5 text-xs leading-relaxed font-normal sm:text-sm text-white md:text-base lg:text-lg">
+          <p className="mt-5 text-xs leading-relaxed font-normal text-white sm:text-xs md:text-sm lg:text-base xl:text-lg">
             {description}
           </p>
 
-          <div className="mt-8 flex  justify-center gap-3 md:justify-start *:border-3">
+          <div className="mt-8 flex justify-center gap-3 md:justify-start">
             {buttons.map((button) => (
               <HrefButton
                 key={button.id || button.label}
@@ -51,9 +50,9 @@ export default function HeroSection({ data, lang }: HeroSectionProps) {
             ))}
           </div>
         </div>
-        {/* Portrait — bigger, hugs the right, hidden below md */}
-        <div className="relative hidden w-[360px] shrink-0 md:block lg:w-110 xl:w-120">
-          {/* Blue offset block */}
+
+        {/* Portrait — hidden below md */}
+        <div className="relative hidden w-90 shrink-0 md:block lg:w-110 xl:w-120">
           <div className="absolute -top-2 -left-2 h-full w-full rounded-3xl bg-[#1F2BD4]" />
 
           <div className="relative aspect-6/7 overflow-hidden rounded-3xl shadow-2xl">

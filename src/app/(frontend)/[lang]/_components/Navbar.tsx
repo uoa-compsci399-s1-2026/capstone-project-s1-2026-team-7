@@ -150,10 +150,11 @@ type NavigationLogosProps = {
 
 export const NavigationLogos = ({ data }: NavigationLogosProps) => {
   const { lang } = useLanguage()
+
   return (
     <div className="flex shrink-0 items-center gap-4 max-md:gap-3">
-      <div className="flex items-center shrink-0 relative h-8 w-16">
-        <Link href={`/${lang}`}>
+      <div className="flex h-8 w-16 shrink-0 items-center">
+        <Link href={`/${lang}`} className="relative block h-full w-full">
           <Image
             src={data.uoaLogo.url}
             alt={data.uoaLogo.alt}
@@ -163,9 +164,11 @@ export const NavigationLogos = ({ data }: NavigationLogosProps) => {
           />
         </Link>
       </div>
+
       <div className="h-9 w-px bg-[#BFC4CC]" />
-      <div className="flex h-8 items-center shrink-0 w-16 relative">
-        <Link href={`/${lang}`}>
+
+      <div className="flex h-8 w-16 shrink-0 items-center">
+        <Link href={`/${lang}`} className="relative block h-full w-full">
           <Image
             src={data.hnuLogo.url}
             alt={data.hnuLogo.alt}

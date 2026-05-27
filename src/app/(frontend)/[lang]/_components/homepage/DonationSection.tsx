@@ -1,34 +1,71 @@
+'use client'
+
 import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
+import clsx from 'clsx'
+import { useInView } from '@/app/(frontend)/[lang]/_components/useInView'
+
+const FADE_BASE = 'transition-all duration-700 ease-out will-change-[opacity,transform]'
+const FADE_HIDDEN = 'opacity-0 translate-y-6'
+const FADE_SHOWN = 'opacity-100 translate-y-0'
 
 function DonationSection() {
+  const { ref, inView } = useInView<HTMLElement>()
+
   return (
-    <section className="w-full bg-white px-6.5 py-16 md:px-8 md:py-24 lg:px-12">
-      <div className="mx-auto w-full max-w-300 min-[500px]:max-w-120 sm:max-w-130 md:max-w-300">
-        <div className="relative aspect-300/165 w-full overflow-hidden rounded-xl bg-[#08084f] px-5 py-5 md:aspect-1150/160 md:rounded-[18px] md:px-8 md:py-0 lg:px-16">
+    <section ref={ref} className="w-full bg-white py-16">
+      <div className="mx-auto w-[84%] max-w-300">
+        <div
+          className={clsx(
+            FADE_BASE,
+            inView ? FADE_SHOWN : FADE_HIDDEN,
+            'relative aspect-292/250 w-full overflow-hidden rounded-lg bg-[#08084f] px-5 py-5 sm:aspect-800/350 sm:rounded-2xl md:aspect-1150/150 md:px-8 lg:px-16',
+          )}
+        >
           <Image
             src="/donation-section.png"
             alt="Donation background"
             fill
-            sizes="(max-width: 499px) calc(100vw - 52px), (max-width: 767px) 520px, 1150px"
+            priority
+            sizes="(max-width: 767px) 84vw, 1200px"
             className="object-cover object-center opacity-[0.45]"
           />
 
           <div className="absolute inset-0 bg-[#08084f]/45" />
 
-          <div className="relative z-10 grid h-full w-full min-w-0 grid-cols-1 items-center justify-items-center gap-2.5 text-center text-white md:grid-cols-[0.9fr_1.55fr_auto] md:justify-items-start md:gap-5 md:text-left lg:grid-cols-[1fr_1.45fr_auto] lg:gap-12">
-            <h2 className="min-w-0 max-w-75 wrap-break-word text-[16px] leading-tight font-bold sm:max-w-65 sm:text-lg md:max-w-60 md:text-[18px] lg:max-w-85 lg:text-2xl">
-              Support the Future of Nutrition Science
+          <div className="relative z-10 flex h-full w-full min-w-0 flex-col items-center justify-center gap-2.5 text-center text-white min-[350px]:gap-5 md:flex-row md:justify-between md:gap-6 md:text-left lg:gap-10">
+            <h2
+              className={clsx(
+                FADE_BASE,
+                inView ? FADE_SHOWN : FADE_HIDDEN,
+                inView && 'delay-100',
+                'min-w-0 max-w-64 text-sm leading-tight font-bold min-[500px]:max-w-72 min-[500px]:text-base md:max-w-64 lg:max-w-80 lg:text-lg xl:text-xl',
+              )}
+            >
+              Support Nutrition Research
             </h2>
 
-            <p className="min-w-0 max-w-97.5 wrap-break-word text-[10px] leading-snug font-light sm:max-w-90 sm:text-xs md:max-w-92.5 md:text-[13px] lg:max-w-117.5 lg:text-base">
-              Donations help us advance life-changing research and train the next generation of
-              nutrition scientists
+            <p
+              className={clsx(
+                FADE_BASE,
+                inView ? FADE_SHOWN : FADE_HIDDEN,
+                inView && 'delay-200',
+                'min-w-0 max-w-72 text-[9px] leading-snug font-light min-[500px]:max-w-84 min-[500px]:text-xs md:max-w-96 lg:max-w-120 lg:text-sm xl:text-base',
+              )}
+            >
+              Help us advance research and train future nutrition scientists.
             </p>
 
-            <button className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full bg-[#1F2BD4] px-5 py-2 text-[11px] font-medium text-white transition hover:bg-[#1720b8] md:px-6 md:py-2.5 md:text-xs lg:gap-3 lg:px-8 lg:py-3 lg:text-base">
+            <button
+              className={clsx(
+                FADE_BASE,
+                inView ? FADE_SHOWN : FADE_HIDDEN,
+                inView && 'delay-300',
+                'inline-flex max-w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-[#1F2BD4] px-3 py-1.5 text-[8px] font-medium text-white transition hover:bg-[#1720b8] min-[500px]:px-4 min-[500px]:py-2 min-[500px]:text-[9px] md:px-5 md:text-xs lg:gap-2 lg:px-6 lg:py-2.5 lg:text-sm',
+              )}
+            >
               Make a Donation
-              <ArrowRight className="h-3 w-3 lg:h-4 lg:w-4" />
+              <ArrowRight className="h-2.5 w-2.5 min-[500px]:h-3 min-[500px]:w-3 md:h-3.5 md:w-3.5 lg:h-4 lg:w-4" />
             </button>
           </div>
         </div>
