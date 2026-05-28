@@ -13,9 +13,7 @@ The Human Nutrition Unit Website is a modern web platform developed for the Huma
 The website was designed to improve how the unit shares information with students, researchers, collaborators, and the wider public. It includes features for content management, research presentation, responsive layouts, and scalable content updates through a headless CMS architecture.
 
 The project was built using Next.js and Payload CMS to create a performant and maintainable full-stack application.
-
 > [Final Report](https://docs.google.com/document/d/1Rt-uJvo9WYMho5W4CtirrSa2cJvkS4EerBVExlulh28/edit?usp=sharing)
-
 ---
 
 ## Technologies Used
