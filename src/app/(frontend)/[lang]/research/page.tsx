@@ -1,62 +1,86 @@
 import ResearchHero from './_components/ResearchHero'
-import ResearchFilters from './_components/ResearchFilters'
 import { ResearchClient } from './_components/ResearchClient'
 import { getResearchPage } from '@/features/research/researchpage.query'
 import { searchResearch } from '@/features/research/searchResearch'
-import { Lang } from '@/types/lang'
+import { PageProps } from '@/types/pageprops'
 
-type PageProps = {
-  params: Promise<{
-    lang: Lang
-  }>
+type StaffRelationship =
+  | number
+  | {
+      id: number | string
+      firstname?: string | null
+      lastname?: string | null
+      email?: string | null
+    }
+
+export type ResearchStaffSidebarOption = {
+  id: string
+  label: string
+  firstname: string
+  lastname: string
+  email: string
 }
 
-export default async function page({ params }: PageProps) {
-  const { lang } = await params
-  const researchpage = await getResearchPage(lang)
+function getStaffDisplayName(staff: {
+  firstname?: string | null
+  lastname?: string | null
+  email?: string | null
+  id?: string | number
+}) {
+  const firstname = staff.firstname ?? ''
+  const lastname = staff.lastname ?? ''
+  const fullName = `${firstname} ${lastname}`.trim()
 
-  const researchResult = await searchResearch({
-    page: 1,
-    limit: 16,
+  return fullName || staff.email || `Staff member ${staff.id}`
+}
+
+function getSelectedStaffOptions(
+  staffDisplay: StaffRelationship[] | null | undefined,
+): ResearchStaffSidebarOption[] {
+  return (staffDisplay ?? []).flatMap((staff) => {
+    if (!staff || typeof staff !== 'object') {
+      return []
+    }
+
+    return [
+      {
+        id: String(staff.id),
+        label: getStaffDisplayName(staff),
+        firstname: staff.firstname ?? '',
+        lastname: staff.lastname ?? '',
+        email: staff.email ?? '',
+      },
+    ]
   })
+}
+
+export default async function Page({ params }: PageProps) {
+  const { lang } = await params
+
+  const [researchpage, researchResult] = await Promise.all([
+    getResearchPage(lang),
+    searchResearch({
+      page: 1,
+      limit: 16,
+    }),
+  ])
+
+  const staffOptions = getSelectedStaffOptions(researchpage.researchStaffDisplay)
+
   return (
     <div className="w-full mx-auto">
-      <ResearchHero title={researchpage.title} backgroundImage="/research/hero_desktop.jpg" />
+      <ResearchHero
+        title={researchpage.title}
+        imageUrl={researchpage.portraitImage.url}
+        alt={researchpage.portraitImage.alt}
+      />
+
       <ResearchClient
-        categories={researchpage.researchCategoriesDisplay}
+        categories={researchpage.researchCategoriesDisplay ?? []}
+        staffOptions={staffOptions}
         initialResearch={researchResult.docs}
         initialTotalDocs={researchResult.totalDocs}
       />
     </div>
   )
 }
-
-/*const researchpage: ResearchPageProps = {
-  title: 'Our Research',
-  researchCategoriesDisplay: [
-    { id: '1', title: 'Miscellaneous' },
-    { id: '2', title: 'Muscle Health' },
-    { id: '3', title: 'Energetics' },
-    { id: '4', title: 'Appetite Regulation' },
-    { id: '5', title: 'Obesity and Weight Loss' },
-    { id: '6', title: 'Diabetites and Pre-diabetes' },
-  ],
-  listOfResearch: [
-    {
-      id: '1',
-      title: 'Participant insights from SYNERGY – a residential nutrition intervention trial',
-      link: 'https://example.com/ai-healthcare.pdf',
-      image: '/research/placeholder_wire_image.jpg',
-      date: '2024-05-01',
-      categoryId: '1',
-    },
-    {
-      id: '2',
-      title: 'Sustainable Energy Solutions',
-      link: 'https://example.com/sustainable-energy.pdf',
-      image: '/research/placeholder_wire_image.jpg',
-      date: '2024-04-15',
-      categoryId: '2',
-    },
-  ],
-}*/

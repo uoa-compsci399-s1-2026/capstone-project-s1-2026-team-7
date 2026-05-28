@@ -261,6 +261,38 @@ const donationSectionBlockSchema = blockBaseSchema.extend({
   blockType: z.literal('donation-section'),
 })
 
+const videoItemSchema = z.object({
+  id: z
+    .string()
+    .nullish()
+    .transform((value) => value ?? ''),
+  url: stringWithDefault,
+  title: stringWithDefault,
+  caption: stringWithDefault,
+})
+
+const videoBlockSchema = blockBaseSchema
+  .extend({
+    blockType: z.literal('video'),
+
+    title: stringWithDefault,
+    description: stringWithDefault,
+
+    videos: z
+      .array(videoItemSchema)
+      .nullish()
+      .transform((value) => value ?? []),
+  })
+  .transform((block) => ({
+    id: block.id,
+    blockType: block.blockType,
+
+    title: block.title,
+    description: block.description,
+
+    videos: block.videos,
+  }))
+
 export const homepageBlockSchema = z.discriminatedUnion('blockType', [
   heroBlockSchema,
   researchBlockSchema,
@@ -273,6 +305,7 @@ export const homepageBlockSchema = z.discriminatedUnion('blockType', [
   whatWeDoBlockSchema,
   donationSectionBlockSchema,
   currentStudiesBlockSchema,
+  videoBlockSchema,
 ])
 
 export const homepageSchema = z.object({
@@ -299,3 +332,4 @@ export type WhoWeAreBlockDTO = Extract<HomepageBlockDTO, { blockType: 'who-we-ar
 export type WhatWeDoBlockDTO = Extract<HomepageBlockDTO, { blockType: 'what-we-do' }>
 export type DonationSectionBlockDTO = Extract<HomepageBlockDTO, { blockType: 'donation-section' }>
 export type CurrentStudiesBlockDTO = Extract<HomepageBlockDTO, { blockType: 'current-studies' }>
+export type VideoBlockDTO = Extract<HomepageBlockDTO, { blockType: 'video' }>

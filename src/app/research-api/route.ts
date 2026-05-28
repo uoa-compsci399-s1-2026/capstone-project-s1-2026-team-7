@@ -8,6 +8,7 @@ export async function GET(req: Request) {
   const searchTerm = searchParams.get('search') ?? ''
   const sort = (searchParams.get('sort') ?? 'newest') as ResearchSortOption
   const categoryId = searchParams.get('categoryId')
+  const staffId = searchParams.get('staffId')
 
   const result = await searchResearch({
     searchTerm,
@@ -15,6 +16,7 @@ export async function GET(req: Request) {
     limit,
     sort,
     categoryId,
+    staffId,
   })
 
   return Response.json(result)

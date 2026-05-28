@@ -19,6 +19,7 @@ import { HomePage } from './payload/globals/Homepage'
 import { OurTeamPage } from './payload/globals/OurTeamPage'
 import { StudiesPage } from './payload/globals/StudiesPage'
 import { ResearchPage } from './payload/globals/ResearchPage'
+import { DonationsPage } from './payload/globals/DonationsPage'
 import { NavigationBar } from './payload/globals/NavigationBar'
 import { Footer } from './payload/globals/Footer'
 import { ContactPage } from './payload/globals/ContactPage'
@@ -28,6 +29,8 @@ import {
   researchCsvExportEndpoint,
   researchCsvImportEndpoint,
 } from './payload/endpoints/researchCsv'
+
+import { CollaborationsPage } from './payload/globals/CollaborationsPage'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -82,7 +85,17 @@ export default buildConfig({
     EnquiryTags,
   ],
 
-  globals: [HomePage, OurTeamPage, StudiesPage, ResearchPage, NavigationBar, ContactPage, Footer],
+  globals: [
+    HomePage,
+    OurTeamPage,
+    DonationsPage,
+    StudiesPage,
+    ResearchPage,
+    NavigationBar,
+    ContactPage,
+    Footer,
+    CollaborationsPage,
+  ],
 
   endpoints: [translateEndpoint, researchCsvExportEndpoint, researchCsvImportEndpoint],
 

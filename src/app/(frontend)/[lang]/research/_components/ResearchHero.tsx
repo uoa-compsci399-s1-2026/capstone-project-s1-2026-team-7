@@ -1,21 +1,15 @@
-import React from 'react'
+import Banner from '../../_components/Banner'
 
 type ResearchHeroProps = {
   title: string
-  backgroundImage: string
+  imageUrl: string
+  alt: string
 }
 
-export default function ResearchHero({ title, backgroundImage }: ResearchHeroProps) {
+export default function ResearchHero({ title, imageUrl, alt }: ResearchHeroProps) {
   return (
-    <section
-      className="relative w-full bg-cover bg-center"
-      style={{ backgroundImage: `url(${backgroundImage})` }}
-    >
-      <div className="absolute inset-0 bg-black/50" />
-
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 flex flex-col items-center text-center">
-        <h1 className="text-4xl md:text-5xl font-bold text-white">{title}</h1>
-      </div>
+    <section className="relative isolate overflow-hidden bg-[#090936] text-white">
+      <Banner title={title} imageUrl={imageUrl} imageAlt={alt} />
     </section>
   )
 }

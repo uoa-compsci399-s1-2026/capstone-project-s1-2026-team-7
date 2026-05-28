@@ -104,20 +104,24 @@ export interface Config {
   globals: {
     'home-page': HomePage
     'our-team-page': OurTeamPage
+    'donations-page': DonationsPage
     'studies-page': StudiesPage
     'research-page': ResearchPage
     'navigation-bar': NavigationBar
     'contact-page': ContactPage
     footer: Footer
+    'collaborations-page': CollaborationsPage
   }
   globalsSelect: {
     'home-page': HomePageSelect<false> | HomePageSelect<true>
     'our-team-page': OurTeamPageSelect<false> | OurTeamPageSelect<true>
+    'donations-page': DonationsPageSelect<false> | DonationsPageSelect<true>
     'studies-page': StudiesPageSelect<false> | StudiesPageSelect<true>
     'research-page': ResearchPageSelect<false> | ResearchPageSelect<true>
     'navigation-bar': NavigationBarSelect<false> | NavigationBarSelect<true>
     'contact-page': ContactPageSelect<false> | ContactPageSelect<true>
     footer: FooterSelect<false> | FooterSelect<true>
+    'collaborations-page': CollaborationsPageSelect<false> | CollaborationsPageSelect<true>
   }
   locale: 'en' | 'zh'
   widgets: {
@@ -690,6 +694,7 @@ export interface HomePage {
     | WhatWeDoBlock
     | DonationSectionBlock
     | CurrentStudiesBlock
+    | VideoBlock
   )[]
   seo?: {
     metaTitle?: string | null
@@ -859,6 +864,26 @@ export interface CurrentStudiesBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "VideoBlock".
+ */
+export interface VideoBlock {
+  title: string
+  description?: string | null
+  videos: {
+    /**
+     * Paste the full YouTube link (watch, youtu.be, shorts or embed) or the 11-character video ID.
+     */
+    url: string
+    title?: string | null
+    caption?: string | null
+    id?: string | null
+  }[]
+  id?: string | null
+  blockName?: string | null
+  blockType: 'video'
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "our-team-page".
  */
 export interface OurTeamPage {
@@ -868,6 +893,37 @@ export interface OurTeamPage {
   boardTabLabel: string
   staffTabLabel: string
   staffMembers?: (number | Staff)[] | null
+  updatedAt?: string | null
+  createdAt?: string | null
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "donations-page".
+ */
+export interface DonationsPage {
+  id: number
+  hero: {
+    title: string
+    blurb: string
+    buttonLabel?: string | null
+    donateUrl: string
+    image?: (number | null) | Media
+  }
+  supportSection: {
+    heading: string
+  }
+  stats: {
+    title: string
+    description: string
+    stats?:
+      | {
+          key: 'graduates' | 'publications' | 'partners' | 'participants'
+          value: number
+          label: string
+          id?: string | null
+        }[]
+      | null
+  }
   updatedAt?: string | null
   createdAt?: string | null
 }
@@ -954,6 +1010,7 @@ export interface ResearchPage {
   'portrait image': number | Media
   'mobile image': number | Media
   researchCategoriesDisplay?: (number | ResearchCategory)[] | null
+  researchStaffDisplay?: (number | Staff)[] | null
   seo?: {
     metaTitle?: string | null
     metaDescription?: string | null
@@ -1050,6 +1107,80 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collaborations-page".
+ */
+export interface CollaborationsPage {
+  id: number
+  layout: (
+    | {
+        title: string
+        description: string
+        image: number | Media
+        id?: string | null
+        blockName?: string | null
+        blockType: 'collaborationHero'
+      }
+    | {
+        logos: {
+          logo: number | Media
+          id?: string | null
+        }[]
+        id?: string | null
+        blockName?: string | null
+        blockType: 'partnerLogos'
+      }
+    | {
+        items: {
+          title: string
+          description: string
+          id?: string | null
+        }[]
+        id?: string | null
+        blockName?: string | null
+        blockType: 'collaborationAreas'
+      }
+    | {
+        items: {
+          title: string
+          description: string
+          id?: string | null
+        }[]
+        id?: string | null
+        blockName?: string | null
+        blockType: 'collaborativeApproach'
+      }
+    | {
+        heading: string
+        description: string
+        buttonLabel: string
+        buttonUrl: string
+        id?: string | null
+        blockName?: string | null
+        blockType: 'researchEnquiries'
+      }
+    | StatsSectionBlock
+  )[]
+  updatedAt?: string | null
+  createdAt?: string | null
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatsSectionBlock".
+ */
+export interface StatsSectionBlock {
+  title?: string | null
+  stats: {
+    value: number
+    label: string
+    icon: 'GraduationCap' | 'BookOpen' | 'Handshake' | 'UsersRound'
+    id?: string | null
+  }[]
+  id?: string | null
+  blockName?: string | null
+  blockType: 'statsSection'
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "home-page_select".
  */
 export interface HomePageSelect<T extends boolean = true> {
@@ -1067,6 +1198,7 @@ export interface HomePageSelect<T extends boolean = true> {
         'what-we-do'?: T | WhatWeDoBlockSelect<T>
         'donation-section'?: T | DonationSectionBlockSelect<T>
         'current-studies'?: T | CurrentStudiesBlockSelect<T>
+        video?: T | VideoBlockSelect<T>
       }
   seo?:
     | T
@@ -1224,6 +1356,24 @@ export interface CurrentStudiesBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "VideoBlock_select".
+ */
+export interface VideoBlockSelect<T extends boolean = true> {
+  title?: T
+  description?: T
+  videos?:
+    | T
+    | {
+        url?: T
+        title?: T
+        caption?: T
+        id?: T
+      }
+  id?: T
+  blockName?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "our-team-page_select".
  */
 export interface OurTeamPageSelect<T extends boolean = true> {
@@ -1232,6 +1382,43 @@ export interface OurTeamPageSelect<T extends boolean = true> {
   boardTabLabel?: T
   staffTabLabel?: T
   staffMembers?: T
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "donations-page_select".
+ */
+export interface DonationsPageSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        title?: T
+        blurb?: T
+        buttonLabel?: T
+        donateUrl?: T
+        image?: T
+      }
+  supportSection?:
+    | T
+    | {
+        heading?: T
+      }
+  stats?:
+    | T
+    | {
+        title?: T
+        description?: T
+        stats?:
+          | T
+          | {
+              key?: T
+              value?: T
+              label?: T
+              id?: T
+            }
+      }
   updatedAt?: T
   createdAt?: T
   globalType?: T
@@ -1326,6 +1513,7 @@ export interface ResearchPageSelect<T extends boolean = true> {
   'portrait image'?: T
   'mobile image'?: T
   researchCategoriesDisplay?: T
+  researchStaffDisplay?: T
   seo?:
     | T
     | {
@@ -1421,6 +1609,94 @@ export interface FooterSelect<T extends boolean = true> {
   updatedAt?: T
   createdAt?: T
   globalType?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collaborations-page_select".
+ */
+export interface CollaborationsPageSelect<T extends boolean = true> {
+  layout?:
+    | T
+    | {
+        collaborationHero?:
+          | T
+          | {
+              title?: T
+              description?: T
+              image?: T
+              id?: T
+              blockName?: T
+            }
+        partnerLogos?:
+          | T
+          | {
+              logos?:
+                | T
+                | {
+                    logo?: T
+                    id?: T
+                  }
+              id?: T
+              blockName?: T
+            }
+        collaborationAreas?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    title?: T
+                    description?: T
+                    id?: T
+                  }
+              id?: T
+              blockName?: T
+            }
+        collaborativeApproach?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    title?: T
+                    description?: T
+                    id?: T
+                  }
+              id?: T
+              blockName?: T
+            }
+        researchEnquiries?:
+          | T
+          | {
+              heading?: T
+              description?: T
+              buttonLabel?: T
+              buttonUrl?: T
+              id?: T
+              blockName?: T
+            }
+        statsSection?: T | StatsSectionBlockSelect<T>
+      }
+  updatedAt?: T
+  createdAt?: T
+  globalType?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StatsSectionBlock_select".
+ */
+export interface StatsSectionBlockSelect<T extends boolean = true> {
+  title?: T
+  stats?:
+    | T
+    | {
+        value?: T
+        label?: T
+        icon?: T
+        id?: T
+      }
+  id?: T
+  blockName?: T
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

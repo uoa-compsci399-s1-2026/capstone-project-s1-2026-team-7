@@ -1,75 +1,103 @@
-import React from 'react'
-import { StaffDTO } from '@/features/our-team'
-import { Mail, UserRound } from 'lucide-react'
+'use client'
 import Image from 'next/image'
+import { StaffDTO, DEFAULT_PROFILE_PIC } from '@/features/our-team'
+import { getVariant } from './getVariant'
+
 export type ProfileProps = {
   profile: StaffDTO
+  variantIndex?: number
+  action?: () => void
+}
+export function hasRealPhoto(photo?: { url: string } | null) {
+  return !!photo?.url && photo.url !== DEFAULT_PROFILE_PIC.url
 }
 
-export default function ProfileCard({ profile }: ProfileProps) {
-  const { firstname, lastname, jobTitle, intro, manager, uoaProfileLink, email, photo, sortOrder } =
-    profile
+export function AvatarBlock({
+  variantIndex = 0,
+  rounded = 'rounded-2xl',
+  photo,
+}: {
+  variantIndex?: number
+  rounded?: string
+  photo?: { url: string; alt: string } | null
+}) {
+  const v = getVariant(variantIndex)
+  const usePhoto = hasRealPhoto(photo)
+
   return (
     <div
-      className="flex flex-col justify-items-center justify-center  bg-white  hover:shadow-[0px_0px_20px_0px_rgba(0,0,0,0.25)] transition duration-300
-    xl:w-74.25 xl:h-89.75 xl:rounded-[49px]
-    md:w-50 md:h-61 md:rounded-[33.78px]
-    w-43.5 h-52.5 rounded-[29px]"
+      className={`relative w-full overflow-hidden ${rounded}`}
+      style={{
+        backgroundColor: v.bg,
+        backgroundImage: usePhoto
+          ? undefined
+          : `radial-gradient(${v.dotGrid} 1px, transparent 1px)`,
+        backgroundSize: '14px 14px',
+        aspectRatio: '1 / 1',
+      }}
     >
-      <Image
-        className=" object-cover  rounded-full mx-auto 
-        w-21.5 h-21.5 mt-3.5 
-        md:w-24.75 md:h-24.75 md:mt-4.25 
-        xl:h-36.5 xl:w-36.5 xl:mt-6.25"
-        src={photo.url}
-        alt={photo.alt}
-        width={200}
-        height={200}
-      />
-      <p
-        className=" text-black font-bold text-center
-      xl:text-[22.67px]  xl:mt-3.5
-      md:text-[15.41px] md:mt-2.5
-      text-[13.31px] mt-2"
-      >
-        {firstname} {lastname}
-      </p>
-      <h2
-        className="text-lg font-semibold text-[#1F2BD4] text-center 
-      xl:text-[17px] 
-      md:text-[11.56px] 
-      text-[9.98px] mt-0.75"
-      >
-        {jobTitle}
-      </h2>
-      <p
-        className="text-xs font-normal text-[#1E1E1E] text-center
-      xl:text-[14px] mt-1
-      md:text-[9.52px]
-      text-[8.22px]"
-      >
-        {intro}
-      </p>
-      <p className=" text-lg text-blue-500 text-center underline"></p>
-      <div
-        className="grid grid-cols-2 grid-rows-1 text-center mx-auto justify-items-center mt-auto
-              xl:gap-4 xl:w-20 xl:h-8.25 xl:mb-2.5
-              md:gap-2.5 md:w-13.5 md:h-5.5 md:mb-2.5
-              gap-1.75 w-11.75 h-4.75 mb-2.5"
-      >
-        <Mail
-          className="text-gray-300 hover:text-black transition
-        xl:w-8.25 xl:h-8.25
-        md:w-5.5 md:h-5.5
-        w-4.75 h-4.75"
+      {usePhoto ? (
+        <Image
+          src={photo!.url}
+          alt={photo!.alt}
+          fill
+          sizes="(max-width: 768px) 50vw, 320px"
+          className="object-cover"
         />
-        <UserRound
-          className="text-gray-300 hover:text-black transition
-        xl:w-8.25 xl:h-8.25
-        md:w-5.5 md:h-5.5
-        w-4.75 h-4.75"
-        />
-      </div>
+      ) : (
+        <>
+          <span
+            className="absolute h-4 w-4 rounded-full"
+            style={{ backgroundColor: v.dot, top: '18%', right: '18%' }}
+          />
+          <span
+            className="absolute rounded-full"
+            style={{
+              backgroundColor: v.shape,
+              width: '38%',
+              height: '38%',
+              top: '22%',
+              left: '31%',
+            }}
+          />
+          <span
+            className="absolute"
+            style={{
+              backgroundColor: v.shape,
+              width: '70%',
+              height: '45%',
+              bottom: '-12%',
+              left: '15%',
+              borderTopLeftRadius: '9999px',
+              borderTopRightRadius: '9999px',
+            }}
+          />
+        </>
+      )}
     </div>
+  )
+}
+
+export default function ProfileCard({ profile, variantIndex = 0, action }: ProfileProps) {
+  const { firstname, lastname, jobTitle, intro, photo } = profile
+
+  return (
+    <button
+      type="button"
+      onClick={action}
+      className="group flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-4 text-left transition hover:-translate-y-0.5 hover:shadow-lg"
+    >
+      <AvatarBlock variantIndex={variantIndex} photo={photo} />
+
+      <div className="mt-4 flex flex-1 flex-col">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500">
+          {jobTitle}
+        </p>
+        <h3 className="mt-1 text-lg font-bold text-[#0C0C48]">
+          {firstname} {lastname}
+        </h3>
+        {intro && <p className="mt-2 line-clamp-3 text-sm text-gray-600">{intro}</p>}
+      </div>
+    </button>
   )
 }

@@ -13,19 +13,21 @@ const FADE_BASE = 'transition-all duration-700 ease-out will-change-[opacity,tra
 const FADE_HIDDEN = 'opacity-0 translate-y-6'
 const FADE_SHOWN = 'opacity-100 translate-y-0'
 
+const SECTION_DELAYS = ['delay-200', 'delay-300', 'delay-[400ms]', 'delay-500', 'delay-700']
+
 function WhatWeDoSection({ data }: WhatWeDoSectionProps) {
   const { title, sections } = data
   const { ref, inView } = useInView<HTMLElement>()
 
   return (
-    <section ref={ref} className="w-full bg-white px-[26px] py-16 md:px-8 md:py-24 lg:px-12">
-      <div className="mx-auto w-full max-w-[1120px]">
-        <div className="mb-[17px]">
+    <section ref={ref} className="w-full bg-white py-16">
+      <div className="mx-auto w-[84%] max-w-300">
+        <div className="mb-6 sm:mb-7 md:mb-8 lg:mb-9 xl:mb-10">
           <h2
             className={clsx(
               FADE_BASE,
               inView ? FADE_SHOWN : FADE_HIDDEN,
-              'text-[22px] leading-tight font-extrabold text-[#08084f] sm:text-2xl md:text-[28px] lg:text-[32px] xl:text-4xl',
+              'text-lg leading-tight font-extrabold text-[#08084f] sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl',
             )}
           >
             {title}
@@ -35,13 +37,13 @@ function WhatWeDoSection({ data }: WhatWeDoSectionProps) {
             className={clsx(
               FADE_BASE,
               inView ? FADE_SHOWN : FADE_HIDDEN,
-              'mt-3 h-[3px] w-16 rounded-full bg-[#08084f] sm:w-18 md:h-1 md:w-20 lg:w-22 xl:w-24',
+              inView && 'delay-100',
+              'mt-3 h-0.75 w-16 rounded-full bg-[#08084f] sm:w-18 md:mt-4 md:h-1 md:w-20 lg:w-22 xl:w-24',
             )}
-            style={{ transitionDelay: inView ? '100ms' : '0ms' }}
           />
         </div>
 
-        <div className="grid grid-cols-1 gap-[17px] md:grid-cols-[57fr_43fr] md:items-stretch lg:grid-cols-[63fr_37fr]">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-[57fr_43fr] md:items-stretch md:gap-8 lg:grid-cols-[63fr_37fr] lg:gap-10 xl:gap-12">
           <div className="divide-y divide-gray-200 border-b border-gray-200">
             {sections.map((section, idx) => (
               <div
@@ -49,15 +51,15 @@ function WhatWeDoSection({ data }: WhatWeDoSectionProps) {
                 className={clsx(
                   FADE_BASE,
                   inView ? FADE_SHOWN : FADE_HIDDEN,
-                  'grid grid-cols-[95px_1fr] gap-3 py-8 sm:grid-cols-[105px_1fr] sm:gap-4 sm:py-9 md:grid-cols-[110px_1fr] md:gap-5 lg:grid-cols-[160px_1fr] lg:gap-6 lg:py-11 xl:grid-cols-[170px_1fr]',
+                  inView && SECTION_DELAYS[idx % SECTION_DELAYS.length],
+                  'grid grid-cols-1 gap-3 py-7 sm:grid-cols-3 sm:gap-4 md:gap-5 lg:gap-6',
                 )}
-                style={{ transitionDelay: inView ? `${200 + idx * 100}ms` : '0ms' }}
               >
-                <h3 className="text-[15px] leading-tight font-bold text-[#1f2bd4] sm:text-base md:text-lg lg:text-xl xl:text-2xl">
+                <h3 className="text-sm leading-tight font-bold text-[#1f2bd4] sm:text-base md:text-lg lg:text-xl xl:text-2xl">
                   {section.heading}
                 </h3>
 
-                <ul className="list-disc space-y-1 pl-4 text-[9px] leading-snug font-normal text-[#08084f] sm:text-xs lg:text-[16px]">
+                <ul className="list-disc space-y-1 pl-4 text-xs leading-relaxed font-normal text-[#08084f] sm:col-span-2 sm:text-xs md:text-sm lg:text-base xl:text-lg">
                   {section.items.map((point) => (
                     <li key={point.id}>{point.text}</li>
                   ))}
@@ -71,15 +73,15 @@ function WhatWeDoSection({ data }: WhatWeDoSectionProps) {
               className={clsx(
                 FADE_BASE,
                 inView ? FADE_SHOWN : FADE_HIDDEN,
-                'relative aspect-[292/162] w-full overflow-hidden rounded-[20px] min-[500px]:mx-auto min-[500px]:max-w-[480px] sm:max-w-[520px] md:mx-0 md:aspect-auto md:h-full md:max-w-none',
+                inView && 'delay-200',
+                'relative aspect-video w-full overflow-hidden rounded-2xl sm:max-w-xl md:mx-0 md:aspect-auto md:h-full md:max-w-none',
               )}
-              style={{ transitionDelay: inView ? '200ms' : '0ms' }}
             >
               <Image
                 src="/what-we-do.png"
                 alt="Nutrition researcher working with a participant"
                 fill
-                sizes="(max-width: 499px) calc(100vw - 52px), (max-width: 767px) 520px, (max-width: 1023px) 45vw, 36vw"
+                sizes="(max-width: 767px) 84vw, (max-width: 1023px) 45vw, 36vw"
                 className="object-cover object-center"
               />
             </div>

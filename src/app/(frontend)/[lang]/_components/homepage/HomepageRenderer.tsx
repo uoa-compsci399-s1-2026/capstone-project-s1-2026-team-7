@@ -10,6 +10,7 @@ import WhatWeDoSection from './WhatWeDoSection'
 import DonationSection from './DonationSection'
 import CurrentStudies from './CurrentStudies'
 import type { Lang } from '@/types/lang'
+import VideoSection from './VideoSection'
 
 type Props = {
   blocks: HomepageBlockDTO[]
@@ -23,6 +24,9 @@ export default function RenderHomeBlocks({ blocks, lang }: Props) {
         switch (block.blockType) {
           case 'hero':
             return <HeroSection key={block.id || index} data={block} lang={lang} />
+
+          case 'video':
+            return <VideoSection key={block.id || index} data={block} />
 
           case 'partners':
             return <PartnersSection key={block.id || index} data={block} />
@@ -50,7 +54,6 @@ export default function RenderHomeBlocks({ blocks, lang }: Props) {
 
           case 'donation-section':
             return <DonationSection key={block.id || index} />
-
           default:
             return null
         }
