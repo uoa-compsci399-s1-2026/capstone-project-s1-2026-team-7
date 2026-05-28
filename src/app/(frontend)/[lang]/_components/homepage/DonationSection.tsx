@@ -1,9 +1,9 @@
 'use client'
 
 import Image from 'next/image'
-import { ArrowRight } from 'lucide-react'
 import clsx from 'clsx'
 import { useInView } from '@/app/(frontend)/[lang]/_components/useInView'
+import HrefButton from '../HrefButton'
 
 const FADE_BASE = 'transition-all duration-700 ease-out will-change-[opacity,transform]'
 const FADE_HIDDEN = 'opacity-0 translate-y-6'
@@ -55,18 +55,12 @@ function DonationSection() {
             >
               Help us advance research and train future nutrition scientists.
             </p>
-
-            <button
-              className={clsx(
-                FADE_BASE,
-                inView ? FADE_SHOWN : FADE_HIDDEN,
-                inView && 'delay-300',
-                'inline-flex max-w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-full bg-[#1F2BD4] px-3 py-1.5 text-[8px] font-medium text-white transition hover:bg-[#1720b8] min-[500px]:px-4 min-[500px]:py-2 min-[500px]:text-[9px] md:px-5 md:text-xs lg:gap-2 lg:px-6 lg:py-2.5 lg:text-sm',
-              )}
-            >
-              Make a Donation
-              <ArrowRight className="h-2.5 w-2.5 min-[500px]:h-3 min-[500px]:w-3 md:h-3.5 md:w-3.5 lg:h-4 lg:w-4" />
-            </button>
+            <HrefButton
+              title="Make a Donation"
+              href="https://www.auckland.ac.nz/en/giving/donate/a-z-list-of-funds0.html"
+              variant="primary"
+              className={clsx(FADE_BASE, inView ? FADE_SHOWN : FADE_HIDDEN, inView && 'delay-300')}
+            ></HrefButton>
           </div>
         </div>
       </div>
