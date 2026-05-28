@@ -1,5 +1,6 @@
 import { getPayloadClient } from '@/lib/payload'
 import type { Media, ResearchCategory } from '@/payload-types'
+import type { Payload, Where } from 'payload'
 
 export type UploadResearchDTO = {
   title: string
@@ -19,59 +20,97 @@ export type UploadResearchResult = {
   status: 'created' | 'skipped' | 'updated'
 }
 
-function normalizeDoi(value: string): string {
-  return value
+function normalizeDoi(value: string | null | undefined): string {
+  return (value ?? '')
     .trim()
     .toLowerCase()
     .replace(/^https?:\/\/(dx\.)?doi\.org\//, '')
     .replace(/^doi:/, '')
 }
 
+async function findExistingResearch(payload: Payload, article: UploadResearchDTO, doi: string) {
+  if (doi) {
+    const existingByDoi = await payload.find({
+      collection: 'research',
+      where: {
+        doi: {
+          equals: doi,
+        },
+      },
+      limit: 1,
+      overrideAccess: true,
+    })
+
+    if (existingByDoi.docs[0]) {
+      return existingByDoi.docs[0]
+    }
+  }
+
+  const fallbackFilters: Where[] = [
+    {
+      title: {
+        equals: article.title,
+      },
+    },
+  ]
+
+  if (article.link) {
+    fallbackFilters.push({
+      link: {
+        equals: article.link,
+      },
+    })
+  }
+
+  if (article.date) {
+    fallbackFilters.push({
+      date: {
+        equals: article.date,
+      },
+    })
+  }
+
+  const existingByFallback = await payload.find({
+    collection: 'research',
+    where: {
+      and: fallbackFilters,
+    },
+    limit: 1,
+    overrideAccess: true,
+  })
+
+  return existingByFallback.docs[0]
+}
+
 export async function uploadResearch(article: UploadResearchDTO): Promise<UploadResearchResult> {
   const payload = await getPayloadClient()
-
-  if (!article.link) {
-    console.log(`Skipping article with no URL: ${article.title}`)
-    return { status: 'skipped', reason: 'Missing URL' }
-  }
-
-  if (!article.doi) {
-    console.log(`Skipping article with no DOI: ${article.title}`)
-    return { status: 'skipped', reason: 'Missing DOI' }
-  }
-
   const doi = normalizeDoi(article.doi)
+  const link = article.link?.trim() ?? ''
+  const date = article.date?.trim() ?? ''
   const categoryIDs =
     article.categoryIDs ?? article.categories?.map((category) => category.id) ?? []
 
   const data = {
     title: article.title,
     doi,
-    link: article.link,
+    link,
     image: article.image,
-    date: article.date,
+    date,
     staff: article.staffID,
     categories: categoryIDs,
+    csvDeleted: false,
+    csvDeletedAt: null,
     order: article.order ?? 0,
   }
 
-  const existing = await payload.find({
-    collection: 'research',
-    where: {
-      doi: {
-        equals: doi,
-      },
-    },
-    limit: 1,
-  })
-
-  const existingDoc = existing.docs[0]
+  const existingDoc = await findExistingResearch(payload, { ...article, link, date }, doi)
 
   if (existingDoc) {
     await payload.update({
       collection: 'research',
       id: existingDoc.id,
       data,
+      overrideAccess: true,
     })
 
     return { id: existingDoc.id, status: 'updated' }
@@ -80,6 +119,7 @@ export async function uploadResearch(article: UploadResearchDTO): Promise<Upload
   const created = await payload.create({
     collection: 'research',
     data,
+    overrideAccess: true,
   })
 
   return { id: created.id, status: 'created' }

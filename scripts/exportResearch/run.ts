@@ -4,6 +4,10 @@ import { getOrcidList, compareEntries, getData } from './input'
 import { buildCsvRows, convertToCsv } from './output'
 import { getEnabledCategories } from './getcategories'
 import {
+  buildCsvResearchIdentity,
+  getCsvDeletedResearchIdentities,
+} from '@/features/research/researchCsvDeletionPersistence'
+import {
   CsvResearchRow,
   nameWithORcid,
   PerPersonOutputType,
@@ -82,12 +86,32 @@ export async function getResearchExportRows(
   })
 
   const cleanedResearch = compareEntries(data)
-  const rows = buildCsvRows(cleanedResearch, people)
+  const unfilteredRows = buildCsvRows(cleanedResearch, people)
+  const deletedIdentities = await getCsvDeletedResearchIdentities()
+  const rows = unfilteredRows.filter((row) => {
+    const identity = buildCsvResearchIdentity({
+      title: row.title,
+      doi: row.doi,
+      url: row.url,
+      publicationDate: row.publicationDate,
+    })
+
+    if (identity.doi) {
+      return !deletedIdentities.dois.has(identity.doi)
+    }
+
+    return !deletedIdentities.fallbackKeys.has(identity.fallbackKey)
+  })
+  const excludedRows = unfilteredRows.length - rows.length
 
   reportProgress(options, {
     progress: 72,
     stage: 'rows',
-    status: `Built ${rows.length} CSV row${rows.length === 1 ? '' : 's'}.`,
+    status: `Built ${rows.length} CSV row${rows.length === 1 ? '' : 's'}${
+      excludedRows > 0
+        ? ` (${excludedRows} CSV-deleted record${excludedRows === 1 ? '' : 's'} excluded)`
+        : ''
+    }.`,
   })
 
   reportProgress(options, {

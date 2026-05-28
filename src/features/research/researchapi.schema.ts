@@ -6,7 +6,10 @@ import { researchCategorySchema } from './research-catagory.schema'
 export const researchDTOSchema = z.object({
   id: z.number(),
   title: z.string().default(''),
-  link: z.string().default('https://auckland.ac.nz'),
+  link: z
+    .string()
+    .nullish()
+    .transform((value) => value || 'https://auckland.ac.nz'),
   image: mediaSchema.nullish().transform((value) => value ?? DEFAULT_GENERAL_PIC),
   date: z
     .string()

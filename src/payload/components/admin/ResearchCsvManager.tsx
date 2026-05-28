@@ -11,6 +11,7 @@ type ImportResult = {
   updatedRows: number
   skippedRows: number
   failedRows: number
+  deletedRows: number
   s3Bucket?: string
   s3Key?: string
 }
@@ -318,9 +319,9 @@ export function ResearchCsvManager() {
           }}
         >
           Use this page to manage research publication data in bulk. You can export publications
-          collected from staff ORCID profiles into a CSV file, or upload a completed CSV to add or
-          update research records in the CMS. Uploaded and exported CSV files are also saved as a
-          backup in secure file storage.
+          collected from staff ORCID profiles into a CSV file, or upload a completed CSV to add,
+          update, or persistently delete research records in the CMS. Uploaded and exported CSV
+          files are also saved as a backup in secure file storage.
         </p>
 
         <div
@@ -354,7 +355,8 @@ export function ResearchCsvManager() {
             <h2 style={{ marginTop: 0 }}>2. Import CSV</h2>
             <p style={{ lineHeight: 1.5 }}>
               Upload a CSV with columns: title, doi, url, publicationDate, staffIds, and optional
-              categories. The uploaded file is stored in S3 before the CMS import runs.
+              categories. Rows removed from the CSV are soft-deleted in the CMS and kept out of
+              future exports. The uploaded file is stored in S3 before the CMS import runs.
             </p>
             <form onSubmit={handleImport}>
               <input
@@ -432,6 +434,8 @@ export function ResearchCsvManager() {
               <dd>{importResult.skippedRows}</dd>
               <dt>Failed</dt>
               <dd>{importResult.failedRows}</dd>
+              <dt>Deleted</dt>
+              <dd>{importResult.deletedRows}</dd>
               {importResult.s3Bucket && (
                 <>
                   <dt>S3 bucket</dt>

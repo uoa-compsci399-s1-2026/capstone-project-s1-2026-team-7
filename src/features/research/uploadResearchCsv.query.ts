@@ -1,6 +1,11 @@
 import { readFile } from 'node:fs/promises'
 import { getPayloadClient } from '@/lib/payload'
 import { uploadResearch } from './uploadResearch.query'
+import {
+  buildCsvResearchIdentity,
+  markMissingResearchAsCsvDeleted,
+  type CsvDeletedResearchIdentities,
+} from './researchCsvDeletionPersistence'
 
 type ResearchCsvRow = {
   title: string
@@ -25,7 +30,7 @@ type ParsedResearchRow = {
 export type UploadResearchCsvProgressEvent = {
   index: number
   total: number
-  status: 'created' | 'updated' | 'skipped' | 'failed'
+  status: 'created' | 'updated' | 'skipped' | 'failed' | 'deleted'
   title: string
   error?: string
 }
@@ -38,6 +43,7 @@ export type UploadResearchCsvResult = {
   updatedRows: number
   skippedRows: number
   failedRows: number
+  deletedRows: number
 }
 
 function parseCsv(content: string): Record<string, string>[] {
@@ -250,6 +256,27 @@ export async function uploadResearchCsvContent(
   let updatedRows = 0
   let skippedRows = 0
   let failedRows = 0
+  let deletedRows = 0
+
+  const activeIdentities: CsvDeletedResearchIdentities = {
+    dois: new Set(),
+    fallbackKeys: new Set(),
+  }
+
+  for (const row of rows) {
+    const identity = buildCsvResearchIdentity({
+      title: row.title,
+      doi: row.doi,
+      url: row.url,
+      publicationDate: row.publicationDate,
+    })
+
+    if (identity.doi) {
+      activeIdentities.dois.add(identity.doi)
+    } else if (identity.fallbackKey.replace(/\|/g, '').trim()) {
+      activeIdentities.fallbackKeys.add(identity.fallbackKey)
+    }
+  }
 
   for (const [index, row] of rows.entries()) {
     try {
@@ -305,6 +332,20 @@ export async function uploadResearchCsvContent(
     }
   }
 
+  if (!dryRun && rows.length > 0) {
+    deletedRows = await markMissingResearchAsCsvDeleted({
+      activeIdentities,
+      onDelete: ({ index, total, title }) => {
+        onProgress?.({
+          index,
+          total,
+          status: 'deleted',
+          title,
+        })
+      },
+    })
+  }
+
   return {
     totalRows: rawRows.length,
     validRows: rows.length,
@@ -313,6 +354,7 @@ export async function uploadResearchCsvContent(
     updatedRows,
     skippedRows,
     failedRows,
+    deletedRows,
   }
 }
 

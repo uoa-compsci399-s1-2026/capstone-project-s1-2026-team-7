@@ -1,6 +1,7 @@
 import { ResearchDTO, researchDTOSchema } from '@/features'
 import { getPayloadClient } from '@/lib/payload'
-import type { Where } from 'payload'
+import type { PaginatedDocs, Where } from 'payload'
+import { Research } from '@/payload-types'
 
 export type ResearchSortOption = 'newest' | 'oldest' | 'title'
 

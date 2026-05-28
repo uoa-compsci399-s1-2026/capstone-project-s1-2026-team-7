@@ -15,6 +15,8 @@ import * as migration_20260523_135153_add_video_block from './20260523_135153_ad
 import * as migration_20260520_070000_research_csv_tools from './20260520_070000_research_csv_tools'
 import * as migration_20260520_234806 from './20260520_234806'
 import * as migration_20260521_010122 from './20260521_010122'
+import * as migration_20260524_000000_research_csv_deletion_persistence from './20260524_000000_research_csv_deletion_persistence'
+import * as migration_20260527_000000_research_optional_doi_link from './20260527_000000_research_optional_doi_link'
 import * as migration_20260523_130048 from './20260523_130048'
 import * as migration_20260526_000000_donations_cleanup from './20260526_000000_donations_cleanup'
 import * as migration_20260527_115409 from './20260527_115409'
@@ -107,6 +109,14 @@ export const migrations = [
     name: '20260521_010122',
   },
   {
+    up: migration_20260524_000000_research_csv_deletion_persistence.up,
+    down: migration_20260524_000000_research_csv_deletion_persistence.down,
+    name: '20260524_000000_research_csv_deletion_persistence',
+  },
+  {
+    up: migration_20260527_000000_research_optional_doi_link.up,
+    down: migration_20260527_000000_research_optional_doi_link.down,
+    name: '20260527_000000_research_optional_doi_link',
     up: migration_20260523_130048.up,
     down: migration_20260523_130048.down,
     name: '20260523_130048',
