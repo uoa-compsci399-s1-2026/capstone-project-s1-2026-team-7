@@ -23,7 +23,6 @@
     "seed:team": "tsx scripts/seedHomepage.ts",
     "seed:homepage": "tsx scripts/seedOurteampage.ts",
     "payload:init": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/initPayload.ts",
-    "createmigration": "npm run payload -- migrate:create",
     "export:research": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/exportResearch/main.ts",
     "import:research": "tsx -r dotenv/config scripts/importResearch/uploadCsv.ts"
   },
@@ -39,12 +38,12 @@
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.1044.0",
     "@aws-sdk/client-translate": "^3.1045.0",
-    "@payloadcms/db-postgres": "^3.82.1",
-    "@payloadcms/email-nodemailer": "^3.82.1",
-    "@payloadcms/next": "^3.82.1",
-    "@payloadcms/richtext-lexical": "^3.82.1",
-    "@payloadcms/storage-s3": "^3.82.1",
-    "@payloadcms/ui": "^3.82.1",
+    "@payloadcms/db-postgres": "3.85.0",
+    "@payloadcms/email-nodemailer": "3.85.0",
+    "@payloadcms/next": "3.85.0",
+    "@payloadcms/richtext-lexical": "3.85.0",
+    "@payloadcms/storage-s3": "3.85.0",
+    "@payloadcms/ui": "3.85.0",
     "@tailwindcss/postcss": "^4.2.2",
     "clsx": "^2.1.1",
     "cross-env": "^7.0.3",
@@ -55,8 +54,8 @@
     "gsap": "^3.15.0",
     "lenis": "^1.3.23",
     "lucide-react": "^1.8.0",
-    "next": "16.2.2",
-    "payload": "^3.82.1",
+    "next": "16.2.6",
+    "payload": "3.85.0",
     "react": "^19.2.4",
     "react-dom": "19.2.4",
     "sharp": "0.34.2",
@@ -72,11 +71,11 @@
     "@vitejs/plugin-react": "4.5.2",
     "autoprefixer": "^10.4.27",
     "eslint": "^9.16.0",
-    "eslint-config-next": "16.2.2",
+    "eslint-config-next": "16.2.6",
     "husky": "^9.1.7",
     "jsdom": "28.0.0",
     "neonctl": "^2.22.0",
-    "postcss": "^8.5.8",
+    "postcss": "^8.5.10",
     "prettier": "^3.8.1",
     "tailwindcss": "^4.2.2",
     "tsx": "4.21.0",
@@ -87,5 +86,9 @@
   "engines": {
     "node": "24.x",
     "npm": "11.x"
+  },
+  "overrides": {
+    "dompurify": "3.4.7",
+    "postcss": "$postcss"
   }
 }
