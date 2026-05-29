@@ -117,6 +117,8 @@ export const migrations = [
     up: migration_20260527_000000_research_optional_doi_link.up,
     down: migration_20260527_000000_research_optional_doi_link.down,
     name: '20260527_000000_research_optional_doi_link',
+  },
+  {
     up: migration_20260523_130048.up,
     down: migration_20260523_130048.down,
     name: '20260523_130048',
