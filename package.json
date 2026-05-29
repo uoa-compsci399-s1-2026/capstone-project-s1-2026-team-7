@@ -89,6 +89,10 @@
   },
   "overrides": {
     "dompurify": "3.4.7",
-    "postcss": "$postcss"
+    "postcss": "$postcss",
+    "esbuild": "^0.25.0",
+    "@esbuild-kit/core-utils": {
+      "esbuild": "^0.25.0"
+    }
   }
 }
