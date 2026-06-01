@@ -29,8 +29,6 @@ const contactSchema = z.object({
 })
 
 // -------------------- Study detail template schemas --------------------
-// These come from the Studies Page global.
-// They control reusable static labels/text across all study detail pages.
 
 const heroStatsTemplateSchema = z
   .object({
@@ -127,57 +125,69 @@ const contactCardTemplateSchema = z
     heading: 'Contact',
   })
 
+// -------------------- NEW: Download PDF card template schema --------------------
+// Controls the static label text for the sidebar PDF download card.
+// The actual PDF file comes from the study's participantInfoPdf field.
+
+const downloadPdfCardTemplateSchema = z
+  .object({
+    heading: z.string().default('Study Documents'),
+    fileLabel: z.string().default('Participant Information Sheet'),
+    fileSubLabel: z.string().default('PDF'),
+    buttonLabel: z.string().default('Download'),
+    helperText: z
+      .string()
+      .default('Download the participant information sheet for full details about this study.'),
+  })
+  .default({
+    heading: 'Study Documents',
+    fileLabel: 'Participant Information Sheet',
+    fileSubLabel: 'PDF',
+    buttonLabel: 'Download',
+    helperText: 'Download the participant information sheet for full details about this study.',
+  })
+
+// -------------------------------------------------------------------------
+
 const studyDetailTemplateSchema = z
   .object({
     backButtonLabel: z.string().default('Studies'),
-
     heroStats: heroStatsTemplateSchema,
-
     aboutSection: aboutSectionTemplateSchema,
-
     participationSection: participationSectionTemplateSchema,
-
     eligibilitySection: eligibilitySectionTemplateSchema,
-
     faqSection: faqSectionTemplateSchema,
-
     applyCard: applyCardTemplateSchema,
-
     ethicsCard: ethicsCardTemplateSchema,
-
     contactCard: contactCardTemplateSchema,
+    // NEW
+    downloadPdfCard: downloadPdfCardTemplateSchema,
   })
   .default({
     backButtonLabel: 'Studies',
-
     heroStats: {
       durationLabel: 'Duration',
       compensationLabel: 'Compensation',
       locationLabel: 'Location',
     },
-
     aboutSection: {
       eyebrow: 'About',
       heading: 'Why this study matters',
     },
-
     participationSection: {
       eyebrow: 'Participation',
       heading: "What you'll be asked to do",
     },
-
     eligibilitySection: {
       eyebrow: 'Eligibility',
       heading: "Who we're looking for",
       inclusionHeading: 'You can join if',
       exclusionHeading: 'You cannot join if',
     },
-
     faqSection: {
       eyebrow: 'FAQ',
       heading: 'Common questions',
     },
-
     applyCard: {
       eyebrow: 'Apply',
       heading: "Check if you're eligible",
@@ -185,20 +195,25 @@ const studyDetailTemplateSchema = z
       helperText:
         "Survey takes ~5 min. We'll contact you within 2 working days if you qualify for screening.",
     },
-
     ethicsCard: {
       heading: 'Ethics approved',
       approvedByPrefix: 'Approved by the',
       committeeName: 'Southern Health and Disability Ethics Committee',
     },
-
     contactCard: {
       heading: 'Contact',
+    },
+    // NEW
+    downloadPdfCard: {
+      heading: 'Study Documents',
+      fileLabel: 'Participant Information Sheet',
+      fileSubLabel: 'PDF',
+      buttonLabel: 'Download',
+      helperText: 'Download the participant information sheet for full details about this study.',
     },
   })
 
 // -------------------- Study collection DTO --------------------
-// This maps one document from the Studies collection.
 
 export const studySchema = z.object({
   id: z.number(),
@@ -230,13 +245,23 @@ export const studySchema = z.object({
 
   ethicsApprovalRef: z.string().default(''),
 
+  // NEW — populated upload relationship; null when no PDF has been uploaded
+  participantInfoPdf: z
+    .object({
+      url: z.string(),
+      filename: z.string(),
+      mimeType: z.string().optional(),
+      filesize: z.number().optional(),
+    })
+    .nullable()
+    .default(null),
+
   sortOrder: z.number().default(100000),
 })
 
 export type StudyDTO = z.infer<typeof studySchema>
 
 // -------------------- Studies Page global DTO --------------------
-// This maps the studies-page Payload global.
 
 const listingPageSchema = z
   .object({

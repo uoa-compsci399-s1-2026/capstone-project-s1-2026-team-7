@@ -106,6 +106,12 @@ export default async function StudiesTemplatePage({ params }: StudiesPageProps) 
               surveyUrl={study.surveyUrl}
               ethicsApprovalRef={study.ethicsApprovalRef}
               contact={studiesPage.contact}
+              pdfCardHeading={template.downloadPdfCard.heading}
+              pdfCardFileLabel={template.downloadPdfCard.fileLabel}
+              pdfCardFileSubLabel={template.downloadPdfCard.fileSubLabel}
+              pdfCardButtonLabel={template.downloadPdfCard.buttonLabel}
+              pdfCardHelperText={template.downloadPdfCard.helperText}
+              participantInfoPdf={study.participantInfoPdf}
             />
           </div>
         </div>

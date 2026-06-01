@@ -69,6 +69,7 @@ export interface Config {
   collections: {
     users: User
     media: Media
+    documents: Document
     staff: Staff
     studies: Study
     research: Research
@@ -84,6 +85,7 @@ export interface Config {
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>
     media: MediaSelect<false> | MediaSelect<true>
+    documents: DocumentsSelect<false> | DocumentsSelect<true>
     staff: StaffSelect<false> | StaffSelect<true>
     studies: StudiesSelect<false> | StudiesSelect<true>
     research: ResearchSelect<false> | ResearchSelect<true>
@@ -182,6 +184,28 @@ export interface User {
  */
 export interface Media {
   id: number
+  alt: string
+  updatedAt: string
+  createdAt: string
+  url?: string | null
+  thumbnailURL?: string | null
+  filename?: string | null
+  mimeType?: string | null
+  filesize?: number | null
+  width?: number | null
+  height?: number | null
+  focalX?: number | null
+  focalY?: number | null
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents".
+ */
+export interface Document {
+  id: number
+  /**
+   * A short description of the document, e.g. "Ferdinand Study Participant Information Sheet".
+   */
   alt: string
   updatedAt: string
   createdAt: string
@@ -316,6 +340,10 @@ export interface Study {
    * Ethics approval reference, e.g. "AHREC ref 12345".
    */
   ethicsApprovalRef: string
+  /**
+   * Upload the participant information sheet PDF. When present, a download card will appear in the study sidebar.
+   */
+  participantInfoPdf?: (number | null) | Document
   sortOrder?: number | null
   updatedAt: string
   createdAt: string
@@ -423,6 +451,10 @@ export interface PayloadLockedDocument {
         value: number | Media
       } | null)
     | ({
+        relationTo: 'documents'
+        value: number | Document
+      } | null)
+    | ({
         relationTo: 'staff'
         value: number | Staff
       } | null)
@@ -526,6 +558,24 @@ export interface MediaSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "documents_select".
+ */
+export interface DocumentsSelect<T extends boolean = true> {
+  alt?: T
+  updatedAt?: T
+  createdAt?: T
+  url?: T
+  thumbnailURL?: T
+  filename?: T
+  mimeType?: T
+  filesize?: T
+  width?: T
+  height?: T
+  focalX?: T
+  focalY?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "staff_select".
  */
 export interface StaffSelect<T extends boolean = true> {
@@ -585,6 +635,7 @@ export interface StudiesSelect<T extends boolean = true> {
       }
   surveyUrl?: T
   ethicsApprovalRef?: T
+  participantInfoPdf?: T
   sortOrder?: T
   updatedAt?: T
   createdAt?: T
@@ -981,6 +1032,16 @@ export interface StudiesPage {
     }
     contactCard: {
       heading: string
+    }
+    /**
+     * Static labels for the PDF download card. Only appears on study pages where a PDF has been uploaded.
+     */
+    downloadPdfCard: {
+      heading: string
+      fileLabel: string
+      fileSubLabel: string
+      buttonLabel: string
+      helperText: string
     }
   }
   contact: {
@@ -1491,6 +1552,15 @@ export interface StudiesPageSelect<T extends boolean = true> {
           | T
           | {
               heading?: T
+            }
+        downloadPdfCard?:
+          | T
+          | {
+              heading?: T
+              fileLabel?: T
+              fileSubLabel?: T
+              buttonLabel?: T
+              helperText?: T
             }
       }
   contact?:

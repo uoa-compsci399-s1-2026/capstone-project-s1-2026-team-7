@@ -269,6 +269,18 @@ export const Studies: CollectionConfig = {
       },
     },
 
+    {
+      name: 'participantInfoPdf',
+      type: 'upload',
+      relationTo: 'documents',
+      required: false,
+      label: 'Participant Information Sheet (PDF)',
+      admin: {
+        description:
+          'Upload the participant information sheet PDF. When present, a download card will appear in the study sidebar.',
+      },
+    },
+
     { name: 'sortOrder', type: 'number' },
   ],
 }
