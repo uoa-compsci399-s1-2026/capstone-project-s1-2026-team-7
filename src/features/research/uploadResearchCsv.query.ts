@@ -186,55 +186,91 @@ function normalizeResearchCsvRow(
   }
 }
 
-async function resolveCategoryIDs(categoryNames: string[], dryRun: boolean): Promise<number[]> {
-  if (dryRun || categoryNames.length === 0) {
-    return []
+async function buildCategoryResolver(
+  rows: ParsedResearchRow[],
+  dryRun: boolean,
+): Promise<(names: string[]) => number[]> {
+  if (dryRun) {
+    return () => []
+  }
+
+  const uniqueNames = Array.from(new Set(rows.flatMap((row) => row.categoryNames).filter(Boolean)))
+
+  if (uniqueNames.length === 0) {
+    return () => []
   }
 
   const payload = await getPayloadClient()
-  const categoryIDs: number[] = []
+  const uniqueSlugs = uniqueNames.map(slugify)
 
-  for (const categoryName of [...new Set(categoryNames)]) {
-    const slug = slugify(categoryName)
+  const existing = await payload.find({
+    collection: 'research-categories',
+    where: {
+      or: [{ title: { in: uniqueNames } }, { slug: { in: uniqueSlugs } }],
+    },
+    limit: uniqueNames.length * 2,
+  })
 
-    const existing = await payload.find({
-      collection: 'research-categories',
-      where: {
-        or: [
-          {
-            title: {
-              equals: categoryName,
-            },
-          },
-          {
-            slug: {
-              equals: slug,
-            },
-          },
-        ],
-      },
-      limit: 1,
-    })
+  const titleToId = new Map<string, number>()
+  const slugToId = new Map<string, number>()
 
-    const existingCategory = existing.docs[0]
+  for (const category of existing.docs) {
+    if (category.title) titleToId.set(category.title, category.id)
+    if (category.slug) slugToId.set(category.slug, category.id)
+  }
 
-    if (existingCategory) {
-      categoryIDs.push(existingCategory.id)
+  const nameToId = new Map<string, number>()
+
+  for (const name of uniqueNames) {
+    const slug = slugify(name)
+    const existingId = titleToId.get(name) ?? slugToId.get(slug)
+
+    if (existingId !== undefined) {
+      nameToId.set(name, existingId)
       continue
     }
 
-    const createdCategory = await payload.create({
+    const created = await payload.create({
       collection: 'research-categories',
-      data: {
-        title: categoryName,
-        slug,
-      },
+      data: { title: name, slug },
     })
 
-    categoryIDs.push(createdCategory.id)
+    nameToId.set(name, created.id)
   }
 
-  return categoryIDs
+  return (names) => {
+    const ids: number[] = []
+    const seen = new Set<number>()
+
+    for (const name of names) {
+      const id = nameToId.get(name)
+
+      if (id !== undefined && !seen.has(id)) {
+        ids.push(id)
+        seen.add(id)
+      }
+    }
+
+    return ids
+  }
+}
+
+async function processRowsWithConcurrency<T>(
+  items: T[],
+  concurrency: number,
+  fn: (item: T, index: number) => Promise<void>,
+): Promise<void> {
+  let nextIndex = 0
+
+  async function worker(): Promise<void> {
+    while (true) {
+      const index = nextIndex++
+      if (index >= items.length) return
+      await fn(items[index], index)
+    }
+  }
+
+  await Promise.all(Array.from({ length: Math.min(concurrency, items.length) }, () => worker()))
 }
 
 export async function uploadResearchCsvContent(
@@ -278,7 +314,9 @@ export async function uploadResearchCsvContent(
     }
   }
 
-  for (const [index, row] of rows.entries()) {
+  const resolveCategoryIds = await buildCategoryResolver(rows, dryRun)
+
+  await processRowsWithConcurrency(rows, 5, async (row, index) => {
     try {
       if (dryRun) {
         console.log(`[DRY RUN] Would upload row ${index + 1}: ${row.title}`)
@@ -288,10 +326,10 @@ export async function uploadResearchCsvContent(
           status: 'skipped',
           title: row.title,
         })
-        continue
+        return
       }
 
-      const categoryIDs = await resolveCategoryIDs(row.categoryNames, dryRun)
+      const categoryIDs = resolveCategoryIds(row.categoryNames)
 
       const result = await uploadResearch({
         title: row.title,
@@ -330,7 +368,7 @@ export async function uploadResearchCsvContent(
         error: error instanceof Error ? error.message : String(error),
       })
     }
-  }
+  })
 
   if (!dryRun && rows.length > 0) {
     deletedRows = await markMissingResearchAsCsvDeleted({

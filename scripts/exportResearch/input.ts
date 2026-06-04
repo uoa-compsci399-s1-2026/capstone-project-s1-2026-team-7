@@ -263,14 +263,15 @@ async function getArticleOutput(
     const url = work.url?.value ?? null
 
     const orcidPublicationDate = getOrcidPublicationDate(work)
+    const needsCrossrefDate =
+      !orcidPublicationDate || getDatePrecisionScore(orcidPublicationDate) < 3
 
     let crossrefPublicationDate: string | null = null
 
-    if (doi) {
+    if (doi && needsCrossrefDate) {
       crossrefPublicationDate = await fetchCrossrefPublicationDate(doi, signal)
 
-      // Small delay to reduce Crossref 429 rate-limit errors.
-      await sleep(500, signal)
+      await sleep(50, signal)
     }
 
     articles.push({
