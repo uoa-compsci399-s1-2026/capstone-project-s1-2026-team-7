@@ -30,8 +30,8 @@ export default function DownloadPdfCard({
 
       <div className="mt-4 flex flex-wrap items-center gap-3 rounded-xl border border-gray-100 bg-gray-50 p-3">
         <div className="flex min-w-0 flex-1 basis-40 items-center gap-2">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-red-100">
-            <FileText className="h-4 w-4 text-red-600" />
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-100">
+            <FileText className="h-4 w-4 text-blue-600" />
           </div>
           <div className="min-w-0">
             <p className="text-xs font-medium leading-snug text-[#05083D]">{fileLabel}</p>

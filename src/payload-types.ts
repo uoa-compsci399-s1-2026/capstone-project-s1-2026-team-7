@@ -344,6 +344,10 @@ export interface Study {
    * Upload the participant information sheet PDF. When present, a download card will appear in the study sidebar.
    */
   participantInfoPdf?: (number | null) | Document
+  /**
+   * Tick ONLY when the Chinese translation of this study has been reviewed and confirmed accurate and ethical. While unticked, Chinese visitors see the English content with a warning notice. Auto-translated text is NOT a substitute for review.
+   */
+  chineseTranslationApproved?: boolean | null
   sortOrder?: number | null
   updatedAt: string
   createdAt: string
@@ -636,6 +640,7 @@ export interface StudiesSelect<T extends boolean = true> {
   surveyUrl?: T
   ethicsApprovalRef?: T
   participantInfoPdf?: T
+  chineseTranslationApproved?: T
   sortOrder?: T
   updatedAt?: T
   createdAt?: T

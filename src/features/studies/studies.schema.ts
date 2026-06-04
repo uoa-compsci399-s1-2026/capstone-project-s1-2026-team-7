@@ -125,10 +125,6 @@ const contactCardTemplateSchema = z
     heading: 'Contact',
   })
 
-// -------------------- NEW: Download PDF card template schema --------------------
-// Controls the static label text for the sidebar PDF download card.
-// The actual PDF file comes from the study's participantInfoPdf field.
-
 const downloadPdfCardTemplateSchema = z
   .object({
     heading: z.string().default('Study Documents'),
@@ -147,8 +143,6 @@ const downloadPdfCardTemplateSchema = z
     helperText: 'Download the participant information sheet for full details about this study.',
   })
 
-// -------------------------------------------------------------------------
-
 const studyDetailTemplateSchema = z
   .object({
     backButtonLabel: z.string().default('Studies'),
@@ -160,7 +154,6 @@ const studyDetailTemplateSchema = z
     applyCard: applyCardTemplateSchema,
     ethicsCard: ethicsCardTemplateSchema,
     contactCard: contactCardTemplateSchema,
-    // NEW
     downloadPdfCard: downloadPdfCardTemplateSchema,
   })
   .default({
@@ -203,7 +196,6 @@ const studyDetailTemplateSchema = z
     contactCard: {
       heading: 'Contact',
     },
-    // NEW
     downloadPdfCard: {
       heading: 'Study Documents',
       fileLabel: 'Participant Information Sheet',
@@ -245,7 +237,7 @@ export const studySchema = z.object({
 
   ethicsApprovalRef: z.string().default(''),
 
-  // NEW — populated upload relationship; null when no PDF has been uploaded
+  // Populated upload relationship; null when no PDF has been uploaded
   participantInfoPdf: z
     .object({
       url: z.string(),
@@ -255,6 +247,10 @@ export const studySchema = z.object({
     })
     .nullable()
     .default(null),
+
+  // Admin's explicit ethical sign-off for showing the Chinese translation.
+  // Not localized — a single yes/no per study.
+  chineseTranslationApproved: z.boolean().default(false),
 
   sortOrder: z.number().default(100000),
 })

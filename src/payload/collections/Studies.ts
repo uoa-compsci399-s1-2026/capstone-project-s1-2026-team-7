@@ -269,6 +269,7 @@ export const Studies: CollectionConfig = {
       },
     },
 
+    // -------------------- Participant information PDF --------------------
     {
       name: 'participantInfoPdf',
       type: 'upload',
@@ -278,6 +279,17 @@ export const Studies: CollectionConfig = {
       admin: {
         description:
           'Upload the participant information sheet PDF. When present, a download card will appear in the study sidebar.',
+      },
+    },
+
+    {
+      name: 'chineseTranslationApproved',
+      type: 'checkbox',
+      defaultValue: false,
+      label: 'Chinese translation approved for display',
+      admin: {
+        description:
+          'Tick ONLY when the Chinese translation of this study has been reviewed and confirmed accurate and ethical. While unticked, Chinese visitors see the English content with a warning notice. Auto-translated text is NOT a substitute for review.',
       },
     },
 
