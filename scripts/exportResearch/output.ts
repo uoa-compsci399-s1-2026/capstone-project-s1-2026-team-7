@@ -21,6 +21,7 @@ export function convertToCsv(rows: CsvResearchRow[]): string {
     'staffNames',
     'staffIds',
     'orcidIds',
+    'keywords',
     'categories',
   ]
 
@@ -46,6 +47,7 @@ export function buildCsvRows(
       staffNames: item.people.join('; '),
       staffIds: item.staffIds.join('; '),
       orcidIds: [...new Set(orcidIds)].join('; '),
+      keywords: '',
       categories: '',
     }
   })

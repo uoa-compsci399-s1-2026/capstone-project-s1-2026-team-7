@@ -2,7 +2,7 @@ import type { StaffDTO } from '@/features/our-team/staff.schema'
 import { getStaff } from '@/features/our-team/getStaff.query'
 import { getOrcidList, compareEntries, getData } from './input'
 import { buildCsvRows, convertToCsv } from './output'
-import { getEnabledCategories } from './getcategories'
+import { addPubMedKeywordsToRows } from './pubmed'
 import {
   buildCsvResearchIdentity,
   getCsvDeletedResearchIdentities,
@@ -116,21 +116,21 @@ export async function getResearchExportRows(
 
   reportProgress(options, {
     progress: 75,
-    stage: 'categories',
-    status: 'Checking research categories.',
+    stage: 'keywords',
+    status: 'Fetching PubMed keywords.',
     current: 0,
     total: rows.length,
   })
 
-  const categoryResults = await getEnabledCategories(rows, {
+  const rowsWithKeywords = await addPubMedKeywordsToRows(rows, {
     signal: options?.signal,
     onProgress: ({ current, total }) => {
-      const progress = total === 0 ? 90 : 75 + (current / total) * 15
+      const progress = total === 0 ? 92 : 75 + (current / total) * 17
 
       reportProgress(options, {
         progress,
-        stage: 'categories',
-        status: `Processed category suggestions (${current}/${total}).`,
+        stage: 'keywords',
+        status: `Fetched PubMed keywords (${current}/${total}).`,
         current,
         total,
       })
@@ -140,18 +140,11 @@ export async function getResearchExportRows(
   throwIfAborted(options?.signal)
   reportProgress(options, {
     progress: 92,
-    stage: 'categories',
-    status: 'Applying categories to export rows.',
+    stage: 'keywords',
+    status: 'Applied PubMed keywords to export rows.',
   })
 
-  return rows.map((row) => {
-    const matchingCategoryResult = categoryResults.find((result) => result.title === row.title)
-
-    return {
-      ...row,
-      categories: matchingCategoryResult?.categories.join('; ') ?? '',
-    }
-  })
+  return rowsWithKeywords
 }
 
 export async function getResearchExportCsv(

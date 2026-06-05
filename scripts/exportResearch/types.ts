@@ -6,6 +6,7 @@ export type CsvResearchRow = {
   staffNames: string
   staffIds: string
   orcidIds: string
+  keywords: string
   categories: string
 }
 
@@ -152,6 +153,7 @@ export type ResearchExportProgressStage =
   | 'staff'
   | 'orcid'
   | 'rows'
+  | 'keywords'
   | 'categories'
   | 'csv'
   | 'storage'
