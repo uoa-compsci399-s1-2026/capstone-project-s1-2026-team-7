@@ -43,7 +43,7 @@ function WhatWeDoSection({ data }: WhatWeDoSectionProps) {
           />
         </div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-[57fr_43fr] md:items-stretch md:gap-8 lg:grid-cols-[63fr_37fr] lg:gap-10 xl:gap-12">
+        <div className="grid grid-cols-1 gap-6 md:items-stretch md:gap-8 md:grid-cols-[60fr_40fr] lg:gap-10 xl:gap-12">
           <div className="divide-y divide-gray-200 border-b border-gray-200">
             {sections.map((section, idx) => (
               <div
@@ -59,7 +59,7 @@ function WhatWeDoSection({ data }: WhatWeDoSectionProps) {
                   {section.heading}
                 </h3>
 
-                <ul className="list-disc space-y-1 pl-4 text-xs leading-relaxed font-normal text-[#08084f] sm:col-span-2 sm:text-xs md:text-sm lg:text-base xl:text-lg">
+                <ul className="list-disc space-y-1 pl-4 text-xs leading-relaxed font-normal text-[#08084f] sm:col-span-2 lg:text-sm xl:">
                   {section.items.map((point) => (
                     <li key={point.id}>{point.text}</li>
                   ))}

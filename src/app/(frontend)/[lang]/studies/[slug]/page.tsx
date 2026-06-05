@@ -10,6 +10,7 @@ import ParticipationList from './_components/ParticipationList'
 import EligibilityCriteria from './_components/EligibilityCriteria'
 import FAQList from './_components/FAQList'
 import StickySidebar from './_components/StickySidebar'
+import TranslationWarning from './_components/TranslationWarning'
 
 export type StudiesPageProps = {
   params: Promise<{
@@ -21,8 +22,15 @@ export type StudiesPageProps = {
 export default async function StudiesTemplatePage({ params }: StudiesPageProps) {
   const { lang, slug } = await params
 
-  const [study, studiesPage] = await Promise.all([getStudyBySlug(lang, slug), getStudiesPage(lang)])
+  const [studyResult, studiesPage] = await Promise.all([
+    getStudyBySlug(lang, slug),
+    getStudiesPage(lang),
+  ])
 
+  // getStudyBySlug now returns the study plus whether an approved, complete
+  // Chinese translation exists. When false (and lang is zh), content is in
+  // English and we show the red warning banner.
+  const { study, hasTranslation } = studyResult
   const template = studiesPage.detailTemplate
 
   const bannerImageUrl = study.banner?.url || ''
@@ -44,6 +52,13 @@ export default async function StudiesTemplatePage({ params }: StudiesPageProps) 
       </div>
 
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+        {/* Red compliance warning — only when no approved Chinese translation */}
+        {!hasTranslation && (
+          <div className="mt-6">
+            <TranslationWarning />
+          </div>
+        )}
+
         {study.subtitle && (
           <p className="mt-8 text-xl leading-relaxed text-[#05083D] md:text-2xl">
             {study.subtitle}
@@ -106,6 +121,12 @@ export default async function StudiesTemplatePage({ params }: StudiesPageProps) 
               surveyUrl={study.surveyUrl}
               ethicsApprovalRef={study.ethicsApprovalRef}
               contact={studiesPage.contact}
+              pdfCardHeading={template.downloadPdfCard.heading}
+              pdfCardFileLabel={template.downloadPdfCard.fileLabel}
+              pdfCardFileSubLabel={template.downloadPdfCard.fileSubLabel}
+              pdfCardButtonLabel={template.downloadPdfCard.buttonLabel}
+              pdfCardHelperText={template.downloadPdfCard.helperText}
+              participantInfoPdf={study.participantInfoPdf}
             />
           </div>
         </div>

@@ -9,6 +9,7 @@ import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 
 import { Users } from './payload/collections/Users'
 import { Media } from './payload/collections/Media'
+import { Documents } from './payload/collections/Documents'
 import { Studies } from './payload/collections/Studies'
 import { Staff } from './payload/collections/Staff'
 import { Research } from './payload/collections/Research'
@@ -77,6 +78,7 @@ export default buildConfig({
   collections: [
     Users,
     Media,
+    Documents,
     Staff,
     Studies,
     Research,
@@ -116,6 +118,7 @@ export default buildConfig({
     s3Storage({
       collections: {
         media: true,
+        documents: true,
       },
       bucket: process.env.S3_BUCKET || '',
       config: {

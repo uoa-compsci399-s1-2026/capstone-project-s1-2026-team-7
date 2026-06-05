@@ -177,6 +177,30 @@ export const StudiesPage: GlobalConfig = {
           label: 'Sidebar contact card',
           fields: [localizedTextField('heading', 'Heading', 'Contact')],
         },
+
+        // -------------------- NEW: Sidebar download PDF card --------------------
+        // Controls the static label text for the PDF download card.
+        // The actual PDF is uploaded per-study in the Studies collection.
+        {
+          name: 'downloadPdfCard',
+          type: 'group',
+          label: 'Sidebar download PDF card',
+          admin: {
+            description:
+              'Static labels for the PDF download card. Only appears on study pages where a PDF has been uploaded.',
+          },
+          fields: [
+            localizedTextField('heading', 'Card heading', 'Study Documents'),
+            localizedTextField('fileLabel', 'File name label', 'Participant Information Sheet'),
+            localizedTextField('fileSubLabel', 'File type sub-label', 'PDF'),
+            localizedTextField('buttonLabel', 'Download button label', 'Download'),
+            localizedTextareaField(
+              'helperText',
+              'Helper text below heading',
+              'Download the participant information sheet for full details about this study.',
+            ),
+          ],
+        },
       ],
     },
 

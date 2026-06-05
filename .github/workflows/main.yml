@@ -131,7 +131,7 @@ jobs:
         run: npm run payload -- migrate
 
       - name: Install Playwright browsers
-        run: npx playwright install chromium --with-deps
+        run: npx playwright install chromium
 
       - name: Build and start app
         run: |

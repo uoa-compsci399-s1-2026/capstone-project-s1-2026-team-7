@@ -1,6 +1,7 @@
 import ApplyCard from './ApplyCard'
 import EthicsCard from './EthicsCard'
 import ContactCard from './ContactCard'
+import DownloadPdfCard from './DownloadPdfCard'
 
 type StickySidebarProps = {
   applyEyebrow: string
@@ -18,6 +19,12 @@ type StickySidebarProps = {
     address: string
     phone: string
   }
+  pdfCardHeading: string
+  pdfCardFileLabel: string
+  pdfCardFileSubLabel: string
+  pdfCardButtonLabel: string
+  pdfCardHelperText: string
+  participantInfoPdf: { url: string; filename: string } | null
 }
 
 export default function StickySidebar({
@@ -32,6 +39,12 @@ export default function StickySidebar({
   surveyUrl,
   ethicsApprovalRef,
   contact,
+  pdfCardHeading,
+  pdfCardFileLabel,
+  pdfCardFileSubLabel,
+  pdfCardButtonLabel,
+  pdfCardHelperText,
+  participantInfoPdf,
 }: StickySidebarProps) {
   return (
     <aside className="space-y-4 lg:sticky lg:top-24 lg:h-fit">
@@ -48,6 +61,15 @@ export default function StickySidebar({
         approvedByPrefix={ethicsApprovedByPrefix}
         committeeName={ethicsCommitteeName}
         approvalRef={ethicsApprovalRef}
+      />
+
+      <DownloadPdfCard
+        pdfUrl={participantInfoPdf?.url ?? null}
+        heading={pdfCardHeading}
+        fileLabel={pdfCardFileLabel}
+        fileSubLabel={pdfCardFileSubLabel}
+        buttonLabel={pdfCardButtonLabel}
+        helperText={pdfCardHelperText}
       />
 
       <ContactCard
