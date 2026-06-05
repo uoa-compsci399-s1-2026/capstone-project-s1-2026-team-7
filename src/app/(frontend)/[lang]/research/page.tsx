@@ -1,6 +1,7 @@
 import ResearchHero from './_components/ResearchHero'
 import { ResearchClient } from './_components/ResearchClient'
 import { getResearchPage } from '@/features/research/researchpage.query'
+import { getAllCategories } from '@/features/research/getCatagories.query'
 import { searchResearch } from '@/features/research/searchResearch'
 import { PageProps } from '@/types/pageprops'
 
@@ -57,12 +58,13 @@ function getSelectedStaffOptions(
 export default async function Page({ params }: PageProps) {
   const { lang } = await params
 
-  const [researchpage, researchResult] = await Promise.all([
+  const [researchpage, researchResult, categories] = await Promise.all([
     getResearchPage(lang),
     searchResearch({
       page: 1,
       limit: 16,
     }),
+    getAllCategories(),
   ])
 
   const staffOptions = getSelectedStaffOptions(researchpage.researchStaffDisplay)
@@ -76,7 +78,7 @@ export default async function Page({ params }: PageProps) {
       />
 
       <ResearchClient
-        categories={researchpage.researchCategoriesDisplay ?? []}
+        categories={categories}
         staffOptions={staffOptions}
         initialResearch={researchResult.docs}
         initialTotalDocs={researchResult.totalDocs}

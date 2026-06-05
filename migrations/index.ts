@@ -21,6 +21,7 @@ import * as migration_20260526_000000_donations_cleanup from './20260526_000000_
 import * as migration_20260527_000000_research_optional_doi_link from './20260527_000000_research_optional_doi_link'
 import * as migration_20260527_115409 from './20260527_115409'
 import * as migration_20260527_180608 from './20260527_180608'
+import * as migration_20260605_030000_research_keywords_and_search_text from './20260605_030000_research_keywords_and_search_text'
 import * as migration_20260601_133919_add_participant_info_pdf_field from './20260601_133919_add_participant_info_pdf_field'
 import * as migration_20260601_141351_add_documents_collection from './20260601_141351_add_documents_collection'
 import * as migration_20260604_000904_add_documents_and_translation_approval from './20260604_000904_add_documents_and_translation_approval'
@@ -140,6 +141,11 @@ export const migrations = [
     up: migration_20260527_180608.up,
     down: migration_20260527_180608.down,
     name: '20260527_180608',
+  },
+  {
+    up: migration_20260605_030000_research_keywords_and_search_text.up,
+    down: migration_20260605_030000_research_keywords_and_search_text.down,
+    name: '20260605_030000_research_keywords_and_search_text',
   },
   {
     up: migration_20260601_133919_add_participant_info_pdf_field.up,
