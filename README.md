@@ -157,6 +157,7 @@ Special thanks to:
 ## Contributors
 
 - James Mullane — Full Stack Developer
+- Carl Misquitta — Full Stack Developer
 
 ---
 
