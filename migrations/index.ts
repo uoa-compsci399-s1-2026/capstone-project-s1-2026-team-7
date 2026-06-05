@@ -11,16 +11,19 @@ import * as migration_20260513_121859 from './20260513_121859'
 import * as migration_20260513_123521 from './20260513_123521'
 import * as migration_20260513_164709 from './20260513_164709'
 import * as migration_20260513_173014 from './20260513_173014'
-import * as migration_20260523_135153_add_video_block from './20260523_135153_add_video_block'
 import * as migration_20260520_070000_research_csv_tools from './20260520_070000_research_csv_tools'
 import * as migration_20260520_234806 from './20260520_234806'
 import * as migration_20260521_010122 from './20260521_010122'
-import * as migration_20260524_000000_research_csv_deletion_persistence from './20260524_000000_research_csv_deletion_persistence'
-import * as migration_20260527_000000_research_optional_doi_link from './20260527_000000_research_optional_doi_link'
 import * as migration_20260523_130048 from './20260523_130048'
+import * as migration_20260523_135153_add_video_block from './20260523_135153_add_video_block'
+import * as migration_20260524_000000_research_csv_deletion_persistence from './20260524_000000_research_csv_deletion_persistence'
 import * as migration_20260526_000000_donations_cleanup from './20260526_000000_donations_cleanup'
+import * as migration_20260527_000000_research_optional_doi_link from './20260527_000000_research_optional_doi_link'
 import * as migration_20260527_115409 from './20260527_115409'
 import * as migration_20260527_180608 from './20260527_180608'
+import * as migration_20260601_133919_add_participant_info_pdf_field from './20260601_133919_add_participant_info_pdf_field'
+import * as migration_20260601_141351_add_documents_collection from './20260601_141351_add_documents_collection'
+import * as migration_20260604_000904_add_documents_and_translation_approval from './20260604_000904_add_documents_and_translation_approval'
 
 export const migrations = [
   {
@@ -89,11 +92,6 @@ export const migrations = [
     name: '20260513_173014',
   },
   {
-    up: migration_20260523_135153_add_video_block.up,
-    down: migration_20260523_135153_add_video_block.down,
-    name: '20260523_135153_add_video_block',
-  },
-  {
     up: migration_20260520_070000_research_csv_tools.up,
     down: migration_20260520_070000_research_csv_tools.down,
     name: '20260520_070000_research_csv_tools',
@@ -109,24 +107,29 @@ export const migrations = [
     name: '20260521_010122',
   },
   {
-    up: migration_20260524_000000_research_csv_deletion_persistence.up,
-    down: migration_20260524_000000_research_csv_deletion_persistence.down,
-    name: '20260524_000000_research_csv_deletion_persistence',
-  },
-  {
-    up: migration_20260527_000000_research_optional_doi_link.up,
-    down: migration_20260527_000000_research_optional_doi_link.down,
-    name: '20260527_000000_research_optional_doi_link',
-  },
-  {
     up: migration_20260523_130048.up,
     down: migration_20260523_130048.down,
     name: '20260523_130048',
   },
   {
+    up: migration_20260523_135153_add_video_block.up,
+    down: migration_20260523_135153_add_video_block.down,
+    name: '20260523_135153_add_video_block',
+  },
+  {
+    up: migration_20260524_000000_research_csv_deletion_persistence.up,
+    down: migration_20260524_000000_research_csv_deletion_persistence.down,
+    name: '20260524_000000_research_csv_deletion_persistence',
+  },
+  {
     up: migration_20260526_000000_donations_cleanup.up,
     down: migration_20260526_000000_donations_cleanup.down,
     name: '20260526_000000_donations_cleanup',
+  },
+  {
+    up: migration_20260527_000000_research_optional_doi_link.up,
+    down: migration_20260527_000000_research_optional_doi_link.down,
+    name: '20260527_000000_research_optional_doi_link',
   },
   {
     up: migration_20260527_115409.up,
@@ -137,5 +140,20 @@ export const migrations = [
     up: migration_20260527_180608.up,
     down: migration_20260527_180608.down,
     name: '20260527_180608',
+  },
+  {
+    up: migration_20260601_133919_add_participant_info_pdf_field.up,
+    down: migration_20260601_133919_add_participant_info_pdf_field.down,
+    name: '20260601_133919_add_participant_info_pdf_field',
+  },
+  {
+    up: migration_20260601_141351_add_documents_collection.up,
+    down: migration_20260601_141351_add_documents_collection.down,
+    name: '20260601_141351_add_documents_collection',
+  },
+  {
+    up: migration_20260604_000904_add_documents_and_translation_approval.up,
+    down: migration_20260604_000904_add_documents_and_translation_approval.down,
+    name: '20260604_000904_add_documents_and_translation_approval',
   },
 ]
