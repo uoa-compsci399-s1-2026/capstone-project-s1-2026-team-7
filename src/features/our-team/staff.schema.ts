@@ -11,8 +11,24 @@ const zeroNumber = z
   .nullish()
   .transform((value) => value ?? 0)
 
+const formalTitleLabels = {
+  dr: 'Dr',
+  professor: 'Professor',
+  'associate-professor': 'Associate Professor',
+  mr: 'Mr',
+  mrs: 'Mrs',
+  ms: 'Ms',
+} as const
+
+const formalTitleSchema = z
+  .enum(['dr', 'professor', 'associate-professor', 'mr', 'mrs', 'ms'])
+  .nullish()
+  .transform((value) => (value ? formalTitleLabels[value] : ''))
+
 export const staffSchema = z.object({
   id: z.number(),
+
+  formaltitle: formalTitleSchema,
 
   firstname: emptyString,
   lastname: emptyString,
