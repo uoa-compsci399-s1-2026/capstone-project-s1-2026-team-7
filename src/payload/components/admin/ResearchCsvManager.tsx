@@ -307,7 +307,7 @@ export function ResearchCsvManager() {
           <Link href="/admin" style={{ color: '#0c0c48' }}>
             Admin
           </Link>{' '}
-          / Collections / Research CSV Tools
+          / Research CSV Tools
         </p>
 
         <h1 style={{ fontSize: '2rem', margin: '0 0 0.5rem' }}>Research CSV Import / Export</h1>
