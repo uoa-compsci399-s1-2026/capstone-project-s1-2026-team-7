@@ -12,5 +12,13 @@ export async function getResearchPage(locale: Lang = 'en'): Promise<ResearchPage
     depth: 3,
   })
 
-  return researchPageDTOSchema.parse(data)
+  // The global stores these fields with spaces ("portrait image" / "mobile image"),
+  // but the DTO schema expects camelCase. Map them before parsing.
+  const normalized = {
+    ...data,
+    portraitImage: data['portrait image'],
+    mobileImage: data['mobile image'],
+  }
+
+  return researchPageDTOSchema.parse(normalized)
 }

@@ -59,7 +59,6 @@ function DonationSection() {
               title="Make a Donation"
               href="https://www.auckland.ac.nz/en/giving/donate/a-z-list-of-funds0.html"
               variant="primary"
-              className={clsx(FADE_BASE, inView ? FADE_SHOWN : FADE_HIDDEN, inView && 'delay-300')}
             ></HrefButton>
           </div>
         </div>

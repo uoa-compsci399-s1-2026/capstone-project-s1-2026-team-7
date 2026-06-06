@@ -113,6 +113,11 @@ function Carousel({ videos, inView }: { videos: PlayableVideo[]; inView: boolean
     return () => resizeObserver.disconnect()
   }, [])
 
+  // `active` is centred on mount via the useState initializer above. `count`
+  // comes from server-rendered props and doesn't change at runtime, so no
+  // effect is needed to re-centre it. We clamp during render as a safeguard.
+  const safeActive = count > 0 ? Math.min(active, count - 1) : 0
+
   const next = () => {
     setPlayingId(null)
     setActive((current) => (current + 1) % count)
@@ -176,7 +181,7 @@ function Carousel({ videos, inView }: { videos: PlayableVideo[]; inView: boolean
   const centerGap = isMobile ? width * 0.52 : featuredW * 0.56
 
   const offsetOf = (index: number) => {
-    let relativePosition = (index - active + count) % count
+    let relativePosition = (index - safeActive + count) % count
 
     if (relativePosition > count / 2) {
       relativePosition -= count
@@ -242,7 +247,7 @@ function Carousel({ videos, inView }: { videos: PlayableVideo[]; inView: boolean
         })}
       </div>
 
-      <CenterCaption videos={videos} active={active} inView={inView} />
+      <CenterCaption videos={videos} active={safeActive} inView={inView} />
 
       <div
         className={clsx(
@@ -261,7 +266,7 @@ function Carousel({ videos, inView }: { videos: PlayableVideo[]; inView: boolean
 
         <button
           type="button"
-          onClick={() => setActive(active)}
+          onClick={() => setActive(safeActive)}
           aria-label="Current video"
           className="h-2.5 w-2.5 rounded-full bg-[#08084f]/35 transition hover:bg-[#08084f]/45"
         />
