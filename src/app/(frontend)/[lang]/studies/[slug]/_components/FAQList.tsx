@@ -1,9 +1,12 @@
+import type { ComponentProps } from 'react'
 import { RichTextRenderer } from '@/lib/richTextRenderer'
+
+type RichTextData = ComponentProps<typeof RichTextRenderer>['data']
 
 type FaqItem = {
   id?: string
   question: string
-  answer: any
+  answer: RichTextData
 }
 
 type FAQListProps = {

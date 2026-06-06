@@ -13,7 +13,6 @@ import { WhoWeAreBlock } from '../blocks/home/WhoWeAreBlock'
 import { WhatWeDoBlock } from '../blocks/home/WhatWeDoBlock'
 import { DonationSectionBlock } from '../blocks/home/DonationSectionBlock'
 import { CurrentStudiesBlock } from '../blocks/home/CurrentStudiesBlock'
-import { Video } from 'lucide-react'
 import { VideoBlock } from '../blocks/home/VideoBlock'
 
 export const HomePage: GlobalConfig = {

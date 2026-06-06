@@ -2,7 +2,6 @@
 
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
-import { BookOpen, GraduationCap, Handshake, UsersRound } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
 type Stat = {
@@ -10,29 +9,6 @@ type Stat = {
   value: number
   label: string
 }
-
-const stats: Stat[] = [
-  {
-    icon: GraduationCap,
-    value: 25,
-    label: 'Postgraduate students supported since 2020',
-  },
-  {
-    icon: BookOpen,
-    value: 70,
-    label: 'Peer-reviewed publications',
-  },
-  {
-    icon: Handshake,
-    value: 14,
-    label: 'F&B industry partners',
-  },
-  {
-    icon: UsersRound,
-    value: 1000,
-    label: 'Participants involved in HNU studies',
-  },
-]
 
 function CountUpNumber({ end, duration = 1500 }: { end: number; duration?: number }) {
   const [count, setCount] = useState(0)

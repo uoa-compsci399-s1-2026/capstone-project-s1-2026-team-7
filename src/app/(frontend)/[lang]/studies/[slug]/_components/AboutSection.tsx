@@ -1,9 +1,12 @@
+import type { ComponentProps } from 'react'
 import { RichTextRenderer } from '@/lib/richTextRenderer'
+
+type RichTextData = ComponentProps<typeof RichTextRenderer>['data']
 
 type AboutSectionProps = {
   eyebrow: string
   heading: string
-  body: any
+  body: RichTextData
 }
 
 export default function AboutSection({ eyebrow, heading, body }: AboutSectionProps) {

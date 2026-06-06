@@ -1,13 +1,32 @@
 'use client'
 
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useDocumentInfo, useField, useLocale } from '@payloadcms/ui'
 
 const SOURCE_LOCALE = 'en'
 const TARGET_LOCALE = 'zh'
 
-function getByPath(data: any, path: string): unknown {
-  return path.split('.').reduce((current, key) => current?.[key], data)
+type UnknownRecord = Record<string, unknown>
+
+type TranslationResponse = {
+  translatedText?: string
+  translation?: string
+  text?: string
+  result?: string
+}
+
+function isRecord(value: unknown): value is UnknownRecord {
+  return typeof value === 'object' && value !== null
+}
+
+function getByPath(data: unknown, path: string): unknown {
+  return path.split('.').reduce<unknown>((current, key) => {
+    if (!isRecord(current)) {
+      return undefined
+    }
+
+    return current[key]
+  }, data)
 }
 
 export function TranslateFromEnglishButton({
@@ -55,7 +74,7 @@ export function TranslateFromEnglishButton({
         throw new Error(`Could not load English value. URL failed: ${englishURL}`)
       }
 
-      const englishDoc = await englishResponse.json()
+      const englishDoc: unknown = await englishResponse.json()
       const englishValue = getByPath(englishDoc, path)
 
       if (typeof englishValue !== 'string' || !englishValue.trim()) {
@@ -70,8 +89,8 @@ export function TranslateFromEnglishButton({
         },
         body: JSON.stringify({
           text: englishValue,
-          sourceLanguageCode: 'en',
-          targetLanguageCode: 'zh',
+          sourceLanguageCode: SOURCE_LOCALE,
+          targetLanguageCode: TARGET_LOCALE,
         }),
       })
 
@@ -79,10 +98,10 @@ export function TranslateFromEnglishButton({
         throw new Error('Translation request failed.')
       }
 
-      const result = await translateResponse.json()
+      const result = (await translateResponse.json()) as TranslationResponse
 
       const translatedText =
-        result.translatedText || result.translation || result.text || result.result
+        result.translatedText ?? result.translation ?? result.text ?? result.result
 
       if (!translatedText) {
         throw new Error('Translation endpoint did not return translated text.')

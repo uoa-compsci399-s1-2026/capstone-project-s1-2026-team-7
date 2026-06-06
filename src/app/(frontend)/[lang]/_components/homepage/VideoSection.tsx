@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight, Play } from 'lucide-react'
 import clsx from 'clsx'
 import type { VideoBlockDTO } from '@/features/homepage/home.schema'
 import { useInView } from '@/app/(frontend)/[lang]/_components/useInView'
-
+import Image from 'next/image'
 type Props = {
   data: VideoBlockDTO
 }
@@ -358,11 +358,15 @@ function VideoCard({
             aria-label={`Play ${video.title || 'video'}`}
             className="group absolute inset-0 h-full w-full"
           >
-            <img
-              src={thumb}
-              alt={video.title || 'Video thumbnail'}
-              className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-            />
+            <div className="relative h-full w-full overflow-hidden">
+              <Image
+                fill
+                src={thumb}
+                alt={video.title || 'Video thumbnail'}
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover transition duration-500 group-hover:scale-105"
+              />
+            </div>
 
             <span className="absolute inset-0 bg-[#08084f]/25 transition group-hover:bg-[#08084f]/10" />
 

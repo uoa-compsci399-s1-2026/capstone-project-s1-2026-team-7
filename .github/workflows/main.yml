@@ -88,11 +88,27 @@ jobs:
       - name: Run Next.js build
         run: npm run build
 
+      - name: Upload Next.js build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: next-build
+          path: |
+            .next
+            !.next/cache
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 1
+
   test:
     name: Test
     runs-on: ubuntu-latest
     needs: neon-build
+    timeout-minutes: 15
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.head.repo.fork == false)
+
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
+      options: --user 1001
 
     env:
       PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
@@ -130,12 +146,14 @@ jobs:
       - name: Run Payload migrations
         run: npm run payload -- migrate
 
-      - name: Install Playwright browsers
-        run: npx playwright install chromium
+      - name: Download Next.js build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: next-build
+          path: .next
 
-      - name: Build and start app
+      - name: Start app
         run: |
-          npm run build
           npm run start &
           npx wait-on http://localhost:3000
 

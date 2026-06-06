@@ -1,16 +1,39 @@
-import React from 'react'
-import { StudyDTO } from '@/features/studies'
-import Link from 'next/link'
 import Image from 'next/image'
+import Link from 'next/link'
+import { StudyDTO } from '@/features/studies'
+
 export type StudyCardProps = {
   study: StudyDTO
 }
 
-function extractText(node: any): string {
+type RichTextNode = {
+  text?: unknown
+  children?: unknown
+}
+
+function isRichTextNode(value: unknown): value is RichTextNode {
+  return typeof value === 'object' && value !== null
+}
+
+function extractText(node: unknown): string {
   if (!node) return ''
-  if (typeof node === 'string') return node
-  if (node.text) return node.text
-  if (node.children) return node.children.map(extractText).join('')
+
+  if (typeof node === 'string') {
+    return node
+  }
+
+  if (!isRichTextNode(node)) {
+    return ''
+  }
+
+  if (typeof node.text === 'string') {
+    return node.text
+  }
+
+  if (Array.isArray(node.children)) {
+    return node.children.map(extractText).join('')
+  }
+
   return ''
 }
 
@@ -31,27 +54,24 @@ export default function StudyCard({ study }: StudyCardProps) {
           />
         </div>
 
-        {/* Right column */}
         <div className="flex flex-1 flex-col">
-          {/* Top row: status badge + study code */}
           <div className="flex items-center justify-between">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-700">
               <span className="h-1.5 w-1.5 rounded-full bg-green-600" />
               Open
             </span>
+
             {study.studyCode && <span className="text-xs text-gray-500">{study.studyCode}</span>}
           </div>
 
-          {/* Title + subtitle */}
           <h3 className="mt-2 text-lg font-bold text-gray-900 md:text-xl">{study.title}</h3>
+
           {study.subtitle && <p className="text-sm italic text-gray-700">{study.subtitle}</p>}
 
-          {/* Description preview */}
           <p className="mt-2 line-clamp-2 text-sm text-gray-600">
             {extractText(study.description?.root)}
           </p>
 
-          {/* Footer: duration + eligibility + CTA */}
           <div className="mt-4 flex flex-col gap-3 border-t border-gray-100 pt-3 md:flex-row md:items-end md:justify-between">
             <div className="flex flex-col gap-3 sm:flex-row sm:gap-8">
               <div>
@@ -60,6 +80,7 @@ export default function StudyCard({ study }: StudyCardProps) {
                 </div>
                 <div className="text-sm text-gray-900">{study.duration}</div>
               </div>
+
               <div>
                 <div className="text-[10px] font-semibold uppercase tracking-wide text-gray-500">
                   Eligibility
