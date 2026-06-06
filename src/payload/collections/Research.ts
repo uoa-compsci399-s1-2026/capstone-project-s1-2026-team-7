@@ -18,7 +18,6 @@ export const Research: CollectionConfig = {
       type: 'text',
       admin: { description: 'Optional. Used with title and date as a fallback CSV import match.' },
     },
-    { name: 'image', label: 'image', type: 'upload', relationTo: 'media' },
     { name: 'date', label: 'Date Uploaded', type: 'text' },
     {
       name: 'staff',
