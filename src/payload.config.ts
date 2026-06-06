@@ -14,7 +14,6 @@ import { Studies } from './payload/collections/Studies'
 import { Staff } from './payload/collections/Staff'
 import { Research } from './payload/collections/Research'
 import { ResearchCategories } from './payload/collections/ResearchCategories'
-import { ResearchCsvTools } from './payload/collections/ResearchCsvTools'
 
 import { HomePage } from './payload/globals/Homepage'
 import { OurTeamPage } from './payload/globals/OurTeamPage'
@@ -55,6 +54,22 @@ export default buildConfig({
         Logo: '/payload/components/admin/HNULogo#HNULogo',
         Icon: '/payload/components/admin/HNUIcon#HNUIcon',
       },
+
+      afterDashboard: [
+        '/payload/components/admin/ResearchCsvDashboardLink#ResearchCsvDashboardLink',
+      ],
+
+      afterNavLinks: ['/payload/components/admin/ResearchCsvNavLink#ResearchCsvNavLink'],
+
+      views: {
+        researchCsv: {
+          Component: '/payload/components/admin/ResearchCsvView#ResearchCsvView',
+          path: '/research-csv',
+          meta: {
+            title: 'Research CSV Import / Export',
+          },
+        },
+      },
     },
   },
 
@@ -75,17 +90,7 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
-  collections: [
-    Users,
-    Media,
-    Documents,
-    Staff,
-    Studies,
-    Research,
-    ResearchCategories,
-    ResearchCsvTools,
-    EnquiryTags,
-  ],
+  collections: [Users, Media, Documents, Staff, Studies, Research, ResearchCategories, EnquiryTags],
 
   globals: [
     HomePage,
