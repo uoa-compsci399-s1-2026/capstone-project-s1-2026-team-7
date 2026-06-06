@@ -31,7 +31,7 @@ export default function CollaborationsRenderer({ blocks }: Props) {
             )
 
           case 'partnerLogos':
-            return <PartnerLogos key={index} logos={block.logos?.map((item: any) => item.logo)} />
+            return <PartnerLogos key={index} logos={block.logos?.map((item) => item.logo)} />
 
           case 'collaborationAreas':
             return <CollaborationAreas key={index} items={block.items} />
