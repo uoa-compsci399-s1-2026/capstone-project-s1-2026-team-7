@@ -12,54 +12,37 @@ export type PartnerLogosProps = {
 }
 
 export default function PartnerLogos({ logos }: PartnerLogosProps) {
-  // Split logos evenly into two rows
-  const midpoint = Math.ceil(logos.length / 2)
-  const row1 = logos.slice(0, midpoint)
-  const row2 = logos.slice(midpoint)
+  const scrollingLogos = [...logos, ...logos]
 
-  // Duplicate logos for seamless marquee
-  const doubledRow1 = [...row1, ...row1]
-  const doubledRow2 = [...row2, ...row2]
-
-  const [emblaRef1] = useEmblaCarousel({ loop: true, align: 'start', dragFree: true }, [
+  const [emblaRef] = useEmblaCarousel({ loop: true, align: 'start', dragFree: true }, [
     AutoScroll({ speed: 1, stopOnInteraction: false, stopOnMouseEnter: false }),
   ])
 
-  const [emblaRef2] = useEmblaCarousel({ loop: true, align: 'start', dragFree: true }, [
-    AutoScroll({ speed: -1, stopOnInteraction: false, stopOnMouseEnter: false }),
-  ])
+  if (logos.length === 0) return null
 
   return (
     <section className="w-full bg-white py-16">
-      <div className="max-w-6xl mx-auto px-6">
-        <h2 className="text-2xl font-semibold text-[#003366] text-center">Our Partners</h2>
+      <div className="mx-auto w-[84%] max-w-300 text-center">
+        <h2 className="text-2xl font-semibold text-[#003366] text-center">
+          Current Collaborating Partners
+        </h2>
 
-        {/* Row 1 */}
-        <div className="mt-10 overflow-hidden" ref={emblaRef1}>
-          <div className="flex items-center gap-12">
-            {doubledRow1.map((logo, index) => (
-              <div key={index} className="relative h-16 w-40 flex-shrink-0">
+        <div
+          className="mt-10 overflow-hidden mask-[linear-gradient(to_right,transparent,black_12%,black_88%,transparent)] sm:mt-12"
+          ref={emblaRef}
+        >
+          <div className="flex items-center">
+            {scrollingLogos.map((logo, index) => (
+              <div
+                key={`${logo.url}-${index}`}
+                className="flex h-20 min-w-0 shrink-0 basis-1/2 items-center justify-center px-4 sm:h-24 sm:basis-1/3 md:h-28 md:basis-1/4 lg:h-32 lg:basis-1/5 xl:h-36"
+              >
                 <Image
                   src={logo.url}
                   alt={logo.alt || 'Partner logo'}
-                  fill
-                  className="object-contain"
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Row 2 — opposite direction */}
-        <div className="mt-10 overflow-hidden" ref={emblaRef2}>
-          <div className="flex items-center gap-12">
-            {doubledRow2.map((logo, index) => (
-              <div key={index} className="relative h-16 w-40 flex-shrink-0">
-                <Image
-                  src={logo.url}
-                  alt={logo.alt || 'Partner logo'}
-                  fill
-                  className="object-contain"
+                  width={300}
+                  height={150}
+                  className="h-auto max-h-14 w-auto max-w-full object-contain sm:max-h-16 md:max-h-18 lg:max-h-20 xl:max-h-24"
                 />
               </div>
             ))}

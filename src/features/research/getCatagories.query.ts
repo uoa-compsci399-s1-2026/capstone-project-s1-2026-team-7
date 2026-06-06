@@ -17,3 +17,18 @@ export async function getCatagoryByTitle(slug: string) {
 
   return researchCategorySchema.parse(data.docs[0])
 }
+
+export async function getAllCategories() {
+  const data = await payload.find({
+    collection: 'research-categories',
+    sort: 'title',
+    limit: 0,
+    depth: 0,
+  })
+
+  return data.docs.map((category) => ({
+    id: category.id,
+    title: category.title,
+    slug: category.slug,
+  }))
+}
