@@ -3,6 +3,7 @@ import type { StaffDTO } from '@/features/our-team/staff.schema'
 const dummydata: StaffDTO[] = [
   {
     id: 1,
+    formaltitle: 'Dr',
     firstname: 'Jennifer',
     lastname: 'Miles-Chan',
     jobTitle: 'Professor',
