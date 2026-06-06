@@ -225,6 +225,8 @@ export interface Document {
  */
 export interface Staff {
   id: number
+  fullName?: string | null
+  formaltitle?: ('dr' | 'professor' | 'associate-professor' | 'mr' | 'mrs' | 'ms') | null
   firstname: string
   lastname: string
   orcid?: string | null
@@ -232,7 +234,6 @@ export interface Staff {
   intro?: string | null
   manager: boolean
   uoaProfileLink?: string | null
-  email?: string | null
   photo?: (number | null) | Media
   sortOrder?: number | null
   updatedAt: string
@@ -367,7 +368,6 @@ export interface Research {
    * Optional. Used with title and date as a fallback CSV import match.
    */
   link?: string | null
-  image?: (number | null) | Media
   date?: string | null
   /**
    * Select related staff members
@@ -596,6 +596,8 @@ export interface DocumentsSelect<T extends boolean = true> {
  * via the `definition` "staff_select".
  */
 export interface StaffSelect<T extends boolean = true> {
+  fullName?: T
+  formaltitle?: T
   firstname?: T
   lastname?: T
   orcid?: T
@@ -603,7 +605,6 @@ export interface StaffSelect<T extends boolean = true> {
   intro?: T
   manager?: T
   uoaProfileLink?: T
-  email?: T
   photo?: T
   sortOrder?: T
   updatedAt?: T
@@ -666,7 +667,6 @@ export interface ResearchSelect<T extends boolean = true> {
   title?: T
   doi?: T
   link?: T
-  image?: T
   date?: T
   staff?: T
   categories?: T
