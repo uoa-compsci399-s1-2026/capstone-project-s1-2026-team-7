@@ -2,29 +2,19 @@
 
 import CollabHeroProps from '@/app/(frontend)/[lang]/collaborations/_components/CollabHeroProps'
 // CollabHeroProps may export a component with differing TS props shape; cast to any to avoid JSX prop type errors here
-const CollabHero = CollabHeroProps as unknown as any
+const CollabHero = CollabHeroProps
 import PartnerLogos from '@/app/(frontend)/[lang]/collaborations/_components/PartnerLogos'
 import CollaborationAreas from '@/app/(frontend)/[lang]/collaborations/_components/CollaborationAreas'
 import CollaborativeApproach from '@/app/(frontend)/[lang]/collaborations/_components/CollaborativeApproach'
 import ResearchEnquiries from '@/app/(frontend)/[lang]/collaborations/_components/ResearchEnquiries'
-import { Lang } from '@/types/lang'
 import { CollaborationsPageBlockDTO } from '@/features/collaboration/collaboration.schema'
-import { GraduationCap, BookOpen, Handshake, UsersRound } from 'lucide-react'
 import StatsSectionWrapper from './StatsSectionWrapper'
 
 type Props = {
   blocks: CollaborationsPageBlockDTO[]
-  lang: Lang
 }
 
-const iconMap: Record<string, any> = {
-  GraduationCap: GraduationCap,
-  BookOpen: BookOpen,
-  Handshake: Handshake,
-  UsersRound: UsersRound,
-}
-
-export default function CollaborationsRenderer({ blocks, lang }: Props) {
+export default function CollaborationsRenderer({ blocks }: Props) {
   return (
     <>
       {blocks?.map((block, index) => {
@@ -41,7 +31,7 @@ export default function CollaborationsRenderer({ blocks, lang }: Props) {
             )
 
           case 'partnerLogos':
-            return <PartnerLogos key={index} logos={block.logos?.map((item: any) => item.logo)} />
+            return <PartnerLogos key={index} logos={block.logos?.map((item) => item.logo)} />
 
           case 'collaborationAreas':
             return <CollaborationAreas key={index} items={block.items} />

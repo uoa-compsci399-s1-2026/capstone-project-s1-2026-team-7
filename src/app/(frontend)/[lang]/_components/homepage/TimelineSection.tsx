@@ -18,6 +18,11 @@ const TITLE_TEXT_SIZE = 'text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6x
 const BODY_TEXT_SIZE = 'text-sm sm:text-base md:text-lg lg:text-xl xl:text-xl'
 const EYEBROW_TEXT_SIZE = 'text-sm sm:text-base md:text-lg lg:text-xl'
 
+function setViewportMask(element: HTMLElement, value: string) {
+  element.style.setProperty('-webkit-mask-image', value)
+  element.style.setProperty('mask-image', value)
+}
+
 export default function TimelineSection({ data }: TimelineSectionProps) {
   const { eyebrow, title, description, items } = data
 
@@ -82,15 +87,12 @@ export default function TimelineSection({ data }: TimelineSectionProps) {
     }
 
     if (hasScrolledRef.current) {
-      ;(viewport.style as any).WebkitMaskImage =
-        'linear-gradient(to right, transparent 0, black 3rem, black 100%)'
-      viewport.style.maskImage = 'linear-gradient(to right, transparent 0, black 3rem, black 100%)'
+      setViewportMask(viewport, 'linear-gradient(to right, transparent 0, black 3rem, black 100%)')
     }
 
     if (progress <= 0.01) {
       hasScrolledRef.current = false
-      ;(viewport.style as any).WebkitMaskImage = 'none'
-      viewport.style.maskImage = 'none'
+      setViewportMask(viewport, 'none')
     }
   }, [extra, items.length])
 

@@ -9,7 +9,7 @@ export default async function Collaborations({ params }: PageProps) {
   console.log('collaborationsPage', collaborationsPage)
   return (
     <div>
-      <CollaborationsRenderer blocks={collaborationsPage.layout} lang={lang} />
+      <CollaborationsRenderer blocks={collaborationsPage.layout} />
     </div>
   )
 }

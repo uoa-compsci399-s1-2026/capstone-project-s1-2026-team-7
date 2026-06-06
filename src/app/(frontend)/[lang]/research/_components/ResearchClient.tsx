@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type SetStateAction } from 'react'
 import { ResearchDTO } from '@/features'
 import CategorySidebar from './CategorySidebar'
 import Pagination from './Pagination'
@@ -148,6 +148,11 @@ export function ResearchClient({
     ]),
   )
 
+  function handleSearchQueryChange(value: SetStateAction<string>) {
+    setSearchQuery(value)
+    setPage(1)
+  }
+
   function setSortOption(value: SortOption) {
     setSortOptionState(value)
     setPage(1)
@@ -184,10 +189,6 @@ export function ResearchClient({
     setSortOptionState('newest')
     setPage(1)
   }
-
-  useEffect(() => {
-    setPage(1)
-  }, [debouncedSearchQuery])
 
   useEffect(() => {
     const cached = cache.current.get(queryKey)
@@ -262,7 +263,7 @@ export function ResearchClient({
         sortOption={sortOption}
         setSortOption={setSortOption}
         searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
+        setSearchQuery={handleSearchQueryChange}
         hasActiveFilters={hasActiveFilters}
         onClearFilters={clearFilters}
       />
