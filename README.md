@@ -158,6 +158,7 @@ Special thanks to:
 
 - James Mullane — Full Stack Developer
 - Carl Misquitta — Full Stack Developer
+- Rahul Rajasingh — Full Stack Developer
 
 ---
 
