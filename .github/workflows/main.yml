@@ -88,6 +88,15 @@ jobs:
       - name: Run Next.js build
         run: npm run build
 
+      - name: Upload Next.js build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: next-build
+          path: |
+            .next
+            !.next/cache
+          retention-days: 1
+
   test:
     name: Test
     runs-on: ubuntu-latest
@@ -135,9 +144,14 @@ jobs:
       - name: Run Payload migrations
         run: npm run payload -- migrate
 
-      - name: Build and start app
+      - name: Download Next.js build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: next-build
+          path: .next
+
+      - name: Start app
         run: |
-          npm run build
           npm run start &
           npx wait-on http://localhost:3000
 
