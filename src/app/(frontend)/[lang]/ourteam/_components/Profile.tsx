@@ -79,7 +79,7 @@ export function AvatarBlock({
 }
 
 export default function ProfileCard({ profile, variantIndex = 0, action }: ProfileProps) {
-  const { firstname, lastname, jobTitle, intro, photo } = profile
+  const { formaltitle, firstname, lastname, jobTitle, intro, photo } = profile
 
   return (
     <button
@@ -94,6 +94,7 @@ export default function ProfileCard({ profile, variantIndex = 0, action }: Profi
           {jobTitle}
         </p>
         <h3 className="mt-1 text-lg font-bold text-[#0C0C48]">
+          {formaltitle + ' '}
           {firstname} {lastname}
         </h3>
         {intro && <p className="mt-2 line-clamp-3 text-sm text-gray-600">{intro}</p>}
