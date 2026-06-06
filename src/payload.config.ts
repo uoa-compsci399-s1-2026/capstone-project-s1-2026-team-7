@@ -55,14 +55,19 @@ export default buildConfig({
         Icon: '/payload/components/admin/HNUIcon#HNUIcon',
       },
 
-      beforeDashboard: [
+      afterDashboard: [
         '/payload/components/admin/ResearchCsvDashboardLink#ResearchCsvDashboardLink',
       ],
 
+      afterNavLinks: ['/payload/components/admin/ResearchCsvNavLink#ResearchCsvNavLink'],
+
       views: {
         researchCsv: {
-          Component: '/payload/components/admin/ResearchCsvManager#ResearchCsvManager',
+          Component: '/payload/components/admin/ResearchCsvView#ResearchCsvView',
           path: '/research-csv',
+          meta: {
+            title: 'Research CSV Import / Export',
+          },
         },
       },
     },

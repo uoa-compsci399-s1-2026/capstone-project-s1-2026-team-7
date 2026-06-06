@@ -25,8 +25,9 @@ import { ItalicFeatureClient as ItalicFeatureClient_e70f5e05f09f93e00b997edb1ef0
 import { HNUIcon as HNUIcon_8626532e401102f7c77f9596f9cb4e05 } from '../../../payload/components/admin/HNUIcon'
 import { HNULogo as HNULogo_8a91984c01b16801db0c11c1eff8e804 } from '../../../payload/components/admin/HNULogo'
 import { ResearchCsvDashboardLink as ResearchCsvDashboardLink_83d5cd03d31730bba330c67814d054c3 } from '../../../payload/components/admin/ResearchCsvDashboardLink'
+import { ResearchCsvNavLink as ResearchCsvNavLink_9e74c48b7a21b897797a2f817a59bbfc } from '../../../payload/components/admin/ResearchCsvNavLink'
 import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
-import { ResearchCsvManager as ResearchCsvManager_b96f87064ce78fe75e535420f2a63a85 } from '../../../payload/components/admin/ResearchCsvManager'
+import { ResearchCsvView as ResearchCsvView_3516bbbc8782e8c577352125841dcb4f } from '../../../payload/components/admin/ResearchCsvView'
 import { CollectionCards as CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1 } from '@payloadcms/next/rsc'
 
 /** @type import('payload').ImportMap */
@@ -83,9 +84,11 @@ export const importMap = {
   '/payload/components/admin/HNULogo#HNULogo': HNULogo_8a91984c01b16801db0c11c1eff8e804,
   '/payload/components/admin/ResearchCsvDashboardLink#ResearchCsvDashboardLink':
     ResearchCsvDashboardLink_83d5cd03d31730bba330c67814d054c3,
+  '/payload/components/admin/ResearchCsvNavLink#ResearchCsvNavLink':
+    ResearchCsvNavLink_9e74c48b7a21b897797a2f817a59bbfc,
   '@payloadcms/storage-s3/client#S3ClientUploadHandler':
     S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24,
-  '/payload/components/admin/ResearchCsvManager#ResearchCsvManager':
-    ResearchCsvManager_b96f87064ce78fe75e535420f2a63a85,
+  '/payload/components/admin/ResearchCsvView#ResearchCsvView':
+    ResearchCsvView_3516bbbc8782e8c577352125841dcb4f,
   '@payloadcms/next/rsc#CollectionCards': CollectionCards_f9c02e79a4aed9a3924487c0cd4cafb1,
 }
