@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, PropsWithChildren } from 'react'
+import React, { useEffect, useRef, useState, PropsWithChildren } from 'react'
 import { LanguageDropdown } from './LanguageDropdown'
 import { useRouter } from 'next/navigation'
 import getLocalizedHref from '@/lib/localizedHref'
@@ -14,24 +14,66 @@ type navbarProps = {
   data: NavigationBarDTO
 }
 
+const MOBILE_MENU_ANIMATION_MS = 300
+
 const navUnderlineClass =
   "relative inline-block after:absolute after:left-0 after:-bottom-1 after:h-px after:w-full after:origin-left after:scale-x-0 after:bg-[#0C0C48] after:transition-transform after:duration-200 after:ease-out after:content-[''] hover:after:scale-x-100"
 
 export default function Navbar(props: navbarProps) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [mobileMenuMounted, setMobileMenuMounted] = useState(false)
+  const [mobileMenuVisible, setMobileMenuVisible] = useState(false)
+
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
   const router = useRouter()
   const { lang } = useLanguage()
 
+  useEffect(() => {
+    return () => {
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current)
+      }
+    }
+  }, [])
+
+  const openMobileMenu = () => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current)
+    }
+
+    setMobileMenuMounted(true)
+
+    requestAnimationFrame(() => {
+      setMobileMenuVisible(true)
+    })
+  }
+
+  const closeMobileMenu = (afterClose?: () => void) => {
+    setMobileMenuVisible(false)
+
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current)
+    }
+
+    closeTimerRef.current = setTimeout(() => {
+      setMobileMenuMounted(false)
+      afterClose?.()
+    }, MOBILE_MENU_ANIMATION_MS)
+  }
+
   return (
     <>
-      {/* Mobile full-screen overlay */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-[#F7F7F7] md:hidden">
-          {/* Top row — mirrors the header */}
+      {mobileMenuMounted && (
+        <div
+          className={`fixed inset-0 z-50 flex flex-col bg-[#F7F7F7] transition-transform duration-300 ease-out md:hidden ${
+            mobileMenuVisible ? 'translate-y-0' : '-translate-y-full'
+          }`}
+        >
           <div className="flex h-17 shrink-0 items-center justify-between px-4">
             <NavigationLogos data={props.data} />
+
             <button
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() => closeMobileMenu()}
               aria-label="Close menu"
               className="flex h-8 w-8 items-center justify-center rounded-full border border-[#6B6F76] text-[#000000] transition hover:bg-[#ECECEC]"
             >
@@ -39,26 +81,30 @@ export default function Navbar(props: navbarProps) {
             </button>
           </div>
 
-          {/* Nav links */}
           <nav className="flex flex-1 flex-col px-4 pt-2">
-            {props.data.navbarLinks.map((item, index) => (
-              <Link
-                key={index}
-                href={getLocalizedHref(item.navURL, lang)}
-                onClick={() => setMobileMenuOpen(false)}
-                className="border-b border-[#E8E8E8] py-4 text-[22px] font-medium text-[#0C0C48] transition hover:opacity-85"
-              >
-                <span className={navUnderlineClass}>{item.navTitle}</span>
-              </Link>
-            ))}
+            {props.data.navbarLinks.map((item, index) => {
+              const href = getLocalizedHref(item.navURL, lang)
+
+              return (
+                <Link
+                  key={index}
+                  href={href}
+                  onClick={(event) => {
+                    event.preventDefault()
+                    closeMobileMenu(() => router.push(href))
+                  }}
+                  className="border-b border-[#E8E8E8] py-4 text-[22px] font-medium text-[#0C0C48] transition hover:opacity-85"
+                >
+                  <span className={navUnderlineClass}>{item.navTitle}</span>
+                </Link>
+              )
+            })}
           </nav>
 
-          {/* Bottom section — contact */}
           <div className="flex shrink-0 flex-col gap-3 px-4 pb-8 pt-4">
             <button
               onClick={() => {
-                setMobileMenuOpen(false)
-                router.push(`/${lang}/contact`)
+                closeMobileMenu(() => router.push(`/${lang}/contact`))
               }}
               className="h-11 w-full rounded-full bg-[#2F3FE6] text-[13px] font-medium text-white transition hover:opacity-85"
             >
@@ -68,7 +114,7 @@ export default function Navbar(props: navbarProps) {
         </div>
       )}
 
-      <header className="w-full border-b border-border bg-[#F7F7F7]">
+      <header className="sticky top-0 z-40 w-full border-b border-border bg-[#F7F7F7]">
         <div className="mx-auto flex h-17 max-w-360 items-center justify-between px-8 max-md:px-4">
           <NavigationLogos data={props.data} />
 
@@ -89,12 +135,14 @@ export default function Navbar(props: navbarProps) {
 
             <ContactButton className="hidden h-8 w-18 items-center justify-center rounded-full bg-[#2F3FE6] text-[12px] font-medium text-white transition hover:opacity-85 md:inline-flex" />
 
+            <LanguageDropdown className="inline-flex md:hidden" />
+
             <button
-              onClick={() => setMobileMenuOpen(true)}
+              onClick={openMobileMenu}
               aria-label="Open menu"
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-[#6B6F76] transition hover:bg-[#ECECEC] md:hidden"
+              className="flex h-9 w-9 items-center justify-center rounded-full transition hover:bg-[#ECECEC] md:hidden"
             >
-              <Image src="/BurgerIcon.svg" alt="" width={16} height={16} aria-hidden />
+              <Image src="/BurgerIcon.svg" alt="" width={21} height={21} aria-hidden />
             </button>
           </div>
         </div>
@@ -127,7 +175,7 @@ export const NavigationLogos = ({ data }: NavigationLogosProps) => {
       aria-label="Go to homepage"
       className="flex shrink-0 items-center gap-4 transition hover:opacity-85 max-md:gap-3"
     >
-      <span className="relative block h-8 w-16 shrink-0">
+      <span className="relative block h-8 w-16 shrink-0 max-[444px]:hidden">
         <Image
           src={data.uoaLogo.url}
           alt={data.uoaLogo.alt}
@@ -137,7 +185,7 @@ export const NavigationLogos = ({ data }: NavigationLogosProps) => {
         />
       </span>
 
-      <span className="h-9 w-px bg-[#BFC4CC]" aria-hidden />
+      <span className="h-9 w-px bg-[#BFC4CC] max-[444px]:hidden" aria-hidden />
 
       <span className="relative block h-8 w-16 shrink-0">
         <Image
