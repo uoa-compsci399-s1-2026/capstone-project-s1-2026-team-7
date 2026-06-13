@@ -4,8 +4,8 @@ export const Studies: CollectionConfig = {
   slug: 'studies',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'studyCode', 'slug', 'sortOrder'],
-    listSearchableFields: ['title', 'studyCode', 'slug'],
+    defaultColumns: ['title', 'slug', 'sortOrder'],
+    listSearchableFields: ['title', 'slug'],
   },
 
   fields: [
@@ -34,16 +34,6 @@ export const Studies: CollectionConfig = {
             '/payload/components/admin/TranslateFromEnglishButton#TranslateFromEnglishButton',
           ],
         },
-      },
-    },
-
-    {
-      name: 'studyCode',
-      type: 'text',
-      required: true,
-      unique: true,
-      admin: {
-        description: 'Public study identifier, e.g. HNU-2025-014. Must be unique.',
       },
     },
 

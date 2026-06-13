@@ -3,8 +3,9 @@ import './global.css'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  description: 'A blank template using Payload in a Next.js app.',
+  description: '...',
   title: 'Human Nutrition Unit',
+  icons: { icon: '/HNU%20logo%20HD.png' },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
