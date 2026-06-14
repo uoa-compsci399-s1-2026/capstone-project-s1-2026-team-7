@@ -44,10 +44,10 @@ export const HeroBlock: Block = {
       required: true,
     },
     {
-      name: 'mobileHeroImage',
+      name: 'featuredImage',
       type: 'upload',
       relationTo: 'media',
-      label: 'Mobile Hero Image',
+      label: 'Featured Image',
       required: true,
     },
     {

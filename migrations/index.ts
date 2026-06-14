@@ -27,6 +27,7 @@ import * as migration_20260604_000904_add_documents_and_translation_approval fro
 import * as migration_20260605_030000_research_keywords_and_search_text from './20260605_030000_research_keywords_and_search_text'
 import * as migration_20260606_091408 from './20260606_091408'
 import * as migration_20260613_155220 from './20260613_155220'
+import * as migration_20260614_070306 from './20260614_070306'
 
 export const migrations = [
   {
@@ -173,5 +174,10 @@ export const migrations = [
     up: migration_20260613_155220.up,
     down: migration_20260613_155220.down,
     name: '20260613_155220',
+  },
+  {
+    up: migration_20260614_070306.up,
+    down: migration_20260614_070306.down,
+    name: '20260614_070306',
   },
 ]

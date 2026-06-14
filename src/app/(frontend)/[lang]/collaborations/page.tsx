@@ -6,7 +6,6 @@ import CollaborationsRenderer from './_components/CollaborationsRenderer'
 export default async function Collaborations({ params }: PageProps) {
   const { lang } = await params
   const collaborationsPage: CollaborationsPageDTO = await getCollaborationsPage(lang)
-  console.log('collaborationsPage', collaborationsPage)
   return (
     <div>
       <CollaborationsRenderer blocks={collaborationsPage.layout} />

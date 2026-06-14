@@ -759,7 +759,7 @@ export interface HeroBlock {
   title: string
   description: string
   portraitHeroImage: number | Media
-  mobileHeroImage: number | Media
+  featuredImage: number | Media
   buttons?:
     | {
         label: string
@@ -1276,7 +1276,7 @@ export interface HeroBlockSelect<T extends boolean = true> {
   title?: T
   description?: T
   portraitHeroImage?: T
-  mobileHeroImage?: T
+  featuredImage?: T
   buttons?:
     | T
     | {

@@ -1,7 +1,7 @@
 import type { Endpoint, PayloadRequest } from 'payload'
 import { uploadResearchCsvContent } from '@/features/research/uploadResearchCsv.query'
 import { getResearchExportCsv } from '../../../scripts/exportResearch/run'
-import { storeResearchCsvInS3 } from '../lib/researchCsvStorage'
+import { storeResearchCsvInS3 } from '@/lib/researchCsvStorage'
 
 function unauthorizedResponse(): Response {
   return Response.json({ error: 'Unauthorized' }, { status: 401 })

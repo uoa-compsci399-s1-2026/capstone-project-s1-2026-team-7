@@ -39,6 +39,7 @@ const heroBlockSchema = blockBaseSchema
 
     portraitHeroImage: mediaWithDefault,
     mobileHeroImage: mediaWithDefault,
+    featuredImage: mediaWithDefault,
 
     buttons: z
       .array(buttonSchema)
@@ -53,7 +54,7 @@ const heroBlockSchema = blockBaseSchema
     description: block.description,
 
     heroHorizontal: block.portraitHeroImage,
-    heroMobile: block.mobileHeroImage,
+    featuredImage: block.featuredImage,
 
     buttons: block.buttons,
   }))
