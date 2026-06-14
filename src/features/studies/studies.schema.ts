@@ -212,7 +212,6 @@ export const studySchema = z.object({
 
   title: z.string().default(''),
   subtitle: z.string().default(''),
-  studyCode: z.string().default(''),
 
   duration: z.string().default(''),
   compensation: z.string().default(''),

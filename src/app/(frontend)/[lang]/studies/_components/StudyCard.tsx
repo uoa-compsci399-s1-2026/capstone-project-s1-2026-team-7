@@ -60,8 +60,6 @@ export default function StudyCard({ study }: StudyCardProps) {
               <span className="h-1.5 w-1.5 rounded-full bg-green-600" />
               Open
             </span>
-
-            {study.studyCode && <span className="text-xs text-gray-500">{study.studyCode}</span>}
           </div>
 
           <h3 className="mt-2 text-lg font-bold text-gray-900 md:text-xl">{study.title}</h3>
