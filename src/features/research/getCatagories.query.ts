@@ -1,6 +1,6 @@
 import { getPayloadClient } from '@/lib/payload'
 import { ResearchCategory } from '@/payload-types'
-import { researchCategorySchema } from '@/features'
+import { researchCategorySchema } from './research-catagory.schema'
 import { PaginatedDocs } from 'payload'
 const payload = await getPayloadClient()
 

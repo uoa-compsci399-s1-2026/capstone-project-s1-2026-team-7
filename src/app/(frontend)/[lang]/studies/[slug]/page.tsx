@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { Lang } from '@/types/lang'
 import { getStudyBySlug } from '@/features/studies/getStudyBySlug.query'
 import { getStudiesPage } from '@/features/studies/studiespage.query'
@@ -19,6 +20,41 @@ export type StudiesPageProps = {
   }>
 }
 
+export async function generateMetadata({ params }: StudiesPageProps): Promise<Metadata> {
+  const { lang, slug } = await params
+  const { study } = await getStudyBySlug(lang, slug)
+
+  const title = study.meta?.title || study.title || 'Study | Human Nutrition Unit'
+
+  const description =
+    study.meta?.description ||
+    study.subtitle ||
+    study.eligibility ||
+    'Study information from the Human Nutrition Unit.'
+
+  const metaImageUrl =
+    study.meta?.image && typeof study.meta.image === 'object' ? study.meta.image.url : undefined
+
+  const imageUrl = metaImageUrl || study.banner?.url
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: imageUrl ? [imageUrl] : [],
+    },
+    alternates: {
+      canonical: `/${lang}/studies/${slug}`,
+      languages: {
+        en: `/en/studies/${slug}`,
+        zh: `/zh/studies/${slug}`,
+      },
+    },
+  }
+}
+
 export default async function StudiesTemplatePage({ params }: StudiesPageProps) {
   const { lang, slug } = await params
 
@@ -27,9 +63,6 @@ export default async function StudiesTemplatePage({ params }: StudiesPageProps) 
     getStudiesPage(lang),
   ])
 
-  // getStudyBySlug now returns the study plus whether an approved, complete
-  // Chinese translation exists. When false (and lang is zh), content is in
-  // English and we show the red warning banner.
   const { study, hasTranslation } = studyResult
   const template = studiesPage.detailTemplate
 
@@ -38,7 +71,6 @@ export default async function StudiesTemplatePage({ params }: StudiesPageProps) 
 
   return (
     <main>
-      {/* Banner with absolute-positioned back link in the top-left */}
       <div className="relative">
         <Banner title={study.title} imageUrl={bannerImageUrl} imageAlt={bannerImageAlt} />
 
@@ -52,7 +84,6 @@ export default async function StudiesTemplatePage({ params }: StudiesPageProps) 
       </div>
 
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-        {/* Red compliance warning — only when no approved Chinese translation */}
         {!hasTranslation && (
           <div className="mt-6">
             <TranslationWarning />
@@ -77,7 +108,6 @@ export default async function StudiesTemplatePage({ params }: StudiesPageProps) 
         </div>
 
         <div className="mt-10 grid grid-cols-1 gap-10 pb-20 lg:grid-cols-3 lg:gap-8">
-          {/* Left: scrolling main content */}
           <div className="space-y-12 lg:col-span-2">
             <AboutSection
               eyebrow={template.aboutSection.eyebrow}
@@ -107,7 +137,6 @@ export default async function StudiesTemplatePage({ params }: StudiesPageProps) 
             />
           </div>
 
-          {/* Right: sticky sidebar */}
           <div className="lg:col-span-1">
             <StickySidebar
               applyEyebrow={template.applyCard.eyebrow}

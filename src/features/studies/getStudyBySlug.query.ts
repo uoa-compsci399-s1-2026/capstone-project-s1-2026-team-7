@@ -2,7 +2,7 @@ import { getPayloadClient } from '@/lib/payload'
 import { Study } from '@/payload-types'
 import { Lang } from '@/types/lang'
 import { PaginatedDocs } from 'payload'
-import { studySchema, StudyDTO } from '@/features'
+import { studySchema, StudyDTO } from './studies.schema'
 
 export type StudyWithTranslationState = {
   study: StudyDTO

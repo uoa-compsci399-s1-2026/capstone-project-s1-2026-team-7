@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { mediaSchema, DEFAULT_GENERAL_PIC } from '../common/media.schema'
-import { seoSchema } from '../common/seo.schema'
 import { studySchema } from '../studies'
+import { seoMetaSchema } from '../common'
 
 const stringWithDefault = z
   .string()
@@ -317,7 +317,7 @@ export const homepageSchema = z.object({
     .nullish()
     .transform((value) => value ?? []),
 
-  seo: seoSchema,
+  seo: seoMetaSchema,
 })
 
 export type HomepageDTO = z.infer<typeof homepageSchema>

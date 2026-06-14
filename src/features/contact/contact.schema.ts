@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { mediaSchema } from '@/features'
+import { mediaSchema } from '../common/media.schema'
 
 export const enquiryTagSchema = z.object({
   id: z.union([z.string(), z.number()]),

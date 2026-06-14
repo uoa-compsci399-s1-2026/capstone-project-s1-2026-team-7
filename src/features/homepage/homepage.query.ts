@@ -1,5 +1,5 @@
 import { getPayloadClient } from '@/lib/payload'
-import { homepageSchema, HomepageDTO } from '@/features'
+import { homepageSchema, HomepageDTO } from './home.schema'
 
 import { Lang } from '@/types/lang'
 

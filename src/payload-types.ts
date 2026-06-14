@@ -234,6 +234,14 @@ export interface Staff {
   uoaProfileLink?: string | null
   photo?: (number | null) | Media
   sortOrder?: number | null
+  meta?: {
+    title?: string | null
+    description?: string | null
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media
+  }
   updatedAt: string
   createdAt: string
 }
@@ -344,6 +352,14 @@ export interface Study {
    */
   chineseTranslationApproved?: boolean | null
   sortOrder?: number | null
+  meta?: {
+    title?: string | null
+    description?: string | null
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media
+  }
   updatedAt: string
   createdAt: string
 }
@@ -381,6 +397,14 @@ export interface Research {
    * Used for manual sorting (lower comes first)
    */
   order?: number | null
+  meta?: {
+    title?: string | null
+    description?: string | null
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media
+  }
   updatedAt: string
   createdAt: string
 }
@@ -589,6 +613,13 @@ export interface StaffSelect<T extends boolean = true> {
   uoaProfileLink?: T
   photo?: T
   sortOrder?: T
+  meta?:
+    | T
+    | {
+        title?: T
+        description?: T
+        image?: T
+      }
   updatedAt?: T
   createdAt?: T
 }
@@ -637,6 +668,13 @@ export interface StudiesSelect<T extends boolean = true> {
   participantInfoPdf?: T
   chineseTranslationApproved?: T
   sortOrder?: T
+  meta?:
+    | T
+    | {
+        title?: T
+        description?: T
+        image?: T
+      }
   updatedAt?: T
   createdAt?: T
 }
@@ -655,6 +693,13 @@ export interface ResearchSelect<T extends boolean = true> {
   csvDeleted?: T
   csvDeletedAt?: T
   order?: T
+  meta?:
+    | T
+    | {
+        title?: T
+        description?: T
+        image?: T
+      }
   updatedAt?: T
   createdAt?: T
 }
@@ -744,9 +789,13 @@ export interface HomePage {
     | CurrentStudiesBlock
     | VideoBlock
   )[]
-  seo?: {
-    metaTitle?: string | null
-    metaDescription?: string | null
+  meta?: {
+    title?: string | null
+    description?: string | null
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media
   }
   updatedAt?: string | null
   createdAt?: string | null
@@ -941,6 +990,14 @@ export interface OurTeamPage {
   boardTabLabel: string
   staffTabLabel: string
   staffMembers?: (number | Staff)[] | null
+  meta?: {
+    title?: string | null
+    description?: string | null
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media
+  }
   updatedAt?: string | null
   createdAt?: string | null
 }
@@ -971,6 +1028,14 @@ export interface DonationsPage {
           id?: string | null
         }[]
       | null
+  }
+  meta?: {
+    title?: string | null
+    description?: string | null
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media
   }
   updatedAt?: string | null
   createdAt?: string | null
@@ -1055,6 +1120,14 @@ export interface StudiesPage {
      */
     phone: string
   }
+  meta?: {
+    title?: string | null
+    description?: string | null
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media
+  }
   updatedAt?: string | null
   createdAt?: string | null
 }
@@ -1072,6 +1145,14 @@ export interface ResearchPage {
   seo?: {
     metaTitle?: string | null
     metaDescription?: string | null
+  }
+  meta?: {
+    title?: string | null
+    description?: string | null
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media
   }
   updatedAt?: string | null
   createdAt?: string | null
@@ -1120,6 +1201,14 @@ export interface ContactPage {
     recipientEmail: string
   }
   mapSrc: string
+  meta?: {
+    title?: string | null
+    description?: string | null
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media
+  }
   updatedAt?: string | null
   createdAt?: string | null
 }
@@ -1160,6 +1249,14 @@ export interface Footer {
       }[]
     | null
   footerMotif: number | Media
+  meta?: {
+    title?: string | null
+    description?: string | null
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media
+  }
   updatedAt?: string | null
   createdAt?: string | null
 }
@@ -1218,6 +1315,14 @@ export interface CollaborationsPage {
       }
     | StatsSectionBlock
   )[]
+  meta?: {
+    title?: string | null
+    description?: string | null
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media
+  }
   updatedAt?: string | null
   createdAt?: string | null
 }
@@ -1258,11 +1363,12 @@ export interface HomePageSelect<T extends boolean = true> {
         'current-studies'?: T | CurrentStudiesBlockSelect<T>
         video?: T | VideoBlockSelect<T>
       }
-  seo?:
+  meta?:
     | T
     | {
-        metaTitle?: T
-        metaDescription?: T
+        title?: T
+        description?: T
+        image?: T
       }
   updatedAt?: T
   createdAt?: T
@@ -1440,6 +1546,13 @@ export interface OurTeamPageSelect<T extends boolean = true> {
   boardTabLabel?: T
   staffTabLabel?: T
   staffMembers?: T
+  meta?:
+    | T
+    | {
+        title?: T
+        description?: T
+        image?: T
+      }
   updatedAt?: T
   createdAt?: T
   globalType?: T
@@ -1476,6 +1589,13 @@ export interface DonationsPageSelect<T extends boolean = true> {
               label?: T
               id?: T
             }
+      }
+  meta?:
+    | T
+    | {
+        title?: T
+        description?: T
+        image?: T
       }
   updatedAt?: T
   createdAt?: T
@@ -1567,6 +1687,13 @@ export interface StudiesPageSelect<T extends boolean = true> {
         address?: T
         phone?: T
       }
+  meta?:
+    | T
+    | {
+        title?: T
+        description?: T
+        image?: T
+      }
   updatedAt?: T
   createdAt?: T
   globalType?: T
@@ -1586,6 +1713,13 @@ export interface ResearchPageSelect<T extends boolean = true> {
     | {
         metaTitle?: T
         metaDescription?: T
+      }
+  meta?:
+    | T
+    | {
+        title?: T
+        description?: T
+        image?: T
       }
   updatedAt?: T
   createdAt?: T
@@ -1633,6 +1767,13 @@ export interface ContactPageSelect<T extends boolean = true> {
         recipientEmail?: T
       }
   mapSrc?: T
+  meta?:
+    | T
+    | {
+        title?: T
+        description?: T
+        image?: T
+      }
   updatedAt?: T
   createdAt?: T
   globalType?: T
@@ -1673,6 +1814,13 @@ export interface FooterSelect<T extends boolean = true> {
         id?: T
       }
   footerMotif?: T
+  meta?:
+    | T
+    | {
+        title?: T
+        description?: T
+        image?: T
+      }
   updatedAt?: T
   createdAt?: T
   globalType?: T
@@ -1743,6 +1891,13 @@ export interface CollaborationsPageSelect<T extends boolean = true> {
               blockName?: T
             }
         statsSection?: T | StatsSectionBlockSelect<T>
+      }
+  meta?:
+    | T
+    | {
+        title?: T
+        description?: T
+        image?: T
       }
   updatedAt?: T
   createdAt?: T

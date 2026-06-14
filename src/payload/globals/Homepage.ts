@@ -42,22 +42,5 @@ export const HomePage: GlobalConfig = {
         VideoBlock,
       ],
     },
-    {
-      name: 'seo',
-      type: 'group',
-      label: 'SEO',
-      fields: [
-        {
-          name: 'metaTitle',
-          type: 'text',
-          localized: true,
-        },
-        {
-          name: 'metaDescription',
-          type: 'textarea',
-          localized: true,
-        },
-      ],
-    },
   ],
 }

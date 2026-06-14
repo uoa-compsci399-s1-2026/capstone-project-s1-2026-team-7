@@ -1,5 +1,5 @@
 import { getPayloadClient } from '@/lib/payload'
-import { ourTeamPageDTOSchema, OurTeamPageDTO } from '@/features'
+import { ourTeamPageDTOSchema, OurTeamPageDTO } from './ourTeamPage.schema'
 import { Lang } from '@/types/lang'
 
 const payload = await getPayloadClient()

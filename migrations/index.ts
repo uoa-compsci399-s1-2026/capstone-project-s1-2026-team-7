@@ -28,6 +28,8 @@ import * as migration_20260605_030000_research_keywords_and_search_text from './
 import * as migration_20260606_091408 from './20260606_091408'
 import * as migration_20260613_155220 from './20260613_155220'
 import * as migration_20260614_070306 from './20260614_070306'
+import * as migration_20260614_165808_add_seo_homepage_fields from './20260614_165808_add_seo_homepage_fields'
+import * as migration_20260614_171530 from './20260614_171530'
 
 export const migrations = [
   {
@@ -179,5 +181,15 @@ export const migrations = [
     up: migration_20260614_070306.up,
     down: migration_20260614_070306.down,
     name: '20260614_070306',
+  },
+  {
+    up: migration_20260614_165808_add_seo_homepage_fields.up,
+    down: migration_20260614_165808_add_seo_homepage_fields.down,
+    name: '20260614_165808_add_seo_homepage_fields',
+  },
+  {
+    up: migration_20260614_171530.up,
+    down: migration_20260614_171530.down,
+    name: '20260614_171530',
   },
 ]

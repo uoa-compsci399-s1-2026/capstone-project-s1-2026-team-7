@@ -1,5 +1,6 @@
 import { z } from 'zod'
-import { mediaSchema, DEFAULT_GENERAL_PIC } from '@/features'
+import { mediaSchema, DEFAULT_GENERAL_PIC } from '../common/media.schema'
+import { seoMetaSchema } from '../common'
 
 // -------------------- Shared / reusable schemas --------------------
 
@@ -251,6 +252,8 @@ export const studySchema = z.object({
   // Not localized — a single yes/no per study.
   chineseTranslationApproved: z.boolean().default(false),
 
+  meta: seoMetaSchema,
+
   sortOrder: z.number().default(100000),
 })
 
@@ -278,6 +281,8 @@ export const studiesDTOSchema = z.object({
     address: '',
     phone: '',
   }),
+
+  meta: seoMetaSchema,
 
   detailTemplate: studyDetailTemplateSchema,
 })

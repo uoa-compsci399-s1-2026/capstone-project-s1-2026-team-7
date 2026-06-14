@@ -137,5 +137,32 @@ export default buildConfig({
         // ... Other S3 configuration
       },
     }),
+
+    seoPlugin({
+      collections: ['studies', 'research', 'staff'],
+      globals: [
+        'home-page',
+        'studies-page',
+        'research-page',
+        'donations-page',
+        'contact-page',
+        'footer',
+        'our-team-page',
+        'collaborations-page',
+      ],
+      uploadsCollection: 'media',
+
+      generateTitle: ({ doc }) => {
+        return doc?.title ? `${doc.title} | Human Nutrition Unit` : 'Human Nutrition Unit'
+      },
+
+      generateDescription: ({ doc }) => {
+        return doc?.subtitle || doc?.eligibility || 'Human Nutrition Unit'
+      },
+
+      generateImage: ({ doc }) => {
+        return doc?.banner
+      },
+    }),
   ],
 })

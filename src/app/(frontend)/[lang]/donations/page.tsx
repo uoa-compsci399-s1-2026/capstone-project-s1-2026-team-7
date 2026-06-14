@@ -1,5 +1,5 @@
 import React from 'react'
-import { getDonationsPage } from '@/features/contact/donationspage'
+import { getDonationsPage } from '@/features/donations/donationpage.query'
 import { DonationsPageDTO } from '@/features/donations/donationsPage.schema'
 import { getHomePage } from '@/features/homepage/homepage.query'
 import DonationsHero from './_components/DonationsHero'

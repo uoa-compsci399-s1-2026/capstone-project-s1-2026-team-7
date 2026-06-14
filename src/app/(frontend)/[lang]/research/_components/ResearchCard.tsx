@@ -1,4 +1,4 @@
-import { ResearchDTO } from '@/features'
+import { ResearchDTO } from '@/features/research'
 import { ArrowUpRight, CalendarDays, FileText, Tags } from 'lucide-react'
 
 type UnknownRelation =

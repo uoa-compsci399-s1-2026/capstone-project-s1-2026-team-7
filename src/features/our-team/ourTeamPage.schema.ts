@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { staffSchema } from './staff.schema'
+import { seoMetaSchema } from '../common'
 
 export const ourTeamPageDTOSchema = z
   .object({
@@ -8,6 +9,7 @@ export const ourTeamPageDTOSchema = z
     boardTabLabel: z.string().default(''),
     staffTabLabel: z.string().default(''),
     staffMembers: z.array(staffSchema),
+    seo: seoMetaSchema,
   })
   .transform((data) => ({
     title: data.title,
@@ -15,6 +17,7 @@ export const ourTeamPageDTOSchema = z
     boardTabLabel: data.boardTabLabel,
     staffTabLabel: data.staffTabLabel,
     staff: data.staffMembers.sort((a, b) => a.sortOrder - b.sortOrder),
+    seo: data.seo,
   }))
 
 export type OurTeamPageDTO = z.infer<typeof ourTeamPageDTOSchema>

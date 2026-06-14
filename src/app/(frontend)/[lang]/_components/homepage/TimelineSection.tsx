@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLenis } from 'lenis/react'
 import clsx from 'clsx'
-import { TimelineBlockDTO } from '@/features'
+import { TimelineBlockDTO } from '@/features/homepage/home.schema'
 import { useInView } from '@/app/(frontend)/[lang]/_components/useInView'
 
 type TimelineSectionProps = {

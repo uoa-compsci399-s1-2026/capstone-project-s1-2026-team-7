@@ -1,4 +1,4 @@
-import { ResearchDTO, researchDTOSchema } from '@/features'
+import { ResearchDTO, researchDTOSchema } from './researchapi.schema'
 import { getPayloadClient } from '@/lib/payload'
 import type { Where } from 'payload'
 
