@@ -1,6 +1,5 @@
 import { z } from 'zod'
 import { mediaSchema, DEFAULT_PROFILE_PIC } from '../common/media.schema'
-import { seoMetaSchema } from '../common'
 
 const emptyString = z
   .string()

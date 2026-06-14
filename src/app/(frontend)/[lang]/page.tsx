@@ -17,12 +17,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     data.seo?.image && typeof data.seo.image === 'object' ? data.seo.image.url : undefined
 
   return {
-    title,
+    title: {
+      absolute: title,
+    },
     description,
     openGraph: {
       title,
       description,
-      images: metaImage ? [metaImage] : [],
+      images: metaImage ? [metaImage] : undefined,
+    },
+    twitter: {
+      card: metaImage ? 'summary_large_image' : 'summary',
+      title,
+      description,
+      images: metaImage ? [metaImage] : undefined,
     },
     alternates: {
       canonical: `/${lang}`,

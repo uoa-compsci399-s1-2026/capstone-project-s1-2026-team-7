@@ -7,7 +7,7 @@ import { PageProps } from '@/types/pageprops'
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { lang } = await params
   const pageData: OurTeamPageDTO = await getOurTeamPage(lang)
-  const title = pageData.seo?.title || 'Our Team | Human Nutrition Unit'
+  const title = pageData.seo?.title || 'Our Team'
   const description =
     pageData.seo?.description ||
     'Meet the Human Nutrition Unit team and learn about the people behind our research.'
