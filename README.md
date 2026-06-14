@@ -160,7 +160,7 @@ Special thanks to:
 - Carl Misquitta — Full Stack Developer
 - Rahul Rajasingh — Full Stack Developer
 - Ayush Kumar — Frontend Developer and Designer
-
+- Lam Kam Wei — Full Stack Developer
 ---
 
 ## License
