@@ -4,6 +4,10 @@ type ContactInputProps = {
   placeholder: string
   type?: string
   required?: boolean
+  pattern?: string
+  inputMode?: 'text' | 'numeric' | 'tel' | 'email' | 'decimal' | 'search' | 'url' | 'none'
+  title?: string
+  maxLength?: number
 }
 
 export default function ContactInput({
@@ -12,6 +16,10 @@ export default function ContactInput({
   placeholder,
   type = 'text',
   required = false,
+  pattern,
+  inputMode,
+  title,
+  maxLength,
 }: ContactInputProps) {
   return (
     <div className="flex flex-col gap-2">
@@ -30,6 +38,10 @@ export default function ContactInput({
         type={type}
         placeholder={placeholder}
         required={required}
+        pattern={pattern}
+        inputMode={inputMode}
+        title={title}
+        maxLength={maxLength}
         className="h-13 w-full rounded-xl bg-white px-6 text-[18px] text-black outline-1 placeholder:text-[#8A8A8A] focus:ring-2 focus:ring-[#0C0C48]"
       />
     </div>

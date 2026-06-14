@@ -47,6 +47,8 @@ export default function ContactForm({ content, tags, action }: ContactFormProps)
         label={content.email}
         name="email"
         type="email"
+        pattern="[^\s@]+@[^\s@]+\.[^\s@]+"
+        title="Please enter a valid email address"
         placeholder={content.emailPlaceholder}
         required
       />
@@ -55,6 +57,10 @@ export default function ContactForm({ content, tags, action }: ContactFormProps)
         label={content.phone}
         name="phone"
         type="tel"
+        inputMode="numeric"
+        pattern="\d{7,15}"
+        maxLength={15}
+        title="Phone number must be 7–15 digits, numbers only"
         placeholder={content.phonePlaceholder}
       />
 
