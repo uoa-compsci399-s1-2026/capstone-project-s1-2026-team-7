@@ -30,6 +30,8 @@ import {
   researchCsvImportEndpoint,
 } from './payload/endpoints/researchCsv'
 
+import { seoPlugin } from '@payloadcms/plugin-seo'
+
 import { CollaborationsPage } from './payload/globals/CollaborationsPage'
 
 const filename = fileURLToPath(import.meta.url)
