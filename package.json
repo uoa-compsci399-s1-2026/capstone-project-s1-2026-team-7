@@ -14,7 +14,6 @@
     "lint": "cross-env NODE_OPTIONS=--no-deprecation eslint .",
     "lint:fix": "cross-env NODE_OPTIONS=--no-deprecation eslint . --fix",
     "payload": "cross-env NODE_OPTIONS=--no-deprecation payload",
-    "backfill:research": "tsx -r dotenv/config scripts/backfillResearchSearchText.ts",
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "npm run test:int && npm run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=--no-deprecation playwright test --config=playwright.config.ts",
@@ -38,7 +37,6 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-bedrock-runtime": "^3.1044.0",
     "@aws-sdk/client-translate": "^3.1045.0",
     "@payloadcms/db-postgres": "3.85.1",
     "@payloadcms/email-nodemailer": "3.85.1",

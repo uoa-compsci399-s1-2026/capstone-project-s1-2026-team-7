@@ -1,4 +1,3 @@
-//Reminder set BEDROCK_CATEGORIES_ENABLED=false if ur testing; u can find this in .env
 import {
   OrcidWorksResponse,
   OrcidWorkSummary,

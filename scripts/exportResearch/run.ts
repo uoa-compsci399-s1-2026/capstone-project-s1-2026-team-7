@@ -2,7 +2,6 @@ import type { StaffDTO } from '@/features/our-team/staff.schema'
 import { getStaff } from '@/features/our-team/getStaff.query'
 import { getOrcidList, compareEntries, getData } from './input'
 import { buildCsvRows, convertToCsv } from './output'
-import { getEnabledCategories } from './getcategories'
 import {
   buildCsvResearchIdentity,
   getCsvDeletedResearchIdentities,
@@ -80,7 +79,7 @@ export async function getResearchExportRows(
 
   throwIfAborted(options?.signal)
   reportProgress(options, {
-    progress: 66,
+    progress: 80,
     stage: 'rows',
     status: 'Combining duplicate research entries.',
   })
@@ -105,7 +104,7 @@ export async function getResearchExportRows(
   const excludedRows = unfilteredRows.length - rows.length
 
   reportProgress(options, {
-    progress: 72,
+    progress: 92,
     stage: 'rows',
     status: `Built ${rows.length} CSV row${rows.length === 1 ? '' : 's'}${
       excludedRows > 0
@@ -114,44 +113,7 @@ export async function getResearchExportRows(
     }.`,
   })
 
-  reportProgress(options, {
-    progress: 75,
-    stage: 'categories',
-    status: 'Checking research categories.',
-    current: 0,
-    total: rows.length,
-  })
-
-  const categoryResults = await getEnabledCategories(rows, {
-    signal: options?.signal,
-    onProgress: ({ current, total }) => {
-      const progress = total === 0 ? 90 : 75 + (current / total) * 15
-
-      reportProgress(options, {
-        progress,
-        stage: 'categories',
-        status: `Processed category suggestions (${current}/${total}).`,
-        current,
-        total,
-      })
-    },
-  })
-
-  throwIfAborted(options?.signal)
-  reportProgress(options, {
-    progress: 92,
-    stage: 'categories',
-    status: 'Applying categories to export rows.',
-  })
-
-  return rows.map((row) => {
-    const matchingCategoryResult = categoryResults.find((result) => result.title === row.title)
-
-    return {
-      ...row,
-      categories: matchingCategoryResult?.categories.join('; ') ?? '',
-    }
-  })
+  return rows.map((row) => ({ ...row, categories: '' }))
 }
 
 export async function getResearchExportCsv(

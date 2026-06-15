@@ -385,10 +385,6 @@ export interface Research {
   staff?: (number | Staff)[] | null
   categories?: (number | ResearchCategory)[] | null
   /**
-   * Auto-filled from PubMed (abstract, author keywords, MeSH terms) and used for keyword-based auto-categorisation. Clear it and save to re-fetch.
-   */
-  searchText?: string | null
-  /**
    * Keeps CSV deletions persistent by hiding this record and excluding it from future ORCID CSV exports.
    */
   csvDeleted?: boolean | null
@@ -417,7 +413,7 @@ export interface ResearchCategory {
   title: string
   slug: string
   /**
-   * Publications whose title or PubMed abstract/keywords/MeSH terms contain any of these words/phrases are automatically added to this category. Case-insensitive.
+   * Publications whose title contains any of these words/phrases are automatically added to this category. Case-insensitive.
    */
   keywords?:
     | {
@@ -689,7 +685,6 @@ export interface ResearchSelect<T extends boolean = true> {
   date?: T
   staff?: T
   categories?: T
-  searchText?: T
   csvDeleted?: T
   csvDeletedAt?: T
   order?: T

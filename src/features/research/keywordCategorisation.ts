@@ -38,18 +38,13 @@ export function getCategoryIds(categories: unknown): number[] {
   return categories.map(toId).filter((id): id is number => id != null)
 }
 
-/**
- * Work out the full set of category ids a publication should have, matching each
- * category's keywords against title + cached PubMed text. Additive — never
- * strips manual assignments. Returns null if nothing changes.
- */
 export async function getMergedCategoryIdsForResearch(
   payload: Payload,
-  research: { title?: string | null; searchText?: string | null; categories?: unknown },
+  research: { title?: string | null; categories?: unknown },
   req?: PayloadRequest,
 ): Promise<number[] | null> {
   const existing = getCategoryIds(research.categories)
-  const haystack = `${research.title ?? ''} ${research.searchText ?? ''}`
+  const haystack = research.title ?? ''
 
   const categories = await payload.find({
     collection: 'research-categories',
