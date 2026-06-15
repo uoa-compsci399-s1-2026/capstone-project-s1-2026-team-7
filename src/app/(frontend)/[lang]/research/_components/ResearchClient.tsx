@@ -226,7 +226,7 @@ export function ResearchClient({
           params.set('staffId', selectedStaffId)
         }
 
-        const response = await fetch(`/api/research?${params.toString()}`, {
+        const response = await fetch(`/api/research/search?${params.toString()}`, {
           signal: controller.signal,
         })
 
