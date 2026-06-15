@@ -5,12 +5,52 @@ import type { Lang } from '@/types/lang'
 import { getContactPage } from '@/features/contact/contactPage.query'
 import { getEnquiryTags } from '@/features/contact/enquiryTags.query'
 import { sendContactEmail } from './action'
+import { PageProps } from '@/types/pageprops'
 
-type ContactPageProps = {
-  params: Promise<{ lang: string }>
+import type { Metadata } from 'next'
+
+function getImageUrl(image: unknown): string | undefined {
+  if (!image || typeof image !== 'object') {
+    return undefined
+  }
+
+  const url = (image as { url?: string | null }).url
+
+  return url ?? undefined
 }
 
-export default async function ContactPage({ params }: ContactPageProps) {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { lang } = await params
+  const currentLang: Lang = lang === 'zh' ? 'zh' : 'en'
+  const content = await getContactPage(currentLang)
+  const title = content.meta?.title || content.heroTitle || 'Contact'
+  const description = content.meta?.description || 'Contact the Human Nutrition Unit.'
+  const imageUrl = getImageUrl(content.meta?.image) || getImageUrl(content.heroImage)
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: imageUrl
+        ? [
+            {
+              url: imageUrl,
+              alt: title,
+            },
+          ]
+        : undefined,
+    },
+    twitter: {
+      card: imageUrl ? 'summary_large_image' : 'summary',
+      title,
+      description,
+      images: imageUrl ? [imageUrl] : undefined,
+    },
+  }
+}
+
+export default async function ContactPage({ params }: PageProps) {
   const { lang } = await params
   const currentLang: Lang = lang === 'zh' ? 'zh' : 'en'
 

@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { mediaSchema, DEFAULT_GENERAL_PIC } from '../common/media.schema'
-import { seoSchema } from '../common/seo.schema'
+import { seoMetaSchema } from '../common'
 
 const stringWithDefault = z
   .string()
@@ -157,7 +157,7 @@ export const collaborationsPageSchema = z.object({
     .array(collaborationsPageBlockSchema)
     .nullish()
     .transform((value) => value ?? []),
-  seo: seoSchema.optional(),
+  meta: seoMetaSchema,
 })
 
 // --- Type Definitions (DTOs) ---

@@ -11,7 +11,7 @@ export const researchPageDTOSchema = z.object({
   portraitImage: mediaSchema.default(DEFAULT_GENERAL_PIC),
   researchCategoriesDisplay: z.array(researchCategorySchema).default([]),
   researchStaffDisplay: z.array(staffSchema).default([]),
-  seo: seoMetaSchema,
+  meta: seoMetaSchema,
 })
 
 export type ResearchPageDTO = z.infer<typeof researchPageDTOSchema>

@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { mediaSchema } from '../our-team'
+import { seoMetaSchema } from '../common'
 
 export const statSchema = z.object({
   key: z.string(),
@@ -25,6 +26,7 @@ export const DonationsPageDTOSchema = z.object({
     description: z.string(),
     stats: z.array(statSchema),
   }),
+  meta: seoMetaSchema,
 })
 
 export type DonationsPageDTO = z.infer<typeof DonationsPageDTOSchema>

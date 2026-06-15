@@ -8,13 +8,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { lang } = await params
   const data: HomepageDTO = await getHomePage(lang)
 
-  const title = data.seo?.title || 'Human Nutrition Unit'
+  const title = data.meta?.title || 'Human Nutrition Unit'
 
   const description =
-    data.seo?.description || 'Human Nutrition Unit research, studies, and public information.'
+    data.meta?.description || 'Human Nutrition Unit research, studies, and public information.'
 
   const metaImage =
-    data.seo?.image && typeof data.seo.image === 'object' ? data.seo.image.url : undefined
+    data.meta?.image && typeof data.meta.image === 'object' ? data.meta.image.url : undefined
 
   return {
     title: {

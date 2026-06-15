@@ -57,20 +57,5 @@ export const ResearchPage: GlobalConfig = {
         allowEdit: true,
       },
     },
-
-    {
-      name: 'seo',
-      type: 'group',
-      fields: [
-        {
-          name: 'metaTitle',
-          type: 'text',
-        },
-        {
-          name: 'metaDescription',
-          type: 'textarea',
-        },
-      ],
-    },
   ],
 }

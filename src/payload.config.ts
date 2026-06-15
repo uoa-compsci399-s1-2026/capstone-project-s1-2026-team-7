@@ -146,7 +146,6 @@ export default buildConfig({
         'research-page',
         'donations-page',
         'contact-page',
-        'footer',
         'our-team-page',
         'collaborations-page',
       ],

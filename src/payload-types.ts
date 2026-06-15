@@ -1137,10 +1137,6 @@ export interface ResearchPage {
   'mobile image': number | Media
   researchCategoriesDisplay?: (number | ResearchCategory)[] | null
   researchStaffDisplay?: (number | Staff)[] | null
-  seo?: {
-    metaTitle?: string | null
-    metaDescription?: string | null
-  }
   meta?: {
     title?: string | null
     description?: string | null
@@ -1244,14 +1240,6 @@ export interface Footer {
       }[]
     | null
   footerMotif: number | Media
-  meta?: {
-    title?: string | null
-    description?: string | null
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media
-  }
   updatedAt?: string | null
   createdAt?: string | null
 }
@@ -1703,12 +1691,6 @@ export interface ResearchPageSelect<T extends boolean = true> {
   'mobile image'?: T
   researchCategoriesDisplay?: T
   researchStaffDisplay?: T
-  seo?:
-    | T
-    | {
-        metaTitle?: T
-        metaDescription?: T
-      }
   meta?:
     | T
     | {
@@ -1809,13 +1791,6 @@ export interface FooterSelect<T extends boolean = true> {
         id?: T
       }
   footerMotif?: T
-  meta?:
-    | T
-    | {
-        title?: T
-        description?: T
-        image?: T
-      }
   updatedAt?: T
   createdAt?: T
   globalType?: T

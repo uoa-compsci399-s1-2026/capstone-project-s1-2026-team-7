@@ -7,13 +7,13 @@ import { PageProps } from '@/types/pageprops'
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { lang } = await params
   const pageData: OurTeamPageDTO = await getOurTeamPage(lang)
-  const title = pageData.seo?.title || 'Our Team'
+  const title = pageData.meta?.title || 'Our Team'
   const description =
-    pageData.seo?.description ||
+    pageData.meta?.description ||
     'Meet the Human Nutrition Unit team and learn about the people behind our research.'
   const metaImage =
-    pageData.seo?.image && typeof pageData.seo.image === 'object'
-      ? pageData.seo.image.url
+    pageData.meta?.image && typeof pageData.meta.image === 'object'
+      ? pageData.meta.image.url
       : undefined
 
   return {

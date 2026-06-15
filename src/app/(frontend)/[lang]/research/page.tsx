@@ -70,11 +70,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { lang } = await params
   const researchpage = await getResearchPage(lang)
 
-  const title = researchpage.seo?.title || researchpage.title || 'Research'
+  const title = researchpage.meta?.title || researchpage.title || 'Research'
   const description =
-    researchpage.seo?.description || 'Explore research from the Human Nutrition Unit.'
+    researchpage.meta?.description || 'Explore research from the Human Nutrition Unit.'
 
-  const imageUrl = getImageUrl(researchpage.seo?.image) || getImageUrl(researchpage.portraitImage)
+  const imageUrl = getImageUrl(researchpage.meta?.image) || getImageUrl(researchpage.portraitImage)
 
   return {
     title,

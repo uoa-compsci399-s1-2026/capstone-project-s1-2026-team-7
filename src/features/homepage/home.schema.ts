@@ -317,7 +317,7 @@ export const homepageSchema = z.object({
     .nullish()
     .transform((value) => value ?? []),
 
-  seo: seoMetaSchema,
+  meta: seoMetaSchema,
 })
 
 export type HomepageDTO = z.infer<typeof homepageSchema>

@@ -9,7 +9,7 @@ export const ourTeamPageDTOSchema = z
     boardTabLabel: z.string().default(''),
     staffTabLabel: z.string().default(''),
     staffMembers: z.array(staffSchema),
-    seo: seoMetaSchema,
+    meta: seoMetaSchema,
   })
   .transform((data) => ({
     title: data.title,
@@ -17,7 +17,7 @@ export const ourTeamPageDTOSchema = z
     boardTabLabel: data.boardTabLabel,
     staffTabLabel: data.staffTabLabel,
     staff: data.staffMembers.sort((a, b) => a.sortOrder - b.sortOrder),
-    seo: data.seo,
+    meta: data.meta,
   }))
 
 export type OurTeamPageDTO = z.infer<typeof ourTeamPageDTOSchema>
