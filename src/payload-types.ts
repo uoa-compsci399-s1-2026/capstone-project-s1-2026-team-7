@@ -75,6 +75,7 @@ export interface Config {
     research: Research
     'research-categories': ResearchCategory
     'research-category-terms': ResearchCategoryTerm
+    'research-exclusions': ResearchExclusion
     'enquiry-tags': EnquiryTag
     'payload-kv': PayloadKv
     'payload-locked-documents': PayloadLockedDocument
@@ -93,6 +94,7 @@ export interface Config {
     'research-category-terms':
       | ResearchCategoryTermsSelect<false>
       | ResearchCategoryTermsSelect<true>
+    'research-exclusions': ResearchExclusionsSelect<false> | ResearchExclusionsSelect<true>
     'enquiry-tags': EnquiryTagsSelect<false> | EnquiryTagsSelect<true>
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>
     'payload-locked-documents':
@@ -379,7 +381,11 @@ export interface Research {
   staff?: (number | Staff)[] | null
   categories?: (number | ResearchCategory)[] | null
   /**
-   * Keeps CSV deletions persistent by hiding this record and excluding it from future ORCID CSV exports.
+   * Manual records are not removed by CSV imports. ORCID/CSV managed records can be removed when missing from a later CSV import.
+   */
+  source?: ('manual' | 'orcid-csv') | null
+  /**
+   * Legacy field kept for older records. New exclusions are stored in the Excluded Research collection.
    */
   csvDeleted?: boolean | null
   csvDeletedAt?: string | null
@@ -469,6 +475,55 @@ export interface ResearchCategoryTerm {
   createdAt: string
 }
 /**
+ * ORCID/CSV research records that should be excluded from future automated exports/imports. Use Restore to Research to add an item back into the active Research collection.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research-exclusions".
+ */
+export interface ResearchExclusion {
+  id: number
+  /**
+   * Title of the removed research record. Used for fallback matching when no DOI is available.
+   */
+  title: string
+  /**
+   * Display DOI from the removed research record.
+   */
+  doi?: string | null
+  /**
+   * Lowercase DOI used by the ORCID/CSV sync to recognise excluded records.
+   */
+  normalizedDoi?: string | null
+  link?: string | null
+  publicationDate?: string | null
+  /**
+   * Generated from title, URL, and publication date. Used only when there is no DOI.
+   */
+  fallbackKey?: string | null
+  source?: ('manual-exclusion' | 'missing-from-csv' | 'legacy-csv-deleted') | null
+  /**
+   * When active, matching ORCID/CSV records are skipped. Restoring the record turns this off automatically.
+   */
+  active?: boolean | null
+  excludedAt?: string | null
+  /**
+   * The old Research collection ID. This is stored as text because the active research record may have been deleted.
+   */
+  removedResearchId?: string | null
+  /**
+   * The active Research record ID created or found when this exclusion was restored.
+   */
+  restoredResearchId?: string | null
+  restoredAt?: string | null
+  timesSeen?: number | null
+  /**
+   * Optional admin note explaining why this research record was excluded.
+   */
+  reason?: string | null
+  updatedAt: string
+  createdAt: string
+}
+/**
  * Tags shown in the contact form dropdown. Each tag routes submissions to its recipient email.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -536,6 +591,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'research-category-terms'
         value: number | ResearchCategoryTerm
+      } | null)
+    | ({
+        relationTo: 'research-exclusions'
+        value: number | ResearchExclusion
       } | null)
     | ({
         relationTo: 'enquiry-tags'
@@ -724,6 +783,7 @@ export interface ResearchSelect<T extends boolean = true> {
   date?: T
   staff?: T
   categories?: T
+  source?: T
   csvDeleted?: T
   csvDeletedAt?: T
   updatedAt?: T
@@ -768,6 +828,28 @@ export interface ResearchCategoryTermsSelect<T extends boolean = true> {
         id?: T
       }
   adminNotes?: T
+  updatedAt?: T
+  createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research-exclusions_select".
+ */
+export interface ResearchExclusionsSelect<T extends boolean = true> {
+  title?: T
+  doi?: T
+  normalizedDoi?: T
+  link?: T
+  publicationDate?: T
+  fallbackKey?: T
+  source?: T
+  active?: T
+  excludedAt?: T
+  removedResearchId?: T
+  restoredResearchId?: T
+  restoredAt?: T
+  timesSeen?: T
+  reason?: T
   updatedAt?: T
   createdAt?: T
 }

@@ -27,6 +27,8 @@ import { MetaTitleComponent as MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c08
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
+import { ExcludeResearchFromOrcidSyncButton as ExcludeResearchFromOrcidSyncButton_ddd205398844941b26ff98e2090a1cf5 } from '../../../payload/components/admin/ExcludeResearchFromOrcidSyncButton'
+import { RestoreExcludedResearchButton as RestoreExcludedResearchButton_b605077e6b501ec83a0e594fc0872f89 } from '../../../payload/components/admin/RestoreExcludedResearchButton'
 import { HNUIcon as HNUIcon_8626532e401102f7c77f9596f9cb4e05 } from '../../../payload/components/admin/HNUIcon'
 import { HNULogo as HNULogo_8a91984c01b16801db0c11c1eff8e804 } from '../../../payload/components/admin/HNULogo'
 import { ResearchCsvDashboardLink as ResearchCsvDashboardLink_83d5cd03d31730bba330c67814d054c3 } from '../../../payload/components/admin/ResearchCsvDashboardLink'
@@ -95,6 +97,10 @@ export const importMap = {
     MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860,
   '@payloadcms/plugin-seo/client#PreviewComponent':
     PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
+  '/payload/components/admin/ExcludeResearchFromOrcidSyncButton#ExcludeResearchFromOrcidSyncButton':
+    ExcludeResearchFromOrcidSyncButton_ddd205398844941b26ff98e2090a1cf5,
+  '/payload/components/admin/RestoreExcludedResearchButton#RestoreExcludedResearchButton':
+    RestoreExcludedResearchButton_b605077e6b501ec83a0e594fc0872f89,
   '/payload/components/admin/HNUIcon#HNUIcon': HNUIcon_8626532e401102f7c77f9596f9cb4e05,
   '/payload/components/admin/HNULogo#HNULogo': HNULogo_8a91984c01b16801db0c11c1eff8e804,
   '/payload/components/admin/ResearchCsvDashboardLink#ResearchCsvDashboardLink':

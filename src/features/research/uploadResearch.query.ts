@@ -1,6 +1,7 @@
 import { getPayloadClient } from '@/lib/payload'
 import type { Media, ResearchCategory } from '@/payload-types'
 import type { Payload, Where } from 'payload'
+import { isCsvResearchIdentityExcluded, normalizeCsvDoi } from './researchCsvDeletionPersistence'
 
 export type UploadResearchDTO = {
   title: string
@@ -18,14 +19,6 @@ export type UploadResearchResult = {
   id?: number | string
   reason?: string
   status: 'created' | 'skipped' | 'updated'
-}
-
-function normalizeDoi(value: string | null | undefined): string {
-  return (value ?? '')
-    .trim()
-    .toLowerCase()
-    .replace(/^https?:\/\/(dx\.)?doi\.org\//, '')
-    .replace(/^doi:/, '')
 }
 
 async function findExistingResearch(payload: Payload, article: UploadResearchDTO, doi: string) {
@@ -84,11 +77,28 @@ async function findExistingResearch(payload: Payload, article: UploadResearchDTO
 
 export async function uploadResearch(article: UploadResearchDTO): Promise<UploadResearchResult> {
   const payload = await getPayloadClient()
-  const doi = normalizeDoi(article.doi)
+  const doi = normalizeCsvDoi(article.doi)
   const link = article.link?.trim() ?? ''
   const date = article.date?.trim() ?? ''
   const categoryIDs =
     article.categoryIDs ?? article.categories?.map((category) => category.id) ?? []
+
+  const isExcluded = await isCsvResearchIdentityExcluded(
+    {
+      title: article.title,
+      doi,
+      link,
+      date,
+    },
+    payload,
+  )
+
+  if (isExcluded) {
+    return {
+      status: 'skipped',
+      reason: 'This research record is listed in Excluded Research and will not be imported.',
+    }
+  }
 
   const data = {
     title: article.title,
@@ -98,6 +108,7 @@ export async function uploadResearch(article: UploadResearchDTO): Promise<Upload
     date,
     staff: article.staffID,
     categories: categoryIDs,
+    source: 'orcid-csv',
     csvDeleted: false,
     csvDeletedAt: null,
     order: article.order ?? 0,
@@ -109,7 +120,7 @@ export async function uploadResearch(article: UploadResearchDTO): Promise<Upload
     await payload.update({
       collection: 'research',
       id: existingDoc.id,
-      data,
+      data: data as any,
       overrideAccess: true,
     })
 
@@ -118,7 +129,7 @@ export async function uploadResearch(article: UploadResearchDTO): Promise<Upload
 
   const created = await payload.create({
     collection: 'research',
-    data,
+    data: data as any,
     overrideAccess: true,
   })
 
