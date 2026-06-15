@@ -84,6 +84,5 @@ export const Staff: CollectionConfig = {
     { name: 'manager', type: 'checkbox', defaultValue: false, required: true },
     { name: 'uoaProfileLink', type: 'text' },
     { name: 'photo', type: 'upload', relationTo: 'media' },
-    { name: 'sortOrder', type: 'number' },
   ],
 }

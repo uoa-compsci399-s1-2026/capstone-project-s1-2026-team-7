@@ -31,6 +31,7 @@ import * as migration_20260614_070306 from './20260614_070306'
 import * as migration_20260614_165808_add_seo_homepage_fields from './20260614_165808_add_seo_homepage_fields'
 import * as migration_20260614_171530 from './20260614_171530'
 import * as migration_20260615_125201 from './20260615_125201'
+import * as migration_20260615_154718 from './20260615_154718'
 
 export const migrations = [
   {
@@ -197,5 +198,10 @@ export const migrations = [
     up: migration_20260615_125201.up,
     down: migration_20260615_125201.down,
     name: '20260615_125201',
+  },
+  {
+    up: migration_20260615_154718.up,
+    down: migration_20260615_154718.down,
+    name: '20260615_154718',
   },
 ]

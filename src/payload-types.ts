@@ -233,7 +233,6 @@ export interface Staff {
   manager: boolean
   uoaProfileLink?: string | null
   photo?: (number | null) | Media
-  sortOrder?: number | null
   updatedAt: string
   createdAt: string
 }
@@ -587,7 +586,6 @@ export interface StaffSelect<T extends boolean = true> {
   manager?: T
   uoaProfileLink?: T
   photo?: T
-  sortOrder?: T
   updatedAt?: T
   createdAt?: T
 }
