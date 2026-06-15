@@ -74,6 +74,7 @@ export interface Config {
     studies: Study
     research: Research
     'research-categories': ResearchCategory
+    'research-category-terms': ResearchCategoryTerm
     'enquiry-tags': EnquiryTag
     'payload-kv': PayloadKv
     'payload-locked-documents': PayloadLockedDocument
@@ -89,6 +90,9 @@ export interface Config {
     studies: StudiesSelect<false> | StudiesSelect<true>
     research: ResearchSelect<false> | ResearchSelect<true>
     'research-categories': ResearchCategoriesSelect<false> | ResearchCategoriesSelect<true>
+    'research-category-terms':
+      | ResearchCategoryTermsSelect<false>
+      | ResearchCategoryTermsSelect<true>
     'enquiry-tags': EnquiryTagsSelect<false> | EnquiryTagsSelect<true>
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>
     'payload-locked-documents':
@@ -391,7 +395,7 @@ export interface ResearchCategory {
   title: string
   slug: string
   /**
-   * Publications whose title contains any of these words/phrases are automatically added to this category. Case-insensitive.
+   * Fallback title matching words/phrases for this real website category. These are used when no mapped OpenAlex term is found.
    */
   keywords?:
     | {
@@ -399,6 +403,68 @@ export interface ResearchCategory {
         id?: string | null
       }[]
     | null
+  /**
+   * Select the OpenAlex terms that should map to this real website category. Saving this category will update those terms automatically.
+   */
+  mappedTerms?: (number | ResearchCategoryTerm)[] | null
+  updatedAt: string
+  createdAt: string
+}
+/**
+ * OpenAlex terms discovered during research CSV exports. Map these terms to real Research Categories before importing/exporting approved categories.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research-category-terms".
+ */
+export interface ResearchCategoryTerm {
+  id: number
+  /**
+   * The raw topic or keyword found from OpenAlex. This is not shown as a website category unless it is mapped below.
+   */
+  term: string
+  /**
+   * Lowercase value used to avoid duplicate terms.
+   */
+  normalizedTerm: string
+  /**
+   * Where this suggested term came from.
+   */
+  source: 'openalex-primary-topic' | 'openalex-topic' | 'openalex-keyword'
+  /**
+   * Unmapped terms are waiting for review. Ignored terms are never used for category suggestions.
+   */
+  status: 'unmapped' | 'mapped' | 'ignored'
+  /**
+   * Choose the real website Research Category this OpenAlex term should point to. You can also manage this from the Research Category edit screen.
+   */
+  mappedCategory?: (number | null) | ResearchCategory
+  /**
+   * The latest relevance score returned by OpenAlex, where available.
+   */
+  sourceScore?: number | null
+  /**
+   * How many exported publications have returned this term.
+   */
+  timesSeen?: number | null
+  /**
+   * Last time this term appeared during a research CSV export.
+   */
+  lastSeenAt?: string | null
+  /**
+   * Examples where this term appeared. These are added automatically during CSV export to help admins decide the mapping.
+   */
+  exampleResearch?:
+    | {
+        title: string
+        doi?: string | null
+        url?: string | null
+        id?: string | null
+      }[]
+    | null
+  /**
+   * Optional notes for why this term is mapped or ignored.
+   */
+  adminNotes?: string | null
   updatedAt: string
   createdAt: string
 }
@@ -466,6 +532,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'research-categories'
         value: number | ResearchCategory
+      } | null)
+    | ({
+        relationTo: 'research-category-terms'
+        value: number | ResearchCategoryTerm
       } | null)
     | ({
         relationTo: 'enquiry-tags'
@@ -672,6 +742,32 @@ export interface ResearchCategoriesSelect<T extends boolean = true> {
         value?: T
         id?: T
       }
+  mappedTerms?: T
+  updatedAt?: T
+  createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research-category-terms_select".
+ */
+export interface ResearchCategoryTermsSelect<T extends boolean = true> {
+  term?: T
+  normalizedTerm?: T
+  source?: T
+  status?: T
+  mappedCategory?: T
+  sourceScore?: T
+  timesSeen?: T
+  lastSeenAt?: T
+  exampleResearch?:
+    | T
+    | {
+        title?: T
+        doi?: T
+        url?: T
+        id?: T
+      }
+  adminNotes?: T
   updatedAt?: T
   createdAt?: T
 }

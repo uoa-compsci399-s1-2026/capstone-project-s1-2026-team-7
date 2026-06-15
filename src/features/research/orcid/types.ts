@@ -9,31 +9,14 @@ export type CsvResearchRow = {
   categories: string
 }
 
-export type OrcidEmploymentSummary = {
-  organization?: {
-    name?: string
-  }
-}
-
-export type OrcidEmploymentsResponse = {
-  affiliation_group?: {
-    summaries?: {
-      employment_summary?: OrcidEmploymentSummary[]
-    }
-  }[]
-}
-
-export type SharedArticle = {
-  article: ArticleOutput
-  people: string[]
-  staffIds: number[]
-}
-
-export type nameWithORcid = {
+export type NameWithOrcid = {
   name: string
   orcid: string
   staffId: number
 }
+
+// Backwards-compatible alias for the previous scripts/exportResearch type name.
+export type nameWithORcid = NameWithOrcid
 
 export type ArticleOutput = {
   title: string
@@ -48,9 +31,10 @@ export type PerPersonOutputType = {
   articles: ArticleOutput[]
 }
 
-export type SharedArticleInternal = {
+export type SharedArticle = {
   article: ArticleOutput
-  people: Set<string>
+  people: string[]
+  staffIds: number[]
 }
 
 export type OrcidDateValue = {

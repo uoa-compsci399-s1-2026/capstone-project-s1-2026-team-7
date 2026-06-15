@@ -328,8 +328,9 @@ export function ResearchCsvManager() {
             <h2 style={{ marginTop: 0 }}>1. Export CSV</h2>
             <p style={{ lineHeight: 1.5, paddingBottom: '14px' }}>
               Generates a fresh CSV using staff ORCID values, stores a copy in S3 (Amazon Simple
-              Storage Service), and downloads the CSV to your computer. The categories column is
-              left blank — fill it in manually before re-importing.
+              Storage Service), and downloads the CSV to your computer. OpenAlex terms are saved
+              into Research Category Terms for admin review. Only mapped terms and title-keyword
+              fallback categories are added to the categories column.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
               <button type="button" onClick={handleExport} disabled={disabled} style={buttonStyle}>

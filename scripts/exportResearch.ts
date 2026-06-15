@@ -10,15 +10,10 @@ async function main() {
   await writeFile(outputPath, csv, 'utf8')
 
   console.log(`Exported ${rows.length} research records to ${outputPath}`)
-
-  return rows
 }
 
 main()
-  .then(() => {
-    console.log('Export research script finished.')
-    process.exit(0)
-  })
+  .then(() => process.exit(0))
   .catch((error) => {
     console.error(error)
     process.exit(1)
