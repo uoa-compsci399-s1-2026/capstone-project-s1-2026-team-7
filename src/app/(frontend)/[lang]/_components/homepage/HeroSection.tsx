@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import HrefButton from '../HrefButton'
 import type { HeroBlockDTO } from '@/features/homepage/home.schema'
-import { withLang } from '@/lib/withLang'
 import type { Lang } from '@/types/lang'
+import getLocalizedHref from '@/lib/localizedHref'
 
 type HeroSectionProps = {
   data: HeroBlockDTO
@@ -10,7 +10,7 @@ type HeroSectionProps = {
 }
 
 export default function HeroSection({ data, lang }: HeroSectionProps) {
-  const { title, description, heroHorizontal, buttons } = data
+  const { title, description, heroHorizontal, buttons, featuredImage } = data
 
   return (
     <section className="relative isolate min-h-130 w-full overflow-hidden md:min-h-145 lg:min-h-160 xl:min-h-182">
@@ -46,7 +46,7 @@ export default function HeroSection({ data, lang }: HeroSectionProps) {
                   key={button.id || button.label}
                   title={button.label}
                   variant={button.variant}
-                  href={withLang(button.url, lang)}
+                  href={getLocalizedHref(button.url, lang)}
                 />
               ))}
             </div>
@@ -58,8 +58,8 @@ export default function HeroSection({ data, lang }: HeroSectionProps) {
               <div className="absolute -top-2 -left-2 h-full w-full rounded-3xl bg-[#1F2BD4]" />
               <div className="relative aspect-6/7 overflow-hidden rounded-3xl shadow-2xl">
                 <Image
-                  src="/hero-portrait-image.png"
-                  alt="Hero portrait image"
+                  src={featuredImage.url}
+                  alt={featuredImage.alt}
                   fill
                   priority
                   quality={100}

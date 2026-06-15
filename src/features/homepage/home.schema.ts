@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { mediaSchema, DEFAULT_GENERAL_PIC } from '../common/media.schema'
-import { seoSchema } from '../common/seo.schema'
 import { studySchema } from '../studies'
+import { seoMetaSchema } from '../common'
 
 const stringWithDefault = z
   .string()
@@ -39,6 +39,7 @@ const heroBlockSchema = blockBaseSchema
 
     portraitHeroImage: mediaWithDefault,
     mobileHeroImage: mediaWithDefault,
+    featuredImage: mediaWithDefault,
 
     buttons: z
       .array(buttonSchema)
@@ -53,7 +54,7 @@ const heroBlockSchema = blockBaseSchema
     description: block.description,
 
     heroHorizontal: block.portraitHeroImage,
-    heroMobile: block.mobileHeroImage,
+    featuredImage: block.featuredImage,
 
     buttons: block.buttons,
   }))
@@ -316,7 +317,7 @@ export const homepageSchema = z.object({
     .nullish()
     .transform((value) => value ?? []),
 
-  seo: seoSchema,
+  meta: seoMetaSchema,
 })
 
 export type HomepageDTO = z.infer<typeof homepageSchema>

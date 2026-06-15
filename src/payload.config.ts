@@ -30,6 +30,8 @@ import {
   researchCsvImportEndpoint,
 } from './payload/endpoints/researchCsv'
 
+import { seoPlugin } from '@payloadcms/plugin-seo'
+
 import { CollaborationsPage } from './payload/globals/CollaborationsPage'
 
 const filename = fileURLToPath(import.meta.url)
@@ -133,6 +135,32 @@ export default buildConfig({
         },
         region: process.env.S3_REGION,
         // ... Other S3 configuration
+      },
+    }),
+
+    seoPlugin({
+      collections: ['studies', 'research', 'staff'],
+      globals: [
+        'home-page',
+        'studies-page',
+        'research-page',
+        'donations-page',
+        'contact-page',
+        'our-team-page',
+        'collaborations-page',
+      ],
+      uploadsCollection: 'media',
+
+      generateTitle: ({ doc }) => {
+        return doc?.title ? `${doc.title} | Human Nutrition Unit` : 'Human Nutrition Unit'
+      },
+
+      generateDescription: ({ doc }) => {
+        return doc?.subtitle || doc?.eligibility || 'Human Nutrition Unit'
+      },
+
+      generateImage: ({ doc }) => {
+        return doc?.banner
       },
     }),
   ],

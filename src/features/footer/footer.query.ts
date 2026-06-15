@@ -1,5 +1,5 @@
 import { getPayloadClient } from '@/lib/payload'
-import { footerSchema, FooterDTO } from '@/features'
+import { footerSchema, FooterDTO } from './footer.schema'
 import { Lang } from '@/types/lang'
 
 const payload = await getPayloadClient()

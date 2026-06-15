@@ -327,9 +327,9 @@ export function ResearchCsvManager() {
           <section style={cardStyle}>
             <h2 style={{ marginTop: 0 }}>1. Export CSV</h2>
             <p style={{ lineHeight: 1.5, paddingBottom: '14px' }}>
-              Generates a fresh CSV using staff ORCID values, stores a copy in S3(Amazon Simple
-              Storage Service), and downloads the CSV to your computer. Keep Bedrock disabled unless
-              you want automatic category suggestions.
+              Generates a fresh CSV using staff ORCID values, stores a copy in S3 (Amazon Simple
+              Storage Service), and downloads the CSV to your computer. The categories column is
+              left blank — fill it in manually before re-importing.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
               <button type="button" onClick={handleExport} disabled={disabled} style={buttonStyle}>

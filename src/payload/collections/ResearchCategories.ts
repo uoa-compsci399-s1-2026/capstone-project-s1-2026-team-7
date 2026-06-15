@@ -28,7 +28,7 @@ export const ResearchCategories: CollectionConfig = {
       label: 'Keywords',
       admin: {
         description:
-          'Publications whose title or PubMed abstract/keywords/MeSH terms contain any of these words/phrases are automatically added to this category. Case-insensitive.',
+          'Publications whose title contains any of these words/phrases are automatically added to this category. Case-insensitive.',
       },
       fields: [{ name: 'value', type: 'text', required: true }],
     },
@@ -49,7 +49,7 @@ export const ResearchCategories: CollectionConfig = {
         })
 
         for (const item of research.docs) {
-          const haystack = `${item.title ?? ''} ${item.searchText ?? ''}`
+          const haystack = item.title ?? ''
           if (!textMatchesKeywords(haystack, keywords)) continue
 
           const existing = getCategoryIds(item.categories)

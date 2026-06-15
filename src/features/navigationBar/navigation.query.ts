@@ -1,5 +1,5 @@
 import { getPayloadClient } from '@/lib/payload'
-import { navigationBarSchema, NavigationBarDTO } from '@/features'
+import { navigationBarSchema, NavigationBarDTO } from './navigation.schema'
 import { Lang } from '@/types/lang'
 
 const payload = await getPayloadClient()

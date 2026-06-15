@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState, type SetStateAction } from 'react'
-import { ResearchDTO } from '@/features'
+import { ResearchDTO } from '@/features/research'
 import CategorySidebar from './CategorySidebar'
 import Pagination from './Pagination'
 import ResearchArticles from './ResearchArticles'
@@ -226,7 +226,7 @@ export function ResearchClient({
           params.set('staffId', selectedStaffId)
         }
 
-        const response = await fetch(`/research-api?${params.toString()}`, {
+        const response = await fetch(`/api/research?${params.toString()}`, {
           signal: controller.signal,
         })
 

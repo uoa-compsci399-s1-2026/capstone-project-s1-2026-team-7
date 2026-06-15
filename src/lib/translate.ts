@@ -1,6 +1,11 @@
 import { TranslateClient, TranslateTextCommand } from '@aws-sdk/client-translate'
 
-export async function translateText(text: string) {
+type TranslateTextOptions = {
+  sourceLanguageCode?: string
+  targetLanguageCode?: string
+}
+
+export async function translateText(text: string, options: TranslateTextOptions = {}) {
   const accessKeyId = process.env.AWS_ACCESS_KEY_ID?.trim()
   const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY?.trim()
   const region = process.env.AWS_REGION || 'ap-southeast-2'
@@ -21,11 +26,11 @@ export async function translateText(text: string) {
 
   const command = new TranslateTextCommand({
     Text: text,
-    SourceLanguageCode: 'en',
-    TargetLanguageCode: 'zh',
+    SourceLanguageCode: options.sourceLanguageCode ?? 'en',
+    TargetLanguageCode: options.targetLanguageCode ?? 'zh',
   })
 
   const result = await client.send(command)
 
-  return result.TranslatedText
+  return result.TranslatedText ?? ''
 }

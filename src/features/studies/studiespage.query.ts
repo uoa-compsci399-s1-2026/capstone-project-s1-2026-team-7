@@ -1,5 +1,5 @@
 import { getPayloadClient } from '@/lib/payload'
-import { studiesDTOSchema, StudiesPageDTO } from '@/features'
+import { studiesDTOSchema, StudiesPageDTO } from './studies.schema'
 import type { Lang } from '@/types/lang'
 
 export async function getStudiesPage(locale: Lang = 'en'): Promise<StudiesPageDTO> {
