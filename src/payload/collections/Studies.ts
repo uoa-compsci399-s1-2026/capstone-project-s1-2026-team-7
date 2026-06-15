@@ -334,7 +334,5 @@ export const Studies: CollectionConfig = {
           'Tick ONLY when the Chinese translation of this study has been reviewed and confirmed accurate and ethical. While unticked, Chinese visitors see the English content with a warning notice. Auto-translated text is NOT a substitute for review.',
       },
     },
-
-    { name: 'sortOrder', type: 'number' },
   ],
 }

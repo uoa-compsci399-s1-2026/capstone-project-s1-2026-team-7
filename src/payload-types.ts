@@ -234,14 +234,6 @@ export interface Staff {
   uoaProfileLink?: string | null
   photo?: (number | null) | Media
   sortOrder?: number | null
-  meta?: {
-    title?: string | null
-    description?: string | null
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media
-  }
   updatedAt: string
   createdAt: string
 }
@@ -351,7 +343,6 @@ export interface Study {
    * Tick ONLY when the Chinese translation of this study has been reviewed and confirmed accurate and ethical. While unticked, Chinese visitors see the English content with a warning notice. Auto-translated text is NOT a substitute for review.
    */
   chineseTranslationApproved?: boolean | null
-  sortOrder?: number | null
   meta?: {
     title?: string | null
     description?: string | null
@@ -389,18 +380,6 @@ export interface Research {
    */
   csvDeleted?: boolean | null
   csvDeletedAt?: string | null
-  /**
-   * Used for manual sorting (lower comes first)
-   */
-  order?: number | null
-  meta?: {
-    title?: string | null
-    description?: string | null
-    /**
-     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
-     */
-    image?: (number | null) | Media
-  }
   updatedAt: string
   createdAt: string
 }
@@ -609,13 +588,6 @@ export interface StaffSelect<T extends boolean = true> {
   uoaProfileLink?: T
   photo?: T
   sortOrder?: T
-  meta?:
-    | T
-    | {
-        title?: T
-        description?: T
-        image?: T
-      }
   updatedAt?: T
   createdAt?: T
 }
@@ -663,7 +635,6 @@ export interface StudiesSelect<T extends boolean = true> {
   ethicsApprovalRef?: T
   participantInfoPdf?: T
   chineseTranslationApproved?: T
-  sortOrder?: T
   meta?:
     | T
     | {
@@ -687,14 +658,6 @@ export interface ResearchSelect<T extends boolean = true> {
   categories?: T
   csvDeleted?: T
   csvDeletedAt?: T
-  order?: T
-  meta?:
-    | T
-    | {
-        title?: T
-        description?: T
-        image?: T
-      }
   updatedAt?: T
   createdAt?: T
 }

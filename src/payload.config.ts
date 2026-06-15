@@ -139,7 +139,7 @@ export default buildConfig({
     }),
 
     seoPlugin({
-      collections: ['studies', 'research', 'staff'],
+      collections: ['studies'],
       globals: [
         'home-page',
         'studies-page',

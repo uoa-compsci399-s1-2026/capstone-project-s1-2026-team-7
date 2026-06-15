@@ -17,10 +17,6 @@ export const researchDTOSchema = z.object({
     .transform((value) => value ?? '1 / 1 / 2050'),
   staff: z.array(staffSchema).default([]),
   categories: z.array(researchCategorySchema).default([]),
-  order: z
-    .number()
-    .nullish()
-    .transform((v) => v ?? ''),
 })
 
 export type ResearchDTO = z.infer<typeof researchDTOSchema>
