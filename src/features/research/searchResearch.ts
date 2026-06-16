@@ -88,7 +88,13 @@ export async function searchResearch({
 }: SearchResearchParams = {}): Promise<SearchResearchResult> {
   const payload = await getPayloadClient()
 
-  const andFilters: Where[] = []
+  const andFilters: Where[] = [
+    {
+      csvDeleted: {
+        not_equals: true,
+      },
+    },
+  ]
   const trimmedSearchTerm = searchTerm.trim()
 
   if (trimmedSearchTerm) {

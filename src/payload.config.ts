@@ -15,6 +15,7 @@ import { Staff } from './payload/collections/Staff'
 import { Research } from './payload/collections/Research'
 import { ResearchCategories } from './payload/collections/ResearchCategories'
 import { ResearchCategoryTerms } from './payload/collections/ResearchCategoryTerms'
+import { ResearchExclusions } from './payload/collections/ResearchExclusions'
 
 import { HomePage } from './payload/globals/Homepage'
 import { OurTeamPage } from './payload/globals/OurTeamPage'
@@ -30,6 +31,7 @@ import {
   researchCsvExportEndpoint,
   researchCsvImportEndpoint,
 } from './payload/endpoints/researchCsv'
+import { researchExcludeFromOrcidSyncEndpoint } from './payload/endpoints/researchExclusions'
 
 import { seoPlugin } from '@payloadcms/plugin-seo'
 
@@ -102,6 +104,7 @@ export default buildConfig({
     Research,
     ResearchCategories,
     ResearchCategoryTerms,
+    ResearchExclusions,
     EnquiryTags,
   ],
 
@@ -117,7 +120,12 @@ export default buildConfig({
     CollaborationsPage,
   ],
 
-  endpoints: [translateEndpoint, researchCsvExportEndpoint, researchCsvImportEndpoint],
+  endpoints: [
+    translateEndpoint,
+    researchCsvExportEndpoint,
+    researchCsvImportEndpoint,
+    researchExcludeFromOrcidSyncEndpoint,
+  ],
 
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',

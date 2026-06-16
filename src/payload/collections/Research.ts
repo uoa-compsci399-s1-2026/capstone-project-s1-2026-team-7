@@ -28,14 +28,41 @@ export const Research: CollectionConfig = {
     },
     { name: 'categories', type: 'relationship', relationTo: 'research-categories', hasMany: true },
     {
+      name: 'source',
+      label: 'Management Source',
+      type: 'select',
+      defaultValue: 'manual',
+      options: [
+        { label: 'Manual research record', value: 'manual' },
+        { label: 'ORCID/CSV managed', value: 'orcid-csv' },
+      ],
+      admin: {
+        position: 'sidebar',
+        description:
+          'Manual records are not removed by CSV imports. ORCID/CSV managed records can be removed when missing from a later CSV import.',
+      },
+    },
+    {
+      name: 'excludeFromOrcidSyncAction',
+      label: 'Exclude from ORCID Sync',
+      type: 'ui',
+      admin: {
+        position: 'sidebar',
+        components: {
+          Field:
+            '/payload/components/admin/ExcludeResearchFromOrcidSyncButton#ExcludeResearchFromOrcidSyncButton',
+        },
+      },
+    },
+    {
       name: 'csvDeleted',
       label: 'Deleted from CSV',
       type: 'checkbox',
       defaultValue: false,
       admin: {
-        position: 'sidebar',
+        hidden: true,
         description:
-          'Keeps CSV deletions persistent by hiding this record and excluding it from future ORCID CSV exports.',
+          'Legacy field kept for older records. New exclusions are stored in the Excluded Research collection.',
       },
     },
     {
@@ -43,9 +70,7 @@ export const Research: CollectionConfig = {
       label: 'CSV deleted at',
       type: 'date',
       admin: {
-        position: 'sidebar',
-        readOnly: true,
-        condition: (_, siblingData) => Boolean(siblingData?.csvDeleted),
+        hidden: true,
       },
     },
   ],
@@ -75,6 +100,6 @@ export const Research: CollectionConfig = {
       },
     ],
   },
-  admin: { useAsTitle: 'title', defaultColumns: ['title', 'order'] },
+  admin: { useAsTitle: 'title', defaultColumns: ['title', 'source', 'date'] },
   defaultSort: '-createdAt',
 }
