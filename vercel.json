@@ -1,0 +1,16 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/process-research-exports",
+      "schedule": "* * * * *"
+    }
+  ],
+  "functions": {
+    "src/app/(payload)/api/[...slug]/route.ts": {
+      "maxDuration": 300
+    },
+    "src/app/api/cron/process-research-exports/route.ts": {
+      "maxDuration": 300
+    }
+  }
+}

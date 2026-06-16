@@ -1,7 +1,8 @@
+/* eslint-disable react-hooks/set-state-in-effect -- this component uses useEffect for initial data fetch + polling, which is appropriate here */
 'use client'
 
 import Link from 'next/link'
-import React, { FormEvent, useRef, useState } from 'react'
+import React, { FormEvent, useCallback, useEffect, useRef, useState } from 'react'
 
 type ImportResult = {
   totalRows: number
@@ -16,12 +17,15 @@ type ImportResult = {
   s3Key?: string
 }
 
-type ExportResult = {
-  csv: string
-  filename: string
-  rowCount: number
-  s3Bucket?: string
-  s3Key?: string
+type ExportJob = {
+  id: number
+  status: 'pending' | 'processing' | 'done' | 'failed'
+  filename?: string | null
+  rowCount?: number | null
+  requestedAt?: string | null
+  startedAt?: string | null
+  completedAt?: string | null
+  errorMessage?: string | null
 }
 
 type StatusMessage = {
@@ -58,24 +62,11 @@ const secondaryButtonStyle: React.CSSProperties = {
   color: '#0c0c48',
 }
 
-function downloadBlob(blob: Blob, filename: string): void {
-  const url = URL.createObjectURL(blob)
-  const link = document.createElement('a')
-
-  link.href = url
-  link.download = filename
-  document.body.appendChild(link)
-  link.click()
-  link.remove()
-  URL.revokeObjectURL(url)
-}
-
-function clampProgress(value: unknown): number {
-  const progress = Number(value)
-
-  if (!Number.isFinite(progress)) return 0
-
-  return Math.max(0, Math.min(100, Math.round(progress)))
+const statusColors: Record<ExportJob['status'], { bg: string; fg: string }> = {
+  pending: { bg: '#fef3c7', fg: '#92400e' },
+  processing: { bg: '#dbeafe', fg: '#1e40af' },
+  done: { bg: '#dcfce7', fg: '#166534' },
+  failed: { bg: '#fee2e2', fg: '#991b1b' },
 }
 
 function parseStreamEvent(line: string): StreamEvent | null {
@@ -92,122 +83,98 @@ function parseStreamEvent(line: string): StreamEvent | null {
   }
 }
 
+function formatDateTime(value: string | null | undefined): string {
+  if (!value) return '—'
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return '—'
+  return date.toLocaleString()
+}
+
 export function ResearchCsvManager() {
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const exportAbortControllerRef = useRef<AbortController | null>(null)
-  const [exporting, setExporting] = useState(false)
-  const [exportProgress, setExportProgress] = useState(0)
   const [importing, setImporting] = useState(false)
-  //const [dryRun, setDryRun] = useState(true)
+  const [exportQueueing, setExportQueueing] = useState(false)
   const [message, setMessage] = useState<StatusMessage | null>(null)
   const [importResult, setImportResult] = useState<ImportResult | null>(null)
-  const [exportS3Key, setExportS3Key] = useState<string | null>(null)
   const [lastProgress, setLastProgress] = useState<string | null>(null)
+  const [recentExports, setRecentExports] = useState<ExportJob[]>([])
+  const pollTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const fetchRecentExports = useCallback(async () => {
+    try {
+      const response = await fetch('/api/research-exports?limit=10&sort=-requestedAt&depth=0', {
+        credentials: 'include',
+      })
+      if (!response.ok) return
+      const data = (await response.json()) as { docs?: ExportJob[] }
+      setRecentExports(data.docs ?? [])
+    } catch {
+      // ignore — the next poll tick will retry
+    }
+  }, [])
+
+  const hasActiveJob = recentExports.some(
+    (job) => job.status === 'pending' || job.status === 'processing',
+  )
+
+  // Poll while there's a pending/processing job.
+  useEffect(() => {
+    if (pollTimerRef.current) {
+      clearTimeout(pollTimerRef.current)
+      pollTimerRef.current = null
+    }
+
+    if (!hasActiveJob) return
+
+    pollTimerRef.current = setTimeout(() => {
+      void fetchRecentExports()
+    }, 5000)
+
+    return () => {
+      if (pollTimerRef.current) {
+        clearTimeout(pollTimerRef.current)
+        pollTimerRef.current = null
+      }
+    }
+  }, [hasActiveJob, recentExports, fetchRecentExports])
+
+  // Initial load.
+  useEffect(() => {
+    void fetchRecentExports()
+  }, [fetchRecentExports])
 
   async function handleExport() {
-    const controller = new AbortController()
-    exportAbortControllerRef.current = controller
-
-    setExporting(true)
-    setExportProgress(0)
+    setExportQueueing(true)
     setMessage(null)
     setImportResult(null)
-    setExportS3Key(null)
 
     try {
-      const response = await fetch('/api/research-csv/export?stream=1', {
+      const response = await fetch('/api/research-csv/export-start', {
+        method: 'POST',
         credentials: 'include',
-        signal: controller.signal,
       })
 
       if (!response.ok) {
         const error = await response.json().catch(() => null)
-        throw new Error(error?.error ?? 'CSV export failed.')
+        throw new Error(error?.error ?? 'Failed to queue export.')
       }
 
-      if (!response.body) {
-        throw new Error('No response body.')
-      }
+      const data = (await response.json()) as { jobId?: number }
 
-      const reader = response.body.getReader()
-      const decoder = new TextDecoder()
-      let buffer = ''
-      const finalResultRef: { current: ExportResult | null } = {
-        current: null,
-      }
-      let streamError: string | null = null
-      let wasCancelled = false
-
-      const handleEvent = (raw: string) => {
-        const line = raw.trim()
-        if (!line) return
-
-        const evt = parseStreamEvent(line)
-        if (!evt) return
-
-        if (evt.type === 'progress') {
-          setExportProgress(clampProgress(evt.progress))
-        } else if (evt.type === 'complete') {
-          setExportProgress(100)
-          finalResultRef.current = evt.result as ExportResult
-        } else if (evt.type === 'cancelled') {
-          wasCancelled = true
-        } else if (evt.type === 'error') {
-          streamError = String(evt.error ?? 'CSV export failed.')
-        }
-      }
-
-      while (true) {
-        const { value, done } = await reader.read()
-        if (done) break
-        buffer += decoder.decode(value, { stream: true })
-
-        let newlineIndex = buffer.indexOf('\n')
-        while (newlineIndex !== -1) {
-          handleEvent(buffer.slice(0, newlineIndex))
-          buffer = buffer.slice(newlineIndex + 1)
-          newlineIndex = buffer.indexOf('\n')
-        }
-      }
-
-      if (buffer.trim()) handleEvent(buffer)
-
-      if (controller.signal.aborted || wasCancelled) {
-        setMessage({ tone: 'error', text: 'Export cancelled.' })
-        return
-      }
-
-      if (streamError) throw new Error(streamError)
-      const finalResult = finalResultRef.current
-      if (!finalResult) throw new Error('Export ended without a result.')
-
-      downloadBlob(
-        new Blob([finalResult.csv], { type: 'text/csv;charset=utf-8' }),
-        finalResult.filename,
-      )
-      setExportS3Key(finalResult.s3Key ?? null)
       setMessage({
         tone: 'success',
-        text: `Export complete: ${finalResult.rowCount} rows downloaded.`,
+        text: `Export queued (job #${data.jobId ?? '?'}). The CSV will appear in Recent exports once the worker finishes. This usually takes 1–5 minutes.`,
       })
+
+      await fetchRecentExports()
     } catch (error) {
       setMessage({
         tone: 'error',
-        text:
-          controller.signal.aborted || (error instanceof Error && error.name === 'AbortError')
-            ? 'Export cancelled.'
-            : error instanceof Error
-              ? error.message
-              : 'CSV export failed.',
+        text: error instanceof Error ? error.message : 'Failed to queue export.',
       })
     } finally {
-      exportAbortControllerRef.current = null
-      setExporting(false)
+      setExportQueueing(false)
     }
-  }
-
-  function handleCancelExport() {
-    exportAbortControllerRef.current?.abort()
   }
 
   async function handleImport(event: FormEvent<HTMLFormElement>) {
@@ -215,7 +182,6 @@ export function ResearchCsvManager() {
     setImporting(true)
     setMessage(null)
     setImportResult(null)
-    setExportS3Key(null)
     setLastProgress(null)
 
     try {
@@ -298,23 +264,23 @@ export function ResearchCsvManager() {
     }
   }
 
-  const disabled = exporting || importing
+  const exportButtonLabel = exportQueueing
+    ? 'Queuing…'
+    : hasActiveJob
+      ? 'Export running…'
+      : 'Export research CSV'
+
+  const disabled = importing || exportQueueing
 
   return (
     <div style={{ color: '#0c0c48' }}>
       <div style={{ maxWidth: '980px' }}>
         <h1 style={{ fontSize: '2rem', margin: '0 0 0.5rem' }}>Research CSV Import / Export</h1>
-        <p
-          style={{
-            lineHeight: 1.55,
-            marginBottom: '1.5rem',
-            maxWidth: '760px',
-          }}
-        >
-          Use this page to manage research publication data in bulk. You can export publications
-          collected from staff ORCID profiles into a CSV file, or upload a completed CSV to add,
-          update, or persistently delete research records in the CMS. Uploaded and exported CSV
-          files are also saved as a backup in secure file storage.
+        <p style={{ lineHeight: 1.55, marginBottom: '1.5rem', maxWidth: '760px' }}>
+          Use this page to manage research publication data in bulk. You can queue a background
+          export that collects publications from staff ORCID profiles and writes the CSV to S3, or
+          upload a completed CSV to add, update, or persistently delete research records in the CMS.
+          Uploaded and exported CSV files are also saved as a backup in secure file storage.
         </p>
 
         <div
@@ -327,21 +293,20 @@ export function ResearchCsvManager() {
           <section style={cardStyle}>
             <h2 style={{ marginTop: 0 }}>1. Export CSV</h2>
             <p style={{ lineHeight: 1.5, paddingBottom: '14px' }}>
-              Generates a fresh CSV using staff ORCID values, stores a copy in S3 (Amazon Simple
-              Storage Service), and downloads the CSV to your computer. OpenAlex terms are saved
-              into Research Category Terms for admin review. Only mapped terms and title-keyword
-              fallback categories are added to the categories column.
+              Queues a background job that fetches publications from staff ORCID profiles, applies
+              OpenAlex term mappings (with title-keyword fallbacks), and stores the CSV in S3. Comes
+              back in 1–5 minutes — refresh or wait for the Recent exports list below to flip to{' '}
+              <strong>Done</strong>, then click Download.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
-              <button type="button" onClick={handleExport} disabled={disabled} style={buttonStyle}>
-                {exporting ? `Exporting ${exportProgress}%` : 'Export research CSV'}
+              <button
+                type="button"
+                onClick={handleExport}
+                disabled={disabled || hasActiveJob}
+                style={buttonStyle}
+              >
+                {exportButtonLabel}
               </button>
-
-              {exporting && (
-                <button type="button" onClick={handleCancelExport} style={secondaryButtonStyle}>
-                  Cancel
-                </button>
-              )}
             </div>
           </section>
 
@@ -362,7 +327,7 @@ export function ResearchCsvManager() {
               />
 
               <button type="submit" disabled={disabled} style={secondaryButtonStyle}>
-                {importing ? 'Importing...' : 'Import CSV to CMS'}
+                {importing ? 'Importing…' : 'Import CSV to CMS'}
               </button>
             </form>
 
@@ -399,12 +364,94 @@ export function ResearchCsvManager() {
           </div>
         )}
 
-        {exportS3Key && (
-          <section style={{ ...cardStyle, marginTop: '1.25rem' }}>
-            <h2 style={{ marginTop: 0 }}>Export saved to S3</h2>
-            <p style={{ wordBreak: 'break-all', marginBottom: 0 }}>{exportS3Key}</p>
-          </section>
-        )}
+        <section style={{ ...cardStyle, marginTop: '1.25rem' }}>
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginBottom: '0.5rem',
+            }}
+          >
+            <h2 style={{ margin: 0 }}>Recent exports</h2>
+            <Link
+              href="/admin/collections/research-exports"
+              style={{ color: '#0c0c48', fontWeight: 600 }}
+            >
+              View all
+            </Link>
+          </div>
+
+          {recentExports.length === 0 ? (
+            <p style={{ color: '#6b7280', margin: 0 }}>
+              No exports yet. Queue one with the Export research CSV button above.
+            </p>
+          ) : (
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.9rem' }}>
+              <thead>
+                <tr style={{ textAlign: 'left', borderBottom: '1px solid #e5e7eb' }}>
+                  <th style={{ padding: '0.5rem 0.5rem 0.5rem 0' }}>Status</th>
+                  <th style={{ padding: '0.5rem' }}>Requested</th>
+                  <th style={{ padding: '0.5rem' }}>Completed</th>
+                  <th style={{ padding: '0.5rem' }}>Rows</th>
+                  <th style={{ padding: '0.5rem 0 0.5rem 0.5rem', textAlign: 'right' }}>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {recentExports.map((job) => {
+                  const palette = statusColors[job.status]
+                  return (
+                    <tr key={job.id} style={{ borderBottom: '1px solid #f3f4f6' }}>
+                      <td style={{ padding: '0.6rem 0.5rem 0.6rem 0' }}>
+                        <span
+                          style={{
+                            background: palette.bg,
+                            color: palette.fg,
+                            borderRadius: '999px',
+                            padding: '0.2rem 0.6rem',
+                            fontSize: '0.75rem',
+                            fontWeight: 600,
+                            textTransform: 'capitalize',
+                          }}
+                        >
+                          {job.status}
+                        </span>
+                      </td>
+                      <td style={{ padding: '0.6rem 0.5rem' }}>
+                        {formatDateTime(job.requestedAt)}
+                      </td>
+                      <td style={{ padding: '0.6rem 0.5rem' }}>
+                        {formatDateTime(job.completedAt)}
+                      </td>
+                      <td style={{ padding: '0.6rem 0.5rem' }}>{job.rowCount ?? '—'}</td>
+                      <td
+                        style={{
+                          padding: '0.6rem 0 0.6rem 0.5rem',
+                          textAlign: 'right',
+                        }}
+                      >
+                        {job.status === 'done' ? (
+                          <a
+                            href={`/api/research-csv/export-download?jobId=${job.id}`}
+                            style={{ color: '#0c0c48', fontWeight: 600 }}
+                          >
+                            Download
+                          </a>
+                        ) : job.status === 'failed' ? (
+                          <span title={job.errorMessage ?? undefined} style={{ color: '#991b1b' }}>
+                            See error
+                          </span>
+                        ) : (
+                          <span style={{ color: '#6b7280' }}>—</span>
+                        )}
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          )}
+        </section>
 
         {importResult && (
           <section style={{ ...cardStyle, marginTop: '1.25rem' }}>
