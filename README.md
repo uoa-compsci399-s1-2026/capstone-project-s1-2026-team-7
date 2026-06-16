@@ -473,7 +473,7 @@ npm run start
 ## Deployment
 
 Live Website:  
-https://capstone-project-s1-2026-team-7.vercel.app/
+Live Deployment](https://hnu-uoa.vercel.app/)
 
 This deployed website should remain available until the final mark has been released.
 
