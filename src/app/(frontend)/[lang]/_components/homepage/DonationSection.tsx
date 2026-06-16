@@ -2,7 +2,10 @@
 
 import Image from 'next/image'
 import clsx from 'clsx'
+import { useParams } from 'next/navigation'
 import { useInView } from '@/app/(frontend)/[lang]/_components/useInView'
+import getLocalizedHref from '@/lib/localizedHref'
+import type { Lang } from '@/types/lang'
 import HrefButton from '../HrefButton'
 
 const FADE_BASE = 'transition-all duration-700 ease-out will-change-[opacity,transform]'
@@ -11,6 +14,7 @@ const FADE_SHOWN = 'opacity-100 translate-y-0'
 
 function DonationSection() {
   const { ref, inView } = useInView<HTMLElement>()
+  const { lang } = useParams<{ lang: Lang }>()
 
   return (
     <section ref={ref} className="w-full bg-white py-16">
@@ -48,9 +52,9 @@ function DonationSection() {
             </p>
             <HrefButton
               title="Make a Donation"
-              href="https://www.auckland.ac.nz/en/giving/donate/a-z-list-of-funds0.html"
+              href={getLocalizedHref('/donations', lang)}
               variant="primary"
-            ></HrefButton>
+            />
           </div>
         </div>
       </div>
