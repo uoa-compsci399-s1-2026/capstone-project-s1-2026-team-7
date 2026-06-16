@@ -38,7 +38,10 @@ export default function WhoWeAreSection({ data }: WhoWeAreBlockProps) {
                 <div className="relative aspect-4/3 h-full w-full overflow-hidden rounded-2xl md:max-h-96">
                   <Image
                     src={image.url}
-                    alt="Researchers working with a participant in the Human Nutrition Unit"
+                    alt={
+                      image.alt ||
+                      'Researchers working with a participant in the Human Nutrition Unit'
+                    }
                     fill
                     sizes="(max-width: 639px) 84vw, (max-width: 1023px) 42vw, 520px"
                     className="object-cover object-center"

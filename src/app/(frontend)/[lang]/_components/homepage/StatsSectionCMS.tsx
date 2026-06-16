@@ -57,25 +57,16 @@ function CountUpNumber({ end, duration = 1500 }: { end: number; duration?: numbe
 }
 export default function StatsSectionCMS({ title, stats }: { title?: string; stats: Stat[] }) {
   return (
-    <section className="bg-white px-[26px] py-16 md:px-8 md:py-24 lg:px-12">
+    <section className="bg-white px-6.5 py-16 md:px-8 md:py-24 lg:px-12">
       {/* Title */}
       {title && (
-        <div className="mx-auto mb-10 w-full max-w-[1150px] text-center">
+        <div className="mx-auto mb-10 w-full max-w-287.5 text-center">
           <h2 className="text-xl font-semibold text-[#05083f] md:text-3xl">{title}</h2>
         </div>
       )}
 
-      <div className="mx-auto w-full max-w-[1150px] min-[500px]:max-w-[480px] sm:max-w-[520px] md:max-w-[1150px]">
+      <div className="mx-auto w-full max-w-287.5 min-[500px]:max-w-[480px] sm:max-w-[520px] md:max-w-[1150px]">
         <div className="relative aspect-[292/229] w-full overflow-hidden rounded-[8px] bg-[linear-gradient(180deg,#3636B7_0%,#3434B0_0.01%,#272785_13.16%,#181851_74.52%)] md:aspect-[1150/295] md:rounded-[24px]">
-          <Image
-            src="/stats-bg.png"
-            alt="Microscope cell background"
-            fill
-            priority
-            sizes="(max-width: 499px) calc(100vw - 52px), (max-width: 767px) 520px, 1150px"
-            className="object-cover opacity-[0.35] mix-blend-screen"
-          />
-
           <div className="absolute inset-0 bg-[#05083f]/25" />
 
           {/* Mobile middle divider lines only */}

@@ -26,5 +26,5 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function Page({ params }: PageProps) {
   const { lang } = await params
   const things: StudiesPageDTO = await getStudiesPage(lang)
-  return <StudyList studypage={things}></StudyList>
+  return <StudyList studypage={things} lang={lang}></StudyList>
 }

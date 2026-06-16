@@ -49,6 +49,9 @@ export const WhoWeAreBlock: Block = {
       label: 'Image',
       relationTo: 'media',
       required: true,
+      admin: {
+        description: 'Image shown in the Who We Are section on the homepage.',
+      },
     },
   ],
 }

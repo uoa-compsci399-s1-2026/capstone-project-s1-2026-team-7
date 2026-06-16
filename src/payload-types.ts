@@ -1087,6 +1087,9 @@ export interface TimelineBlock {
 export interface WhoWeAreBlock {
   title: string
   description: string
+  /**
+   * Image shown in the Who We Are section on the homepage.
+   */
   image: number | Media
   id?: string | null
   blockName?: string | null
@@ -1106,6 +1109,9 @@ export interface WhatWeDoBlock {
     }[]
     id?: string | null
   }[]
+  /**
+   * Image shown in the What We Do section on the homepage.
+   */
   image: number | Media
   id?: string | null
   blockName?: string | null
@@ -1459,6 +1465,7 @@ export interface CollaborationsPage {
         title: string
         description: string
         image: number | Media
+        backgroundImage?: (number | null) | Media
         id?: string | null
         blockName?: string | null
         blockType: 'collaborationHero'
@@ -2023,6 +2030,7 @@ export interface CollaborationsPageSelect<T extends boolean = true> {
               title?: T
               description?: T
               image?: T
+              backgroundImage?: T
               id?: T
               blockName?: T
             }
