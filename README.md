@@ -473,7 +473,7 @@ npm run start
 ## Deployment
 
 Live Website:  
-Live Deployment](https://hnu-uoa.vercel.app/)
+[Live Deployment](https://hnu-uoa.vercel.app/)
 
 This deployed website should remain available until the final mark has been released.
 
