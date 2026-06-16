@@ -10,7 +10,7 @@ export default function FilterPill({
   return (
     <button
       onClick={onClick}
-      className={`cursor-pointer rounded-full border px-4 py-1.5 text-sm font-medium transition ${
+      className={`cursor-pointer rounded-full border px-4 py-1.5 text-sm font-medium transition-all duration-200 ${
         active
           ? 'border-[#181851] bg-[#181851] text-white'
           : 'border-gray-200 bg-white text-[#181851] hover:border-[#181851]'

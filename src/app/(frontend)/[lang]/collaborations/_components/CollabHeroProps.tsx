@@ -12,9 +12,7 @@ type Props = {
 export default function CollabHeroProps({ title, description, imageUrl, imageAlt }: Props) {
   return (
     <section className="relative isolate w-full overflow-hidden min-h-130 md:min-h-145 lg:min-h-160 xl:min-h-182 bg-blue-900">
-      {/* Content */}
       <div className="relative z-10 mx-auto grid min-h-130 w-full max-w-280 grid-cols-1 items-center px-6.5 py-16 md:min-h-145 md:grid-cols-[55%_45%] md:gap-x-[4%] md:px-8 lg:min-h-160 lg:grid-cols-[45%_55%] lg:gap-x-[6%] lg:px-12 xl:min-h-182 xl:gap-x-[4%] xl:px-0">
-        {/* Text column */}
         <div className="flex w-full flex-col items-center text-center md:items-start md:text-left xl:items-center xl:text-start">
           <h1
             className="font-bold leading-tight text-white md:max-w-xs lg:max-w-sm

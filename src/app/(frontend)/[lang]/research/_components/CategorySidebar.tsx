@@ -45,7 +45,7 @@ export default function CategorySidebar({
         <button
           type="button"
           onClick={() => onSelect(null)}
-          className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-sm font-semibold transition ${
+          className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left text-sm font-semibold transition-all duration-200 cursor-pointer ${
             selectedCategoryId === null
               ? 'bg-[#090936] text-white shadow-sm'
               : 'bg-slate-50 text-slate-700 hover:bg-slate-100'
@@ -64,7 +64,7 @@ export default function CategorySidebar({
               key={categoryId}
               type="button"
               onClick={() => onSelect(isActive ? null : categoryId)}
-              className={`group flex w-full items-center justify-between gap-3 rounded-2xl px-4 py-3 text-left text-sm transition ${
+              className={`group flex w-full items-center justify-between gap-3 rounded-2xl px-4 py-3 text-left text-sm transition-all duration-200 cursor-pointer ${
                 isActive
                   ? 'bg-[#090936] font-bold text-white shadow-sm'
                   : 'bg-white text-slate-700 hover:bg-slate-50 hover:text-slate-950'

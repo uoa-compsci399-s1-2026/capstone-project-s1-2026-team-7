@@ -42,7 +42,7 @@ export default function Pagination({ page, totalItems, itemsPerPage, onPageChang
           type="button"
           disabled={page === 1}
           onClick={() => onPageChange(page - 1)}
-          className="inline-flex h-10 items-center gap-2 rounded-2xl border border-slate-200 px-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+          className="inline-flex h-10 items-center gap-2 rounded-2xl border border-slate-200 px-3 text-sm font-bold text-slate-700 transition-all duration-200 hover:bg-slate-50 cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
         >
           <ChevronLeft className="h-4 w-4" aria-hidden="true" />
           Previous
@@ -55,7 +55,7 @@ export default function Pagination({ page, totalItems, itemsPerPage, onPageChang
               type="button"
               onClick={() => onPageChange(pageNumber)}
               aria-current={pageNumber === page ? 'page' : undefined}
-              className={`h-10 min-w-10 rounded-2xl px-3 text-sm font-black transition ${
+              className={`h-10 min-w-10 rounded-2xl px-3 cursor-pointer text-sm font-black transition-all duration-200 ${
                 pageNumber === page
                   ? 'bg-[#090936] text-white'
                   : 'text-slate-600 hover:bg-slate-100 hover:text-slate-950'
@@ -70,7 +70,7 @@ export default function Pagination({ page, totalItems, itemsPerPage, onPageChang
           type="button"
           disabled={page === totalPages}
           onClick={() => onPageChange(page + 1)}
-          className="inline-flex h-10 items-center gap-2 rounded-2xl border border-slate-200 px-3 text-sm font-bold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+          className="inline-flex h-10 items-center gap-2 rounded-2xl border border-slate-200 px-3 text-sm font-bold text-slate-700 transition-all duration-200 hover:bg-slate-50 cursor-pointer disabled:cursor-not-allowed disabled:opacity-40"
         >
           Next
           <ChevronRight className="h-4 w-4" aria-hidden="true" />

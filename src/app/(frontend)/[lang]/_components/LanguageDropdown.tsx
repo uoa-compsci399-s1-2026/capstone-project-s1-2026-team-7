@@ -38,7 +38,7 @@ export const LanguageDropdown = (props: LanguageDropdownProps) => {
       <button
         onClick={() => setOpen((prev) => !prev)}
         aria-label="Change language"
-        className="inline-flex h-8 items-center justify-center gap-2 rounded-full border border-[#C9CDD4] bg-white px-3 text-[12px] font-medium text-[#0C0C48] transition hover:bg-[#F2F4F7]"
+        className="inline-flex h-8 items-center justify-center gap-2 rounded-full border border-[#C9CDD4] bg-white px-3 text-[12px] font-medium text-[#0C0C48] transition-all duration-200 hover:bg-[#F2F4F7] cursor-pointer"
       >
         <span>
           {selected.code === 'en' ? '🇬🇧 ' : ''}
@@ -57,7 +57,7 @@ export const LanguageDropdown = (props: LanguageDropdownProps) => {
               key={l.code}
               onClick={() => handleSelect(l.code as Lang)}
               className={cn(
-                'flex w-full items-center gap-2 px-3 py-2 text-left text-[12px] font-medium text-[#0C0C48] transition hover:bg-[#F2F4F7]',
+                'flex w-full items-center gap-2 px-3 py-2 text-left text-[12px] font-medium text-[#0C0C48] transition-all duration-200 hover:bg-[#F2F4F7] cursor-pointer',
                 selected.code === l.code && 'bg-[#F2F4F7]',
               )}
             >

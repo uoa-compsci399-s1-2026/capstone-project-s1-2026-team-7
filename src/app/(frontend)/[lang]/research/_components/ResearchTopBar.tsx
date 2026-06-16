@@ -25,7 +25,6 @@ export default function ResearchTopBar({
 
   return (
     <div className="mb-5 rounded-3xl border border-slate-200 bg-white px-5 py-4 shadow-sm">
-      <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-400">Archive index</p>
       <div className="mt-1 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
           <h2 className="text-xl font-black text-slate-950">
@@ -40,7 +39,7 @@ export default function ResearchTopBar({
               <button
                 type="button"
                 onClick={onClearStaff}
-                className="rounded-full bg-[#090936]/10 px-3 py-1 text-xs font-bold text-[#090936] transition hover:bg-[#090936] hover:text-white"
+                className="rounded-full bg-[#090936]/10 px-3 py-1 text-xs font-bold text-[#090936] transition-all duration-200 hover:bg-[#090936] hover:text-white"
                 title="Clear staff filter"
               >
                 Staff: {selectedStaff.label} ×
