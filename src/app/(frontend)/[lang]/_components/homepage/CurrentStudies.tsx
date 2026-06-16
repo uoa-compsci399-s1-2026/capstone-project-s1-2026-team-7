@@ -7,6 +7,7 @@ import type { CurrentStudiesBlockDTO } from '@/features/homepage/home.schema'
 import type { Lang } from '@/types/lang'
 import StudySummaryCard from './StudySummaryCard'
 import { useInView } from '@/app/(frontend)/[lang]/_components/useInView'
+import { ChevronRight } from 'lucide-react'
 
 type CurrentStudiesProps = {
   data: CurrentStudiesBlockDTO
@@ -52,7 +53,7 @@ export default function CurrentStudies({ data, lang, limit = 3 }: CurrentStudies
                 'text-xs font-bold whitespace-nowrap text-[#08084f] transition hover:opacity-70 sm:text-sm md:text-base lg:text-lg',
               )}
             >
-              {data.link.title} &gt;
+              {data.link.title} <ChevronRight className="h-6 w-6 inline-block" aria-hidden="true" />
             </Link>
           )}
         </div>
