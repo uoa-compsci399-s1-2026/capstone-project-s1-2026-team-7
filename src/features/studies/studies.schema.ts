@@ -6,6 +6,10 @@ import { seoMetaSchema } from '../common'
 
 const richTextSchema = z.any().default('')
 
+const mediaWithDefaultSchema = mediaSchema
+  .nullish()
+  .transform((media) => media ?? DEFAULT_GENERAL_PIC)
+
 const participationItemSchema = z.object({
   id: z.string().optional(),
   title: z.string().default(''),
@@ -221,23 +225,34 @@ export const studySchema = z.object({
   eligibility: z.string().default(''),
   slug: z.string().default(''),
 
-  banner: mediaSchema.default(DEFAULT_GENERAL_PIC),
+  banner: mediaWithDefaultSchema,
 
   description: richTextSchema,
 
-  participationItems: z.array(participationItemSchema).default([]),
+  participationItems: z
+    .array(participationItemSchema)
+    .nullish()
+    .transform((items) => items ?? []),
 
-  eligibilityInclusion: z.array(eligibilityCriterionSchema).default([]),
+  eligibilityInclusion: z
+    .array(eligibilityCriterionSchema)
+    .nullish()
+    .transform((items) => items ?? []),
 
-  eligibilityExclusion: z.array(eligibilityCriterionSchema).default([]),
+  eligibilityExclusion: z
+    .array(eligibilityCriterionSchema)
+    .nullish()
+    .transform((items) => items ?? []),
 
-  faqs: z.array(faqItemSchema).default([]),
+  faqs: z
+    .array(faqItemSchema)
+    .nullish()
+    .transform((items) => items ?? []),
 
   surveyUrl: z.string().default(''),
 
   ethicsApprovalRef: z.string().default(''),
 
-  // Populated upload relationship; null when no PDF has been uploaded
   participantInfoPdf: z
     .object({
       url: z.string(),
@@ -248,8 +263,6 @@ export const studySchema = z.object({
     .nullable()
     .default(null),
 
-  // Admin's explicit ethical sign-off for showing the Chinese translation.
-  // Not localized — a single yes/no per study.
   chineseTranslationApproved: z.boolean().default(false),
 
   meta: seoMetaSchema,
@@ -264,8 +277,11 @@ export type StudyDTO = z.infer<typeof studySchema>
 const listingPageSchema = z
   .object({
     title: z.string().default(''),
-    banner: mediaSchema.default(DEFAULT_GENERAL_PIC),
-    studiesDisplay: z.array(studySchema).default([]),
+    banner: mediaWithDefaultSchema,
+    studiesDisplay: z
+      .array(studySchema)
+      .nullish()
+      .transform((studies) => studies ?? []),
   })
   .default({
     title: '',

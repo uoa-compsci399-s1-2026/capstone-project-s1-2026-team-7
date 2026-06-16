@@ -4,60 +4,8 @@ export const Studies: CollectionConfig = {
   slug: 'studies',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'slug', 'sortOrder'],
+    defaultColumns: ['title', 'slug'],
     listSearchableFields: ['title', 'slug'],
-  },
-
-  hooks: {
-    afterChange: [
-      async ({ doc, operation, req }) => {
-        if (operation !== 'create') {
-          return
-        }
-
-        const studyId = doc.id
-
-        const studiesPage = await req.payload.findGlobal({
-          slug: 'studies-page',
-          depth: 0,
-        })
-
-        const currentStudies = studiesPage?.listingPage?.studiesDisplay ?? []
-
-        const currentStudyIds = Array.isArray(currentStudies)
-          ? currentStudies.map((study) => {
-              if (typeof study === 'string' || typeof study === 'number') {
-                return study
-              }
-
-              if (study && typeof study === 'object' && 'id' in study) {
-                return study.id
-              }
-
-              return study
-            })
-          : []
-
-        const alreadyExists = currentStudyIds.some((id) => {
-          return String(id) === String(studyId)
-        })
-
-        if (alreadyExists) {
-          return
-        }
-
-        await req.payload.updateGlobal({
-          slug: 'studies-page',
-          depth: 0,
-          data: {
-            listingPage: {
-              ...studiesPage.listingPage,
-              studiesDisplay: [studyId, ...currentStudyIds],
-            },
-          },
-        })
-      },
-    ],
   },
 
   fields: [
@@ -149,12 +97,18 @@ export const Studies: CollectionConfig = {
       name: 'slug',
       type: 'text',
       required: true,
+      unique: true,
       admin: {
         description: 'URL-friendly version of the title, e.g. nutrition-study-2026',
       },
     },
 
-    { name: 'banner', type: 'upload', relationTo: 'media' },
+    {
+      name: 'banner',
+      type: 'upload',
+      relationTo: 'media',
+      required: false,
+    },
 
     // -------------------- About body --------------------
     {
