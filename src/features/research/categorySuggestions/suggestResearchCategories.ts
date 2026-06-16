@@ -145,7 +145,7 @@ export async function addSuggestedCategoriesToResearchRows(
 
   const titleKeywordCategories = await getKeywordFallbackCategories()
 
-  return processRowsWithConcurrency(rows, 3, async (row, index) => {
+  return processRowsWithConcurrency(rows, 10, async (row, index) => {
     throwIfAborted(options?.signal)
 
     const categoryNames = await suggestCategoryNamesForResearchRow(

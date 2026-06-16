@@ -38,14 +38,34 @@ function getOrcidPublicationDate(work: OrcidWorkSummary): string | null {
   return year ? [year, month, day].filter(Boolean).join('-') : null
 }
 
+async function processWithConcurrency<T, R>(
+  items: T[],
+  concurrency: number,
+  fn: (item: T) => Promise<R>,
+): Promise<R[]> {
+  const results = new Array<R>(items.length)
+  let nextIndex = 0
+
+  async function worker(): Promise<void> {
+    while (true) {
+      const index = nextIndex++
+      if (index >= items.length) return
+      results[index] = await fn(items[index])
+    }
+  }
+
+  await Promise.all(Array.from({ length: Math.min(concurrency, items.length) }, () => worker()))
+
+  return results
+}
+
 async function getArticleOutput(
   data: OrcidWorksResponse,
   signal?: AbortSignal,
 ): Promise<ArticleOutput[]> {
   const works = data.group.flatMap((group) => group['work-summary'])
-  const articles: ArticleOutput[] = []
 
-  for (const work of works) {
+  return processWithConcurrency(works, 5, async (work) => {
     throwIfAborted(signal)
 
     const title = work.title.title.value
@@ -60,19 +80,15 @@ async function getArticleOutput(
 
     if (doi && needsCrossrefDate) {
       crossrefPublicationDate = await fetchCrossrefPublicationDate(doi, signal)
-
-      await sleep(50, signal)
     }
 
-    articles.push({
+    return {
       title,
       doi,
       url,
       publicationDate: crossrefPublicationDate ?? orcidPublicationDate,
-    })
-  }
-
-  return articles
+    }
+  })
 }
 
 export async function fetchResearchOrcid(
