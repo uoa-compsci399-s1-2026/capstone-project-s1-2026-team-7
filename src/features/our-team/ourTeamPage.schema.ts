@@ -1,11 +1,11 @@
 import { z } from 'zod'
 import { staffSchema } from './staff.schema'
-import { seoMetaSchema } from '../common'
+import { mediaSchema, seoMetaSchema } from '../common'
 
 export const ourTeamPageDTOSchema = z
   .object({
     title: z.string().default(''),
-    banner: z.object(),
+    banner: mediaSchema.nullish(),
     boardTabLabel: z.string().default(''),
     staffTabLabel: z.string().default(''),
     staffMembers: z.array(staffSchema),

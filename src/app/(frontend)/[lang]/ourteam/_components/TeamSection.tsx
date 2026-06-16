@@ -35,7 +35,11 @@ export default function TeamSection({ teamSection }: teamSectionProps) {
 
   return (
     <>
-      <Banner title={teamSection.title} imageUrl="/ourTeam.svg" imageAlt="Our team banner image" />
+      <Banner
+        title={teamSection.title}
+        imageUrl={teamSection.banner?.url ?? ''}
+        imageAlt={teamSection.banner?.alt ?? teamSection.title}
+      />
 
       <div className="border-b border-gray-200 bg-white">
         <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-5 md:flex-row md:items-center md:justify-between">
