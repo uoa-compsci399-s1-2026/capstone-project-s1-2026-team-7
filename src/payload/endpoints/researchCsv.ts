@@ -1,6 +1,8 @@
 import type { Endpoint, PayloadRequest } from 'payload'
+import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3'
 import { importResearchCsvContent } from '@/features/research/csv/importResearchCsv'
 import { getResearchExportCsv } from '@/features/research/orcid/exportResearchCsv'
+import { runResearchExportWorker } from '@/features/research/researchExportWorker'
 import { storeResearchCsvInS3 } from '@/lib/researchCsvStorage'
 
 function unauthorizedResponse(): Response {
@@ -27,6 +29,16 @@ function isStreamRequest(req: PayloadRequest): boolean {
 
 function getRequestSignal(req: PayloadRequest): AbortSignal | undefined {
   return (req as unknown as Request).signal
+}
+
+function getS3Client(): S3Client {
+  return new S3Client({
+    region: process.env.S3_REGION || process.env.AWS_REGION || 'ap-southeast-2',
+    credentials: {
+      accessKeyId: process.env.AWS_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY || '',
+      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || '',
+    },
+  })
 }
 
 export const researchCsvExportEndpoint: Endpoint = {
@@ -218,6 +230,88 @@ export const researchCsvImportEndpoint: Endpoint = {
         'Cache-Control': 'no-cache, no-transform',
         'X-Accel-Buffering': 'no',
         'Content-Encoding': 'identity',
+      },
+    })
+  },
+}
+
+// ---- NEW: queue a background export job ----
+export const researchCsvExportStartEndpoint: Endpoint = {
+  path: '/research-csv/export-start',
+  method: 'post',
+  handler: async (req) => {
+    if (!isAuthenticated(req)) {
+      return unauthorizedResponse()
+    }
+
+    const job = await req.payload.create({
+      collection: 'research-exports',
+      data: {
+        status: 'pending',
+        requestedAt: new Date().toISOString(),
+        requestedBy: req.user?.id,
+      },
+      req,
+    })
+
+    // In dev, kick off the worker immediately so teachers/markers don't need
+    // Vercel Cron or a curl call. Fire-and-forget — the response returns now.
+    if (process.env.NODE_ENV !== 'production') {
+      void runResearchExportWorker().catch((error) => {
+        console.error('Dev auto-trigger of research export worker failed:', error)
+      })
+    }
+
+    return Response.json({ jobId: job.id })
+  },
+}
+
+// ---- NEW: download a finished export's CSV from S3 ----
+export const researchCsvExportDownloadEndpoint: Endpoint = {
+  path: '/research-csv/export-download',
+  method: 'get',
+  handler: async (req) => {
+    if (!isAuthenticated(req)) {
+      return unauthorizedResponse()
+    }
+
+    const url = new URL(req.url ?? '', 'http://localhost')
+    const jobIdParam = url.searchParams.get('jobId')
+    if (!jobIdParam) {
+      return Response.json({ error: 'jobId is required.' }, { status: 400 })
+    }
+
+    const jobId = Number(jobIdParam)
+    if (!Number.isFinite(jobId)) {
+      return Response.json({ error: 'jobId must be a number.' }, { status: 400 })
+    }
+
+    const job = await req.payload.findByID({
+      collection: 'research-exports',
+      id: jobId,
+      depth: 0,
+    })
+
+    if (!job || job.status !== 'done' || !job.s3Bucket || !job.s3Key) {
+      return Response.json({ error: 'Export is not ready for download.' }, { status: 404 })
+    }
+
+    const client = getS3Client()
+    const response = await client.send(
+      new GetObjectCommand({ Bucket: job.s3Bucket, Key: job.s3Key }),
+    )
+
+    if (!response.Body) {
+      return Response.json({ error: 'CSV body not found in S3.' }, { status: 500 })
+    }
+
+    const csv = await response.Body.transformToString('utf-8')
+    const filename = job.filename || 'research-export.csv'
+
+    return new Response(csv, {
+      headers: {
+        'Content-Type': 'text/csv; charset=utf-8',
+        'Content-Disposition': `attachment; filename="${filename}"`,
       },
     })
   },

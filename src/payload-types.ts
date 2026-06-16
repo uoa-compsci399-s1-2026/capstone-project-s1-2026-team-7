@@ -76,6 +76,7 @@ export interface Config {
     'research-categories': ResearchCategory
     'research-category-terms': ResearchCategoryTerm
     'research-exclusions': ResearchExclusion
+    'research-exports': ResearchExport
     'enquiry-tags': EnquiryTag
     'payload-kv': PayloadKv
     'payload-locked-documents': PayloadLockedDocument
@@ -95,6 +96,7 @@ export interface Config {
       | ResearchCategoryTermsSelect<false>
       | ResearchCategoryTermsSelect<true>
     'research-exclusions': ResearchExclusionsSelect<false> | ResearchExclusionsSelect<true>
+    'research-exports': ResearchExportsSelect<false> | ResearchExportsSelect<true>
     'enquiry-tags': EnquiryTagsSelect<false> | EnquiryTagsSelect<true>
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>
     'payload-locked-documents':
@@ -524,6 +526,36 @@ export interface ResearchExclusion {
   createdAt: string
 }
 /**
+ * Background research CSV export jobs. Created when an admin clicks Export and processed by the cron worker.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research-exports".
+ */
+export interface ResearchExport {
+  id: number
+  status: 'pending' | 'processing' | 'done' | 'failed'
+  /**
+   * The CMS user who clicked Export. Auto-filled on create.
+   */
+  requestedBy?: (number | null) | User
+  /**
+   * Auto-filled on create.
+   */
+  requestedAt: string
+  startedAt?: string | null
+  completedAt?: string | null
+  filename?: string | null
+  rowCount?: number | null
+  s3Bucket?: string | null
+  s3Key?: string | null
+  /**
+   * Populated only if the export failed.
+   */
+  errorMessage?: string | null
+  updatedAt: string
+  createdAt: string
+}
+/**
  * Tags shown in the contact form dropdown. Each tag routes submissions to its recipient email.
  *
  * This interface was referenced by `Config`'s JSON-Schema
@@ -595,6 +627,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'research-exclusions'
         value: number | ResearchExclusion
+      } | null)
+    | ({
+        relationTo: 'research-exports'
+        value: number | ResearchExport
       } | null)
     | ({
         relationTo: 'enquiry-tags'
@@ -850,6 +886,24 @@ export interface ResearchExclusionsSelect<T extends boolean = true> {
   restoredAt?: T
   timesSeen?: T
   reason?: T
+  updatedAt?: T
+  createdAt?: T
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "research-exports_select".
+ */
+export interface ResearchExportsSelect<T extends boolean = true> {
+  status?: T
+  requestedBy?: T
+  requestedAt?: T
+  startedAt?: T
+  completedAt?: T
+  filename?: T
+  rowCount?: T
+  s3Bucket?: T
+  s3Key?: T
+  errorMessage?: T
   updatedAt?: T
   createdAt?: T
 }

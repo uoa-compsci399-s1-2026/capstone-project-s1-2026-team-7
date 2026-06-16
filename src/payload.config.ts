@@ -16,6 +16,7 @@ import { Research } from './payload/collections/Research'
 import { ResearchCategories } from './payload/collections/ResearchCategories'
 import { ResearchCategoryTerms } from './payload/collections/ResearchCategoryTerms'
 import { ResearchExclusions } from './payload/collections/ResearchExclusions'
+import { ResearchExports } from './payload/collections/ResearchExports'
 
 import { HomePage } from './payload/globals/Homepage'
 import { OurTeamPage } from './payload/globals/OurTeamPage'
@@ -30,7 +31,10 @@ import { translateEndpoint } from './payload/endpoints/translate'
 import {
   researchCsvExportEndpoint,
   researchCsvImportEndpoint,
+  researchCsvExportStartEndpoint,
+  researchCsvExportDownloadEndpoint,
 } from './payload/endpoints/researchCsv'
+
 import { researchExcludeFromOrcidSyncEndpoint } from './payload/endpoints/researchExclusions'
 
 import { seoPlugin } from '@payloadcms/plugin-seo'
@@ -105,6 +109,7 @@ export default buildConfig({
     ResearchCategories,
     ResearchCategoryTerms,
     ResearchExclusions,
+    ResearchExports,
     EnquiryTags,
   ],
 
@@ -124,6 +129,8 @@ export default buildConfig({
     translateEndpoint,
     researchCsvExportEndpoint,
     researchCsvImportEndpoint,
+    researchCsvExportStartEndpoint,
+    researchCsvExportDownloadEndpoint,
     researchExcludeFromOrcidSyncEndpoint,
   ],
 
