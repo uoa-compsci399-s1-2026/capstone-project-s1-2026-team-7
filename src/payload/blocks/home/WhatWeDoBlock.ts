@@ -84,6 +84,9 @@ export const WhatWeDoBlock: Block = {
       label: 'Image',
       relationTo: 'media',
       required: true,
+      admin: {
+        description: 'Image shown in the What We Do section on the homepage.',
+      },
     },
   ],
 }
