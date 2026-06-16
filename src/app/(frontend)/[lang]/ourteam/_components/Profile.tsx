@@ -85,7 +85,7 @@ export default function ProfileCard({ profile, variantIndex = 0, action }: Profi
     <button
       type="button"
       onClick={action}
-      className="group flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-4 text-left transition hover:-translate-y-0.5 hover:shadow-lg"
+      className="group flex h-full flex-col rounded-2xl border border-gray-200 bg-white p-4 text-left transition hover:-translate-y-0.5 hover:shadow-lg cursor-pointer"
     >
       <AvatarBlock variantIndex={variantIndex} photo={photo} />
 

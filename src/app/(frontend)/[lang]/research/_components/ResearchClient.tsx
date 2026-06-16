@@ -349,7 +349,7 @@ export function ResearchClient({
                 <button
                   type="button"
                   onClick={clearFilters}
-                  className="mt-6 rounded-2xl bg-[#090936] px-5 py-3 text-sm font-black text-white transition hover:bg-[#15155a]"
+                  className="mt-6 rounded-2xl bg-[#090936] px-5 py-3 text-sm font-black text-white transition-all duration-200 hover:bg-[#15155a]"
                 >
                   Clear all filters
                 </button>

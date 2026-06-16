@@ -14,7 +14,6 @@ export default function HeroSection({ data, lang }: HeroSectionProps) {
 
   return (
     <section className="relative isolate min-h-130 w-full overflow-hidden md:min-h-145 lg:min-h-160 xl:min-h-182">
-      {/* Background image from CMS */}
       {heroHorizontal.url && (
         <Image
           src={heroHorizontal.url}
@@ -27,10 +26,8 @@ export default function HeroSection({ data, lang }: HeroSectionProps) {
         />
       )}
 
-      {/* Same container as the other sections: w-[84%] capped at 1200px */}
       <div className="relative z-10 mx-auto flex min-h-130 w-[84%] max-w-300 items-center py-16 md:min-h-145 lg:min-h-160 xl:min-h-182">
         <div className="grid w-full grid-cols-1 items-center gap-10 md:grid-cols-2 md:gap-10 lg:gap-12 xl:gap-14">
-          {/* Text */}
           <div className="text-center md:text-left">
             <h1 className="text-2xl leading-tight font-bold text-white md:text-3xl lg:text-4xl xl:text-5xl">
               {title}
@@ -52,7 +49,6 @@ export default function HeroSection({ data, lang }: HeroSectionProps) {
             </div>
           </div>
 
-          {/* Portrait — hidden below md, pinned to the right of its column */}
           <div className="hidden md:flex md:justify-end">
             <div className="relative w-full max-w-90 lg:max-w-115 xl:max-w-130">
               <div className="absolute -top-2 -left-2 h-full w-full rounded-3xl bg-[#1F2BD4]" />

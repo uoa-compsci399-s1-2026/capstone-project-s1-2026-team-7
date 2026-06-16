@@ -5,6 +5,7 @@ import ContactInput from './ContactInput'
 import MainButton from '../../_components/MainButton'
 import type { EnquiryTagDTO } from '@/features/contact/contact.schema'
 import { type ContactFormState, contactFormInitialState } from '@/types/contact'
+import { ChevronDown } from 'lucide-react'
 
 type ContactFormProps = {
   content: {
@@ -72,22 +73,25 @@ export default function ContactForm({ content, tags, action }: ContactFormProps)
           </span>
         </label>
 
-        <select
-          id="enquiryTagId"
-          name="enquiryTagId"
-          required
-          defaultValue=""
-          className="h-13 w-full rounded-xl bg-white px-6 text-[18px] text-black outline-1 focus:ring-2 focus:ring-[#0C0C48]"
-        >
-          <option value="" disabled>
-            {content.enquiryTypePlaceholder}
-          </option>
-          {tags.map((tag) => (
-            <option key={tag.id} value={String(tag.id)}>
-              {tag.label}
+        <div className="relative">
+          <select
+            id="enquiryTagId"
+            name="enquiryTagId"
+            required
+            defaultValue=""
+            className="h-13 w-full rounded-xl bg-white px-6 text-[18px] text-black outline-1 focus:ring-2 focus:ring-[#0C0C48] cursor-pointer appearance-none"
+          >
+            <option value="" disabled>
+              {content.enquiryTypePlaceholder}
             </option>
-          ))}
-        </select>
+            {tags.map((tag) => (
+              <option key={tag.id} value={String(tag.id)}>
+                {tag.label}
+              </option>
+            ))}
+          </select>
+          <ChevronDown className="pointer-events-none absolute right-3 top-4.5 w-4 h-4 " />
+        </div>
       </div>
 
       <div className="flex flex-col gap-2">

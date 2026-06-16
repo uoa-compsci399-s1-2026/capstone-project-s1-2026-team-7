@@ -54,7 +54,7 @@ export default function ResearchFilters({
                 aria-hidden="true"
               />
               <select
-                className="h-12 w-full appearance-none rounded-2xl border border-slate-200 bg-slate-50 pl-11 pr-9 text-sm font-bold text-slate-800 outline-none transition focus:border-[#090936] focus:bg-white focus:ring-4 focus:ring-[#090936]/10"
+                className="h-12 w-full appearance-none rounded-2xl border border-slate-200 bg-slate-50 pl-11 pr-9 text-sm font-bold text-slate-800 outline-none transition focus:border-[#090936] focus:bg-white focus:ring-4 focus:ring-[#090936]/10 cursor-pointer"
                 value={sortOption}
                 onChange={(event) => setSortOption(event.target.value as SortOption)}
               >
@@ -69,7 +69,7 @@ export default function ResearchFilters({
             type="button"
             onClick={onClearFilters}
             disabled={!hasActiveFilters}
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 px-5 text-sm font-bold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+            className="inline-flex h-12 items-center justify-center gap-2 rounded-2xl border border-slate-200 px-5 text-sm font-bold text-slate-700 transition-all duration-200 hover:border-slate-300 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
           >
             <X className="h-4 w-4" aria-hidden="true" />
             Clear

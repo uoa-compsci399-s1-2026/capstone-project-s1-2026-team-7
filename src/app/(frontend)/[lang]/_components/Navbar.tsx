@@ -75,7 +75,7 @@ export default function Navbar(props: navbarProps) {
             <button
               onClick={() => closeMobileMenu()}
               aria-label="Close menu"
-              className="flex h-8 w-8 items-center justify-center rounded-full border border-[#6B6F76] text-[#000000] transition hover:bg-[#ECECEC]"
+              className="flex h-8 w-8 items-center justify-center rounded-full border border-[#6B6F76] text-[#000000] transition-all duration-200 hover:bg-[#ECECEC]"
             >
               <Image src="/XIcon.svg" alt="" width={14} height={14} aria-hidden />
             </button>
@@ -106,7 +106,7 @@ export default function Navbar(props: navbarProps) {
               onClick={() => {
                 closeMobileMenu(() => router.push(`/${lang}/contact`))
               }}
-              className="h-11 w-full rounded-full bg-[#2F3FE6] text-[13px] font-medium text-white transition hover:opacity-85"
+              className="h-11 w-full rounded-full bg-[#2F3FE6] text-[13px] font-medium text-white transition-all duration-200 hover:opacity-85"
             >
               Contact
             </button>
@@ -133,14 +133,14 @@ export default function Navbar(props: navbarProps) {
           <div className="flex items-center gap-3">
             <LanguageDropdown className="hidden md:inline-flex" />
 
-            <ContactButton className="hidden h-8 w-18 items-center justify-center rounded-full bg-[#2F3FE6] text-[12px] font-medium text-white transition hover:opacity-85 md:inline-flex" />
+            <ContactButton className="hidden h-8 w-18 items-center justify-center rounded-full bg-[#2F3FE6] text-[12px] font-medium text-white transition-all duration-200 hover:opacity-85 md:inline-flex cursor-pointer" />
 
             <LanguageDropdown className="inline-flex md:hidden" />
 
             <button
               onClick={openMobileMenu}
               aria-label="Open menu"
-              className="flex h-9 w-9 items-center justify-center rounded-full transition hover:bg-[#ECECEC] md:hidden"
+              className="flex h-9 w-9 items-center justify-center rounded-full transition-all duration-200 hover:bg-[#ECECEC] md:hidden"
             >
               <Image src="/BurgerIcon.svg" alt="" width={21} height={21} aria-hidden />
             </button>
