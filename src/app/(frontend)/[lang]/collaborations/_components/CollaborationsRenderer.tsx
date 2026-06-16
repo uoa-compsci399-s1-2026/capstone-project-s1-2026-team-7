@@ -27,6 +27,8 @@ export default function CollaborationsRenderer({ blocks }: Props) {
                 description={block.description}
                 imageUrl={block.image?.url}
                 imageAlt={block.image?.alt}
+                backgroundImageUrl={block.backgroundImage?.url ?? undefined}
+                backgroundImageAlt={block.backgroundImage?.alt ?? undefined}
               />
             )
 
