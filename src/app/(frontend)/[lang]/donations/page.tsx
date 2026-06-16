@@ -64,8 +64,13 @@ export default async function Donations({ params }: PageProps) {
         imageUrl={pageData.hero.image.url}
         imageAlt={pageData.hero.image.alt}
         buttonurl={pageData.hero.donateUrl}
+        backgroundImageUrl={pageData.hero.backgroundImage?.url}
+        backgroundImageAlt={pageData.hero.backgroundImage?.alt}
       />
-      <SupportSection heading={pageData.supportSection.heading} />
+      <SupportSection
+        heading={pageData.supportSection.heading}
+        items={pageData.supportSection.items}
+      />
       <StatsSection
         title={pageData.stats.title}
         description={pageData.stats.description}

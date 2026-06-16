@@ -1201,9 +1201,21 @@ export interface DonationsPage {
     buttonLabel?: string | null
     donateUrl: string
     image?: (number | null) | Media
+    /**
+     * Optional. Shown behind the hero; falls back to the blue gradient if empty.
+     */
+    backgroundImage?: (number | null) | Media
   }
   supportSection: {
     heading: string
+    items?:
+      | {
+          icon: 'microscope' | 'bed' | 'building' | 'heart'
+          title: string
+          description: string
+          id?: string | null
+        }[]
+      | null
   }
   stats: {
     title: string
@@ -1746,11 +1758,20 @@ export interface DonationsPageSelect<T extends boolean = true> {
         buttonLabel?: T
         donateUrl?: T
         image?: T
+        backgroundImage?: T
       }
   supportSection?:
     | T
     | {
         heading?: T
+        items?:
+          | T
+          | {
+              icon?: T
+              title?: T
+              description?: T
+              id?: T
+            }
       }
   stats?:
     | T

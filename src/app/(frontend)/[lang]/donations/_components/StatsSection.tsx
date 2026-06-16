@@ -67,61 +67,53 @@ function CountUpNumber({ end, duration = 800 }: { end: number; duration?: number
 
 export default function StatsSection({ title, description, stats }: StatsSectionProps) {
   return (
-    <section className="bg-white px-4 py-8 md:px-8 lg:px-12">
-      <div className="mx-auto w-full max-w-287.5">
-        <div className="relative  w-full overflow-hidden rounded-xl bg-[linear-gradient(180deg,#3636B7_0%,#3434B0_0.01%,#272785_13.16%,#181851_74.52%)] h-140 md:h-150 xl:h-135 xl:min-h-0 xl:aspect-1150/330 xl:rounded-3xl">
-          <Image
-            src="/stats-bg.png"
-            alt="Microscope cell background"
-            fill
-            priority
-            sizes="(max-width: 768px) 100vw, 1150px"
-            className="object-cover opacity-[0.35] mix-blend-screen"
-          />
-
+    <section className="bg-white py-16">
+      <div className="mx-auto w-[84%] max-w-300">
+        <div className="relative overflow-hidden rounded-2xl bg-[linear-gradient(180deg,#3636B7_0%,#3434B0_0.01%,#272785_13.16%,#181851_74.52%)]">
           <div className="absolute inset-0 bg-[#05083f]/25" />
 
-          {/* Mobile dividers */}
-          <div className="absolute top-1/4 left-1/2 z-10 h-12 -translate-x-1/2 -translate-y-1/2 border-l border-dotted border-white/60 xl:hidden" />
-          <div className="absolute top-3/4 left-1/2 z-10 h-12 -translate-x-1/2 -translate-y-1/2 border-l border-dotted border-white/60 xl:hidden" />
+          <div className="relative z-20 px-6 py-10 text-white md:py-12">
+            {/* Header */}
+            <div className="text-center">
+              <h2 className="text-2xl font-bold sm:text-3xl md:text-4xl">{title}</h2>
 
-          {/* Title */}
-          <div className="mt-6 text-center text-3xl font-bold text-white md:text-4xl xl:mt-7.5 xl:text-5xl">
-            {title}
-          </div>
+              <div className="mx-auto mt-4 h-1 w-16 rounded-full bg-white sm:w-20" />
 
-          <div className="mx-auto mt-5 h-1 w-20 rounded-full bg-white xl:w-24" />
+              <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed sm:text-base md:max-w-2xl md:text-lg">
+                {description}
+              </p>
+            </div>
 
-          {/* Description */}
-          <div className="mx-auto mt-5 max-w-xl px-6 text-center text-wrap text-base text-white md:text-lg xl:w-216 xl:max-w-none xl:px-0 xl:text-xl">
-            {description}
-          </div>
+            {/* Stats */}
+            <div className="relative mt-10 grid grid-cols-2 grid-rows-2 gap-y-10 md:mt-12 md:grid-cols-4 md:grid-rows-1 md:gap-y-0">
+              <div className="absolute top-1/4 left-1/2 h-10 -translate-x-1/2 -translate-y-1/2 border-l border-dotted border-white/60 md:hidden" />
+              <div className="absolute top-3/4 left-1/2 h-10 -translate-x-1/2 -translate-y-1/2 border-l border-dotted border-white/60 md:hidden" />
 
-          {/* Stats */}
-          <div className="relative z-20 mt-10 grid grid-cols-2 grid-rows-2 gap-6 px-6 py-6 text-white md:mt-12 md:px-8 xl:mt-14 xl:grid-cols-4 xl:grid-rows-1 xl:gap-0 xl:px-10 xl:py-8">
-            {stats.map((stat, index) => {
-              const Icon = iconMap[stat.key] ?? BookOpen
+              {stats.map((stat, index) => {
+                const Icon = iconMap[stat.key] ?? BookOpen
 
-              return (
-                <div
-                  key={stat.key}
-                  className="relative flex flex-col items-center justify-center text-center"
-                >
-                  {/* Desktop divider */}
-                  {index !== 0 && (
-                    <div className="absolute top-1/2 left-0 hidden h-25 -translate-y-1/2 border-l border-dotted border-white/60 xl:block" />
-                  )}
+                return (
+                  <div
+                    key={stat.key}
+                    className="relative flex flex-col items-center justify-center text-center"
+                  >
+                    {index !== 0 && (
+                      <div className="absolute top-1/2 left-0 hidden h-20 -translate-y-1/2 border-l border-dotted border-white/60 md:block lg:h-22.5 xl:h-25" />
+                    )}
 
-                  <Icon className="mb-2 h-7 w-7 md:h-9 md:w-9 xl:h-10 xl:w-10" />
+                    <Icon className="h-8 w-8 md:h-10 md:w-10 lg:h-12 lg:w-12" />
 
-                  <h2 className="text-2xl font-medium md:text-4xl xl:text-5xl">
-                    <CountUpNumber end={stat.value} />+
-                  </h2>
+                    <h3 className="mt-2 text-2xl leading-none font-bold tracking-tight sm:text-3xl md:text-2xl lg:text-3xl xl:text-4xl">
+                      <CountUpNumber end={stat.value} />+
+                    </h3>
 
-                  <p className="text-xs font-light md:text-sm xl:text-base">{stat.label}</p>
-                </div>
-              )
-            })}
+                    <p className="mt-1 max-w-35 text-xs leading-tight sm:max-w-40 md:max-w-42.5 md:text-sm lg:max-w-52.5 lg:text-base">
+                      {stat.label}
+                    </p>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         </div>
       </div>
