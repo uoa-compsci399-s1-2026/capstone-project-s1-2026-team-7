@@ -1447,6 +1447,7 @@ export interface CollaborationsPage {
         title: string
         description: string
         image: number | Media
+        backgroundImage?: (number | null) | Media
         id?: string | null
         blockName?: string | null
         blockType: 'collaborationHero'
@@ -2002,6 +2003,7 @@ export interface CollaborationsPageSelect<T extends boolean = true> {
               title?: T
               description?: T
               image?: T
+              backgroundImage?: T
               id?: T
               blockName?: T
             }

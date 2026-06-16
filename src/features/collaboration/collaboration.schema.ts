@@ -28,6 +28,7 @@ const collaborationHeroBlockSchema = blockBaseSchema
     title: stringWithDefault,
     description: stringWithDefault,
     image: mediaWithDefault,
+    backgroundImage: mediaSchema.nullish().transform((value) => value ?? null),
   })
   .transform((block) => ({
     id: block.id,
@@ -35,6 +36,7 @@ const collaborationHeroBlockSchema = blockBaseSchema
     title: block.title,
     description: block.description,
     image: block.image,
+    backgroundImage: block.backgroundImage,
   }))
 
 // 2. Partner Logos Block

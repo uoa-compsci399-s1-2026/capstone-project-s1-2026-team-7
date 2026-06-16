@@ -7,32 +7,51 @@ type Props = {
   description: string
   imageUrl: string
   imageAlt?: string
+  backgroundImageUrl?: string
+  backgroundImageAlt?: string
 }
 
-export default function CollabHeroProps({ title, description, imageUrl, imageAlt }: Props) {
+export default function CollabHeroProps({
+  title,
+  description,
+  imageUrl,
+  imageAlt,
+  backgroundImageUrl,
+  backgroundImageAlt,
+}: Props) {
   return (
-    <section className="relative isolate w-full overflow-hidden min-h-130 md:min-h-145 lg:min-h-160 xl:min-h-182 bg-blue-900">
+    <section className="relative isolate w-full overflow-hidden min-h-130 md:min-h-145 lg:min-h-160 xl:min-h-182">
+      {backgroundImageUrl && (
+        <Image
+          src={backgroundImageUrl}
+          alt={backgroundImageAlt || 'Hero background image'}
+          fill
+          priority
+          quality={100}
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+      )}
+      <div className="absolute inset-0 bg-[#272785]/80" />
       <div className="relative z-10 mx-auto grid min-h-130 w-full max-w-280 grid-cols-1 items-center px-6.5 py-16 md:min-h-145 md:grid-cols-[55%_45%] md:gap-x-[4%] md:px-8 lg:min-h-160 lg:grid-cols-[45%_55%] lg:gap-x-[6%] lg:px-12 xl:min-h-182 xl:gap-x-[4%] xl:px-0">
         <div className="flex w-full flex-col items-center text-center md:items-start md:text-left xl:items-center xl:text-start">
           <h1
             className="font-bold leading-tight text-white md:max-w-xs lg:max-w-sm
-            text-xl sm:text-2xl md:text-3xl lg:text-3xl xl:text-4xl"
+            text-2xl md:text-3xl lg:text-4xl xl:text-5xl"
           >
             {title}
           </h1>
 
           <p
             className="mt-4 leading-relaxed text-white md:max-w-xs lg:max-w-sm
-            text-sm md:text-sm lg:text-sm xl:text-base"
+            text-sm md:text-base lg:text-lg xl:text-xl"
           >
             {description}
           </p>
         </div>
 
-        {/* Portrait image — hidden below md */}
         <div className="hidden md:flex md:items-center md:justify-center md:self-stretch">
           <div className="relative w-full max-w-85 lg:max-w-100 xl:max-w-118 aspect-[474/519]">
-            {/* Blue offset block */}
             <div className="absolute -top-3 -left-3 h-full w-full rounded-3xl bg-[#1F2BD4]" />
 
             <div className="relative overflow-hidden rounded-3xl shadow-2xl h-full">

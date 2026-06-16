@@ -39,5 +39,11 @@ export const CollaborationHeroBlock: Block = {
       relationTo: 'media',
       required: true,
     },
+    {
+      name: 'backgroundImage',
+      type: 'upload',
+      relationTo: 'media',
+      required: false,
+    },
   ],
 }
