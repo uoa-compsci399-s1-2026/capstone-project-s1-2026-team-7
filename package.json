@@ -1,13 +1,14 @@
 {
   "name": "human-nutrition-unit-website",
   "version": "1.0.0",
-  "description": "A blank template to get started with Payload 3.0",
+  "private": true,
+  "description": "A Next.js and Payload CMS website for the University of Auckland Human Nutrition Unit.",
   "license": "MIT",
   "type": "module",
   "scripts": {
     "build": "cross-env NODE_OPTIONS=\"--no-deprecation --max-old-space-size=8000\" next build",
     "dev": "cross-env NODE_OPTIONS=--no-deprecation next dev --no-server-fast-refresh",
-    "devsafe": "powershell -Command \"Remove-Item -Recurse -Force .next -ErrorAction SilentlyContinue\"; cross-env NODE_OPTIONS=--no-deprecation next dev",
+    "devsafe": "node -e \"require('node:fs').rmSync('.next', { recursive: true, force: true })\" && cross-env NODE_OPTIONS=--no-deprecation next dev",
     "generate:importmap": "cross-env NODE_OPTIONS=--no-deprecation payload generate:importmap",
     "generate:types": "cross-env NODE_OPTIONS=--no-deprecation payload generate:types",
     "lint": "cross-env NODE_OPTIONS=--no-deprecation eslint .",
@@ -19,12 +20,10 @@
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
     "prepare": "husky",
     "db:sync-branch": "node scripts/sync-neon-branch.mjs",
-    "clean": "powershell -Command \"Remove-Item -Recurse -Force .next,node_modules -ErrorAction SilentlyContinue\"",
-    "seed:team": "tsx scripts/seedHomepage.ts",
-    "seed:homepage": "tsx scripts/seedOurteampage.ts",
+    "clean": "node -e \"const fs=require('node:fs'); for (const dir of ['.next', 'node_modules']) fs.rmSync(dir, { recursive: true, force: true })\"",
     "payload:init": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/initPayload.ts",
     "export:research": "cross-env NODE_OPTIONS=--no-deprecation tsx scripts/exportResearch/main.ts",
-    "import:research": "tsx -r dotenv/config scripts/importResearch/uploadCsv.ts"
+    "import:research": "cross-env NODE_OPTIONS=--no-deprecation tsx -r dotenv/config scripts/importResearch/uploadCsv.ts"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [
@@ -36,6 +35,7 @@
     ]
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1045.0",
     "@aws-sdk/client-translate": "^3.1045.0",
     "@payloadcms/db-postgres": "3.85.1",
     "@payloadcms/email-nodemailer": "3.85.1",
@@ -63,6 +63,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@next/env": "16.2.6",
     "@playwright/test": "1.58.2",
     "@testing-library/react": "16.3.0",
     "@types/node": "^22.19.17",
@@ -88,7 +89,7 @@
     "npm": ">=10 <12"
   },
   "overrides": {
-    "dompurify": "3.4.7",
+    "dompurify": "3.4.10",
     "postcss": "$postcss",
     "esbuild": "0.28.1",
     "axios": "1.17.0",
