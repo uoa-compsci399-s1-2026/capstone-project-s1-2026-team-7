@@ -1087,6 +1087,9 @@ export interface TimelineBlock {
 export interface WhoWeAreBlock {
   title: string
   description: string
+  /**
+   * Image shown in the Who We Are section on the homepage.
+   */
   image: number | Media
   id?: string | null
   blockName?: string | null
@@ -1106,6 +1109,9 @@ export interface WhatWeDoBlock {
     }[]
     id?: string | null
   }[]
+  /**
+   * Image shown in the What We Do section on the homepage.
+   */
   image: number | Media
   id?: string | null
   blockName?: string | null

@@ -16,7 +16,7 @@ const FADE_SHOWN = 'opacity-100 translate-y-0'
 const SECTION_DELAYS = ['delay-200', 'delay-300', 'delay-[400ms]', 'delay-500', 'delay-700']
 
 function WhatWeDoSection({ data }: WhatWeDoSectionProps) {
-  const { title, sections } = data
+  const { title, sections, image } = data
   const { ref, inView } = useInView<HTMLElement>()
 
   return (
@@ -78,8 +78,8 @@ function WhatWeDoSection({ data }: WhatWeDoSectionProps) {
               )}
             >
               <Image
-                src="/what-we-do.png"
-                alt="Nutrition researcher working with a participant"
+                src={image.url}
+                alt={image.alt || 'Nutrition researcher working with a participant'}
                 fill
                 sizes="(max-width: 767px) 84vw, (max-width: 1023px) 45vw, 36vw"
                 className="object-cover object-center"
