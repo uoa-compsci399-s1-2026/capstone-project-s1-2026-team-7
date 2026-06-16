@@ -123,7 +123,7 @@ export async function importResearchCsvContent(
   if (!dryRun && rows.length > 0) {
     deletedRows = await markMissingResearchAsCsvDeleted({
       activeIdentities,
-      onDelete: ({ index, total, title }) => {
+      onExclude: ({ index, total, title }) => {
         onProgress?.({
           index,
           total,
