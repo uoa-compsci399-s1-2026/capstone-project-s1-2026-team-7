@@ -163,7 +163,7 @@ Special thanks to:
 - James Mullane — Full Stack Developer
 - Carl Misquitta — Full Stack Developer
 - Rahul Rajasingh — Full Stack Developer
-- Ayush Kumar — Frontend Developer and Designer
+- Ayush Kumar — Frontend Developer and UX Designer
 - Lam Kam Wei — Full Stack Developer
 - Kelvin Mensah — Frontend Developer and Designer
 
