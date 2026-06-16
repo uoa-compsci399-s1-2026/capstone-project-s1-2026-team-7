@@ -161,6 +161,8 @@ Special thanks to:
 - Rahul Rajasingh — Full Stack Developer
 - Ayush Kumar — Frontend Developer and Designer
 - Lam Kam Wei — Full Stack Developer
+- Kelvin Mensah — Frontend Developer and Designer
+
 ---
 
 ## License
