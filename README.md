@@ -7,6 +7,10 @@
 **Project Management:**  
 [Github Projects](https://github.com/orgs/uoa-compsci399-s1-2026/projects/36/views/3)
 
+**Video of the Human Nutrition Website**
+https://www.youtube.com/watch?v=Yl3zqdddD4g 
+
+
 **Description:**  
 The Human Nutrition Unit Website is a modern web platform developed for the Human Nutrition Unit at The University of Auckland. The purpose of the project is to provide the research unit with a more professional, modern, and accessible online presence that better represents its work, research activities, team members, and contributions to the field of human nutrition.
 
