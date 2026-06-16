@@ -1,17 +1,22 @@
 import { z } from 'zod'
+import { staffSchema } from '../our-team/staff.schema'
+import { mediaSchema, DEFAULT_GENERAL_PIC } from '../common/media.schema'
 import { researchCategorySchema } from './research-catagory.schema'
-import { mediaSchema, DEFAULT_GENERAL_PIC } from '../../features/common/media.schema'
-import { staffSchema } from '../our-team'
-import { seoMetaSchema } from '../../features/common'
 
-export const researchPageDTOSchema = z.object({
+export const researchDTOSchema = z.object({
+  id: z.number(),
   title: z.string().default(''),
-  description: z.string().default(''),
-  mobileImage: mediaSchema.default(DEFAULT_GENERAL_PIC),
-  portraitImage: mediaSchema.default(DEFAULT_GENERAL_PIC),
-  researchCategoriesDisplay: z.array(researchCategorySchema).default([]),
-  researchStaffDisplay: z.array(staffSchema).default([]),
-  meta: seoMetaSchema,
+  link: z
+    .string()
+    .nullish()
+    .transform((value) => value || 'https://auckland.ac.nz'),
+  image: mediaSchema.nullish().transform((value) => value ?? DEFAULT_GENERAL_PIC),
+  date: z
+    .string()
+    .nullish()
+    .transform((value) => value ?? '1 / 1 / 2050'),
+  staff: z.array(staffSchema).default([]),
+  categories: z.array(researchCategorySchema).default([]),
 })
 
-export type ResearchPageDTO = z.infer<typeof researchPageDTOSchema>
+export type ResearchDTO = z.infer<typeof researchDTOSchema>

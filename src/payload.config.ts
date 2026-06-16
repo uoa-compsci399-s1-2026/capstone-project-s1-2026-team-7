@@ -14,6 +14,7 @@ import { Studies } from './payload/collections/Studies'
 import { Staff } from './payload/collections/Staff'
 import { Research } from './payload/collections/Research'
 import { ResearchCategories } from './payload/collections/ResearchCategories'
+import { ResearchCategoryTerms } from './payload/collections/ResearchCategoryTerms'
 
 import { HomePage } from './payload/globals/Homepage'
 import { OurTeamPage } from './payload/globals/OurTeamPage'
@@ -92,7 +93,17 @@ export default buildConfig({
     defaultLocale: 'en',
     fallback: true,
   },
-  collections: [Users, Media, Documents, Staff, Studies, Research, ResearchCategories, EnquiryTags],
+  collections: [
+    Users,
+    Media,
+    Documents,
+    Staff,
+    Studies,
+    Research,
+    ResearchCategories,
+    ResearchCategoryTerms,
+    EnquiryTags,
+  ],
 
   globals: [
     HomePage,
@@ -139,7 +150,7 @@ export default buildConfig({
     }),
 
     seoPlugin({
-      collections: ['studies', 'research', 'staff'],
+      collections: ['studies'],
       globals: [
         'home-page',
         'studies-page',

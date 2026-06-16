@@ -1,3 +1,6 @@
 export * from './research-catagory.schema'
+export * from './researchpage.schema'
 export * from './research.schema'
-export * from './researchapi.schema'
+export * from './openalex'
+export * from './categorySuggestions'
+export * from './categoryMappings'

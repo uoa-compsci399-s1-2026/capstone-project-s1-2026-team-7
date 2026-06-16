@@ -1,25 +1,20 @@
 import type { StaffDTO } from '@/features/our-team/staff.schema'
 import { getStaff } from '@/features/our-team/getStaff.query'
-import { getOrcidList, compareEntries, getData } from './input'
-import { buildCsvRows, convertToCsv } from './output'
 import {
   buildCsvResearchIdentity,
   getCsvDeletedResearchIdentities,
 } from '@/features/research/researchCsvDeletionPersistence'
-import {
+import { addSuggestedCategoriesToResearchRows } from '@/features/research/categorySuggestions/suggestResearchCategories'
+import { buildCsvRows, compareEntries, convertToCsv } from './buildResearchExportRows'
+import { getData } from './fetchOrcidWorks'
+import { getStaffOrcids } from './getStaffOrcids'
+import type {
   CsvResearchRow,
-  nameWithORcid,
+  NameWithOrcid,
   PerPersonOutputType,
   ResearchExportProgressOptions,
 } from './types'
-
-function throwIfAborted(signal?: AbortSignal): void {
-  if (!signal?.aborted) return
-
-  const error = new Error('Export cancelled.')
-  error.name = 'AbortError'
-  throw error
-}
+import { throwIfAborted } from './utils'
 
 function reportProgress(
   options: ResearchExportProgressOptions | undefined,
@@ -51,7 +46,7 @@ export async function getResearchExportRows(
     status: 'Staff records loaded.',
   })
 
-  const people: nameWithORcid[] = await getOrcidList(staff)
+  const people: NameWithOrcid[] = getStaffOrcids(staff)
   reportProgress(options, {
     progress: 10,
     stage: 'orcid',
@@ -104,7 +99,7 @@ export async function getResearchExportRows(
   const excludedRows = unfilteredRows.length - rows.length
 
   reportProgress(options, {
-    progress: 92,
+    progress: 88,
     stage: 'rows',
     status: `Built ${rows.length} CSV row${rows.length === 1 ? '' : 's'}${
       excludedRows > 0
@@ -113,7 +108,34 @@ export async function getResearchExportRows(
     }.`,
   })
 
-  return rows.map((row) => ({ ...row, categories: '' }))
+  throwIfAborted(options?.signal)
+  reportProgress(options, {
+    progress: 89,
+    stage: 'categories',
+    status:
+      'Saving OpenAlex terms and applying mapped categories, with title keywords as fallback.',
+    current: 0,
+    total: rows.length,
+  })
+
+  const rowsWithCategories = await addSuggestedCategoriesToResearchRows(rows, {
+    signal: options?.signal,
+    onProgress: ({ index, total, title, categories }) => {
+      const progress = total === 0 ? 94 : 89 + (index / total) * 5
+
+      reportProgress(options, {
+        progress,
+        stage: 'categories',
+        status: categories.length
+          ? `Suggested ${categories.length} categor${categories.length === 1 ? 'y' : 'ies'} for ${title} (${index}/${total}).`
+          : `No category suggestion found for ${title} (${index}/${total}).`,
+        current: index,
+        total,
+      })
+    },
+  })
+
+  return rowsWithCategories
 }
 
 export async function getResearchExportCsv(
@@ -123,7 +145,7 @@ export async function getResearchExportCsv(
 
   throwIfAborted(options?.signal)
   reportProgress(options, {
-    progress: 94,
+    progress: 96,
     stage: 'csv',
     status: 'Converting rows to CSV.',
   })

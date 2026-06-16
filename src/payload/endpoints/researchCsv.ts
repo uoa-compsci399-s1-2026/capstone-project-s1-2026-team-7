@@ -1,6 +1,6 @@
 import type { Endpoint, PayloadRequest } from 'payload'
-import { uploadResearchCsvContent } from '@/features/research/uploadResearchCsv.query'
-import { getResearchExportCsv } from '../../../scripts/exportResearch/run'
+import { importResearchCsvContent } from '@/features/research/csv/importResearchCsv'
+import { getResearchExportCsv } from '@/features/research/orcid/exportResearchCsv'
 import { storeResearchCsvInS3 } from '@/lib/researchCsvStorage'
 
 function unauthorizedResponse(): Response {
@@ -184,7 +184,7 @@ export const researchCsvImportEndpoint: Endpoint = {
 
         ;(async () => {
           try {
-            const result = await uploadResearchCsvContent(content, {
+            const result = await importResearchCsvContent(content, {
               dryRun,
               onProgress: (evt) => {
                 write({ type: 'progress', ...evt })

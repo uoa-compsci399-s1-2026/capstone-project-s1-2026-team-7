@@ -4,6 +4,10 @@ import {
   getCategoryKeywords,
   textMatchesKeywords,
 } from '@/features/research/keywordCategorisation'
+import {
+  getRelationshipIds,
+  syncResearchCategoryTermsForCategory,
+} from '@/features/research/categoryMappings/syncResearchCategoryTermRelations'
 
 export const ResearchCategories: CollectionConfig = {
   slug: 'research-categories',
@@ -28,13 +32,36 @@ export const ResearchCategories: CollectionConfig = {
       label: 'Keywords',
       admin: {
         description:
-          'Publications whose title contains any of these words/phrases are automatically added to this category. Case-insensitive.',
+          'Fallback title matching words/phrases for this real website category. These are used when no mapped OpenAlex term is found.',
       },
       fields: [{ name: 'value', type: 'text', required: true }],
+    },
+    {
+      name: 'mappedTerms',
+      label: 'Mapped OpenAlex Terms',
+      type: 'relationship',
+      relationTo: 'research-category-terms',
+      hasMany: true,
+      admin: {
+        description:
+          'Select the OpenAlex terms that should map to this real website category. Saving this category will update those terms automatically.',
+      },
+      filterOptions: () => ({
+        status: { not_equals: 'ignored' },
+      }),
     },
   ],
   hooks: {
     afterChange: [
+      async ({ doc, req, context }) => {
+        if (context?.skipCategoryToTermSync) return doc
+
+        const selectedTermIds = getRelationshipIds((doc as { mappedTerms?: unknown }).mappedTerms)
+
+        await syncResearchCategoryTermsForCategory(req, doc.id, selectedTermIds)
+
+        return doc
+      },
       async ({ doc, req, context }) => {
         if (context?.skipKeywordSync) return doc
 
@@ -62,6 +89,30 @@ export const ResearchCategories: CollectionConfig = {
             depth: 0,
             req,
             context: { skipKeywordSync: true },
+          })
+        }
+
+        return doc
+      },
+    ],
+    afterDelete: [
+      async ({ doc, req }) => {
+        const selectedTermIds = getRelationshipIds((doc as { mappedTerms?: unknown }).mappedTerms)
+
+        for (const termId of selectedTermIds) {
+          await req.payload.update({
+            collection: 'research-category-terms' as any,
+            id: termId,
+            data: {
+              mappedCategory: null,
+              status: 'unmapped',
+            },
+            depth: 0,
+            overrideAccess: true,
+            req,
+            context: {
+              skipTermToCategorySync: true,
+            },
           })
         }
 

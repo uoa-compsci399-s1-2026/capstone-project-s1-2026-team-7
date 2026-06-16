@@ -48,12 +48,6 @@ export const Research: CollectionConfig = {
         condition: (_, siblingData) => Boolean(siblingData?.csvDeleted),
       },
     },
-    {
-      name: 'order',
-      type: 'number',
-      required: false,
-      admin: { position: 'sidebar', description: 'Used for manual sorting (lower comes first)' },
-    },
   ],
   hooks: {
     afterChange: [

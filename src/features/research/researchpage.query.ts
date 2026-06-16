@@ -1,5 +1,5 @@
 import { getPayloadClient } from '@/lib/payload'
-import { researchPageDTOSchema, ResearchPageDTO } from './research.schema'
+import { researchPageDTOSchema, ResearchPageDTO } from './researchpage.schema'
 import { Lang } from '@/types/lang'
 
 const payload = await getPayloadClient()

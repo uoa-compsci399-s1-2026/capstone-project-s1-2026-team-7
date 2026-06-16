@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import path from 'node:path'
-import { uploadResearchCsv } from '@/features/research/uploadResearchCsv.query'
+import { importResearchCsv } from '@/features/research/csv/importResearchCsv'
 
 function getCsvPath(): string {
   const filePathArg = process.argv.find((arg) => arg.endsWith('.csv'))
@@ -18,7 +18,7 @@ async function main(): Promise<void> {
 
   console.log(`Reading CSV from: ${csvPath}`)
 
-  const result = await uploadResearchCsv(csvPath, {
+  const result = await importResearchCsv(csvPath, {
     dryRun,
   })
 
