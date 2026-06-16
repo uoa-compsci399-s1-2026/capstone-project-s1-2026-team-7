@@ -253,7 +253,7 @@ function Carousel({ videos, inView }: { videos: PlayableVideo[]; inView: boolean
         className={clsx(
           FADE_BASE,
           inView ? FADE_SHOWN : FADE_HIDDEN,
-          inView && 'delay-[400ms]',
+          inView && 'delay-400ms',
           'mt-6 flex items-center justify-center gap-2 sm:mt-7 md:mt-8',
         )}
       >

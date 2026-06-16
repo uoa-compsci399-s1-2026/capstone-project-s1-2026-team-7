@@ -101,15 +101,6 @@ function StatsSection() {
             'relative aspect-292/250 w-full overflow-hidden rounded-lg bg-[linear-gradient(180deg,#3636B7_0%,#3434B0_0.01%,#272785_13.16%,#181851_74.52%)] sm:aspect-800/350 sm:rounded-2xl md:aspect-1150/295',
           )}
         >
-          <Image
-            src="/stats-bg.png"
-            alt="Microscope cell background"
-            fill
-            priority
-            sizes="(max-width: 767px) 84vw, 1200px"
-            className="object-cover opacity-[0.35] mix-blend-screen"
-          />
-
           <div className="absolute inset-0 bg-[#05083f]/25" />
 
           {/* Mobile middle divider lines only */}

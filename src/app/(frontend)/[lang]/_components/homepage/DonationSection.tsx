@@ -22,15 +22,6 @@ function DonationSection() {
             'relative aspect-292/250 w-full overflow-hidden rounded-lg bg-[#08084f] px-5 py-5 sm:aspect-800/350 sm:rounded-2xl md:aspect-1150/150 md:px-8 lg:px-16',
           )}
         >
-          <Image
-            src="/donation-section.png"
-            alt="Donation background"
-            fill
-            priority
-            sizes="(max-width: 767px) 84vw, 1200px"
-            className="object-cover object-center opacity-[0.45]"
-          />
-
           <div className="absolute inset-0 bg-[#08084f]/45" />
 
           <div className="relative z-10 flex h-full w-full min-w-0 flex-col items-center justify-center gap-2.5 text-center text-white min-[350px]:gap-5 md:flex-row md:justify-between md:gap-6 md:text-left lg:gap-10">
