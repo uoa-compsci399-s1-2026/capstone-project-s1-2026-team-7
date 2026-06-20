@@ -475,6 +475,10 @@ npm run start
 Live Website:  
 [Live Deployment](https://hnu-uoa.vercel.app/)
 
+Admin Dashboard:
+[Live Dashboard](https://hnu-uoa.vercel.app/admin)
+
+
 This deployed website should remain available until the final mark has been released.
 
 For deployment, make sure the hosting provider has the same environment variables as the local `.env` file, especially:
